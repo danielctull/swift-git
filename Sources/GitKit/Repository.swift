@@ -16,3 +16,11 @@ extension Repository {
         }
     }
 }
+
+extension Repository {
+
+    public func head() throws -> Branch {
+        let head = try OpaquePointer { git_repository_head($0, repository) }
+        return try Branch(head)
+    }
+}

@@ -25,7 +25,7 @@ extension GitError {
     }
 }
 
-extension GitError.Code {
+extension GitError.Code: Equatable {
 
     /// Generic error
     public static let unknown = Self(code: GIT_ERROR)
@@ -110,4 +110,72 @@ extension GitError.Code {
 
     /// Patch application failed
     public static let applyFail = Self(code: GIT_EAPPLYFAIL)
+}
+
+
+/// Generic error
+/// Requested object could not be found
+/// Object exists preventing operation
+/// More than one object matches
+/// Output buffer too short to hold data
+/// Operation not allowed on bare repository
+/// HEAD refers to branch with no commits
+/// Merge in progress prevented operation
+/// Reference was not fast-forwardable
+/// Name/ref spec was not in a valid format
+/// Checkout conflicts prevented operation
+/// Lock file prevented operation
+/// Reference value does not match expected
+/// Authentication error
+/// Server certificate is invalid
+/// Patch/merge has already been applied
+/// The requested peel operation is not possible
+/// Unexpected EOF
+/// Invalid operation or input
+/// Uncommitted changes in index prevented operation
+/// The operation is not valid for a directory
+/// A merge conflict exists and cannot continue
+/// A user-configured callback refused to act
+/// Signals end of iteration with iterator
+/// Internal only
+/// Hashsum mismatch in object
+/// Unsaved changes in the index would be overwritten
+/// Patch application failed
+
+extension GitError: CustomStringConvertible {
+
+    public var description: String {
+
+        switch code {
+        case .unknown: return "Unknown\nGeneric error"
+        case .notFound: return "Not Found\nRequested object could not be found"
+        case .exists: return "Exists\nObject exists preventing operation"
+        case .ambiguous: return "Ambiguous\nMore than one object matches"
+        case .buffer: return "Buffer\nOutput buffer too short to hold data"
+        case .bareRepository: return "Bare Repository\nOperation not allowed on bare repository"
+        case .unbornBranch: return "Unborn Branch\nHEAD refers to branch with no commits"
+        case .unmerged: return "Unmerged\nMerge in progress prevented operation"
+        case .nonFastForward: return "Non Fast-Forward\nReference was not fast-forwardable"
+        case .invalidSpec: return "Invalid Spec\nName/ref spec was not in a valid format"
+        case .conflict: return "Conflict\nCheckout conflicts prevented operation"
+        case .locked: return "Locked\nLock file prevented operation"
+        case .modified: return "Modified\nReference value does not match expected"
+        case .auth: return "Auth\nAuthentication error"
+        case .certificate: return "Certificate\nServer certificate is invalid"
+        case .applied: return "Applied\nPatch/merge has already been applied"
+        case .peel: return "Peel\nThe requested peel operation is not possible"
+        case .endOfFile: return "End Of File\nUnexpected EOF"
+        case .invalid: return "Invalid\nInvalid operation or input"
+        case .uncommitted: return "Uncommitted\nUncommitted changes in index prevented operation"
+        case .directory: return "Directory\nThe operation is not valid for a directory"
+        case .mergeConflict: return "Merge Conflict\nA merge conflict exists and cannot continue"
+        case .passthrough: return "Passthrough\nA user-configured callback refused to act"
+        case .iteratorOver: return "Iterator Over \nSignals end of iteration with iterator"
+        case .retry: return "Retry\nInternal only"
+        case .mismatch: return "Mismatch\nHashsum mismatch in object"
+        case .indexDirty: return "Index Dirty\nUnsaved changes in the index would be overwritten"
+        case .applyFail: return "Apply Fail\nPatch application failed"
+        default: return "Who knows?"
+        }
+    }
 }
