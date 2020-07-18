@@ -1,4 +1,4 @@
-// swift-tools-version:5.2
+// swift-tools-version:5.3
 
 import PackageDescription
 
@@ -21,6 +21,7 @@ let package = Package(
 
         .systemLibrary(
             name: "Clibgit2",
+            pkgConfig: "libgit2",
             providers: [
                 .brew(["libgit2"]),
                 .apt(["libgit2-dev"])
