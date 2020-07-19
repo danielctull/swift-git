@@ -15,7 +15,7 @@ final class ReferenceTests: XCTestCase {
     }
 
     func testHead() throws {
-        let remote = try Bundle.module.url(forRepository: "GitKit.git")
+        let remote = try Bundle.module.url(forRepository: "Test.git")
         try FileManager.default.withTemporaryDirectory { local in
             let repository = try Repository(local: local, remote: remote)
             let head = try repository.head()

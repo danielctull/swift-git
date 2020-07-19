@@ -6,7 +6,7 @@ import GitKit
 final class RepositoryTests: XCTestCase {
 
     func testClone() throws {
-        let remote = try Bundle.module.url(forRepository: "GitKit.git")
+        let remote = try Bundle.module.url(forRepository: "Test.git")
         try FileManager.default.withTemporaryDirectory { local in
             XCTAssertNoThrow(try Repository(local: local, remote: remote))
         }
@@ -31,7 +31,7 @@ final class RepositoryTests: XCTestCase {
     }
 
     func testOpen() throws {
-        let remote = try Bundle.module.url(forRepository: "GitKit.git")
+        let remote = try Bundle.module.url(forRepository: "Test.git")
         try FileManager.default.withTemporaryDirectory { local in
             XCTAssertNoThrow(try Repository(local: local, remote: remote))
             XCTAssertNoThrow(try Repository(url: local, options: .open))
@@ -39,7 +39,7 @@ final class RepositoryTests: XCTestCase {
     }
 
     func testBranches() throws {
-        let remote = try Bundle.module.url(forRepository: "GitKit.git")
+        let remote = try Bundle.module.url(forRepository: "Test.git")
         try FileManager.default.withTemporaryDirectory { local in
             let repo = try Repository(local: local, remote: remote)
             let branches = try repo.branches()
@@ -50,15 +50,13 @@ final class RepositoryTests: XCTestCase {
     }
 
     func testRemoteBranches() throws {
-        let remote = try Bundle.module.url(forRepository: "GitKit.git")
+        let remote = try Bundle.module.url(forRepository: "Test.git")
         try FileManager.default.withTemporaryDirectory { local in
             let repo = try Repository(local: local, remote: remote)
             let remoteBranches = try repo.remoteBranches()
-            XCTAssertEqual(remoteBranches.count, 2)
+            XCTAssertEqual(remoteBranches.count, 1)
             XCTAssertEqual(remoteBranches.first?.name, "origin/main")
             XCTAssertEqual(remoteBranches.first?.fullName, "refs/remotes/origin/main")
-            XCTAssertEqual(remoteBranches.last?.name, "origin/status")
-            XCTAssertEqual(remoteBranches.last?.fullName, "refs/remotes/origin/status")
         }
     }
 
