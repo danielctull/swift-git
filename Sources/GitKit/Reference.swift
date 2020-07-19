@@ -5,7 +5,7 @@ public enum Reference {
     case branch(Branch)
     case note
     case remoteBranch(RemoteBranch)
-    case tag
+    case tag(Tag)
 }
 
 extension Reference {
@@ -24,7 +24,7 @@ extension Reference {
             self = try .remoteBranch(RemoteBranch(reference))
 
         case let reference where reference.check(git_reference_is_tag):
-            self = .tag
+            self = try .tag(Tag(reference))
 
         default:
             struct UnknownReferenceType: Error {}
@@ -43,5 +43,10 @@ extension Reference {
     var remoteBranch: RemoteBranch? {
         guard case .remoteBranch(let remoteBranch) = self else { return nil }
         return remoteBranch
+    }
+
+    var tag: Tag? {
+        guard case .tag(let tag) = self else { return nil }
+        return tag
     }
 }
