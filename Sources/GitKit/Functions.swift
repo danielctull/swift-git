@@ -24,3 +24,7 @@ extension UnsafePointer {
         self = unwrapped
     }
 }
+
+extension Int32 {
+    var isTrue: Bool { self != 0 }
+}

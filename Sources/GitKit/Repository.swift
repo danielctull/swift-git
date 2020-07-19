@@ -19,8 +19,8 @@ extension Repository {
 
 extension Repository {
 
-    public func head() throws -> Branch {
+    public func head() throws -> Reference {
         let head = try OpaquePointer { git_repository_head($0, repository) }
-        return try Branch(head)
+        return try Reference(head)
     }
 }

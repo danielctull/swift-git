@@ -3,7 +3,7 @@ import Foundation
 import XCTest
 import GitKit
 
-final class BranchTests: XCTestCase {
+final class ReferenceTests: XCTestCase {
 
     func testThrowsUnbornBranchError() throws {
         try FileManager.default.withTemporaryDirectory { url in
