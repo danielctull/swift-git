@@ -48,17 +48,4 @@ extension GitPointer {
         if let error = GitError(result) { throw error }
         return value!
     }
-
-    func get(
-        _ get: (UnsafeMutablePointer<git_strarray>?, OpaquePointer?) -> Int32
-    ) throws -> [String] {
-
-        let strarray = UnsafeMutablePointer<git_strarray>.allocate(capacity: 1)
-        defer { strarray.deallocate() }
-        let result = get(strarray, pointer)
-        if let error = GitError(result) { throw error }
-        let strings = Array(strarray.pointee)
-        git_strarray_free(strarray)
-        return strings
-    }
 }
