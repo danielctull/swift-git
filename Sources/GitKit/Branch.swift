@@ -2,16 +2,16 @@
 import Clibgit2
 
 public struct Branch {
-    let pointer: OpaquePointer
+    let branch: GitPointer
     public let name: String
 }
 
 extension Branch {
 
-    init(_ pointer: OpaquePointer) throws {
-        guard git_reference_is_branch(pointer).isTrue else { throw GitError(.unknown) }
-        let name = try UnsafePointer<Int8> { git_branch_name($0, pointer) }
+    init(_ branch: GitPointer) throws {
+        guard git_reference_is_branch(branch.pointer).isTrue else { throw GitError(.unknown) }
+        let name = try UnsafePointer<Int8> { git_branch_name($0, branch.pointer) }
         self.name = String(validatingUTF8: name)!
-        self.pointer = pointer
+        self.branch = branch
     }
 }

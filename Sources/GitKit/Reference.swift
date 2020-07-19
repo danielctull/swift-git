@@ -10,15 +10,15 @@ public enum Reference {
 
 extension Reference {
 
-    init(_ pointer: OpaquePointer) throws {
+    init(_ reference: GitPointer) throws {
 
-        if git_reference_is_branch(pointer).isTrue {
-            self = .branch(try Branch(pointer))
-        } else if git_reference_is_note(pointer).isTrue {
+        if git_reference_is_branch(reference.pointer).isTrue {
+            self = .branch(try Branch(reference))
+        } else if git_reference_is_note(reference.pointer).isTrue {
             self = .note
-        } else if git_reference_is_remote(pointer).isTrue {
+        } else if git_reference_is_remote(reference.pointer).isTrue {
             self = .remoteBranch
-        } else if git_reference_is_tag(pointer).isTrue {
+        } else if git_reference_is_tag(reference.pointer).isTrue {
             self = .tag
         }
 
