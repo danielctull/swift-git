@@ -28,6 +28,10 @@ extension GitPointer {
         return result != 0
     }
 
+    func get<Value>(_ get: (OpaquePointer?) -> UnsafePointer<Value>?) -> UnsafePointer<Value> {
+        get(pointer)!
+    }
+
     func get<Value>(_ get: (OpaquePointer?) -> UnsafePointer<Value>?) -> Value {
         get(pointer)!.pointee
     }
