@@ -32,3 +32,11 @@ extension Reference {
         }
     }
 }
+
+extension Reference {
+
+    var branch: Branch? {
+        guard case .branch(let branch) = self else { return nil }
+        return branch
+    }
+}

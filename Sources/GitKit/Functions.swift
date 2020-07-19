@@ -10,3 +10,15 @@ extension UInt32 {
         }
     }
 }
+
+extension git_strarray: Sequence {
+
+    public func makeIterator() -> AnyIterator<String> {
+        var index = 0
+        return AnyIterator {
+            guard index < count else { return nil }
+            defer { index += 1 }
+            return String(validatingUTF8: strings[index]!)!
+        }
+    }
+}
