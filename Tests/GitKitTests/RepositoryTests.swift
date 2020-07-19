@@ -5,6 +5,13 @@ import GitKit
 
 final class RepositoryTests: XCTestCase {
 
+    func testClone() throws {
+        let remote = try Bundle.module.url(forRepository: "GitKit.git")
+        try FileManager.default.withTemporaryDirectory { local in
+            XCTAssertNoThrow(try Repository(local: local, remote: remote))
+        }
+    }
+
     func testCreate() throws {
         try FileManager.default.withTemporaryDirectory { url in
             XCTAssertNoThrow(try Repository(url: url))
@@ -23,14 +30,14 @@ final class RepositoryTests: XCTestCase {
         }
     }
 
-    func testClone() throws {
+    func testOpen() throws {
         let remote = try Bundle.module.url(forRepository: "GitKit.git")
         try FileManager.default.withTemporaryDirectory { local in
             XCTAssertNoThrow(try Repository(local: local, remote: remote))
+            XCTAssertNoThrow(try Repository(url: local, options: .open))
         }
     }
 }
-
 
 extension Bundle {
 
