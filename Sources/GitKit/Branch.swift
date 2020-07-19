@@ -9,7 +9,7 @@ public struct Branch {
 extension Branch {
 
     init(_ branch: GitPointer) throws {
-        guard git_reference_is_branch(branch.pointer).isTrue else { throw GitError(.unknown) }
+        guard git_reference_is_branch(branch.pointer) == .true else { throw GitError(.unknown) }
         let name = try UnsafePointer<Int8> { git_branch_name($0, branch.pointer) }
         self.name = String(validatingUTF8: name)!
         self.branch = branch

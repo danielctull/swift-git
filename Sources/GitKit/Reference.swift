@@ -12,13 +12,13 @@ extension Reference {
 
     init(_ reference: GitPointer) throws {
 
-        if git_reference_is_branch(reference.pointer).isTrue {
+        if git_reference_is_branch(reference.pointer) == .true {
             self = .branch(try Branch(reference))
-        } else if git_reference_is_note(reference.pointer).isTrue {
+        } else if git_reference_is_note(reference.pointer) == .true {
             self = .note
-        } else if git_reference_is_remote(reference.pointer).isTrue {
+        } else if git_reference_is_remote(reference.pointer) == .true {
             self = .remoteBranch
-        } else if git_reference_is_tag(reference.pointer).isTrue {
+        } else if git_reference_is_tag(reference.pointer) == .true {
             self = .tag
         }
 

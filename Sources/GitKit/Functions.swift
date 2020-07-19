@@ -14,5 +14,6 @@ extension UnsafePointer {
 }
 
 extension Int32 {
-    var isTrue: Bool { self != 0 }
+    static var `true`: Int32 { 1 }
+    static var `false`: Int32 { 0 }
 }
