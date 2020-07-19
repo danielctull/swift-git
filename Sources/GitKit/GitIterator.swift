@@ -14,7 +14,7 @@ struct GitIterator<Element> {
     }
 }
 
-extension GitIterator: IteratorProtocol {
+extension GitIterator: IteratorProtocol, Sequence {
 
     mutating func next() -> Element? {
         do {

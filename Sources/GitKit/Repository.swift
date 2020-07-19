@@ -70,7 +70,7 @@ extension Repository {
             free: git_branch_iterator_free,
             next: nextBranch)
 
-        return Array(AnySequence { iterator })
+        return Array(iterator)
     }
 
     public func remoteBranches() throws -> [RemoteBranch] {
