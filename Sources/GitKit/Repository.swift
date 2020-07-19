@@ -53,9 +53,24 @@ extension Repository {
     }
 
     public func branches() throws -> [Branch] {
-        try repository.get(git_reference_list)
-            .map(reference(for:))
-            .compactMap(\.branch)
+
+        func nextBranch(iterator: OpaquePointer) throws -> Branch {
+            let branch = try GitPointer(
+                create: {
+                    let type = UnsafeMutablePointer<git_branch_t>.allocate(capacity: 1)
+                    defer { type.deallocate() }
+                    return git_branch_next($0, type, iterator)
+                },
+                free: git_reference_free)
+            return try Branch(branch)
+        }
+
+        let iterator = try GitIterator(
+            create: { git_branch_iterator_new($0, repository.pointer, GIT_BRANCH_LOCAL) },
+            free: git_branch_iterator_free,
+            next: nextBranch)
+
+        return Array(AnySequence { iterator })
     }
 
     public func remoteBranches() throws -> [RemoteBranch] {

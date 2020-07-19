@@ -1,7 +1,7 @@
 
 import Clibgit2
 
-public struct GitError: Error {
+public struct GitError: Error, Equatable {
     public let code: Code
 
     init(_ code: Code) {
