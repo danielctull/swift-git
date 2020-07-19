@@ -54,34 +54,40 @@ extension Repository {
 
     public func branches() throws -> [Branch] {
 
-        func nextBranch(iterator: OpaquePointer) throws -> Branch {
-            let branch = try GitPointer(
-                create: {
-                    let type = UnsafeMutablePointer<git_branch_t>.allocate(capacity: 1)
-                    defer { type.deallocate() }
-                    return git_branch_next($0, type, iterator)
-                },
-                free: git_reference_free)
-            return try Branch(branch)
-        }
-
-        let iterator = try GitIterator(
-            create: { git_branch_iterator_new($0, repository.pointer, GIT_BRANCH_LOCAL) },
-            free: git_branch_iterator_free,
-            next: nextBranch)
-
-        return Array(iterator)
+        try GitIterator(
+            createIterator: { git_branch_iterator_new($0, repository.pointer, GIT_BRANCH_LOCAL) },
+            freeIterator: git_branch_iterator_free,
+            nextElement: {
+                let type = UnsafeMutablePointer<git_branch_t>.allocate(capacity: 1)
+                defer { type.deallocate() }
+                return git_branch_next($0, type, $1)
+            },
+            freeElement: git_reference_free)
+            .map(Branch.init)
     }
 
     public func remoteBranches() throws -> [RemoteBranch] {
-        try repository.get(git_reference_list)
-            .map(reference(for:))
-            .compactMap(\.remoteBranch)
+
+        try GitIterator(
+            createIterator: { git_branch_iterator_new($0, repository.pointer, GIT_BRANCH_REMOTE) },
+            freeIterator: git_branch_iterator_free,
+            nextElement: {
+                let type = UnsafeMutablePointer<git_branch_t>.allocate(capacity: 1)
+                defer { type.deallocate() }
+                return git_branch_next($0, type, $1)
+            },
+            freeElement: git_reference_free)
+            .map(RemoteBranch.init)
     }
 
     public func tags() throws -> [Tag] {
-        try repository.get(git_reference_list)
-            .map(reference(for:))
+
+        try GitIterator(
+            createIterator: { git_reference_iterator_new($0, repository.pointer) },
+            freeIterator: git_reference_iterator_free,
+            nextElement: git_reference_next,
+            freeElement: git_reference_free)
+            .map(Reference.init)
             .compactMap(\.tag)
     }
 }

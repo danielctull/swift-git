@@ -5,12 +5,12 @@ struct GitIterator<Element> {
     let nextElement: (OpaquePointer) throws -> Element?
 
     init(
-        create: (UnsafeMutablePointer<OpaquePointer?>) -> Int32,
-        free: @escaping (OpaquePointer) -> Void,
-        next: @escaping (OpaquePointer) throws -> Element?
+        createIterator: (UnsafeMutablePointer<OpaquePointer?>) -> Int32,
+        freeIterator: @escaping (OpaquePointer) -> Void,
+        nextElement: @escaping (OpaquePointer) throws -> Element?
     ) throws {
-        iterator = try GitPointer(create: create, free: free)
-        nextElement = next
+        iterator = try GitPointer(create: createIterator, free: freeIterator)
+        self.nextElement = nextElement
     }
 }
 
@@ -22,8 +22,26 @@ extension GitIterator: IteratorProtocol, Sequence {
         } catch let error as GitError where error == GitError(.iteratorOver) {
             return nil
         } catch {
-            print("Iterator error", error)
-            return nil
+            fatalError("Iterator error: \(error)")
         }
+    }
+}
+
+extension GitIterator where Element == GitPointer {
+
+    init(
+        createIterator: (UnsafeMutablePointer<OpaquePointer?>) -> Int32,
+        freeIterator: @escaping (OpaquePointer) -> Void,
+        nextElement: @escaping (UnsafeMutablePointer<OpaquePointer?>, OpaquePointer) -> Int32,
+        freeElement: @escaping (OpaquePointer) -> Void
+    ) throws {
+
+        try self.init(
+            createIterator: createIterator,
+            freeIterator: freeIterator,
+            nextElement: { iterator in
+                try GitPointer(create: { nextElement($0, iterator) },
+                               free: freeElement)
+            })
     }
 }
