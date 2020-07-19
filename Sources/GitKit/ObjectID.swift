@@ -3,6 +3,10 @@ import Clibgit2
 
 public struct ObjectID {
     let oid: git_oid
+
+    init(_ oid: git_oid) {
+        self.oid = oid
+    }
 }
 
 extension ObjectID: Equatable {

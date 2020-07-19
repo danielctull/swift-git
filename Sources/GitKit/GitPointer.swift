@@ -27,4 +27,15 @@ extension GitPointer {
         let result = check(pointer)
         return result != 0
     }
+
+    func get<Value>(_ get: (OpaquePointer?) -> UnsafePointer<Value>?) -> Value {
+        get(pointer)!.pointee
+    }
+
+    func get<Value>(_ get: (UnsafeMutablePointer<Value?>?, OpaquePointer?) -> Int32) throws -> Value {
+        var value: Value?
+        let result = withUnsafeMutablePointer(to: &value) { get($0, pointer) }
+        if let error = GitError(result) { throw error }
+        return value!
+    }
 }
