@@ -20,3 +20,11 @@ final class GitPointer {
         self.free = free
     }
 }
+
+extension GitPointer {
+
+    func check(_ check: (OpaquePointer) -> Int32) -> Bool {
+        let result = check(pointer)
+        return result != 0
+    }
+}

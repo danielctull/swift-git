@@ -22,8 +22,3 @@ extension UInt32 {
         }
     }
 }
-
-extension Int32 {
-    static var `true`: Self { 1 }
-    static var `false`: Self { 0 }
-}

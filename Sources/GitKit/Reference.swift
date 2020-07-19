@@ -12,14 +12,18 @@ extension Reference {
 
     init(_ reference: GitPointer) throws {
 
-        if git_reference_is_branch(reference.pointer) == .true {
+        if reference.check(git_reference_is_branch) {
             self = .branch(try Branch(reference))
-        } else if git_reference_is_note(reference.pointer) == .true {
+            return
+        } else if reference.check(git_reference_is_note) {
             self = .note
-        } else if git_reference_is_remote(reference.pointer) == .true {
+            return
+        } else if reference.check(git_reference_is_remote) {
             self = .remoteBranch
-        } else if git_reference_is_tag(reference.pointer) == .true {
+            return
+        } else if reference.check(git_reference_is_tag) {
             self = .tag
+            return
         }
 
         struct UnknownReferenceType: Error {}

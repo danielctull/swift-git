@@ -13,4 +13,14 @@ final class ReferenceTests: XCTestCase {
             }
         }
     }
+
+    func testHead() throws {
+        let remote = try Bundle.module.url(forRepository: "GitKit.git")
+        try FileManager.default.withTemporaryDirectory { local in
+            let repository = try Repository(local: local, remote: remote)
+            let head = try repository.head()
+            guard case let .branch(branch) = head else { XCTFail("Expected branch"); return }
+            XCTAssertEqual(branch.name, "main")
+        }
+    }
 }
