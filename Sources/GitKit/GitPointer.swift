@@ -24,8 +24,7 @@ final class GitPointer {
 extension GitPointer {
 
     func check(_ check: (OpaquePointer) -> Int32) -> Bool {
-        let result = check(pointer)
-        return result != 0
+        check(pointer) != 0
     }
 
     func get<Value>(
