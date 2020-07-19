@@ -12,21 +12,23 @@ extension Reference {
 
     init(_ reference: GitPointer) throws {
 
-        if reference.check(git_reference_is_branch) {
-            self = .branch(try Branch(reference))
-            return
-        } else if reference.check(git_reference_is_note) {
-            self = .note
-            return
-        } else if reference.check(git_reference_is_remote) {
-            self = .remoteBranch
-            return
-        } else if reference.check(git_reference_is_tag) {
-            self = .tag
-            return
-        }
+        switch reference {
 
-        struct UnknownReferenceType: Error {}
-        throw UnknownReferenceType()
+        case let reference where reference.check(git_reference_is_branch):
+            self = try .branch(Branch(reference))
+
+        case let reference where reference.check(git_reference_is_note):
+            self = .note
+
+        case let reference where reference.check(git_reference_is_remote):
+            self = .remoteBranch
+
+        case let reference where reference.check(git_reference_is_tag):
+            self = .tag
+
+        default:
+            struct UnknownReferenceType: Error {}
+            throw UnknownReferenceType()
+        }
     }
 }
