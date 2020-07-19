@@ -57,4 +57,10 @@ extension Repository {
             .map(reference(for:))
             .compactMap(\.branch)
     }
+
+    public func remoteBranches() throws -> [RemoteBranch] {
+        try repository.get(git_reference_list)
+            .map(reference(for:))
+            .compactMap(\.remoteBranch)
+    }
 }

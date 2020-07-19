@@ -48,6 +48,19 @@ final class RepositoryTests: XCTestCase {
             XCTAssertEqual(branches.first?.fullName, "refs/heads/main")
         }
     }
+
+    func testRemoteBranches() throws {
+        let remote = try Bundle.module.url(forRepository: "GitKit.git")
+        try FileManager.default.withTemporaryDirectory { local in
+            let repo = try Repository(local: local, remote: remote)
+            let remoteBranches = try repo.remoteBranches()
+            XCTAssertEqual(remoteBranches.count, 2)
+            XCTAssertEqual(remoteBranches.first?.name, "origin/main")
+            XCTAssertEqual(remoteBranches.first?.fullName, "refs/remotes/origin/main")
+            XCTAssertEqual(remoteBranches.last?.name, "origin/status")
+            XCTAssertEqual(remoteBranches.last?.fullName, "refs/remotes/origin/status")
+        }
+    }
 }
 
 extension Bundle {
