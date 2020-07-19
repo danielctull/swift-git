@@ -46,12 +46,6 @@ extension Repository {
         return try Reference(head)
     }
 
-    func reference(for fullName: String) throws -> Reference {
-        let pointer = try GitPointer(create: { git_reference_lookup($0, repository.pointer, fullName) },
-                                     free: git_reference_free)
-        return try Reference(pointer)
-    }
-
     public func branches() throws -> [Branch] {
 
         try GitIterator(
