@@ -112,36 +112,6 @@ extension GitError.Code: Equatable {
     public static let applyFail = Self(code: GIT_EAPPLYFAIL)
 }
 
-
-/// Generic error
-/// Requested object could not be found
-/// Object exists preventing operation
-/// More than one object matches
-/// Output buffer too short to hold data
-/// Operation not allowed on bare repository
-/// HEAD refers to branch with no commits
-/// Merge in progress prevented operation
-/// Reference was not fast-forwardable
-/// Name/ref spec was not in a valid format
-/// Checkout conflicts prevented operation
-/// Lock file prevented operation
-/// Reference value does not match expected
-/// Authentication error
-/// Server certificate is invalid
-/// Patch/merge has already been applied
-/// The requested peel operation is not possible
-/// Unexpected EOF
-/// Invalid operation or input
-/// Uncommitted changes in index prevented operation
-/// The operation is not valid for a directory
-/// A merge conflict exists and cannot continue
-/// A user-configured callback refused to act
-/// Signals end of iteration with iterator
-/// Internal only
-/// Hashsum mismatch in object
-/// Unsaved changes in the index would be overwritten
-/// Patch application failed
-
 extension GitError: CustomStringConvertible {
 
     public var description: String {
