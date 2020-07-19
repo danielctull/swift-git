@@ -35,16 +35,6 @@ extension Reference {
 
 extension Reference {
 
-    var branch: Branch? {
-        guard case .branch(let branch) = self else { return nil }
-        return branch
-    }
-
-    var remoteBranch: RemoteBranch? {
-        guard case .remoteBranch(let remoteBranch) = self else { return nil }
-        return remoteBranch
-    }
-
     var tag: Tag? {
         guard case .tag(let tag) = self else { return nil }
         return tag
