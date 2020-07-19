@@ -13,7 +13,17 @@ extension UnsafePointer {
     }
 }
 
+extension UInt32 {
+
+    init(_ value: Bool) {
+        switch value {
+        case true: self = 1
+        case false: self = 0
+        }
+    }
+}
+
 extension Int32 {
-    static var `true`: Int32 { 1 }
-    static var `false`: Int32 { 0 }
+    static var `true`: Self { 1 }
+    static var `false`: Self { 0 }
 }

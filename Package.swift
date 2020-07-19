@@ -17,7 +17,10 @@ let package = Package(
 
         .testTarget(
             name: "GitKitTests",
-            dependencies: ["GitKit"]),
+            dependencies: ["GitKit"],
+            resources: [
+                .copy("Repositories"),
+            ]),
 
         .systemLibrary(
             name: "Clibgit2",
