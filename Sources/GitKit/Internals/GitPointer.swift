@@ -40,6 +40,12 @@ extension GitPointer {
     }
 
     func get<Value>(
+        _ getter: (OpaquePointer?) -> Value
+    ) -> Value {
+        getter(pointer)
+    }
+
+    func get<Value>(
         _ get: (UnsafeMutablePointer<Value?>?, OpaquePointer?) -> Int32
     ) throws -> Value {
         var value: Value?
