@@ -93,16 +93,16 @@ extension Repository {
     public func commits(in branch: Branch) throws -> [Commit] {
 
         try GitIterator(
-            createIterator: {
-                var result = git_revwalk_new($0, repository.pointer)
+            createIterator: { iterator in
+                var result = git_revwalk_new(iterator, repository.pointer)
                 if GitError(result) != nil { return result }
-                result = git_revwalk_sorting($0.pointee, GIT_SORT_TIME.rawValue)
+                result = git_revwalk_sorting(iterator.pointee, GIT_SORT_TIME.rawValue)
                 if GitError(result) != nil { return result }
                 var oid = branch.objectID.oid
-                return git_revwalk_push($0.pointee, &oid)
+                return git_revwalk_push(iterator.pointee, &oid)
             },
             freeIterator: git_revwalk_free,
-            nextElement: { (commit, iterator) -> Int32 in
+            nextElement: { commit, iterator in
                 let oid = UnsafeMutablePointer<git_oid>.allocate(capacity: 1)
                 defer { oid.deallocate() }
                 let result = git_revwalk_next(oid, iterator)
