@@ -1,7 +1,7 @@
 
 import Foundation
-import XCTest
 import GitKit
+import XCTest
 
 final class RepositoryTests: XCTestCase {
 
@@ -36,13 +36,5 @@ final class RepositoryTests: XCTestCase {
             XCTAssertNoThrow(try Repository(local: local, remote: remote))
             XCTAssertNoThrow(try Repository(url: local, options: .open))
         }
-    }
-}
-
-extension Bundle {
-
-    func url(forRepository repository: String) throws -> URL {
-        let repositories = try XCTUnwrap(url(forResource: "Repositories", withExtension: nil))
-        return repositories.appendingPathComponent(repository)
     }
 }

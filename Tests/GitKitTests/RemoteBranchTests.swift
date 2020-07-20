@@ -1,7 +1,7 @@
 
 import Foundation
-import XCTest
 import GitKit
+import XCTest
 
 final class RemoteBranchTests: XCTestCase {
 
