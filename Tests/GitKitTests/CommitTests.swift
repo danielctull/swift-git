@@ -5,7 +5,7 @@ import GitKit
 
 final class CommitTests: XCTestCase {
 
-    func testClone() throws {
+    func testRepositoryCommits() throws {
         let remote = try Bundle.module.url(forRepository: "Test.git")
         try FileManager.default.withTemporaryDirectory { local in
             let repo = try Repository(local: local, remote: remote)
@@ -20,6 +20,8 @@ final class CommitTests: XCTestCase {
             XCTAssertEqual(last.author.email, "dt@danieltull.co.uk")
             XCTAssertEqual(last.author.date, Date(timeIntervalSince1970: 1595183161))
             XCTAssertEqual(last.author.timeZone, TimeZone(secondsFromGMT: 3600))
+            let first = try XCTUnwrap(commits.first)
+            XCTAssertEqual(main.objectID, first.objectID)
         }
     }
 }
