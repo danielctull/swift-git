@@ -1,15 +1,17 @@
 
 import Clibgit2
+import Tagged
 
-public struct Commit {
+public struct Commit: Identifiable {
     let commit: GitPointer
-    public let objectID: ObjectID
+    public typealias ID = Tagged<Commit, ObjectID>
+    public let id: ID
     public let message: String
     public let author: Signature
 
     init(_ pointer: GitPointer) {
         commit = pointer
-        objectID = ObjectID(commit.get(git_object_id))
+        id = ID(rawValue: ObjectID(commit.get(git_object_id)))
         message = String(validatingUTF8: commit.get(git_commit_message))!
         author = Signature(commit.get(git_commit_author))
     }

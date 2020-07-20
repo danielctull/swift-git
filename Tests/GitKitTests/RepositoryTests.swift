@@ -45,7 +45,7 @@ final class RepositoryTests: XCTestCase {
             let branches = try repo.branches()
             XCTAssertEqual(branches.count, 1)
             XCTAssertEqual(branches.first?.name, "main")
-            XCTAssertEqual(branches.first?.fullName, "refs/heads/main")
+            XCTAssertEqual(branches.first?.id, Branch.ID(rawValue: "refs/heads/main"))
             XCTAssertEqual(branches.first?.objectID.description, "17e26bc76cff375603e7173dac31e5183350e559")
         }
     }
@@ -57,7 +57,7 @@ final class RepositoryTests: XCTestCase {
             let remoteBranches = try repo.remoteBranches()
             XCTAssertEqual(remoteBranches.count, 1)
             XCTAssertEqual(remoteBranches.first?.name, "origin/main")
-            XCTAssertEqual(remoteBranches.first?.fullName, "refs/remotes/origin/main")
+            XCTAssertEqual(remoteBranches.first?.id, RemoteBranch.ID(rawValue: "refs/remotes/origin/main"))
         }
     }
 
@@ -67,7 +67,7 @@ final class RepositoryTests: XCTestCase {
             let repo = try Repository(local: local, remote: remote)
             let tags = try repo.tags()
             XCTAssertEqual(tags.count, 1)
-            XCTAssertEqual(tags.first?.fullName, "refs/tags/1.0")
+            XCTAssertEqual(tags.first?.id, Tag.ID(rawValue: "refs/tags/1.0"))
         }
     }
 }

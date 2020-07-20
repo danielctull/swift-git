@@ -15,13 +15,13 @@ final class CommitTests: XCTestCase {
             XCTAssertEqual(commits.count, 1)
             let last = try XCTUnwrap(commits.last)
             XCTAssertEqual(last.message, "Add readme\n")
-            XCTAssertEqual(last.objectID.description, "17e26bc76cff375603e7173dac31e5183350e559")
+            XCTAssertEqual(last.id.description, "17e26bc76cff375603e7173dac31e5183350e559")
             XCTAssertEqual(last.author.name, "Daniel Tull")
             XCTAssertEqual(last.author.email, "dt@danieltull.co.uk")
             XCTAssertEqual(last.author.date, Date(timeIntervalSince1970: 1595183161))
             XCTAssertEqual(last.author.timeZone, TimeZone(secondsFromGMT: 3600))
             let first = try XCTUnwrap(commits.first)
-            XCTAssertEqual(main.objectID, first.objectID)
+            XCTAssertEqual(main.objectID, first.id.rawValue)
         }
     }
 }

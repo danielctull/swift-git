@@ -9,11 +9,17 @@ let package = Package(
             name: "GitKit",
             targets: ["GitKit"]),
     ],
+    dependencies: [
+        .package(name: "Tagged", url: "https://github.com/pointfreeco/swift-tagged", from: "0.5.0"),
+    ],
     targets: [
 
         .target(
             name: "GitKit",
-            dependencies: ["Clibgit2"]),
+            dependencies: [
+                "Clibgit2",
+                "Tagged",
+            ]),
 
         .testTarget(
             name: "GitKitTests",
