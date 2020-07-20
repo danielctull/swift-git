@@ -9,6 +9,18 @@ public struct ObjectID {
     }
 }
 
+extension ObjectID: CustomStringConvertible {
+
+    public var description: String {
+        withUnsafePointer(to: oid) { oid in
+            let length = Int(GIT_OID_RAWSZ) * 2
+            let string = UnsafeMutablePointer<Int8>.allocate(capacity: length)
+            git_oid_fmt(string, oid)
+            return String(bytesNoCopy: string, length: length, encoding: .ascii, freeWhenDone: true)!
+        }
+    }
+}
+
 extension ObjectID: Equatable {
 
     public static func == (lhs: ObjectID, rhs: ObjectID) -> Bool {

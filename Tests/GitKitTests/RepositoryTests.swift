@@ -46,6 +46,7 @@ final class RepositoryTests: XCTestCase {
             XCTAssertEqual(branches.count, 1)
             XCTAssertEqual(branches.first?.name, "main")
             XCTAssertEqual(branches.first?.fullName, "refs/heads/main")
+            XCTAssertEqual(branches.first?.objectID.description, "17e26bc76cff375603e7173dac31e5183350e559")
         }
     }
 
