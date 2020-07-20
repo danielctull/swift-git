@@ -85,3 +85,31 @@ extension Repository {
             .compactMap(\.tag)
     }
 }
+
+// MARK: - Commits
+
+extension Repository {
+
+    public func commits(in branch: Branch) throws -> [Commit] {
+
+        try GitIterator(
+            createIterator: {
+                var result = git_revwalk_new($0, repository.pointer)
+                if GitError(result) != nil { return result }
+                result = git_revwalk_sorting($0.pointee, GIT_SORT_TIME.rawValue)
+                if GitError(result) != nil { return result }
+                var oid = branch.objectID.oid
+                return git_revwalk_push($0.pointee, &oid)
+            },
+            freeIterator: git_revwalk_free,
+            nextElement: { (commit, iterator) -> Int32 in
+                let oid = UnsafeMutablePointer<git_oid>.allocate(capacity: 1)
+                defer { oid.deallocate() }
+                let result = git_revwalk_next(oid, iterator)
+                if GitError(result) != nil { return result }
+                return git_commit_lookup(commit, repository.pointer, oid)
+            },
+            freeElement: git_commit_free)
+            .map(Commit.init)
+    }
+}
