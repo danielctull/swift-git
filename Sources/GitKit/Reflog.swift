@@ -7,11 +7,12 @@ public struct Reflog {
 
 extension Reflog {
 
-    public struct Item: Equatable, Hashable {
-        public let message: String
-        public let committer: Signature
-        public let old: ObjectID
-        public let new: ObjectID
+    public struct Item: Equatable, Hashable, Identifiable {
+        public let id: ID
+        public var message: String { id.message }
+        public var committer: Signature { id.committer }
+        public var old: ObjectID { id.old }
+        public var new: ObjectID { id.new }
     }
 
     public var items: [Item] {
@@ -28,13 +29,17 @@ extension Reflog {
     }
 }
 
-extension Reflog.Item: Identifiable {
+extension Reflog.Item {
 
-    public var id: ID { ID(committer: committer, old: old, new: new) }
+    init(message: String, committer: Signature, old: ObjectID, new: ObjectID) {
+        let id = ID(message: message, committer: committer, old: old, new: new)
+        self.init(id: id)
+    }
 
-    public struct ID: Hashable, Equatable {
-        public let committer: Signature
-        public let old: ObjectID
-        public let new: ObjectID
+    public struct ID: Equatable, Hashable {
+        let message: String
+        let committer: Signature
+        let old: ObjectID
+        let new: ObjectID
     }
 }
