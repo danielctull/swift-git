@@ -18,3 +18,15 @@ public struct Commit: Identifiable {
         committer = Signature(commit.get(git_commit_committer))
     }
 }
+
+extension Commit {
+
+    public func parents() throws -> [Commit] {
+        let count = commit.get(git_commit_parentcount)
+        return try (0..<count).map { index in
+            try GitPointer(create: { git_commit_parent($0, commit.pointer, index) },
+                           free: git_commit_free)
+        }
+        .map(Commit.init)
+    }
+}
