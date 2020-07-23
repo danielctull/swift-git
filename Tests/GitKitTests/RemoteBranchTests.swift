@@ -16,4 +16,14 @@ final class RemoteBranchTests: XCTestCase {
             XCTAssertEqual(main.id, "refs/remotes/origin/main")
         }
     }
+
+    func testRepositoryRemoteBranchNamed() throws {
+        let remote = try Bundle.module.url(forRepository: "Test.git")
+        try FileManager.default.withTemporaryDirectory { local in
+            let repo = try Repository(local: local, remote: remote)
+            let remoteBranch = try repo.remoteBranch(named: "origin/main")
+            XCTAssertEqual(remoteBranch.name, "origin/main")
+            XCTAssertEqual(remoteBranch.id, "refs/remotes/origin/main")
+        }
+    }
 }

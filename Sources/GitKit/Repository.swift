@@ -38,6 +38,8 @@ extension Repository {
     }
 }
 
+// MARK: - Head
+
 extension Repository {
 
     public func head() throws -> Reference {
@@ -73,6 +75,8 @@ extension Repository {
     }
 }
 
+// MARK: - Remote Branch
+
 extension Repository {
 
     public func remoteBranches() throws -> [RemoteBranch] {
@@ -88,6 +92,18 @@ extension Repository {
             freeElement: git_reference_free)
             .map(RemoteBranch.init)
     }
+
+    public func remoteBranch(named name: String) throws -> RemoteBranch {
+        let pointer = try GitPointer(
+            create: { git_branch_lookup($0, repository.pointer, name, GIT_BRANCH_REMOTE) },
+            free: git_reference_free)
+        return try RemoteBranch(pointer)
+    }
+}
+
+// MARK: - Tag
+
+extension Repository {
 
     public func tags() throws -> [Tag] {
 
