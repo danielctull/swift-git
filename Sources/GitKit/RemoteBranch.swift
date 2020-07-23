@@ -4,7 +4,7 @@ import Tagged
 
 public struct RemoteBranch {
     let branch: GitPointer
-    public typealias ID = Tagged<Branch, String>
+    public typealias ID = Tagged<RemoteBranch, String>
     public let id: ID
     public let objectID: ObjectID
     public let name: String
