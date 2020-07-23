@@ -20,6 +20,10 @@ final class CommitTests: XCTestCase {
             XCTAssertEqual(last.author.email, "dt@danieltull.co.uk")
             XCTAssertEqual(last.author.date, Date(timeIntervalSince1970: 1595183161))
             XCTAssertEqual(last.author.timeZone, TimeZone(secondsFromGMT: 3600))
+            XCTAssertEqual(last.committer.name, "Daniel Tull")
+            XCTAssertEqual(last.committer.email, "dt@danieltull.co.uk")
+            XCTAssertEqual(last.committer.date, Date(timeIntervalSince1970: 1595183161))
+            XCTAssertEqual(last.committer.timeZone, TimeZone(secondsFromGMT: 3600))
             let first = try XCTUnwrap(commits.first)
             XCTAssertEqual(main.objectID, first.id.rawValue)
         }
