@@ -1,5 +1,6 @@
 
 import Clibgit2
+import Tagged
 
 public enum Reference {
     case branch(Branch)
@@ -32,6 +33,24 @@ extension Reference {
         }
     }
 }
+
+// Reference.ID
+
+extension Reference: Identifiable {
+
+    public typealias ID = Tagged<Reference, String>
+
+    public var id: ID {
+        switch self {
+        case let .branch(branch): return ID(rawValue: branch.id.rawValue)
+        case let .note(note): return ID(rawValue: note.id.rawValue)
+        case let .remoteBranch(remoteBranch): return ID(rawValue: remoteBranch.id.rawValue)
+        case let .tag(tag): return ID(rawValue: tag.id.rawValue)
+        }
+    }
+}
+
+// Getters
 
 extension Reference {
 
