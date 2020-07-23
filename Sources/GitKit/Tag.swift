@@ -11,6 +11,13 @@ public struct Tag: Identifiable {
 
 extension Tag {
 
+    public var name: String {
+        String(id.rawValue.dropFirst(10)) // length of "refs/tags/"
+    }
+}
+
+extension Tag {
+
     init(_ reference: GitPointer) throws {
         guard reference.check(git_reference_is_tag) else { throw GitError(.unknown) }
         tag = reference
