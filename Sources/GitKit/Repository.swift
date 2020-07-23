@@ -67,6 +67,13 @@ extension Repository {
             .map(Branch.init)
     }
 
+    public func createBranch(named name: String, at commit: Commit) throws -> Branch {
+        let pointer = try GitPointer(
+            create: { git_branch_create($0, repository.pointer, name, commit.commit.pointer, 0) },
+            free: git_reference_free)
+        return try Branch(pointer)
+    }
+
     public func branch(named name: String) throws -> Branch {
         let pointer = try GitPointer(
             create: { git_branch_lookup($0, repository.pointer, name, GIT_BRANCH_LOCAL) },
