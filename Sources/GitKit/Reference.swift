@@ -3,7 +3,7 @@ import Clibgit2
 
 public enum Reference {
     case branch(Branch)
-    case note
+    case note(Note)
     case remoteBranch(RemoteBranch)
     case tag(Tag)
 }
@@ -18,7 +18,7 @@ extension Reference {
             self = try .branch(Branch(reference))
 
         case let reference where reference.check(git_reference_is_note):
-            self = .note
+            self = try .note(Note(reference))
 
         case let reference where reference.check(git_reference_is_remote):
             self = try .remoteBranch(RemoteBranch(reference))
