@@ -126,9 +126,9 @@ extension Repository {
         try GitIterator(
             createIterator: { iterator in
                 var result = git_revwalk_new(iterator, repository.pointer)
-                if GitError(result) != nil { return result }
+                if LibGit2Error(result) != nil { return result }
                 result = git_revwalk_sorting(iterator.pointee, GIT_SORT_TIME.rawValue)
-                if GitError(result) != nil { return result }
+                if LibGit2Error(result) != nil { return result }
                 var oid = branch.objectID.oid
                 return git_revwalk_push(iterator.pointee, &oid)
             },
@@ -137,7 +137,7 @@ extension Repository {
                 let oid = UnsafeMutablePointer<git_oid>.allocate(capacity: 1)
                 defer { oid.deallocate() }
                 let result = git_revwalk_next(oid, iterator)
-                if GitError(result) != nil { return result }
+                if LibGit2Error(result) != nil { return result }
                 return git_commit_lookup(commit, repository.pointer, oid)
             },
             freeElement: git_commit_free)

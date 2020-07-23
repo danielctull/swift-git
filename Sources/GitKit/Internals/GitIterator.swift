@@ -19,7 +19,7 @@ extension GitIterator: IteratorProtocol, Sequence {
     mutating func next() -> Element? {
         do {
             return try nextElement(iterator.pointer)
-        } catch let error as GitError where error == GitError(.iteratorOver) {
+        } catch let error as LibGit2Error where error == LibGit2Error(.iteratorOver) {
             return nil
         } catch {
             fatalError("Iterator error: \(error)")

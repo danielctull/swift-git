@@ -15,7 +15,7 @@ final class GitPointer {
         git_libgit2_init()
         var pointer: OpaquePointer?
         let result = withUnsafeMutablePointer(to: &pointer, create)
-        if let error = GitError(result) { throw error }
+        if let error = LibGit2Error(result) { throw error }
         self.pointer = pointer!
         self.free = free
     }
@@ -50,7 +50,7 @@ extension GitPointer {
     ) throws -> Value {
         var value: Value?
         let result = withUnsafeMutablePointer(to: &value) { get($0, pointer) }
-        if let error = GitError(result) { throw error }
+        if let error = LibGit2Error(result) { throw error }
         return value!
     }
 }

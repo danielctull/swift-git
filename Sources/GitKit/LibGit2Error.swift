@@ -1,7 +1,7 @@
 
 import Clibgit2
 
-public struct GitError: Error, Equatable {
+public struct LibGit2Error: Error, Equatable {
     public let code: Code
 
     init(_ code: Code) {
@@ -9,7 +9,7 @@ public struct GitError: Error, Equatable {
     }
 }
 
-extension GitError {
+extension LibGit2Error {
 
     init?(_ result: Int32) {
         let code = git_error_code(result)
@@ -18,14 +18,14 @@ extension GitError {
     }
 }
 
-extension GitError {
+extension LibGit2Error {
 
     public struct Code {
         let code: git_error_code
     }
 }
 
-extension GitError.Code: Equatable {
+extension LibGit2Error.Code: Equatable {
 
     /// Generic error
     public static let unknown = Self(code: GIT_ERROR)
@@ -112,39 +112,38 @@ extension GitError.Code: Equatable {
     public static let applyFail = Self(code: GIT_EAPPLYFAIL)
 }
 
-extension GitError: CustomStringConvertible {
+extension LibGit2Error: CustomStringConvertible {
 
     public var description: String {
-
         switch code {
-        case .unknown: return "Unknown\nGeneric error"
-        case .notFound: return "Not Found\nRequested object could not be found"
-        case .exists: return "Exists\nObject exists preventing operation"
-        case .ambiguous: return "Ambiguous\nMore than one object matches"
-        case .buffer: return "Buffer\nOutput buffer too short to hold data"
-        case .bareRepository: return "Bare Repository\nOperation not allowed on bare repository"
-        case .unbornBranch: return "Unborn Branch\nHEAD refers to branch with no commits"
-        case .unmerged: return "Unmerged\nMerge in progress prevented operation"
-        case .nonFastForward: return "Non Fast-Forward\nReference was not fast-forwardable"
-        case .invalidSpec: return "Invalid Spec\nName/ref spec was not in a valid format"
-        case .conflict: return "Conflict\nCheckout conflicts prevented operation"
-        case .locked: return "Locked\nLock file prevented operation"
-        case .modified: return "Modified\nReference value does not match expected"
-        case .auth: return "Auth\nAuthentication error"
-        case .certificate: return "Certificate\nServer certificate is invalid"
-        case .applied: return "Applied\nPatch/merge has already been applied"
-        case .peel: return "Peel\nThe requested peel operation is not possible"
-        case .endOfFile: return "End Of File\nUnexpected EOF"
-        case .invalid: return "Invalid\nInvalid operation or input"
-        case .uncommitted: return "Uncommitted\nUncommitted changes in index prevented operation"
-        case .directory: return "Directory\nThe operation is not valid for a directory"
-        case .mergeConflict: return "Merge Conflict\nA merge conflict exists and cannot continue"
-        case .passthrough: return "Passthrough\nA user-configured callback refused to act"
-        case .iteratorOver: return "Iterator Over \nSignals end of iteration with iterator"
-        case .retry: return "Retry\nInternal only"
-        case .mismatch: return "Mismatch\nHashsum mismatch in object"
-        case .indexDirty: return "Index Dirty\nUnsaved changes in the index would be overwritten"
-        case .applyFail: return "Apply Fail\nPatch application failed"
+        case .unknown: return "[libgit2] Unknown"
+        case .notFound: return "[libgit2] Not Found"
+        case .exists: return "[libgit2] Exists"
+        case .ambiguous: return "[libgit2] Ambiguous"
+        case .buffer: return "[libgit2] Buffer"
+        case .bareRepository: return "[libgit2] Bare Repository"
+        case .unbornBranch: return "[libgit2] Unborn Branch"
+        case .unmerged: return "[libgit2] Unmerged"
+        case .nonFastForward: return "[libgit2] Non Fast-Forward"
+        case .invalidSpec: return "[libgit2] Invalid Spec"
+        case .conflict: return "[libgit2] Conflict"
+        case .locked: return "[libgit2] Locked"
+        case .modified: return "[libgit2] Modified"
+        case .auth: return "[libgit2] Auth"
+        case .certificate: return "[libgit2] Certificate"
+        case .applied: return "[libgit2] Applied"
+        case .peel: return "[libgit2] Peel"
+        case .endOfFile: return "[libgit2] End Of File"
+        case .invalid: return "[libgit2] Invalid"
+        case .uncommitted: return "[libgit2] Uncommitted"
+        case .directory: return "[libgit2] Directory"
+        case .mergeConflict: return "[libgit2] Merge Conflict"
+        case .passthrough: return "[libgit2] Passthrough"
+        case .iteratorOver: return "[libgit2] Iterator Over"
+        case .retry: return "[libgit2] Retry"
+        case .mismatch: return "[libgit2] Mismatch"
+        case .indexDirty: return "[libgit2] Index Dirty"
+        case .applyFail: return "[libgit2] Apply Fail"
         default: return "Who knows?"
         }
     }

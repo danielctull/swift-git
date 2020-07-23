@@ -9,7 +9,7 @@ final class ReferenceTests: XCTestCase {
         try FileManager.default.withTemporaryDirectory { url in
             let repository = try Repository(url: url)
             XCTAssertThrowsError(try repository.head()) { error in
-                XCTAssertEqual((error as? GitError)?.code, .unbornBranch)
+                XCTAssertEqual((error as? LibGit2Error)?.code, .unbornBranch)
             }
         }
     }
