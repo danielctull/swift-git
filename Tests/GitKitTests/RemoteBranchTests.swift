@@ -13,7 +13,7 @@ final class RemoteBranchTests: XCTestCase {
             XCTAssertEqual(remoteBranches.count, 1)
             let main = try XCTUnwrap(remoteBranches.first)
             XCTAssertEqual(main.name, "origin/main")
-            XCTAssertEqual(main.id, RemoteBranch.ID(rawValue: "refs/remotes/origin/main"))
+            XCTAssertEqual(main.id, "refs/remotes/origin/main")
         }
     }
 }

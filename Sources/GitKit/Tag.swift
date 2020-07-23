@@ -4,7 +4,7 @@ import Tagged
 
 public struct Tag: Identifiable {
     let tag: GitPointer
-    public typealias ID = Tagged<Tag, String>
+    public typealias ID = Tagged<Tag, Reference.ID>
     public let id: ID
     public let objectID: ObjectID
 }
@@ -21,7 +21,7 @@ extension Tag {
     init(_ reference: GitPointer) throws {
         guard reference.check(git_reference_is_tag) else { throw GitError(.unknown) }
         tag = reference
-        id = ID(rawValue: String(validatingUTF8: reference.get(git_reference_name))!)
+        id = ID(rawValue: Reference.ID(reference: reference))
         objectID = ObjectID(reference.get(git_reference_target))
     }
 }

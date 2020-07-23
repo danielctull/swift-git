@@ -42,11 +42,18 @@ extension Reference: Identifiable {
 
     public var id: ID {
         switch self {
-        case let .branch(branch): return ID(rawValue: branch.id.rawValue)
-        case let .note(note): return ID(rawValue: note.id.rawValue)
-        case let .remoteBranch(remoteBranch): return ID(rawValue: remoteBranch.id.rawValue)
-        case let .tag(tag): return ID(rawValue: tag.id.rawValue)
+        case let .branch(branch): return branch.id.rawValue
+        case let .note(note): return note.id.rawValue
+        case let .remoteBranch(remoteBranch): return remoteBranch.id.rawValue
+        case let .tag(tag): return tag.id.rawValue
         }
+    }
+}
+
+extension Reference.ID {
+
+    init(reference: GitPointer) {
+        self.init(rawValue: String(validatingUTF8: reference.get(git_reference_name))!)
     }
 }
 

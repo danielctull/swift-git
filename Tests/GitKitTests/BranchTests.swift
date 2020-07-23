@@ -13,7 +13,7 @@ final class BranchTests: XCTestCase {
             XCTAssertEqual(branches.count, 1)
             let branch = try XCTUnwrap(branches.first)
             XCTAssertEqual(branch.name, "main")
-            XCTAssertEqual(branch.id, Branch.ID(rawValue: "refs/heads/main"))
+            XCTAssertEqual(branch.id, "refs/heads/main")
             XCTAssertEqual(branch.objectID.description, "17e26bc76cff375603e7173dac31e5183350e559")
         }
     }
@@ -24,7 +24,7 @@ final class BranchTests: XCTestCase {
             let repo = try Repository(local: local, remote: remote)
             let branch = try repo.branch(named: "main")
             XCTAssertEqual(branch.name, "main")
-            XCTAssertEqual(branch.id, Branch.ID(rawValue: "refs/heads/main"))
+            XCTAssertEqual(branch.id, "refs/heads/main")
             XCTAssertEqual(branch.objectID.description, "17e26bc76cff375603e7173dac31e5183350e559")
         }
     }
