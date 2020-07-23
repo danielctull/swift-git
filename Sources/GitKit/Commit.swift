@@ -12,7 +12,7 @@ public struct Commit: Identifiable {
 
     init(_ pointer: GitPointer) {
         commit = pointer
-        id = ID(rawValue: ObjectID(commit.get(git_object_id)))
+        id = ID(rawValue: ObjectID(commit.get(git_commit_id)))
         summary = String(validatingUTF8: commit.get(git_commit_summary))!
         author = Signature(commit.get(git_commit_author))
         committer = Signature(commit.get(git_commit_committer))
