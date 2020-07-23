@@ -17,4 +17,15 @@ final class BranchTests: XCTestCase {
             XCTAssertEqual(branch.objectID.description, "17e26bc76cff375603e7173dac31e5183350e559")
         }
     }
+
+    func testRepositoryBranchNamed() throws {
+        let remote = try Bundle.module.url(forRepository: "Test.git")
+        try FileManager.default.withTemporaryDirectory { local in
+            let repo = try Repository(local: local, remote: remote)
+            let branch = try repo.branch(named: "main")
+            XCTAssertEqual(branch.name, "main")
+            XCTAssertEqual(branch.id, Branch.ID(rawValue: "refs/heads/main"))
+            XCTAssertEqual(branch.objectID.description, "17e26bc76cff375603e7173dac31e5183350e559")
+        }
+    }
 }
