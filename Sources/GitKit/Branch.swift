@@ -13,7 +13,7 @@ public struct Branch: Identifiable {
 extension Branch {
 
     init(_ branch: GitPointer) throws {
-        guard branch.check(git_reference_is_branch) else { throw GitError(.unknown) }
+        guard branch.check(git_reference_is_branch) else { throw GitKitError.incorrectType(expected: "branch") }
         self.branch = branch
         id = ID(rawValue: Reference.ID(reference: branch))
         name = try String(validatingUTF8: branch.get(git_branch_name))!

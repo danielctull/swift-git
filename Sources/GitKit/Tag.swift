@@ -19,7 +19,7 @@ extension Tag {
 extension Tag {
 
     init(_ reference: GitPointer) throws {
-        guard reference.check(git_reference_is_tag) else { throw GitError(.unknown) }
+        guard reference.check(git_reference_is_tag) else { throw GitKitError.incorrectType(expected: "tag") }
         tag = reference
         id = ID(rawValue: Reference.ID(reference: reference))
         objectID = ObjectID(reference.get(git_reference_target))

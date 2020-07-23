@@ -10,7 +10,7 @@ public struct Note: Identifiable {
 extension Note {
 
     init(_ note: GitPointer) throws {
-        guard note.check(git_reference_is_note) else { throw GitError(.unknown) }
+        guard note.check(git_reference_is_note) else { throw GitKitError.incorrectType(expected: "note") }
         id = ID(rawValue: Reference.ID(reference: note))
     }
 }
