@@ -12,7 +12,7 @@ public struct Tag: Identifiable {
 extension Tag {
 
     public var name: String {
-        String(id.rawValue.dropFirst(10)) // length of "refs/tags/"
+        String(id.dropFirst(10)) // length of "refs/tags/"
     }
 }
 
