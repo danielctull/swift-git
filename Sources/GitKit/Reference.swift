@@ -53,7 +53,7 @@ extension Reference: Identifiable {
 extension Reference.ID {
 
     init(reference: GitPointer) throws {
-        try self.init(rawValue: String(reference.get(git_reference_name)))
+        try self.init(rawValue: Unwrap(String(validatingUTF8: reference.get(git_reference_name))))
     }
 }
 

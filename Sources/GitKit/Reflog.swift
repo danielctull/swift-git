@@ -20,7 +20,7 @@ extension Reflog {
         return try (0..<count).map { index in
             let pointer = reflog.get { git_reflog_entry_byindex($0, index) }!
             return Item(
-                message: try String(git_reflog_entry_message(pointer)),
+                message: try Unwrap(String(validatingUTF8: git_reflog_entry_message(pointer))),
                 committer: try Signature(git_reflog_entry_committer(pointer)!.pointee),
                 old: ObjectID(git_reflog_entry_id_old(pointer)!.pointee),
                 new: ObjectID(git_reflog_entry_id_new(pointer)!.pointee)
