@@ -17,6 +17,6 @@ extension Branch {
         self.branch = branch
         id = ID(rawValue: Reference.ID(reference: branch))
         name = try String(validatingUTF8: branch.get(git_branch_name))!
-        objectID = ObjectID(branch.get(git_reference_target))
+        objectID = try ObjectID(branch.get(git_reference_target))
     }
 }

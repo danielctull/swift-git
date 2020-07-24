@@ -10,12 +10,12 @@ public struct Commit: Identifiable {
     public let author: Signature
     public let committer: Signature
 
-    init(_ pointer: GitPointer) {
+    init(_ pointer: GitPointer) throws {
         commit = pointer
-        id = ID(rawValue: ObjectID(commit.get(git_commit_id)))
+        id = try ID(rawValue: ObjectID(commit.get(git_commit_id)))
         summary = String(validatingUTF8: commit.get(git_commit_summary))!
-        author = Signature(commit.get(git_commit_author))
-        committer = Signature(commit.get(git_commit_committer))
+        author = try Signature(commit.get(git_commit_author))
+        committer = try Signature(commit.get(git_commit_committer))
     }
 }
 
