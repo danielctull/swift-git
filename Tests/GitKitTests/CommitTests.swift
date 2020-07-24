@@ -15,6 +15,7 @@ final class CommitTests: XCTestCase {
             XCTAssertEqual(commits.count, 1)
             let last = try XCTUnwrap(commits.last)
             XCTAssertEqual(last.summary, "Add readme")
+            XCTAssertNil(last.body)
             XCTAssertEqual(last.id.description, "17e26bc76cff375603e7173dac31e5183350e559")
             XCTAssertEqual(last.author.name, "Daniel Tull")
             XCTAssertEqual(last.author.email, "dt@danieltull.co.uk")

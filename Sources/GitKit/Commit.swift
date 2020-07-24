@@ -7,6 +7,7 @@ public struct Commit: Identifiable {
     public typealias ID = Tagged<Commit, ObjectID>
     public let id: ID
     public let summary: String
+    public let body: String?
     public let author: Signature
     public let committer: Signature
 
@@ -14,6 +15,7 @@ public struct Commit: Identifiable {
         commit = pointer
         id = try ID(rawValue: ObjectID(commit.get(git_commit_id)))
         summary = try String(commit.get(git_commit_summary))
+        body = try? String(commit.get(git_commit_body))
         author = try Signature(commit.get(git_commit_author))
         committer = try Signature(commit.get(git_commit_committer))
     }
