@@ -52,8 +52,8 @@ extension Reference: Identifiable {
 
 extension Reference.ID {
 
-    init(reference: GitPointer) {
-        self.init(rawValue: String(validatingUTF8: reference.get(git_reference_name))!)
+    init(reference: GitPointer) throws {
+        self.init(rawValue: try String(validatingUTF8: reference.get(git_reference_name))!)
     }
 }
 
