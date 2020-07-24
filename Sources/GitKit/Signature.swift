@@ -15,6 +15,6 @@ extension Signature {
         name = try Unwrap(String(validatingUTF8: signature.name))
         email = try Unwrap(String(validatingUTF8: signature.email))
         date = Date(timeIntervalSince1970: TimeInterval(signature.when.time))
-        timeZone = TimeZone(secondsFromGMT: 60 * Int(signature.when.offset))!
+        timeZone = try Unwrap(TimeZone(secondsFromGMT: 60 * Int(signature.when.offset)))
     }
 }
