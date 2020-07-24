@@ -10,3 +10,13 @@ extension UInt32 {
         }
     }
 }
+
+extension String {
+
+    init(_ characters: UnsafePointer<CChar>) throws {
+        guard let string = Self(validatingUTF8: characters) else {
+            throw GitKitError.unexpectedNilValue
+        }
+        self = string
+    }
+}
