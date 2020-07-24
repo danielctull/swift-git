@@ -51,6 +51,7 @@ extension GitPointer {
         var value: Value?
         let result = withUnsafeMutablePointer(to: &value) { get($0, pointer) }
         if let error = LibGit2Error(result) { throw error }
-        return value!
+        guard let unwrapped = value else { throw GitKitError.unexpectedNilValue }
+        return unwrapped
     }
 }

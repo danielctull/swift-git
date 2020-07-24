@@ -10,6 +10,10 @@ struct GitKitError: Error, CustomStringConvertible {
 extension GitKitError {
 
     static func incorrectType(expected: String) -> GitKitError {
-        GitKitError("Incorrect Type. Expected: \(expected).")
+        GitKitError("Incorrect type. Expected: \(expected).")
+    }
+
+    static var unexpectedNilValue: GitKitError {
+        GitKitError("Unexpted nil value.")
     }
 }
