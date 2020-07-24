@@ -17,7 +17,7 @@ extension FileManager {
 extension Bundle {
 
     func url(forRepository repository: String) throws -> URL {
-        let repositories = try XCTUnwrap(url(forResource: "Repositories", withExtension: nil))
-        return repositories.appendingPathComponent(repository)
+        try XCTUnwrap(url(forResource: "Repositories", withExtension: nil))
+            .appendingPathComponent(repository)
     }
 }
