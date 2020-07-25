@@ -66,3 +66,17 @@ extension Reference {
         return tag
     }
 }
+
+// MARK: - CustomDebugStringConvertible
+
+extension Reference: CustomDebugStringConvertible {
+
+    public var debugDescription: String {
+        switch self {
+        case let .branch(branch): return branch.debugDescription
+        case let .note(note): return note.debugDescription
+        case let .remoteBranch(remoteBranch): return remoteBranch.debugDescription
+        case let .tag(tag): return tag.debugDescription
+        }
+    }
+}

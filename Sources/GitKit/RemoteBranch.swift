@@ -20,3 +20,11 @@ extension RemoteBranch {
         objectID = try ObjectID(branch.get(git_reference_target))
     }
 }
+
+// MARK: - CustomDebugStringConvertible
+
+extension RemoteBranch: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        "RemoteBranch(name: \(name), id: \(id), objectID: \(objectID.debugDescription))"
+    }
+}

@@ -14,3 +14,11 @@ extension Note {
         id = try ID(rawValue: Reference.ID(reference: note))
     }
 }
+
+// MARK: - CustomDebugStringConvertible
+
+extension Note: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        "Note(id: \(id))"
+    }
+}

@@ -20,3 +20,11 @@ extension Branch {
         objectID = try ObjectID(branch.get(git_reference_target))
     }
 }
+
+// MARK: - CustomDebugStringConvertible
+
+extension Branch: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        "Branch(name: \(name), id: \(id), objectID: \(objectID.debugDescription))"
+    }
+}

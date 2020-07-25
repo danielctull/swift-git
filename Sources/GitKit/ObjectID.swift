@@ -21,6 +21,13 @@ extension ObjectID: CustomStringConvertible {
     }
 }
 
+extension ObjectID: CustomDebugStringConvertible {
+
+    public var debugDescription: String {
+        String(description.dropLast(33))
+    }
+}
+
 extension ObjectID: Equatable {
 
     public static func == (lhs: ObjectID, rhs: ObjectID) -> Bool {

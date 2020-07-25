@@ -25,3 +25,11 @@ extension Tag {
         objectID = try ObjectID(reference.get(git_reference_target))
     }
 }
+
+// MARK: - CustomDebugStringConvertible
+
+extension Tag: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        "Tag(name: \(name), id: \(id), objectID: \(objectID.debugDescription))"
+    }
+}

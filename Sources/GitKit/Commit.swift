@@ -32,3 +32,11 @@ extension Commit {
         .map(Commit.init)
     }
 }
+
+// MARK: - CustomDebugStringConvertible
+
+extension Commit: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        "Commit(objectID: \(id.rawValue.debugDescription), summary: \(summary))"
+    }
+}
