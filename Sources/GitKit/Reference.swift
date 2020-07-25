@@ -34,6 +34,20 @@ extension Reference {
     }
 }
 
+// ObjectID
+
+extension Reference {
+
+    public var objectID: ObjectID {
+        switch self {
+        case let .branch(branch): return branch.objectID
+        case let .note(note): return note.objectID
+        case let .remoteBranch(remoteBranch): return remoteBranch.objectID
+        case let .tag(tag): return tag.objectID
+        }
+    }
+}
+
 // Reference.ID
 
 extension Reference: Identifiable {
