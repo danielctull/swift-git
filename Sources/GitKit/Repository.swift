@@ -150,14 +150,18 @@ extension Repository {
 
     public func commits(
         for references: Reference...,
-        sortedBy sortOptions: SortOptions = SortOptions()
+        sortedBy sortOptions: SortOptions = SortOptions(),
+        includeHead: Bool = true
     ) throws -> [Commit] {
-        try commits(for: references, sortedBy: sortOptions)
+        try commits(for: references,
+                    sortedBy: sortOptions,
+                    includeHead: includeHead)
     }
 
     public func commits(
-        for references: [Reference],
-        sortedBy sortOptions: SortOptions = SortOptions()
+        for references: [Reference] = [],
+        sortedBy sortOptions: SortOptions = SortOptions(),
+        includeHead: Bool = true
     ) throws -> [Commit] {
 
         try GitIterator(
@@ -166,6 +170,10 @@ extension Repository {
                 for reference in references {
                     var oid = reference.objectID.oid
                     let result = git_revwalk_push(iterator, &oid)
+                    if LibGit2Error(result) != nil { return result }
+                }
+                if includeHead {
+                    let result = git_revwalk_push_head(iterator)
                     if LibGit2Error(result) != nil { return result }
                 }
                 return git_revwalk_sorting(iterator, sortOptions.rawValue)

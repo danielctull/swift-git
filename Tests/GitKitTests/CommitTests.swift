@@ -11,7 +11,7 @@ final class CommitTests: XCTestCase {
             let repo = try Repository(local: local, remote: remote)
             let branches = try repo.branches()
             let main = try XCTUnwrap(branches.first(where: { $0.name == "main" }))
-            let commits = try repo.commits(for: .branch(main))
+            let commits = try repo.commits()
             XCTAssertEqual(commits.count, 4)
             let last = try XCTUnwrap(commits.last)
             XCTAssertEqual(last.summary, "Add readme")
@@ -28,6 +28,15 @@ final class CommitTests: XCTestCase {
             let first = try XCTUnwrap(commits.first)
             XCTAssertEqual(main.objectID, first.id.rawValue)
             XCTAssertEqual(try last.parents().count, 0)
+        }
+    }
+
+    func testRepositoryCommitsZeroSearch() throws {
+        let remote = try Bundle.module.url(forRepository: "Test.git")
+        try FileManager.default.withTemporaryDirectory { local in
+            let repo = try Repository(local: local, remote: remote)
+            let commits = try repo.commits(for: [], includeHead: false)
+            XCTAssertEqual(commits.count, 0)
         }
     }
 }
