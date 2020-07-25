@@ -11,7 +11,7 @@ final class CommitTests: XCTestCase {
             let repo = try Repository(local: local, remote: remote)
             let branches = try repo.branches()
             let main = try XCTUnwrap(branches.first(where: { $0.name == "main" }))
-            let commits = try repo.commits(in: main)
+            let commits = try repo.commits(for: .branch(main))
             XCTAssertEqual(commits.count, 4)
             let last = try XCTUnwrap(commits.last)
             XCTAssertEqual(last.summary, "Add readme")

@@ -135,17 +135,40 @@ extension Repository {
 
 // MARK: - Commits
 
+public struct SortOptions: OptionSet {
+    public let rawValue: UInt32
+    public init(rawValue: UInt32) {
+        self.rawValue = rawValue
+    }
+    public init() { rawValue = GIT_SORT_NONE.rawValue }
+    public static let time = Self(rawValue: GIT_SORT_TIME.rawValue)
+    public static let topological = Self(rawValue: GIT_SORT_TOPOLOGICAL.rawValue)
+    public static let reverse = Self(rawValue: GIT_SORT_REVERSE.rawValue)
+}
+
 extension Repository {
 
-    public func commits(in branch: Branch) throws -> [Commit] {
+    public func commits(
+        for references: Reference...,
+        sortedBy sortOptions: SortOptions = SortOptions()
+    ) throws -> [Commit] {
+        try commits(for: references, sortedBy: sortOptions)
+    }
+
+    public func commits(
+        for references: [Reference],
+        sortedBy sortOptions: SortOptions = SortOptions()
+    ) throws -> [Commit] {
 
         try GitIterator(
             createIterator: { git_revwalk_new($0, repository.pointer) },
             configureIterator: { iterator in
-                let result = git_revwalk_sorting(iterator, GIT_SORT_TIME.rawValue)
-                if LibGit2Error(result) != nil { return result }
-                var oid = branch.objectID.oid
-                return git_revwalk_push(iterator, &oid)
+                for reference in references {
+                    var oid = reference.objectID.oid
+                    let result = git_revwalk_push(iterator, &oid)
+                    if LibGit2Error(result) != nil { return result }
+                }
+                return git_revwalk_sorting(iterator, sortOptions.rawValue)
             },
             freeIterator: git_revwalk_free,
             nextElement: { commit, iterator in

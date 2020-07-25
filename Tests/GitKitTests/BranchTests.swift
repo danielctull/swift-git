@@ -23,7 +23,7 @@ final class BranchTests: XCTestCase {
         try FileManager.default.withTemporaryDirectory { local in
             let repo = try Repository(local: local, remote: remote)
             let main = try repo.branch(named: "main")
-            let commits = try repo.commits(in: main)
+            let commits = try repo.commits(for: .branch(main))
             let commit = try XCTUnwrap(commits.first)
             let main2 = try repo.createBranch(named: "main2", at: commit)
             XCTAssertEqual(main2.name, "main2")
