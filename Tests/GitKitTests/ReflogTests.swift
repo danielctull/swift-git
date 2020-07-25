@@ -15,7 +15,7 @@ final class ReflogTests: XCTestCase {
             let item = try XCTUnwrap(reflog.items().last)
             XCTAssertEqual(item.message, "checkout: moving from master to main")
             XCTAssertEqual(item.old.description, "0000000000000000000000000000000000000000")
-            XCTAssertEqual(item.new.description, "17e26bc76cff375603e7173dac31e5183350e559")
+            XCTAssertEqual(item.new.description, "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
             XCTAssertEqual(item.committer.name, "Daniel Tull")
             XCTAssertEqual(item.committer.email, "dt@danieltull.co.uk")
             // The date for a reflog item is when it occurred, in this case when
