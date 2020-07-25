@@ -35,6 +35,7 @@ extension GitIterator where Element == GitPointer {
         configureIterator: ((OpaquePointer) -> Int32)? = nil,
         freeIterator: @escaping (OpaquePointer) -> Void,
         nextElement: @escaping (UnsafeMutablePointer<OpaquePointer?>, OpaquePointer) -> Int32,
+        configureElement: ((OpaquePointer) -> Int32)? = nil,
         freeElement: @escaping (OpaquePointer) -> Void
     ) throws {
 
@@ -44,6 +45,7 @@ extension GitIterator where Element == GitPointer {
             freeIterator: freeIterator,
             nextElement: { iterator in
                 try GitPointer(create: { nextElement($0, iterator) },
+                               configure: configureElement,
                                free: freeElement)
             })
     }
