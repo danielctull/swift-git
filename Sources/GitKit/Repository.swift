@@ -140,13 +140,12 @@ extension Repository {
     public func commits(in branch: Branch) throws -> [Commit] {
 
         try GitIterator(
-            createIterator: { iterator in
-                var result = git_revwalk_new(iterator, repository.pointer)
-                if LibGit2Error(result) != nil { return result }
-                result = git_revwalk_sorting(iterator.pointee, GIT_SORT_TIME.rawValue)
+            createIterator: { git_revwalk_new($0, repository.pointer) },
+            configureIterator: { iterator in
+                let result = git_revwalk_sorting(iterator, GIT_SORT_TIME.rawValue)
                 if LibGit2Error(result) != nil { return result }
                 var oid = branch.objectID.oid
-                return git_revwalk_push(iterator.pointee, &oid)
+                return git_revwalk_push(iterator, &oid)
             },
             freeIterator: git_revwalk_free,
             nextElement: { commit, iterator in
