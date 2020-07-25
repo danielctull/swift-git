@@ -21,3 +21,20 @@ extension Bundle {
             .appendingPathComponent(repository)
     }
 }
+
+struct IndexOutOfBounds<C: Collection>: Error, CustomStringConvertible {
+    let collection: C
+    let index: C.Index
+    var description: String {
+        "Attempted to access index \(index) in \(collection)"
+    }
+}
+
+extension Collection {
+
+    func value(at index: Index) throws -> Element {
+        guard startIndex <= index else { throw IndexOutOfBounds(collection: self, index: index) }
+        guard index < endIndex else { throw IndexOutOfBounds(collection: self, index: index) }
+        return self[index]
+    }
+}

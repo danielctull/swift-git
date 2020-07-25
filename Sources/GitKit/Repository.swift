@@ -82,6 +82,21 @@ extension Repository {
     }
 }
 
+// MARK: - Reference
+
+extension Repository {
+
+    public func references() throws -> [Reference] {
+
+        try GitIterator(
+            createIterator: { git_reference_iterator_new($0, repository.pointer) },
+            freeIterator: git_reference_iterator_free,
+            nextElement: git_reference_next,
+            freeElement: git_reference_free)
+            .map(Reference.init)
+    }
+}
+
 // MARK: - Remote Branch
 
 extension Repository {
@@ -113,13 +128,7 @@ extension Repository {
 extension Repository {
 
     public func tags() throws -> [Tag] {
-
-        try GitIterator(
-            createIterator: { git_reference_iterator_new($0, repository.pointer) },
-            freeIterator: git_reference_iterator_free,
-            nextElement: git_reference_next,
-            freeElement: git_reference_free)
-            .map(Reference.init)
+        try references()
             .compactMap(\.tag)
     }
 }
