@@ -17,7 +17,7 @@ extension RemoteBranch {
         self.branch = branch
         id = try ID(rawValue: Reference.ID(reference: branch))
         name = try Unwrap(String(validatingUTF8: branch.get(git_branch_name)))
-        objectID = try ObjectID(branch.get(git_reference_target))
+        objectID = try ObjectID(reference: branch)
     }
 }
 

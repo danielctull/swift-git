@@ -13,7 +13,7 @@ extension Note {
     init(_ note: GitPointer) throws {
         guard note.check(git_reference_is_note) else { throw GitKitError.incorrectType(expected: "note") }
         id = try ID(rawValue: Reference.ID(reference: note))
-        objectID = try ObjectID(note.get(git_reference_target))
+        objectID = try ObjectID(reference: note)
     }
 }
 

@@ -22,7 +22,7 @@ extension Tag {
         guard reference.check(git_reference_is_tag) else { throw GitKitError.incorrectType(expected: "tag") }
         tag = reference
         id = try ID(rawValue: Reference.ID(reference: reference))
-        objectID = try ObjectID(reference.get(git_reference_target))
+        objectID = try ObjectID(reference: reference)
     }
 }
 
