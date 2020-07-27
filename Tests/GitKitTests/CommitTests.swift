@@ -28,6 +28,7 @@ final class CommitTests: XCTestCase {
             let first = try XCTUnwrap(commits.first)
             XCTAssertEqual(main.objectID, first.id.rawValue)
             XCTAssertEqual(try last.parents().count, 0)
+            XCTAssertEqual(last.parentIDs.count, 0)
         }
     }
 

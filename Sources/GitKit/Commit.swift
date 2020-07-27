@@ -23,13 +23,27 @@ public struct Commit: Identifiable {
 
 extension Commit {
 
+    public var parentIDs: [ID] {
+        (0..<commit.get(git_commit_parentcount)).map { index in
+            ID(git_commit_parent_id(commit.pointer, index).pointee)
+        }
+    }
+
     public func parents() throws -> [Commit] {
-        let count = commit.get(git_commit_parentcount)
-        return try (0..<count).map { index in
+        try (0..<commit.get(git_commit_parentcount)).map { index in
             try GitPointer(create: { git_commit_parent($0, commit.pointer, index) },
                            free: git_commit_free)
         }
         .map(Commit.init)
+    }
+}
+
+// MARK: - Commit.ID
+
+extension Commit.ID {
+
+    init(_ oid: git_oid) {
+        self.init(rawValue: ObjectID(oid))
     }
 }
 
