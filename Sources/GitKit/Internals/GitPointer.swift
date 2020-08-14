@@ -38,6 +38,16 @@ final class GitPointer {
         }
         self.free = free
     }
+
+    /// Creates a GitPointer using an OpaquePointer.
+    ///
+    /// The provided pointer **will not be freed** when deinit is called.
+    ///
+    /// - Parameter pointer: The pointer to wrap.
+    init(_ pointer: OpaquePointer) {
+        self.pointer = pointer
+        self.free = { _ in }
+    }
 }
 
 extension GitPointer {
