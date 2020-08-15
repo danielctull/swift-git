@@ -1,15 +1,32 @@
 
 import Clibgit2
 
-public struct ObjectID {
-    let oid: git_oid
+public enum Object {
+    case blob(Blob)
+    case commit(Commit)
+    case tree(Tree)
+}
+
+extension Object: Identifiable {
+
+    public struct ID {
+        let oid: git_oid
+    }
+
+    public var id: ID {
+        switch self {
+        case let .blob(blob): return blob.id.rawValue
+        case let .commit(commit): return commit.id.rawValue
+        case let .tree(tree): return tree.id.rawValue
+        }
+    }
+}
+
+extension Object.ID {
 
     init(_ oid: git_oid) {
         self.oid = oid
     }
-}
-
-extension ObjectID {
 
     init(reference: GitPointer) throws {
         let resolved = try GitPointer(create: { git_reference_resolve($0, reference.pointer) },
@@ -18,7 +35,8 @@ extension ObjectID {
     }
 }
 
-extension ObjectID: CustomStringConvertible {
+extension Object.ID: CustomStringConvertible {
+
     public var description: String {
         withUnsafePointer(to: oid) { oid in
             let length = Int(GIT_OID_RAWSZ) * 2
@@ -31,16 +49,16 @@ extension ObjectID: CustomStringConvertible {
     }
 }
 
-extension ObjectID: CustomDebugStringConvertible {
+extension Object.ID: CustomDebugStringConvertible {
 
     public var debugDescription: String {
         String(description.dropLast(33))
     }
 }
 
-extension ObjectID: Equatable {
+extension Object.ID: Equatable {
 
-    public static func == (lhs: ObjectID, rhs: ObjectID) -> Bool {
+    public static func == (lhs: Self, rhs: Self) -> Bool {
         withUnsafePointer(to: lhs.oid) { lhs in
             withUnsafePointer(to: rhs.oid) { rhs in
                 git_oid_cmp(lhs, rhs) == 0
@@ -49,7 +67,7 @@ extension ObjectID: Equatable {
     }
 }
 
-extension ObjectID: Hashable {
+extension Object.ID: Hashable {
 
     public func hash(into hasher: inout Hasher) {
         withUnsafeBytes(of: oid.id) {

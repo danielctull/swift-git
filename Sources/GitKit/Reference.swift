@@ -34,11 +34,11 @@ extension Reference {
     }
 }
 
-// ObjectID
+// Object.ID
 
 extension Reference {
 
-    public var objectID: ObjectID {
+    public var objectID: Object.ID {
         switch self {
         case let .branch(branch): return branch.objectID
         case let .note(note): return note.objectID

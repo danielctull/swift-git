@@ -6,7 +6,7 @@ public struct Tag: Identifiable {
     let tag: GitPointer
     public typealias ID = Tagged<Tag, Reference.ID>
     public let id: ID
-    public let objectID: ObjectID
+    public let objectID: Object.ID
 }
 
 extension Tag {
@@ -22,7 +22,7 @@ extension Tag {
         guard reference.check(git_reference_is_tag) else { throw GitKitError.incorrectType(expected: "tag") }
         tag = reference
         id = try ID(rawValue: Reference.ID(reference: reference))
-        objectID = try ObjectID(reference: reference)
+        objectID = try Object.ID(reference: reference)
     }
 }
 

@@ -5,14 +5,14 @@ import Tagged
 
 public struct Blob: Identifiable {
     let blob: GitPointer
-    public typealias ID = Tagged<Blob, ObjectID>
+    public typealias ID = Tagged<Blob, Object.ID>
     public let id: ID
     public let data: Data
     public let isBinary: Bool
 
     init(_ blob: GitPointer) throws {
         self.blob = blob
-        id = try ID(rawValue: ObjectID(blob.get(git_object_id)))
+        id = try ID(rawValue: Object.ID(blob.get(git_object_id)))
         let size = Int(blob.get(git_blob_rawsize))
         let content = try Unwrap(blob.get(git_blob_rawcontent))
         data = Data(bytes: content, count: size)

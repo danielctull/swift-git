@@ -4,7 +4,7 @@ import Tagged
 
 public struct Commit: Identifiable {
     let commit: GitPointer
-    public typealias ID = Tagged<Commit, ObjectID>
+    public typealias ID = Tagged<Commit, Object.ID>
     public let id: ID
     public let summary: String
     public let body: String?
@@ -13,7 +13,7 @@ public struct Commit: Identifiable {
 
     init(_ pointer: GitPointer) throws {
         commit = pointer
-        id = try ID(rawValue: ObjectID(commit.get(git_commit_id)))
+        id = try ID(rawValue: Object.ID(commit.get(git_commit_id)))
         summary = try Unwrap(String(validatingUTF8: commit.get(git_commit_summary)))
         body = try? Unwrap(String(validatingUTF8: commit.get(git_commit_body)))
         author = try Signature(commit.get(git_commit_author))
@@ -43,7 +43,7 @@ extension Commit {
 extension Commit.ID {
 
     init(_ oid: git_oid) {
-        self.init(rawValue: ObjectID(oid))
+        self.init(rawValue: Object.ID(oid))
     }
 }
 

@@ -6,7 +6,7 @@ public struct Branch: Identifiable {
     let branch: GitPointer
     public typealias ID = Tagged<Branch, Reference.ID>
     public let id: ID
-    public let objectID: ObjectID
+    public let objectID: Object.ID
     public let name: String
 }
 
@@ -17,7 +17,7 @@ extension Branch {
         self.branch = branch
         id = try ID(rawValue: Reference.ID(reference: branch))
         name = try Unwrap(String(validatingUTF8: branch.get(git_branch_name)))
-        objectID = try ObjectID(reference: branch)
+        objectID = try Object.ID(reference: branch)
     }
 }
 
