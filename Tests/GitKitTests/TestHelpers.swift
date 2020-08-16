@@ -4,7 +4,7 @@ import XCTest
 
 extension FileManager {
 
-    func withTemporaryDirectory(_ perform: (URL) throws -> ()) throws {
+    func withTemporaryDirectory(_ perform: (URL) throws -> Void) throws {
         let url = temporaryDirectory
             .appendingPathComponent("GitKitTests")
             .appendingPathComponent(UUID().uuidString)

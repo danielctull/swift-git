@@ -19,13 +19,14 @@ extension ObjectID {
 }
 
 extension ObjectID: CustomStringConvertible {
-
     public var description: String {
         withUnsafePointer(to: oid) { oid in
             let length = Int(GIT_OID_RAWSZ) * 2
             let string = UnsafeMutablePointer<Int8>.allocate(capacity: length)
             git_oid_fmt(string, oid)
+            // swiftlint:disable force_unwrapping
             return String(bytesNoCopy: string, length: length, encoding: .ascii, freeWhenDone: true)!
+            // swiftlint:enable force_unwrapping
         }
     }
 }

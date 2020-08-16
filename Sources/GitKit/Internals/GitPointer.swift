@@ -4,7 +4,7 @@ import Clibgit2
 final class GitPointer {
 
     let pointer: OpaquePointer
-    private let free: (OpaquePointer) -> ()
+    private let free: (OpaquePointer) -> Void
 
     deinit { free(pointer) }
 
