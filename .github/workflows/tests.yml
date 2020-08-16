@@ -1,4 +1,4 @@
-sudo name: tests
+name: tests
 
 on:
   - push
