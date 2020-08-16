@@ -19,12 +19,14 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v1
+    - name: APT experimental
+      run: echo "deb http://deb.debian.org/debian experimental main" > /etc/apt/sources.list
     - name: APT Update
-      run: apt-get update -y
+      run: apt-get -t update -y
     - name: APT Upgrade
-      run: apt-get upgrade -y
+      run: apt-get -t upgrade -y
     - name: Install libgit2
-      run: apt-get install -y libgit2-dev
+      run: apt-get -t experimental install -y libgit2-dev
     - name: Find headers
       run: dpkg -L libgit2-dev
     - name: Swift Version
