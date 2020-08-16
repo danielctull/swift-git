@@ -25,6 +25,8 @@ jobs:
       run: apt-get upgrade -y
     - name: Install libgit2
       run: apt-get install -y libgit2-dev
+    - name: Find headers
+      run: dpkg -L libgit2-dev
     - name: Swift Version
       run: swift --version
     - name: Build
