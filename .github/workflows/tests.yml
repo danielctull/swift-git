@@ -19,9 +19,11 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v1
-    - name: Install libgit2
+    - name: APT Update
       run: sudo apt-get update -y
+    - name: APT Upgrade
       run: sudo apt-get upgrade -y
+    - name: Install libgit2
       run: sudo apt-get install -y libgit2-dev
     - name: Swift Version
       run: swift --version
