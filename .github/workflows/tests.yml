@@ -20,11 +20,11 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v1
     - name: APT Update
-      run: sudo apt-get update -y
+      run: apt-get update -y
     - name: APT Upgrade
-      run: sudo apt-get upgrade -y
+      run: apt-get upgrade -y
     - name: Install libgit2
-      run: sudo apt-get install -y libgit2-dev
+      run: apt-get install -y libgit2-dev
     - name: Swift Version
       run: swift --version
     - name: Release Build
