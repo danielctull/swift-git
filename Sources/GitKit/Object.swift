@@ -18,7 +18,7 @@ extension Object: Identifiable {
         switch self {
         case let .blob(blob): return blob.id.rawValue
         case let .commit(commit): return commit.id.rawValue
-        case let .tag(tag): return tag.objectID
+        case let .tag(tag): return tag.id.rawValue
         case let .tree(tree): return tree.id.rawValue
         }
     }

@@ -2,21 +2,20 @@
 import Clibgit2
 import Tagged
 
-public enum Tag: Equatable, Identifiable {
+public enum Tag: Identifiable {
     public typealias ID = Tagged<Tag, Reference.ID>
-    case lightweight(LightweightTag)
-    case annotated(AnnotatedTag)
+    case lightweight(id: ID, target: Object.ID)
+    case annotated(id: ID, target: AnnotatedTag)
 }
 
 extension Tag {
 
     public var id: ID {
         switch self {
-        case let .annotated(tag): return tag.id
-        case let .lightweight(tag): return tag.id
+        case let .annotated(id, _): return id
+        case let .lightweight(id, _): return id
         }
     }
-
 
     public var name: String {
         String(id.dropFirst(10)) // length of "refs/tags/"
@@ -24,8 +23,8 @@ extension Tag {
 
     public var target: Object.ID {
         switch self {
-        case let .annotated(tag): return tag.target
-        case let .lightweight(tag): return tag.target
+        case let .annotated(_, tag): return tag.target
+        case let .lightweight(_, target): return target
         }
     }
 }
@@ -44,9 +43,9 @@ extension Tag {
 
         switch tagObject {
         case .none:
-            self = .lightweight(LightweightTag(id: id, target: objectID))
+            self = .lightweight(id: id, target: objectID)
         case .some(let tagObject):
-            self = try .annotated(AnnotatedTag(id: id, tag: tagObject))
+            self = try .annotated(id: id, target: AnnotatedTag(tagObject))
         }
     }
 }
@@ -61,9 +60,11 @@ extension Tag: CustomDebugStringConvertible {
 
 // MARK: - AnnotatedTag
 
-public struct AnnotatedTag: Equatable {
-    public let id: Tag.ID
-    public let objectID: Object.ID
+public struct AnnotatedTag {
+    let tag: GitPointer
+    public typealias ID = Tagged<AnnotatedTag, Object.ID>
+    public let id: ID
+    public let name: String
     public let target: Object.ID
     public let tagger: Signature
     public let message: String
@@ -71,18 +72,12 @@ public struct AnnotatedTag: Equatable {
 
 extension AnnotatedTag {
 
-    fileprivate init(id: Tag.ID, tag: GitPointer) throws {
-        self.id = id
-        objectID = try Object.ID(tag.get(git_tag_id))
+    fileprivate init(_ tag: GitPointer) throws {
+        self.tag = tag
+        id = try ID(rawValue: Object.ID(tag.get(git_tag_id)))
+        name = try Unwrap(String(validatingUTF8: tag.get(git_tag_name)))
         target = try Object.ID(tag.get(git_tag_target_id))
         tagger = try Signature(tag.get(git_tag_tagger))
         message = try Unwrap(String(validatingUTF8: tag.get(git_tag_message)))
     }
-}
-
-// MARK: - LightweightTag
-
-public struct LightweightTag: Equatable {
-    public let id: Tag.ID
-    public let target: Object.ID
 }
