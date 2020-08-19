@@ -12,7 +12,7 @@ public struct Blob: Identifiable {
 
     init(_ blob: GitPointer) throws {
         self.blob = blob
-        id = try ID(rawValue: Object.ID(blob.get(git_object_id)))
+        id = try ID(object: blob)
         let size = Int(blob.get(git_blob_rawsize))
         let content = try Unwrap(blob.get(git_blob_rawcontent))
         data = Data(bytes: content, count: size)

@@ -74,7 +74,7 @@ extension AnnotatedTag {
 
     fileprivate init(_ tag: GitPointer) throws {
         self.tag = tag
-        id = try ID(rawValue: Object.ID(tag.get(git_tag_id)))
+        id = try ID(object: tag)
         name = try Unwrap(String(validatingUTF8: tag.get(git_tag_name)))
         target = try Object.ID(tag.get(git_tag_target_id))
         tagger = try Signature(tag.get(git_tag_tagger))

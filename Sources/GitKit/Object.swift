@@ -1,5 +1,6 @@
 
 import Clibgit2
+import Tagged
 
 public enum Object {
     case blob(Blob)
@@ -75,5 +76,15 @@ extension Object.ID: Hashable {
         withUnsafeBytes(of: oid.id) {
             hasher.combine(bytes: $0)
         }
+    }
+}
+
+// MARK: - Tagged + Object.ID
+
+extension Tagged where RawValue == Object.ID {
+
+    init(object: GitPointer) throws {
+        let objectID = try Object.ID(object.get(git_object_id))
+        self.init(rawValue: objectID)
     }
 }
