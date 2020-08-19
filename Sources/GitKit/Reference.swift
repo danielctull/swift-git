@@ -43,7 +43,7 @@ extension Reference {
         case let .branch(branch): return branch.objectID
         case let .note(note): return note.objectID
         case let .remoteBranch(remoteBranch): return remoteBranch.objectID
-        case let .tag(tag): return tag.objectID
+        case let .tag(tag): return tag.target
         }
     }
 }

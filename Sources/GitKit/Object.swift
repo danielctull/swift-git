@@ -4,6 +4,7 @@ import Clibgit2
 public enum Object {
     case blob(Blob)
     case commit(Commit)
+    case tag(AnnotatedTag)
     case tree(Tree)
 }
 
@@ -17,6 +18,7 @@ extension Object: Identifiable {
         switch self {
         case let .blob(blob): return blob.id.rawValue
         case let .commit(commit): return commit.id.rawValue
+        case let .tag(tag): return tag.objectID
         case let .tree(tree): return tree.id.rawValue
         }
     }

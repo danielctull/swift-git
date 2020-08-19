@@ -30,7 +30,7 @@ final class ReferenceTests: XCTestCase {
         try FileManager.default.withTemporaryDirectory { local in
             let repo = try Repository(local: local, remote: remote)
             let references = try repo.references()
-            XCTAssertEqual(references.count, 3)
+            XCTAssertEqual(references.count, 4)
             XCTAssertEqual(try references.value(at: 0).id, "refs/heads/main")
             XCTAssertEqual(try references.value(at: 0).objectID.description, "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
             XCTAssertEqual(try references.value(at: 0).debugDescription, "Branch(name: main, id: refs/heads/main, objectID: b1d2dba)")
@@ -38,8 +38,11 @@ final class ReferenceTests: XCTestCase {
             XCTAssertEqual(try references.value(at: 1).objectID.description, "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
             XCTAssertEqual(try references.value(at: 1).debugDescription, "RemoteBranch(name: origin/main, id: refs/remotes/origin/main, objectID: b1d2dba)")
             XCTAssertEqual(try references.value(at: 2).id, "refs/tags/1.0")
-            XCTAssertEqual(try references.value(at: 2).objectID.description, "b1c37c042a0c7d5ba7252719850c15355ebdf7c6")
-            XCTAssertEqual(try references.value(at: 2).debugDescription, "Tag(name: 1.0, id: refs/tags/1.0, objectID: b1c37c0)")
+            XCTAssertEqual(try references.value(at: 2).objectID.description, "17e26bc76cff375603e7173dac31e5183350e559")
+            XCTAssertEqual(try references.value(at: 2).debugDescription, "Tag(name: 1.0, id: refs/tags/1.0, target: 17e26bc)")
+            XCTAssertEqual(try references.value(at: 3).id, "refs/tags/lightweight-tag")
+            XCTAssertEqual(try references.value(at: 3).objectID.description, "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
+            XCTAssertEqual(try references.value(at: 3).debugDescription, "Tag(name: lightweight-tag, id: refs/tags/lightweight-tag, target: b1d2dba)")
         }
     }
 }
