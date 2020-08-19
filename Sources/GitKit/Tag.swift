@@ -36,7 +36,7 @@ extension Tag {
         let repo = try Unwrap(tagReference.get(git_reference_owner))
         var oid = try Unwrap(tagReference.get(git_reference_target)).pointee
 
-        let id = try Tag.ID(rawValue: Reference.ID(reference: tagReference))
+        let id = try Tag.ID(reference: tagReference)
         let objectID = Object.ID(oid)
         let tagObject = try? GitPointer(create: { git_object_lookup($0, repo, &oid, GIT_OBJECT_TAG) },
                                         free: git_object_free)

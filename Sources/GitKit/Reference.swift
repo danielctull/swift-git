@@ -64,13 +64,6 @@ extension Reference: Identifiable {
     }
 }
 
-extension Reference.ID {
-
-    init(reference: GitPointer) throws {
-        try self.init(rawValue: Unwrap(String(validatingUTF8: reference.get(git_reference_name))))
-    }
-}
-
 // Getters
 
 extension Reference {
@@ -92,5 +85,16 @@ extension Reference: CustomDebugStringConvertible {
         case let .remoteBranch(remoteBranch): return remoteBranch.debugDescription
         case let .tag(tag): return tag.debugDescription
         }
+    }
+}
+
+// MARK: - Tagged + Reference.ID
+
+extension Tagged where RawValue == Reference.ID {
+
+    init(reference: GitPointer) throws {
+        let name = try Unwrap(String(validatingUTF8: reference.get(git_reference_name)))
+        let referenceID = Reference.ID(rawValue: name)
+        self.init(rawValue: referenceID)
     }
 }

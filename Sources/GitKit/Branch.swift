@@ -15,7 +15,7 @@ extension Branch {
     init(_ branch: GitPointer) throws {
         guard branch.check(git_reference_is_branch) else { throw GitKitError.incorrectType(expected: "branch") }
         self.branch = branch
-        id = try ID(rawValue: Reference.ID(reference: branch))
+        id = try ID(reference: branch)
         name = try Unwrap(String(validatingUTF8: branch.get(git_branch_name)))
         objectID = try Object.ID(reference: branch)
     }
