@@ -9,6 +9,39 @@ public enum Object {
     case tree(Tree)
 }
 
+// MARK: - Git Initialiser
+
+extension Object {
+
+    init(_ object: GitPointer) throws {
+
+        let type = object.get(git_object_type)
+
+        switch type {
+
+        case GIT_OBJECT_BLOB:
+            self = try .blob(Blob(object))
+
+        case GIT_OBJECT_COMMIT:
+            self = try .commit(Commit(object))
+
+        case GIT_OBJECT_TAG:
+            self = try .tag(AnnotatedTag(object))
+
+        case GIT_OBJECT_TREE:
+            self = try .tree(Tree(object))
+
+        default:
+            let typeName = try Unwrap(String(validatingUTF8: git_object_type2string(type)))
+            let expected = try [GIT_OBJECT_BLOB, GIT_OBJECT_COMMIT, GIT_OBJECT_TAG, GIT_OBJECT_TREE]
+                .map { try Unwrap(String(validatingUTF8: git_object_type2string($0))) }
+            throw GitKitError.unexpectedValue(expected: expected, received: typeName)
+        }
+    }
+}
+
+// MARK: - Identifiable
+
 extension Object: Identifiable {
 
     public struct ID {

@@ -4,9 +4,6 @@ import Foundation
 
 public struct Repository {
     let repository: GitPointer
-}
-
-extension Repository {
 
     public enum Options {
         case open
@@ -35,6 +32,15 @@ extension Repository {
                 git_clone(pointer, remoteString, path, nil)
             }
         }, free: git_repository_free)
+    }
+}
+
+// MARK: - Git Initialiser
+
+extension Repository {
+
+    init(_ pointer: GitPointer) {
+        repository = pointer
     }
 }
 
@@ -130,6 +136,18 @@ extension Repository {
     public func tags() throws -> [Tag] {
         try references()
             .compactMap(\.tag)
+    }
+}
+
+// MARK: - Object
+
+extension Repository {
+
+    public func object(for id: Object.ID) throws -> Object {
+        var oid = id.oid
+        let pointer = try GitPointer(create: { git_object_lookup($0, repository.pointer, &oid, GIT_OBJECT_ANY) },
+                                     free: git_object_free)
+        return try Object(pointer)
     }
 }
 

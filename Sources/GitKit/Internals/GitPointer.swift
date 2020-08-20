@@ -70,6 +70,12 @@ extension GitPointer {
         return value.pointee
     }
 
+    func get(
+        _ get: (OpaquePointer?) -> OpaquePointer?
+    ) throws -> GitPointer {
+        GitPointer(try Unwrap(get(pointer)))
+    }
+
     func get<Value>(
         _ get: (OpaquePointer?) -> Value
     ) -> Value {
