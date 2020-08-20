@@ -33,17 +33,18 @@ extension Tag {
 
     init(_ tagReference: GitPointer) throws {
         guard tagReference.check(git_reference_is_tag) else { throw GitKitError.incorrectType(expected: "tag") }
-        let repo = try Unwrap(tagReference.get(git_reference_owner))
-        var oid = try Unwrap(tagReference.get(git_reference_target)).pointee
 
         let id = try Tag.ID(reference: tagReference)
-        let objectID = Object.ID(oid)
+        let target = try Object.ID(reference: tagReference)
+
+        let repo = try Unwrap(tagReference.get(git_reference_owner))
+        var oid = target.oid
         let tagObject = try? GitPointer(create: { git_object_lookup($0, repo, &oid, GIT_OBJECT_TAG) },
                                         free: git_object_free)
 
         switch tagObject {
         case .none:
-            self = .lightweight(id: id, target: objectID)
+            self = .lightweight(id: id, target: target)
         case .some(let tagObject):
             self = try .annotated(id: id, target: AnnotatedTag(tagObject))
         }
