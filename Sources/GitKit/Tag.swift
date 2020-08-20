@@ -2,13 +2,16 @@
 import Clibgit2
 import Tagged
 
-public enum Tag: Identifiable {
-    public typealias ID = Tagged<Tag, Reference.ID>
+public enum Tag {
     case lightweight(id: ID, target: Object.ID)
     case annotated(id: ID, target: AnnotatedTag)
 }
 
-extension Tag {
+// MARK: - Tag.ID
+
+extension Tag: Identifiable {
+
+    public typealias ID = Tagged<Tag, Reference.ID>
 
     public var id: ID {
         switch self {
@@ -16,6 +19,11 @@ extension Tag {
         case let .lightweight(id, _): return id
         }
     }
+}
+
+// MARK: - Properties
+
+extension Tag {
 
     public var name: String {
         String(id.dropFirst(10)) // length of "refs/tags/"
@@ -28,6 +36,8 @@ extension Tag {
         }
     }
 }
+
+// MARK: - Git Initialiser
 
 extension Tag {
 

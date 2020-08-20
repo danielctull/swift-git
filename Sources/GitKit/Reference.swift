@@ -9,6 +9,8 @@ public enum Reference {
     case tag(Tag)
 }
 
+// MARK: - Git Initialiser
+
 extension Reference {
 
     init(_ reference: GitPointer) throws {
@@ -33,6 +35,8 @@ extension Reference {
         }
     }
 }
+
+// MARK: - Properties
 
 extension Reference {
 
