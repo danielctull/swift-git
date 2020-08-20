@@ -39,14 +39,20 @@ extension Tag {
 
         let repo = try Unwrap(tagReference.get(git_reference_owner))
         var oid = target.oid
-        let tagObject = try? GitPointer(create: { git_object_lookup($0, repo, &oid, GIT_OBJECT_TAG) },
-                                        free: git_object_free)
+        let targetObject = try GitPointer(create: { git_object_lookup($0, repo, &oid, GIT_OBJECT_ANY) },
+                                          free: git_object_free)
+        let targetType = targetObject.get(git_object_type)
 
-        switch tagObject {
-        case .none:
+        switch targetType {
+        case GIT_OBJECT_TAG:
+            self = try .annotated(id: id, target: AnnotatedTag(targetObject))
+        case GIT_OBJECT_BLOB, GIT_OBJECT_TREE, GIT_OBJECT_COMMIT:
             self = .lightweight(id: id, target: target)
-        case .some(let tagObject):
-            self = try .annotated(id: id, target: AnnotatedTag(tagObject))
+        default:
+            let typeName = try Unwrap(String(validatingUTF8: git_object_type2string(targetType)))
+            let expected = try [GIT_OBJECT_BLOB, GIT_OBJECT_TREE, GIT_OBJECT_COMMIT]
+                .map { try Unwrap(String(validatingUTF8: git_object_type2string($0))) }
+            throw GitKitError.unexpectedValue(expected: expected, received: typeName)
         }
     }
 }
