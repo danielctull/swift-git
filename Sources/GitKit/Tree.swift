@@ -7,6 +7,19 @@ public struct Tree: Identifiable {
     public typealias ID = Tagged<Tree, Object.ID>
     public let id: ID
     public let entries: [Entry]
+}
+
+extension Tree {
+
+    public struct Entry {
+        public let target: Object.ID
+        public let name: String
+    }
+}
+
+// MARK: - Git Initialisers
+
+extension Tree {
 
     init(_ tree: GitPointer) throws {
         self.tree = tree
@@ -19,14 +32,10 @@ public struct Tree: Identifiable {
     }
 }
 
-extension Tree {
+extension Tree.Entry {
 
-    public struct Entry {
-
-        public let name: String
-
-        init(_ entry: GitPointer) throws {
-            name = try Unwrap(String(validatingUTF8: entry.get(git_tree_entry_name)))
-        }
+    init(_ entry: GitPointer) throws {
+        target = try Object.ID(entry.get(git_tree_entry_id))
+        name = try Unwrap(String(validatingUTF8: entry.get(git_tree_entry_name)))
     }
 }
