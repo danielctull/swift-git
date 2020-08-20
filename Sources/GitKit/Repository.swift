@@ -168,7 +168,7 @@ extension Repository {
             createIterator: { git_revwalk_new($0, repository.pointer) },
             configureIterator: { iterator in
                 for reference in references {
-                    var oid = reference.objectID.oid
+                    var oid = reference.target.oid
                     let result = git_revwalk_push(iterator, &oid)
                     if LibGit2Error(result) != nil { return result }
                 }

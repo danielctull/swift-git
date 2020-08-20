@@ -34,15 +34,13 @@ extension Reference {
     }
 }
 
-// Object.ID
-
 extension Reference {
 
-    public var objectID: Object.ID {
+    public var target: Object.ID {
         switch self {
-        case let .branch(branch): return branch.objectID
-        case let .note(note): return note.objectID
-        case let .remoteBranch(remoteBranch): return remoteBranch.objectID
+        case let .branch(branch): return branch.target
+        case let .note(note): return note.target
+        case let .remoteBranch(remoteBranch): return remoteBranch.target
         case let .tag(tag): return tag.target
         }
     }

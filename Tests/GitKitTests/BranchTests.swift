@@ -14,7 +14,7 @@ final class BranchTests: XCTestCase {
             let branch = try XCTUnwrap(branches.first)
             XCTAssertEqual(branch.name, "main")
             XCTAssertEqual(branch.id, "refs/heads/main")
-            XCTAssertEqual(branch.objectID.description, "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
+            XCTAssertEqual(branch.target.description, "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
         }
     }
 
@@ -28,7 +28,7 @@ final class BranchTests: XCTestCase {
             let main2 = try repo.createBranch(named: "main2", at: commit)
             XCTAssertEqual(main2.name, "main2")
             XCTAssertEqual(main2.id, "refs/heads/main2")
-            XCTAssertEqual(main2.objectID.description, "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
+            XCTAssertEqual(main2.target.description, "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
         }
     }
 
@@ -39,7 +39,7 @@ final class BranchTests: XCTestCase {
             let branch = try repo.branch(named: "main")
             XCTAssertEqual(branch.name, "main")
             XCTAssertEqual(branch.id, "refs/heads/main")
-            XCTAssertEqual(branch.objectID.description, "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
+            XCTAssertEqual(branch.target.description, "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
         }
     }
 }
