@@ -9,6 +9,11 @@ public struct Blob: Identifiable {
     public let id: ID
     public let data: Data
     public let isBinary: Bool
+}
+
+// MARK: - Git Initialiser
+
+extension Blob {
 
     init(_ blob: GitPointer) throws {
         self.blob = blob

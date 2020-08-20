@@ -23,6 +23,12 @@ public struct Commit: Identifiable {
 
 extension Commit {
 
+    public func tree() throws -> Tree {
+        let pointer = try GitPointer(create: { git_commit_tree($0, commit.pointer) },
+                                     free: git_tree_free)
+        return try Tree(pointer)
+    }
+
     public var parentIDs: [ID] {
         (0..<commit.get(git_commit_parentcount)).map { index in
             ID(git_commit_parent_id(commit.pointer, index).pointee)

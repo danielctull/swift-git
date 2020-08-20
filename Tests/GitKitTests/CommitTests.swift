@@ -44,4 +44,24 @@ final class CommitTests: XCTestCase {
             XCTAssertEqual(commits.count, 0)
         }
     }
+
+    func testCommitTree() throws {
+        let remote = try Bundle.module.url(forRepository: "Test.git")
+        try FileManager.default.withTemporaryDirectory { local in
+            let repo = try Repository(local: local, remote: remote)
+            let commits = try repo.commits()
+            let last = try XCTUnwrap(commits.last)
+            let tree = try last.tree()
+            XCTAssertEqual(tree.id.description, "017acad83ffb24d951581417f150bf31673e45b6")
+            XCTAssertEqual(tree.entries.count, 1)
+            let entry = try tree.entries.value(at: 0)
+            XCTAssertEqual(entry.name, "README.md")
+            let object = try repo.object(for: entry.target)
+            XCTAssertEqual(object.id.description, "e5c0a8638a0d8dfa0c733f9d666c511f7e1f9a96")
+            guard case let .blob(blob) = object else { XCTFail(); return }
+            XCTAssertEqual(blob.id.description, "e5c0a8638a0d8dfa0c733f9d666c511f7e1f9a96")
+            XCTAssertEqual(blob.isBinary, false)
+            XCTAssertEqual(String(data: blob.data, encoding: .utf8), "This is a test repository.")
+        }
+    }
 }
