@@ -158,10 +158,13 @@ public struct SortOptions: OptionSet {
     public init(rawValue: UInt32) {
         self.rawValue = rawValue
     }
-    public init() { rawValue = GIT_SORT_NONE.rawValue }
-    public static let time = Self(rawValue: GIT_SORT_TIME.rawValue)
-    public static let topological = Self(rawValue: GIT_SORT_TOPOLOGICAL.rawValue)
-    public static let reverse = Self(rawValue: GIT_SORT_REVERSE.rawValue)
+    private init(_ sort: git_sort_t) {
+        self.init(rawValue: sort.rawValue)
+    }
+    public init() { self.init(GIT_SORT_NONE) }
+    public static let time = Self(GIT_SORT_TIME)
+    public static let topological = Self(GIT_SORT_TOPOLOGICAL)
+    public static let reverse = Self(GIT_SORT_REVERSE)
 }
 
 extension Repository {
