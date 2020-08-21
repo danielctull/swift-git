@@ -44,17 +44,6 @@ extension Repository {
     }
 }
 
-// MARK: - Head
-
-extension Repository {
-
-    public func head() throws -> Reference {
-        let head = try GitPointer(create: { git_repository_head($0, repository.pointer) },
-                                  free: git_reference_free)
-        return try Reference(head)
-    }
-}
-
 // MARK: - Branch
 
 extension Repository {
@@ -85,21 +74,6 @@ extension Repository {
             create: { git_branch_lookup($0, repository.pointer, name, GIT_BRANCH_LOCAL) },
             free: git_reference_free)
         return try Branch(pointer)
-    }
-}
-
-// MARK: - Reference
-
-extension Repository {
-
-    public func references() throws -> [Reference] {
-
-        try GitIterator(
-            createIterator: { git_reference_iterator_new($0, repository.pointer) },
-            freeIterator: git_reference_iterator_free,
-            nextElement: git_reference_next,
-            freeElement: git_reference_free)
-            .map(Reference.init)
     }
 }
 
