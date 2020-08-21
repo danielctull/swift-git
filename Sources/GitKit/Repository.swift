@@ -102,13 +102,3 @@ extension Repository {
         return try RemoteBranch(pointer)
     }
 }
-
-// MARK: - Tag
-
-extension Repository {
-
-    public func tags() throws -> [Tag] {
-        try references()
-            .compactMap(\.tag)
-    }
-}
