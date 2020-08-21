@@ -117,7 +117,11 @@ extension Object.ID: Hashable {
 extension Tagged where RawValue == Object.ID {
 
     init(object: GitPointer) throws {
-        let objectID = try Object.ID(object.get(git_object_id))
+        try self.init(oid: object.get(git_object_id))
+    }
+
+    init(oid: git_oid) {
+        let objectID = Object.ID(oid)
         self.init(rawValue: objectID)
     }
 }
