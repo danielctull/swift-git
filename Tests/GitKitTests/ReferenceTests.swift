@@ -46,6 +46,41 @@ final class ReferenceTests: XCTestCase {
         }
     }
 
+    func testRemoveReferenceByType() throws {
+        let remote = try Bundle.module.url(forRepository: "Test.git")
+        try FileManager.default.withTemporaryDirectory { local in
+            let repo = try Repository(local: local, remote: remote)
+
+            XCTAssertEqual(try repo.references().count, 4)
+            XCTAssertEqual(try repo.references().value(at: 0).id, "refs/heads/main")
+            XCTAssertEqual(try repo.references().value(at: 1).id, "refs/remotes/origin/main")
+            XCTAssertEqual(try repo.references().value(at: 2).id, "refs/tags/1.0")
+            XCTAssertEqual(try repo.references().value(at: 3).id, "refs/tags/lightweight-tag")
+
+            guard case let .branch(branch) = try repo.references().value(at: 0) else { XCTFail(); return }
+            try repo.remove(branch)
+            XCTAssertEqual(try repo.references().count, 3)
+            XCTAssertEqual(try repo.references().value(at: 0).id, "refs/remotes/origin/main")
+            XCTAssertEqual(try repo.references().value(at: 1).id, "refs/tags/1.0")
+            XCTAssertEqual(try repo.references().value(at: 2).id, "refs/tags/lightweight-tag")
+
+            guard case let .remoteBranch(remoteBranch) = try repo.references().value(at: 0) else { XCTFail(); return }
+            try repo.remove(remoteBranch)
+            XCTAssertEqual(try repo.references().count, 2)
+            XCTAssertEqual(try repo.references().value(at: 0).id, "refs/tags/1.0")
+            XCTAssertEqual(try repo.references().value(at: 1).id, "refs/tags/lightweight-tag")
+
+            guard case let .tag(annotatedTag) = try repo.references().value(at: 0) else { XCTFail(); return }
+            try repo.remove(annotatedTag)
+            XCTAssertEqual(try repo.references().count, 1)
+            XCTAssertEqual(try repo.references().value(at: 0).id, "refs/tags/lightweight-tag")
+
+            guard case let .tag(lightweightTag) = try repo.references().value(at: 0) else { XCTFail(); return }
+            try repo.remove(lightweightTag)
+            XCTAssertEqual(try repo.references().count, 0)
+        }
+    }
+
     func testRemoveReferenceByTypeID() throws {
         let remote = try Bundle.module.url(forRepository: "Test.git")
         try FileManager.default.withTemporaryDirectory { local in

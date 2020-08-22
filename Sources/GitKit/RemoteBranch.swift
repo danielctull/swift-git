@@ -2,7 +2,7 @@
 import Clibgit2
 import Tagged
 
-public struct RemoteBranch {
+public struct RemoteBranch: Identifiable {
     let branch: GitPointer
     public typealias ID = Tagged<RemoteBranch, Reference.ID>
     public let id: ID

@@ -19,6 +19,15 @@ extension Repository {
             .map(Reference.init)
     }
 
+    @available(OSX 10.15, *)
+    public func remove<Ref>(
+        _ reference: Ref
+    ) throws where Ref: Identifiable,
+                   Ref.ID: RawRepresentable,
+                   Ref.ID.RawValue == Reference.ID {
+        try remove(reference.id.rawValue)
+    }
+
     public func remove<ID>(
         _ id: ID
     ) throws where ID: RawRepresentable, ID.RawValue == Reference.ID {
