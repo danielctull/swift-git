@@ -19,6 +19,13 @@ extension Repository {
             .map(Reference.init)
     }
 
+    public func reference(for id: Reference.ID) throws -> Reference {
+        let pointer = try GitPointer(
+            create: { git_reference_lookup($0, repository.pointer, id.rawValue) },
+            free: git_reference_free)
+        return try Reference(pointer)
+    }
+
     @available(OSX 10.15, *)
     public func remove<Ref>(
         _ reference: Ref
