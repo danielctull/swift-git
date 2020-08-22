@@ -100,3 +100,11 @@ extension Tagged where RawValue == Reference.ID {
         self.init(rawValue: referenceID)
     }
 }
+
+extension Tagged where RawValue == String {
+
+    init(_ utf8: UnsafePointer<Int8>!) throws {
+        let value = try Unwrap(String(validatingUTF8: utf8))
+        self.init(rawValue: value)
+    }
+}

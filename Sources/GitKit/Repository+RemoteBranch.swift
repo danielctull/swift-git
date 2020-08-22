@@ -17,7 +17,8 @@ extension Repository {
             .map(RemoteBranch.init)
     }
 
-    public func remoteBranch(named name: String) throws -> RemoteBranch {
+    public func remoteBranch(on remote: Remote.ID, named branch: String) throws -> RemoteBranch {
+        let name = remote.rawValue + "/" + branch
         let pointer = try GitPointer(
             create: { git_branch_lookup($0, repository.pointer, name, GIT_BRANCH_REMOTE) },
             free: git_reference_free)
