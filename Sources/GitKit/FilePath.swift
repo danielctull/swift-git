@@ -1,5 +1,5 @@
 
-public struct FilePath {
+public struct FilePath: Equatable {
     let rawValue: String
 }
 
