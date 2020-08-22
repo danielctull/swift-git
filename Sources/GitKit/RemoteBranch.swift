@@ -7,6 +7,7 @@ public struct RemoteBranch: Identifiable {
     public typealias ID = Tagged<RemoteBranch, Reference.ID>
     public let id: ID
     public let target: Object.ID
+    public let remote: Remote.ID
     public let name: String
 }
 
@@ -18,6 +19,7 @@ extension RemoteBranch {
         id = try ID(reference: branch)
         name = try Unwrap(String(validatingUTF8: branch.get(git_branch_name)))
         target = try Object.ID(reference: branch)
+        remote = try Remote.ID(rawValue: String(Unwrap(name.split(separator: "/").first)))
     }
 }
 

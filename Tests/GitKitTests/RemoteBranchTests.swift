@@ -14,6 +14,7 @@ final class RemoteBranchTests: XCTestCase {
             let main = try XCTUnwrap(remoteBranches.first)
             XCTAssertEqual(main.name, "origin/main")
             XCTAssertEqual(main.id, "refs/remotes/origin/main")
+            XCTAssertEqual(main.remote, "origin")
         }
     }
 
@@ -24,6 +25,7 @@ final class RemoteBranchTests: XCTestCase {
             let remoteBranch = try repo.remoteBranch(on: "origin", named: "main")
             XCTAssertEqual(remoteBranch.name, "origin/main")
             XCTAssertEqual(remoteBranch.id, "refs/remotes/origin/main")
+            XCTAssertEqual(remoteBranch.remote, "origin")
         }
     }
 }
