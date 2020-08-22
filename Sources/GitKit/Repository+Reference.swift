@@ -18,4 +18,9 @@ extension Repository {
             freeElement: git_reference_free)
             .map(Reference.init)
     }
+
+    public func remove(_ reference: Reference.ID) throws {
+        let result = git_reference_remove(repository.pointer, reference.rawValue)
+        if let error = LibGit2Error(result) { throw error }
+    }
 }
