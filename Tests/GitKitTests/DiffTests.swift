@@ -1,0 +1,37 @@
+
+import Foundation
+import GitKit
+import XCTest
+
+final class DiffTests: XCTestCase {
+
+    func testAddedFile() throws {
+        let remote = try Bundle.module.url(forRepository: "Test.git")
+        try FileManager.default.withTemporaryDirectory { local in
+            let repo = try Repository(local: local, remote: remote)
+            let commits = try repo.commits(sortedBy: .reverse)
+            XCTAssertEqual(commits.count, 4)
+            let first = try commits.value(at: 0)
+            let second = try commits.value(at: 1)
+            let diff = try repo.diff(from: first.tree(), to: second.tree())
+            XCTAssertEqual(diff.deltas.count, 1)
+            let delta = try diff.deltas.value(at: 0)
+            XCTAssertEqual(delta.status, .added)
+            XCTAssertEqual(delta.flags, [])
+
+            XCTAssertNil(delta.from)
+
+            let file = try XCTUnwrap(delta.to)
+            XCTAssertEqual(file.flags, [.validID, .exists])
+            XCTAssertEqual(file.size, 0)
+            XCTAssertEqual(file.path, "file.text")
+            XCTAssertEqual(file.id.description, "96c36b4c2da3a3b8472d437cea0497d38f125b04")
+
+            let object = try repo.object(for: file.id.rawValue)
+            guard case let .blob(blob) = object else { XCTFail(); return }
+            XCTAssertEqual(blob.id.description, "96c36b4c2da3a3b8472d437cea0497d38f125b04")
+            XCTAssertFalse(blob.isBinary)
+            XCTAssertEqual(String(data: blob.data, encoding: .utf8), "A test file is made!")
+        }
+    }
+}

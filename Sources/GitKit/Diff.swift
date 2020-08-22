@@ -3,7 +3,7 @@ import Clibgit2
 import Tagged
 
 public struct Diff {
-    let deltas: [Delta]
+    public let deltas: [Delta]
 }
 
 extension Diff {
@@ -23,8 +23,8 @@ extension Diff {
 
     public struct Delta {
         public let status: Status
-        public let old: File
-        public let new: File
+        public let from: File?
+        public let to: File?
         public let flags: Flags
     }
 }
@@ -33,8 +33,8 @@ extension Diff.Delta {
 
     init(_ delta: git_diff_delta) throws {
         flags = Diff.Flags(rawValue: delta.flags)
-        old = try Diff.File(delta.old_file)
-        new = try Diff.File(delta.new_file)
+        from = try Diff.File(delta.old_file)
+        to = try Diff.File(delta.new_file)
         status = try Diff.Delta.Status(status: delta.status, similarity: delta.similarity)
     }
 }
@@ -43,7 +43,7 @@ extension Diff.Delta {
 
 extension Diff.Delta {
 
-    public enum Status {
+    public enum Status: Equatable {
         case unmodified
         case added
         case deleted
@@ -95,11 +95,12 @@ extension Diff {
 
 extension Diff.File {
 
-    init(_ file: git_diff_file) throws {
+    init?(_ file: git_diff_file) throws {
+        flags = Diff.Flags(rawValue: file.flags)
+        guard flags.contains(.exists) else { return nil }
         id = ID(oid: file.id)
         path = try Unwrap(String(validatingUTF8: file.path))
         size = file.size
-        flags = Diff.Flags(rawValue: file.flags)
     }
 }
 
