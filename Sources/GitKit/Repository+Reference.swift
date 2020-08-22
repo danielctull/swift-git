@@ -19,6 +19,12 @@ extension Repository {
             .map(Reference.init)
     }
 
+    public func remove<ID>(
+        _ id: ID
+    ) throws where ID: RawRepresentable, ID.RawValue == Reference.ID {
+        try remove(id.rawValue)
+    }
+
     public func remove(_ reference: Reference) throws {
         try remove(reference.id)
     }
