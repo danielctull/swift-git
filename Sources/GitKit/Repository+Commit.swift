@@ -22,6 +22,14 @@ extension SortOptions {
 
 extension Repository {
 
+    public func commit(for id: Commit.ID) throws -> Commit {
+        var oid = id.rawValue.oid
+        let commit = try GitPointer(
+            create: { git_commit_lookup($0, repository.pointer, &oid) },
+            free: git_commit_free)
+        return try Commit(commit)
+    }
+
     public func commits(
         for references: Reference...,
         sortedBy sortOptions: SortOptions = SortOptions(),
