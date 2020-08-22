@@ -19,8 +19,12 @@ extension Repository {
             .map(Reference.init)
     }
 
-    public func remove(_ reference: Reference.ID) throws {
-        let result = git_reference_remove(repository.pointer, reference.rawValue)
+    public func remove(_ reference: Reference) throws {
+        try remove(reference.id)
+    }
+
+    public func remove(_ id: Reference.ID) throws {
+        let result = git_reference_remove(repository.pointer, id.rawValue)
         if let error = LibGit2Error(result) { throw error }
     }
 }
