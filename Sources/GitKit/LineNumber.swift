@@ -7,6 +7,7 @@ public struct LineNumber: Equatable {
 }
 
 extension LineNumber: Comparable {
+
     public static func < (lhs: LineNumber, rhs: LineNumber) -> Bool {
         lhs.rawValue < rhs.rawValue
     }
@@ -34,9 +35,9 @@ extension LineNumber: ExpressibleByIntegerLiteral {
 
 extension ClosedRange where Bound == LineNumber {
     
-    init(start: Int, count: Int) {
-        let start = LineNumber(start)
-        let end = start.advanced(by: count - 1)
-        self = start...end
+    init<I: BinaryInteger>(start: I, count: I) {
+        let start = LineNumber(Int(start))
+        let end = start.advanced(by: Int(count) - 1)
+        self.init(uncheckedBounds: (start, end))
     }
 }

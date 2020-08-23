@@ -3,17 +3,62 @@ import Clibgit2
 import Tagged
 
 public struct Diff {
+    let diff: GitPointer
     public let deltas: [Delta]
 }
 
 extension Diff {
 
     init(_ diff: GitPointer) throws {
+        self.diff = diff
         let deltaCount = diff.get(git_diff_num_deltas)
         deltas = try (0..<deltaCount).map { index in
             let pointer = try Unwrap(diff.get { git_diff_get_delta($0, index) })
             return try Delta(pointer.pointee)
         }
+    }
+}
+
+// MARK: - Diff.Hunk
+
+extension Diff {
+
+    public struct Hunk {
+        public let lines: ClosedRange<LineNumber>
+        public let file: File
+    }
+
+    public func hunks() throws -> [Hunk] {
+
+        var hunks: [Hunk] = []
+
+        let error = withUnsafeMutablePointer(to: &hunks) {
+            LibGit2Error(git_diff_foreach(diff.pointer, nil, nil, { delta, hunk, hunks in
+
+                do {
+                    let hunks = try Unwrap(hunks).assumingMemoryBound(to: [Hunk].self)
+                    let delta = try Unwrap(delta?.pointee)
+                    let hunk = try Unwrap(hunk?.pointee)
+                    hunks.pointee.append(try Hunk(delta: delta, hunk: hunk))
+                    return 0
+                } catch {
+                    return 1
+                }
+
+            }, nil, $0))
+        }
+
+        if let e = error { throw e }
+        return hunks
+    }
+}
+
+extension Diff.Hunk {
+    
+    fileprivate init(delta: git_diff_delta, hunk: git_diff_hunk) throws {
+        let lines = ClosedRange(start: hunk.new_start, count: hunk.new_lines)
+        let file = try Unwrap(Diff.File(delta.new_file))
+        self.init(lines: lines, file: file)
     }
 }
 
