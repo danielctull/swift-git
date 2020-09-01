@@ -42,7 +42,7 @@ extension Diff {
                     hunks.pointee.append(try Hunk(delta: delta, hunk: hunk))
                     return 0
                 } catch {
-                    return 1
+                    return LibGit2Error.Code.unknown.code.rawValue
                 }
 
             }, nil, $0))
