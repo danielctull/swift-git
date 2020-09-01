@@ -29,3 +29,14 @@ extension LineNumber: ExpressibleByIntegerLiteral {
         self.rawValue = value
     }
 }
+
+// MARK: - Git initialiser
+
+extension ClosedRange where Bound == LineNumber {
+    
+    init(start: Int, count: Int) {
+        let start = LineNumber(start)
+        let end = start.advanced(by: count - 1)
+        self = start...end
+    }
+}

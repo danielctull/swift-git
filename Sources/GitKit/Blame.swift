@@ -40,9 +40,7 @@ extension Blame {
 extension Blame.Hunk {
 
     init(_ hunk: git_blame_hunk) throws {
-        let start = LineNumber(hunk.final_start_line_number)
-        let end = start.advanced(by: hunk.lines_in_hunk - 1)
-        lines = start...end
+        lines = ClosedRange(start: hunk.final_start_line_number, count: hunk.lines_in_hunk)
         signature = try Signature(hunk.final_signature.pointee)
         commitID = Commit.ID(hunk.final_commit_id)
         path = try FilePath(rawValue: Unwrap(String(validatingUTF8: hunk.orig_path)))
