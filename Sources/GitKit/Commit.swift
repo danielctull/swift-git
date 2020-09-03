@@ -55,7 +55,7 @@ extension Commit.ID {
 
 extension Commit.ID {
 
-    var shortDescription: String { String(description.dropLast(33)) }
+    public var shortDescription: String { String(description.dropLast(33)) }
 }
 
 // MARK: - CustomDebugStringConvertible
