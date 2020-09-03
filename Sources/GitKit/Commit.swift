@@ -53,11 +53,16 @@ extension Commit.ID {
     }
 }
 
+extension Commit.ID {
+
+    var shortDescription: String { String(description.dropLast(33)) }
+}
+
 // MARK: - CustomDebugStringConvertible
 
 extension Commit: CustomDebugStringConvertible {
 
     public var debugDescription: String {
-        "Commit(id: \(id.rawValue.debugDescription), summary: \(summary))"
+        "Commit(id: \(id.shortDescription), summary: \(summary))"
     }
 }

@@ -35,6 +35,11 @@ public struct Repository {
     }
 }
 
+extension Repository: CustomStringConvertible {
+
+    public var description: String { "Repository" }
+}
+
 // MARK: - Git Initialiser
 
 extension Repository {

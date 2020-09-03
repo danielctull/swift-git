@@ -12,6 +12,11 @@ extension Blame {
     }
 }
 
+extension Blame: CustomStringConvertible {
+
+    public var description: String { "Blame" }
+}
+
 // MARK: - Blame.Hunk
 
 extension Blame {
@@ -44,5 +49,12 @@ extension Blame.Hunk {
         signature = try Signature(hunk.final_signature.pointee)
         commitID = Commit.ID(hunk.final_commit_id)
         path = try FilePath(rawValue: Unwrap(String(validatingUTF8: hunk.orig_path)))
+    }
+}
+
+extension Blame.Hunk: CustomStringConvertible {
+
+    public var description: String {
+        "Blame.Hunk(path: \(self.path), lines: \(lines.shortDescription), commit: \(self.commitID.shortDescription))"
     }
 }

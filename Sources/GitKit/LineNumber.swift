@@ -46,3 +46,8 @@ extension ClosedRange where Bound == LineNumber {
         self.init(uncheckedBounds: (start, end))
     }
 }
+
+extension ClosedRange {
+
+    var shortDescription: String { "\(lowerBound)...\(upperBound)" }
+}
