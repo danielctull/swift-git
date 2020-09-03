@@ -9,3 +9,8 @@ extension FilePath: ExpressibleByStringLiteral {
         self.rawValue = value
     }
 }
+
+extension FilePath: CustomStringConvertible {
+
+    public var description: String { rawValue }
+}

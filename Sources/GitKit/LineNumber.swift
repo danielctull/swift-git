@@ -31,6 +31,11 @@ extension LineNumber: ExpressibleByIntegerLiteral {
     }
 }
 
+extension LineNumber: CustomStringConvertible {
+
+    public var description: String { String(rawValue) }
+}
+
 // MARK: - Git initialiser
 
 extension ClosedRange where Bound == LineNumber {

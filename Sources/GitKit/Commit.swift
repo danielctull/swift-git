@@ -56,6 +56,7 @@ extension Commit.ID {
 // MARK: - CustomDebugStringConvertible
 
 extension Commit: CustomDebugStringConvertible {
+
     public var debugDescription: String {
         "Commit(id: \(id.rawValue.debugDescription), summary: \(summary))"
     }

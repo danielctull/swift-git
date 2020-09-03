@@ -18,3 +18,18 @@ extension Signature {
         timeZone = try Unwrap(TimeZone(secondsFromGMT: 60 * Int(signature.when.offset)))
     }
 }
+
+extension Signature: CustomStringConvertible {
+
+    private var formattedDate: String {
+        let formatter = DateFormatter()
+        formatter.timeZone = timeZone
+        formatter.dateStyle = .short
+        formatter.timeStyle = .long
+        return formatter.string(from: date)
+    }
+
+    public var description: String {
+        return "Signature(name: \(name), email: \(email), date: \(formattedDate))"
+    }
+}
