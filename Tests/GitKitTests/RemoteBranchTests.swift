@@ -10,11 +10,15 @@ final class RemoteBranchTests: XCTestCase {
         try FileManager.default.withTemporaryDirectory { local in
             let repo = try Repository(local: local, remote: remote)
             let remoteBranches = try repo.remoteBranches()
-            XCTAssertEqual(remoteBranches.count, 1)
-            let main = try XCTUnwrap(remoteBranches.first)
-            XCTAssertEqual(main.name, "origin/main")
-            XCTAssertEqual(main.id, "refs/remotes/origin/main")
-            XCTAssertEqual(main.remote, "origin")
+            XCTAssertEqual(remoteBranches.count, 2)
+            XCTAssertEqual(try remoteBranches.value(at: 0).id, "refs/remotes/origin/HEAD")
+            XCTAssertEqual(try remoteBranches.value(at: 0).name, "origin/HEAD")
+            XCTAssertEqual(try remoteBranches.value(at: 0).remote, "origin")
+            XCTAssertEqual(try remoteBranches.value(at: 0).target.description, "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
+            XCTAssertEqual(try remoteBranches.value(at: 1).id, "refs/remotes/origin/main")
+            XCTAssertEqual(try remoteBranches.value(at: 1).name, "origin/main")
+            XCTAssertEqual(try remoteBranches.value(at: 1).remote, "origin")
+            XCTAssertEqual(try remoteBranches.value(at: 1).target.description, "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
         }
     }
 
@@ -26,6 +30,7 @@ final class RemoteBranchTests: XCTestCase {
             XCTAssertEqual(remoteBranch.name, "origin/main")
             XCTAssertEqual(remoteBranch.id, "refs/remotes/origin/main")
             XCTAssertEqual(remoteBranch.remote, "origin")
+            XCTAssertEqual(remoteBranch.target.description, "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
         }
     }
 }
