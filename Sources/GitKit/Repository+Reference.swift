@@ -25,13 +25,18 @@ extension Repository {
             free: git_reference_free)
         return try Reference(pointer)
     }
+}
+
+// MARK: - Removing References
+
+extension Repository {
 
     @available(OSX 10.15, *)
-    public func remove<Ref>(
-        _ reference: Ref
-    ) throws where Ref: Identifiable,
-                   Ref.ID: RawRepresentable,
-                   Ref.ID.RawValue == Reference.ID {
+    public func remove<SomeReference>(
+        _ reference: SomeReference
+    ) throws where SomeReference: Identifiable,
+                   SomeReference.ID: RawRepresentable,
+                   SomeReference.ID.RawValue == Reference.ID {
         try remove(reference.id.rawValue)
     }
 
@@ -41,12 +46,12 @@ extension Repository {
         try remove(id.rawValue)
     }
 
-    public func remove(_ reference: Reference) throws {
-        try remove(reference.id)
+    public func remove(_ id: Reference.ID) throws {
+        try remove(reference(for: id))
     }
 
-    public func remove(_ id: Reference.ID) throws {
-        let result = git_reference_remove(repository.pointer, id.rawValue)
+    public func remove(_ reference: Reference) throws {
+        let result = git_reference_remove(repository.pointer, reference.id.rawValue)
         if let error = LibGit2Error(result) { throw error }
     }
 }

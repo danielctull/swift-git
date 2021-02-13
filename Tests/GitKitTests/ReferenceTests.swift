@@ -137,6 +137,8 @@ final class ReferenceTests: XCTestCase {
             XCTAssertEqual(try repo.references().value(at: 3).id, "refs/tags/1.0")
             XCTAssertEqual(try repo.references().value(at: 4).id, "refs/tags/lightweight-tag")
 
+            XCTAssertThrowsError(try repo.remove("refs/heads/not-here"))
+            
             try repo.remove("refs/heads/main")
             XCTAssertEqual(try repo.references().count, 4)
             XCTAssertEqual(try repo.references().value(at: 0).id, "refs/remotes/origin/HEAD")
