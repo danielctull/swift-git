@@ -33,6 +33,11 @@ public struct Repository {
             }
         }, free: git_repository_free)
     }
+
+    public var workingDirectory: URL? {
+        guard let path = try? String(validatingUTF8: repository.get(git_repository_workdir)) else { return nil }
+        return URL(fileURLWithPath: path)
+    }
 }
 
 extension Repository: CustomStringConvertible {
