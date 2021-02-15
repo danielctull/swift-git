@@ -97,7 +97,7 @@ final class ReferenceTests: XCTestCase {
             XCTAssertEqual(try repo.references().value(at: 3).id, "refs/tags/1.0")
             XCTAssertEqual(try repo.references().value(at: 4).id, "refs/tags/lightweight-tag")
 
-            guard case let .branch(branch) = try repo.references().value(at: 0) else { XCTFail(); return }
+            guard case let .branch(branch) = try repo.references().value(at: 0) else { XCTFail("Expected branch"); return }
             try repo.remove(branch.id)
             XCTAssertEqual(try repo.references().count, 4)
             XCTAssertEqual(try repo.references().value(at: 0).id, "refs/remotes/origin/HEAD")
@@ -105,20 +105,20 @@ final class ReferenceTests: XCTestCase {
             XCTAssertEqual(try repo.references().value(at: 2).id, "refs/tags/1.0")
             XCTAssertEqual(try repo.references().value(at: 3).id, "refs/tags/lightweight-tag")
 
-            guard case let .remoteBranch(remoteBranch) = try repo.references().value(at: 0) else { XCTFail(); return }
+            guard case let .remoteBranch(remoteBranch) = try repo.references().value(at: 0) else { XCTFail("Expected remote"); return }
             try repo.remove(remoteBranch.id)
             XCTAssertEqual(try repo.references().count, 3)
             XCTAssertEqual(try repo.references().value(at: 0).id, "refs/remotes/origin/main")
             XCTAssertEqual(try repo.references().value(at: 1).id, "refs/tags/1.0")
             XCTAssertEqual(try repo.references().value(at: 2).id, "refs/tags/lightweight-tag")
 
-            guard case let .tag(annotatedTag) = try repo.references().value(at: 1) else { XCTFail(); return }
+            guard case let .tag(annotatedTag) = try repo.references().value(at: 1) else { XCTFail("Expected annotated tag"); return }
             try repo.remove(annotatedTag.id)
             XCTAssertEqual(try repo.references().count, 2)
             XCTAssertEqual(try repo.references().value(at: 0).id, "refs/remotes/origin/main")
             XCTAssertEqual(try repo.references().value(at: 1).id, "refs/tags/lightweight-tag")
 
-            guard case let .tag(lightweightTag) = try repo.references().value(at: 1) else { XCTFail(); return }
+            guard case let .tag(lightweightTag) = try repo.references().value(at: 1) else { XCTFail("Expected lightweight tag"); return }
             try repo.remove(lightweightTag.id)
             XCTAssertEqual(try repo.references().count, 1)
             XCTAssertEqual(try repo.references().value(at: 0).id, "refs/remotes/origin/main")
@@ -138,7 +138,7 @@ final class ReferenceTests: XCTestCase {
             XCTAssertEqual(try repo.references().value(at: 4).id, "refs/tags/lightweight-tag")
 
             XCTAssertThrowsError(try repo.remove("refs/heads/not-here"))
-            
+
             try repo.remove("refs/heads/main")
             XCTAssertEqual(try repo.references().count, 4)
             XCTAssertEqual(try repo.references().value(at: 0).id, "refs/remotes/origin/HEAD")

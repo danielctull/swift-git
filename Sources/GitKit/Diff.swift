@@ -54,7 +54,7 @@ extension Diff {
 }
 
 extension Diff.Hunk {
-    
+
     fileprivate init(delta: git_diff_delta, hunk: git_diff_hunk) throws {
         let lines = ClosedRange(start: hunk.new_start, count: hunk.new_lines)
         let file = try Unwrap(Diff.File(delta.new_file))
@@ -218,26 +218,26 @@ extension Diff {
     }
 }
 
-//// MARK: - Diff.File.Mode
+// MARK: - Diff.File.Mode
+
+//    extension Diff.File {
 //
-//extension Diff.File {
+//        public struct Mode: OptionSet {
 //
-//    public struct Mode: OptionSet {
+//            public let rawValue: UInt16
+//            public init(rawValue: UInt16) {
+//                self.rawValue = rawValue
+//            }
 //
-//        public let rawValue: UInt16
-//        public init(rawValue: UInt16) {
-//            self.rawValue = rawValue
+//            private init(_ mode: git_filemode_t) {
+//                self.init(rawValue: mode.rawValue)
+//            }
+//
+//            public static let unreadable = Self(GIT_FILEMODE_UNREADABLE)
+//            public static let tree = Self(GIT_FILEMODE_TREE)
+//            public static let blob = Self(GIT_FILEMODE_BLOB)
+//            public static let blobExecutable = Self(GIT_FILEMODE_BLOB_EXECUTABLE)
+//            public static let link = Self(GIT_FILEMODE_LINK)
+//            public static let commit = Self(GIT_FILEMODE_COMMIT)
 //        }
-//
-//        private init(_ mode: git_filemode_t) {
-//            self.init(rawValue: mode.rawValue)
-//        }
-//
-//        public static let unreadable = Self(GIT_FILEMODE_UNREADABLE)
-//        public static let tree = Self(GIT_FILEMODE_TREE)
-//        public static let blob = Self(GIT_FILEMODE_BLOB)
-//        public static let blobExecutable = Self(GIT_FILEMODE_BLOB_EXECUTABLE)
-//        public static let link = Self(GIT_FILEMODE_LINK)
-//        public static let commit = Self(GIT_FILEMODE_COMMIT)
 //    }
-//}

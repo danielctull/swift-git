@@ -28,7 +28,7 @@ final class DiffTests: XCTestCase {
             XCTAssertEqual(file.id.description, "96c36b4c2da3a3b8472d437cea0497d38f125b04")
 
             let object = try repo.object(for: file.id)
-            guard case let .blob(blob) = object else { XCTFail(); return }
+            guard case let .blob(blob) = object else { XCTFail("Expected blob"); return }
             XCTAssertEqual(blob.id.description, "96c36b4c2da3a3b8472d437cea0497d38f125b04")
             XCTAssertFalse(blob.isBinary)
             XCTAssertEqual(String(data: blob.data, encoding: .utf8), "A test file is made!")

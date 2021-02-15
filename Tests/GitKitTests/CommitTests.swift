@@ -58,9 +58,9 @@ final class CommitTests: XCTestCase {
             XCTAssertEqual(entry.name, "README.md")
             let object = try repo.object(for: entry.target)
             XCTAssertEqual(object.id.description, "e5c0a8638a0d8dfa0c733f9d666c511f7e1f9a96")
-            guard case let .blob(blob) = object else { XCTFail(); return }
+            guard case let .blob(blob) = object else { XCTFail("Expected blob"); return }
             XCTAssertEqual(blob.id.description, "e5c0a8638a0d8dfa0c733f9d666c511f7e1f9a96")
-            XCTAssertEqual(blob.isBinary, false)
+            XCTAssertFalse(blob.isBinary)
             XCTAssertEqual(String(data: blob.data, encoding: .utf8), "This is a test repository.")
         }
     }

@@ -39,7 +39,7 @@ extension LineNumber: CustomStringConvertible {
 // MARK: - Git initialiser
 
 extension ClosedRange where Bound == LineNumber {
-    
+
     init<I: BinaryInteger>(start: I, count: I) {
         let start = LineNumber(Int(start))
         let end = start.advanced(by: Int(count) - 1)
