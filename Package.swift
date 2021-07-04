@@ -4,6 +4,10 @@ import PackageDescription
 
 let package = Package(
     name: "GitKit",
+    platforms: [
+      .macOS(.v10_13),
+      .iOS(.v11),
+    ],
     products: [
         .library(
             name: "GitKit",
