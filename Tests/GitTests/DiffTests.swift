@@ -50,7 +50,7 @@ final class DiffTests: XCTestCase {
             let hunk = try hunks.value(at: 0)
 
             let file = try XCTUnwrap(hunk.file)
-            XCTAssertEqual(file.flags, [.notBinary, .validID, .exists, .validSize])
+            XCTAssertEqual(file.flags, [.notBinary, .validID, .exists])
             XCTAssertEqual(file.size, 20)
             XCTAssertEqual(file.path, "file.text")
             XCTAssertEqual(file.id.description, "96c36b4c2da3a3b8472d437cea0497d38f125b04")

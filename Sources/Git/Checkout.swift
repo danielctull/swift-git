@@ -1,5 +1,5 @@
 
-import Clibgit2
+import Cgit2
 
 extension Repository {
 
@@ -199,10 +199,10 @@ extension Checkout.Strategy: GitOptionSet {
     ///
     /// Stop after sending notifications; don't update the working directory
     /// or index.
-    public static let dryRun = Self(GIT_CHECKOUT_DRY_RUN)
+//    public static let dryRun = Self(GIT_CHECKOUT_DRY_RUN)
 
     /// Include common ancestor data in zdiff3 format for conflicts
-    public static let conflictStyleZdiff3 = Self(GIT_CHECKOUT_CONFLICT_STYLE_ZDIFF3)
+//    public static let conflictStyleZdiff3 = Self(GIT_CHECKOUT_CONFLICT_STYLE_ZDIFF3)
 
     // THE FOLLOWING OPTIONS ARE NOT YET IMPLEMENTED
 

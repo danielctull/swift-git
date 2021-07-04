@@ -1,5 +1,5 @@
 
-import Clibgit2
+import Cgit2
 
 extension Repository {
 
@@ -231,7 +231,7 @@ extension Diff.Flags: GitOptionSet {
     public static let exists = Self(GIT_DIFF_FLAG_EXISTS)
 
     /// File size value is known correct
-    public static let validSize = Self(GIT_DIFF_FLAG_VALID_SIZE)
+//    public static let validSize = Self(GIT_DIFF_FLAG_VALID_SIZE)
 }
 
 // MARK: - Diff.File.Mode

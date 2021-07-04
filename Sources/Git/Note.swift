@@ -1,5 +1,5 @@
 
-import Clibgit2
+import Cgit2
 
 // MARK: - Note
 

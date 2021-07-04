@@ -1,5 +1,5 @@
 
-import Clibgit2
+import Cgit2
 
 public struct Index: Equatable, Hashable, Sendable {
     let pointer: GitPointer

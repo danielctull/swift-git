@@ -14,13 +14,14 @@ let package = Package(
             targets: ["Git"]),
     ],
     dependencies: [
+        .package(url: "https://github.com/sharplet/swift-cgit2", from: "1.1.0"),
     ],
     targets: [
 
         .target(
             name: "Git",
             dependencies: [
-                "Clibgit2",
+                .product(name: "Cgit2", package: "swift-cgit2"),
             ]),
 
         .testTarget(
@@ -28,14 +29,6 @@ let package = Package(
             dependencies: ["Git"],
             resources: [
                 .copy("Repositories"),
-            ]),
-
-        .systemLibrary(
-            name: "Clibgit2",
-            pkgConfig: "libgit2",
-            providers: [
-                .brew(["libgit2"]),
-                .apt(["libgit2-dev"])
             ]
         ),
     ]
