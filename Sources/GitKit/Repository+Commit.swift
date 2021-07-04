@@ -1,5 +1,5 @@
 
-import Clibgit2
+import Cgit2
 
 public struct SortOptions: OptionSet {
     public let rawValue: UInt32

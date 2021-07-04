@@ -14,6 +14,7 @@ let package = Package(
             targets: ["GitKit"]),
     ],
     dependencies: [
+        .package(url: "https://github.com/sharplet/swift-cgit2", from: "1.1.0"),
         .package(url: "https://github.com/pointfreeco/swift-tagged.git", from: "0.5.0"),
     ],
     targets: [
@@ -21,7 +22,7 @@ let package = Package(
         .target(
             name: "GitKit",
             dependencies: [
-                "Clibgit2",
+                .product(name: "Cgit2", package: "swift-cgit2"),
                 .product(name: "Tagged", package: "swift-tagged"),
             ]),
 
@@ -30,14 +31,6 @@ let package = Package(
             dependencies: ["GitKit"],
             resources: [
                 .copy("Repositories"),
-            ]),
-
-        .systemLibrary(
-            name: "Clibgit2",
-            pkgConfig: "libgit2",
-            providers: [
-                .brew(["libgit2"]),
-                .apt(["libgit2-dev"])
             ]
         ),
     ]

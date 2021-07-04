@@ -2,6 +2,15 @@
   "object": {
     "pins": [
       {
+        "package": "swift-cgit2",
+        "repositoryURL": "https://github.com/sharplet/swift-cgit2",
+        "state": {
+          "branch": null,
+          "revision": "f1c5e899dd8cbd3199ceffc4cae22447890ca284",
+          "version": "1.1.1"
+        }
+      },
+      {
         "package": "swift-tagged",
         "repositoryURL": "https://github.com/pointfreeco/swift-tagged.git",
         "state": {
