@@ -31,7 +31,8 @@ extension Repository {
 
 extension Repository {
 
-    @available(OSX 10.15, *)
+    @available(iOS 13, *)
+    @available(macOS 10.15, *)
     public func remove<SomeReference>(
         _ reference: SomeReference
     ) throws where SomeReference: Identifiable,
