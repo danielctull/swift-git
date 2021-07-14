@@ -16,16 +16,23 @@ extension Reflog {
     }
 
     public func items() throws -> [Item] {
-        let count = reflog.get(git_reflog_entrycount)
-        return try (0..<count).map { index in
-            let pointer = try Unwrap(reflog.get { git_reflog_entry_byindex($0, index) })
-            return Item(
-                message: try Unwrap(String(validatingUTF8: git_reflog_entry_message(pointer))),
-                committer: try Signature(Unwrap(git_reflog_entry_committer(pointer)).pointee),
-                old: try Object.ID(Unwrap(git_reflog_entry_id_old(pointer)).pointee),
-                new: try Object.ID(Unwrap(git_reflog_entry_id_new(pointer)).pointee)
-            )
-        }
+        try GitCollection(
+            pointer: reflog,
+            count: git_reflog_entrycount,
+            element: git_reflog_entry_byindex)
+            .map(Reflog.Item.init)
+    }
+}
+
+extension Reflog.Item {
+
+    fileprivate init(_ pointer: OpaquePointer?) throws {
+        let pointer = try Unwrap(pointer)
+        self.init(
+            message: try Unwrap(String(validatingUTF8: git_reflog_entry_message(pointer))),
+            committer: try Signature(Unwrap(git_reflog_entry_committer(pointer)).pointee),
+            old: try Object.ID(Unwrap(git_reflog_entry_id_old(pointer)).pointee),
+            new: try Object.ID(Unwrap(git_reflog_entry_id_new(pointer)).pointee))
     }
 }
 
