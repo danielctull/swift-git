@@ -58,6 +58,5 @@ opt_in_rules:
   - unneeded_parentheses_in_closure_argument
   - untyped_error_in_catch
   - unused_import
-  - unused_private_declaration
   - xct_specific_matcher
   - yoda_condition
