@@ -26,7 +26,7 @@ final class CommitTests: XCTestCase {
             XCTAssertEqual(last.committer.date, Date(timeIntervalSince1970: 1595183161))
             XCTAssertEqual(last.committer.timeZone, TimeZone(secondsFromGMT: 3600))
             XCTAssertEqual(last.debugDescription, "Commit(id: 17e26bc, summary: Add readme)")
-            XCTAssertEqual(try last.parents().count, 0)
+            XCTAssertEqual(try last.parents.count, 0)
             XCTAssertEqual(last.parentIDs.count, 0)
             let first = try XCTUnwrap(commits.first)
             XCTAssertEqual(main.target, first.id.rawValue)

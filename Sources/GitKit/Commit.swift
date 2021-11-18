@@ -38,12 +38,14 @@ extension Commit {
         }
     }
 
-    public func parents() throws -> [Commit] {
-        try (0..<commit.get(git_commit_parentcount)).map { index in
-            try GitPointer(create: commit.create(git_commit_parent, index),
-                           free: git_commit_free)
+    public var parents: [Commit] {
+        get throws {
+            try (0..<commit.get(git_commit_parentcount)).map { index in
+                try GitPointer(create: commit.create(git_commit_parent, index),
+                               free: git_commit_free)
+            }
+            .map(Commit.init)
         }
-        .map(Commit.init)
     }
 }
 
