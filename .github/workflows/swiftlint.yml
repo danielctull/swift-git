@@ -21,4 +21,5 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v1
       - name: SwiftLint
-        uses: norio-nomura/action-swiftlint@3.0.1
+        uses: norio-nomura/action-swiftlint@3.2.1
+
