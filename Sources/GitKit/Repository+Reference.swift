@@ -12,14 +12,15 @@ extension Repository {
         }
     }
 
-    public func references() throws -> [Reference] {
-
-        try GitIterator(
-            createIterator: repository.create(git_reference_iterator_new),
-            freeIterator: git_reference_iterator_free,
-            nextElement: git_reference_next,
-            freeElement: git_reference_free)
-            .map(Reference.init)
+    public var references: [Reference] {
+        get throws {
+            try GitIterator(
+                createIterator: repository.create(git_reference_iterator_new),
+                freeIterator: git_reference_iterator_free,
+                nextElement: git_reference_next,
+                freeElement: git_reference_free)
+                .map(Reference.init)
+        }
     }
 
     public func reference(for id: Reference.ID) throws -> Reference {

@@ -9,7 +9,6 @@ extension Repository {
     }
 
     public func tags() throws -> [Tag] {
-        try references()
-            .compactMap(\.tag)
+        try references.compactMap(\.tag)
     }
 }
