@@ -3,8 +3,12 @@ import Clibgit2
 
 final class GitPointer {
 
+    typealias Create = (UnsafeMutablePointer<OpaquePointer?>) -> Int32
+    typealias Configure = (OpaquePointer) -> Int32
+    typealias Free = (OpaquePointer) -> Void
+
     let pointer: OpaquePointer
-    private let free: (OpaquePointer) -> Void
+    private let free: Free
 
     deinit { free(pointer) }
 
@@ -23,9 +27,9 @@ final class GitPointer {
     ///   - free: The function to free the pointer.
     /// - Throws: A LibGit2Error if the results of the functions are not GIT_OK.
     init(
-        create: (UnsafeMutablePointer<OpaquePointer?>) -> Int32,
-        configure: ((OpaquePointer) -> Int32)? = nil,
-        free: @escaping (OpaquePointer) -> Void
+        create: Create,
+        configure: Configure? = nil,
+        free: @escaping Free
     ) throws {
         git_libgit2_init()
         var pointer: OpaquePointer?
