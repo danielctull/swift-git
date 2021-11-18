@@ -1,12 +1,14 @@
 
-struct GitCollection<Element> {
+struct GitCollection<Index: BinaryInteger, Element> {
     let pointer: GitPointer
-    let count: (OpaquePointer) -> Int
-    let element: (OpaquePointer, Int) -> Element
+    let count: (OpaquePointer) -> Index
+    let element: (OpaquePointer, Index) -> Element
 }
 
 extension GitCollection: RandomAccessCollection {
-    public var startIndex: Int { 0 }
-    public var endIndex: Int { count(pointer.pointer) }
-    public subscript(position: Int) -> Element { element(pointer.pointer, position) }
+    public var startIndex: Index { .zero }
+    public var endIndex: Index { count(pointer.pointer) }
+    public func index(before i: Index) -> Index { i - 1 }
+    public func index(after i: Index) -> Index { i + 1 }
+    public subscript(position: Index) -> Element { element(pointer.pointer, position) }
 }

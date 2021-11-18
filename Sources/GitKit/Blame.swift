@@ -35,11 +35,14 @@ extension Blame {
 
     public var hunks: [Hunk] {
         get throws {
-            let count = blame.get(git_blame_get_hunk_count)
-            return try (0..<count).map { index in
-                let hunk = try Unwrap(git_blame_get_hunk_byindex(blame.pointer, index))
-                return try Hunk(hunk.pointee)
-            }
+            try GitCollection(
+                pointer: blame,
+                count: git_blame_get_hunk_count,
+                element: git_blame_get_hunk_byindex
+            )
+            .map(Unwrap)
+            .map(\.pointee)
+            .map(Hunk.init)
         }
     }
 }
