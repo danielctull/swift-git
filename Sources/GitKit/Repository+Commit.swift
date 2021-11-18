@@ -30,6 +30,12 @@ extension Repository {
         return try Commit(commit)
     }
 
+    public var commits: [Commit] {
+        get throws {
+            try commits(for: [])
+        }
+    }
+
     public func commits(
         for references: Reference...,
         sortedBy sortOptions: SortOptions = SortOptions(),
@@ -41,7 +47,7 @@ extension Repository {
     }
 
     public func commits(
-        for references: [Reference] = [],
+        for references: [Reference],
         sortedBy sortOptions: SortOptions = SortOptions(),
         includeHead: Bool = true
     ) throws -> [Commit] {
