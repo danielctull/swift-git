@@ -33,11 +33,13 @@ extension Blame {
         return try Hunk(hunk)
     }
 
-    public func hunks() throws -> [Hunk] {
-        let count = blame.get(git_blame_get_hunk_count)
-        return try (0..<count).map { index in
-            let hunk = try Unwrap(git_blame_get_hunk_byindex(blame.pointer, index))
-            return try Hunk(hunk.pointee)
+    public var hunks: [Hunk] {
+        get throws {
+            let count = blame.get(git_blame_get_hunk_count)
+            return try (0..<count).map { index in
+                let hunk = try Unwrap(git_blame_get_hunk_byindex(blame.pointer, index))
+                return try Hunk(hunk.pointee)
+            }
         }
     }
 }
