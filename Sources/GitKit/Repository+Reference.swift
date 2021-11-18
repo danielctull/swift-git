@@ -4,8 +4,9 @@ import Clibgit2
 extension Repository {
 
     public func head() throws -> Reference {
-        let head = try GitPointer(create: repository.create(git_repository_head),
-                                  free: git_reference_free)
+        let head = try GitPointer(
+            create: repository.create(git_repository_head),
+            free: git_reference_free)
         return try Reference(head)
     }
 
