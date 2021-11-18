@@ -31,7 +31,13 @@ final class GitPointer {
         configure: Configure? = nil,
         free: @escaping Free
     ) throws {
+
         git_libgit2_init()
+        let free: Free = {
+            free($0)
+            git_libgit2_shutdown()
+        }
+
         var pointer: OpaquePointer?
         let result = withUnsafeMutablePointer(to: &pointer, create)
         if let error = LibGit2Error(result) { throw error }
