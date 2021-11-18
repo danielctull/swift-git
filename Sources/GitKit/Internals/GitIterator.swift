@@ -2,13 +2,13 @@
 struct GitIterator<Element> {
 
     let iterator: GitPointer
-    let nextElement: (OpaquePointer) throws -> Element?
+    let nextElement: (GitPointer) throws -> Element?
 
     init(
         createIterator: GitPointer.Create,
         configureIterator: (GitPointer.Configure)? = nil,
         freeIterator: @escaping GitPointer.Free,
-        nextElement: @escaping (OpaquePointer) throws -> Element?
+        nextElement: @escaping (GitPointer) throws -> Element?
     ) throws {
         iterator = try GitPointer(create: createIterator, configure: configureIterator, free: freeIterator)
         self.nextElement = nextElement
@@ -19,7 +19,7 @@ extension GitIterator: IteratorProtocol, Sequence {
 
     mutating func next() -> Element? {
         do {
-            return try nextElement(iterator.pointer)
+            return try nextElement(iterator)
         } catch let error as LibGit2Error where error.code == .iteratorOver {
             return nil
         } catch {
@@ -44,7 +44,7 @@ extension GitIterator where Element == GitPointer {
             configureIterator: configureIterator,
             freeIterator: freeIterator,
             nextElement: { iterator in
-                try GitPointer(create: { nextElement($0, iterator) },
+                try GitPointer(create: iterator.create(nextElement),
                                configure: configureElement,
                                free: freeElement)
             })
