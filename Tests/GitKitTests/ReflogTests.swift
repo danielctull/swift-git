@@ -10,7 +10,7 @@ final class ReflogTests: XCTestCase {
         try FileManager.default.withTemporaryDirectory { local in
             let cloneDate = Date()
             let repo = try Repository(local: local, remote: remote)
-            let reflog = try repo.reflog()
+            let reflog = try repo.reflog
             XCTAssertEqual(try reflog.items.count, 1)
             let item = try XCTUnwrap(reflog.items.last)
 //            XCTAssertEqual(item.message, "checkout: moving from master to main")
