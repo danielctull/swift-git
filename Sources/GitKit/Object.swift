@@ -65,7 +65,7 @@ extension Object.ID {
     }
 
     init(reference: GitPointer) throws {
-        let resolved = try GitPointer(create: { git_reference_resolve($0, reference.pointer) },
+        let resolved = try GitPointer(create: reference.create(git_reference_resolve),
                                       free: git_reference_free)
         try self.init(resolved.get(git_reference_target))
     }

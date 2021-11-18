@@ -5,9 +5,9 @@ struct GitIterator<Element> {
     let nextElement: (OpaquePointer) throws -> Element?
 
     init(
-        createIterator: (UnsafeMutablePointer<OpaquePointer?>) -> Int32,
-        configureIterator: ((OpaquePointer) -> Int32)? = nil,
-        freeIterator: @escaping (OpaquePointer) -> Void,
+        createIterator: GitPointer.Create,
+        configureIterator: (GitPointer.Configure)? = nil,
+        freeIterator: @escaping GitPointer.Free,
         nextElement: @escaping (OpaquePointer) throws -> Element?
     ) throws {
         iterator = try GitPointer(create: createIterator, configure: configureIterator, free: freeIterator)
@@ -31,12 +31,12 @@ extension GitIterator: IteratorProtocol, Sequence {
 extension GitIterator where Element == GitPointer {
 
     init(
-        createIterator: (UnsafeMutablePointer<OpaquePointer?>) -> Int32,
-        configureIterator: ((OpaquePointer) -> Int32)? = nil,
-        freeIterator: @escaping (OpaquePointer) -> Void,
+        createIterator: GitPointer.Create,
+        configureIterator: (GitPointer.Configure)? = nil,
+        freeIterator: @escaping GitPointer.Free,
         nextElement: @escaping (UnsafeMutablePointer<OpaquePointer?>, OpaquePointer) -> Int32,
-        configureElement: ((OpaquePointer) -> Int32)? = nil,
-        freeElement: @escaping (OpaquePointer) -> Void
+        configureElement: (GitPointer.Configure)? = nil,
+        freeElement: @escaping GitPointer.Free
     ) throws {
 
         try self.init(

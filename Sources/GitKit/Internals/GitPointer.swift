@@ -96,3 +96,36 @@ extension GitPointer {
         return unwrapped
     }
 }
+
+extension GitPointer {
+
+    func create(
+        _ create: @escaping (UnsafeMutablePointer<OpaquePointer?>, OpaquePointer) -> Int32
+    ) -> Create {
+        { create($0, self.pointer) }
+    }
+
+    func create<A>(
+        _ create: @escaping (UnsafeMutablePointer<OpaquePointer?>, OpaquePointer, A) -> Int32,
+        _ a: A
+    ) -> Create {
+        { create($0, self.pointer, a) }
+    }
+
+    func create<A, B>(
+        _ create: @escaping (UnsafeMutablePointer<OpaquePointer?>, OpaquePointer, A, B) -> Int32,
+        _ a: A,
+        _ b: B
+    ) -> Create {
+        { create($0, self.pointer, a, b) }
+    }
+
+    func create<A, B, C>(
+        _ create: @escaping (UnsafeMutablePointer<OpaquePointer?>, OpaquePointer, A, B, C) -> Int32,
+        _ a: A,
+        _ b: B,
+        _ c: C
+    ) -> Create {
+        { create($0, self.pointer, a, b, c) }
+    }
+}
