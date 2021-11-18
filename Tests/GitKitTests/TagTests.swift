@@ -9,7 +9,7 @@ final class TagTests: XCTestCase {
         let remote = try Bundle.module.url(forRepository: "Test.git")
         try FileManager.default.withTemporaryDirectory { local in
             let repo = try Repository(local: local, remote: remote)
-            let tags = try repo.tags()
+            let tags = try repo.tags
             XCTAssertEqual(tags.count, 2)
 
             let tag0 = try XCTUnwrap(tags.first)
