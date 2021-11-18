@@ -9,7 +9,7 @@ final class CommitTests: XCTestCase {
         let remote = try Bundle.module.url(forRepository: "Test.git")
         try FileManager.default.withTemporaryDirectory { local in
             let repo = try Repository(local: local, remote: remote)
-            let branches = try repo.branches()
+            let branches = try repo.branches
             let main = try XCTUnwrap(branches.first(where: { $0.name == "main" }))
             let commits = try repo.commits()
             XCTAssertEqual(commits.count, 4)
