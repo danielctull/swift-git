@@ -28,28 +28,29 @@ extension Diff {
         public let file: File
     }
 
-    public func hunks() throws -> [Hunk] {
+    public var hunks: [Hunk] {
+        get throws {
+            var hunks: [Hunk] = []
 
-        var hunks: [Hunk] = []
+            let error = withUnsafeMutablePointer(to: &hunks) {
+                LibGit2Error(git_diff_foreach(diff.pointer, nil, nil, { delta, hunk, hunks in
 
-        let error = withUnsafeMutablePointer(to: &hunks) {
-            LibGit2Error(git_diff_foreach(diff.pointer, nil, nil, { delta, hunk, hunks in
+                    do {
+                        let hunks = try Unwrap(hunks).assumingMemoryBound(to: [Hunk].self)
+                        let delta = try Unwrap(delta?.pointee)
+                        let hunk = try Unwrap(hunk?.pointee)
+                        hunks.pointee.append(try Hunk(delta: delta, hunk: hunk))
+                        return 0
+                    } catch {
+                        return LibGit2Error.Code.unknown.code.rawValue
+                    }
 
-                do {
-                    let hunks = try Unwrap(hunks).assumingMemoryBound(to: [Hunk].self)
-                    let delta = try Unwrap(delta?.pointee)
-                    let hunk = try Unwrap(hunk?.pointee)
-                    hunks.pointee.append(try Hunk(delta: delta, hunk: hunk))
-                    return 0
-                } catch {
-                    return LibGit2Error.Code.unknown.code.rawValue
-                }
+                }, nil, $0))
+            }
 
-            }, nil, $0))
+            if let e = error { throw e }
+            return hunks
         }
-
-        if let e = error { throw e }
-        return hunks
     }
 }
 

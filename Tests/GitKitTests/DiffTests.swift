@@ -44,7 +44,7 @@ final class DiffTests: XCTestCase {
             let first = try commits.value(at: 0)
             let second = try commits.value(at: 1)
             let diff = try repo.diff(from: first.tree, to: second.tree)
-            let hunks = try diff.hunks()
+            let hunks = try diff.hunks
             XCTAssertEqual(hunks.count, 1)
             let hunk = try hunks.value(at: 0)
 
