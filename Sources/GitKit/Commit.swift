@@ -23,11 +23,13 @@ public struct Commit: Identifiable {
 
 extension Commit {
 
-    public func tree() throws -> Tree {
-        let pointer = try GitPointer(
-            create: commit.create(git_commit_tree),
-            free: git_tree_free)
-        return try Tree(pointer)
+    public var tree: Tree {
+        get throws {
+            let pointer = try GitPointer(
+                create: commit.create(git_commit_tree),
+                free: git_tree_free)
+            return try Tree(pointer)
+        }
     }
 
     public var parentIDs: [ID] {

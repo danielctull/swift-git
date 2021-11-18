@@ -51,7 +51,7 @@ final class CommitTests: XCTestCase {
             let repo = try Repository(local: local, remote: remote)
             let commits = try repo.commits()
             let last = try XCTUnwrap(commits.last)
-            let tree = try last.tree()
+            let tree = try last.tree
             XCTAssertEqual(tree.id.description, "017acad83ffb24d951581417f150bf31673e45b6")
             XCTAssertEqual(tree.entries.count, 1)
             let entry = try tree.entries.value(at: 0)
