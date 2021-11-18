@@ -15,12 +15,14 @@ extension Reflog {
         public var new: Object.ID { id.new }
     }
 
-    public func items() throws -> [Item] {
-        try GitCollection(
-            pointer: reflog,
-            count: git_reflog_entrycount,
-            element: git_reflog_entry_byindex)
-            .map(Reflog.Item.init)
+    public var items: [Item] {
+        get throws {
+            try GitCollection(
+                pointer: reflog,
+                count: git_reflog_entrycount,
+                element: git_reflog_entry_byindex)
+                .map(Reflog.Item.init)
+        }
     }
 }
 
