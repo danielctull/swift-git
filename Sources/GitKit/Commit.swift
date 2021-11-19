@@ -33,8 +33,15 @@ extension Commit {
     }
 
     public var parentIDs: [ID] {
-        (0..<commit.get(git_commit_parentcount)).map { index in
-            ID(git_commit_parent_id(commit.pointer, index).pointee)
+        get throws {
+            try GitCollection(
+                pointer: commit,
+                count: git_commit_parentcount,
+                element: git_commit_parent_id
+            )
+            .map(Unwrap)
+            .map(\.pointee)
+            .map(ID.init)
         }
     }
 
