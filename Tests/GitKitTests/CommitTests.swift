@@ -53,7 +53,7 @@ final class CommitTests: XCTestCase {
             let last = try XCTUnwrap(commits.last)
             let tree = try last.tree
             XCTAssertEqual(tree.id.description, "017acad83ffb24d951581417f150bf31673e45b6")
-            XCTAssertEqual(tree.entries.count, 1)
+            XCTAssertEqual(try tree.entries.count, 1)
             let entry = try tree.entries.value(at: 0)
             XCTAssertEqual(entry.name, "README.md")
             let object = try repo.object(for: entry.target)

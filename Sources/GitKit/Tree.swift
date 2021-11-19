@@ -6,7 +6,6 @@ public struct Tree: Identifiable {
     let tree: GitPointer
     public typealias ID = Tagged<Tree, Object.ID>
     public let id: ID
-    public let entries: [Entry]
 }
 
 extension Tree {
@@ -24,10 +23,21 @@ extension Tree {
     init(_ tree: GitPointer) throws {
         self.tree = tree
         id = try ID(object: tree)
+    }
+}
 
-        entries = try (0..<tree.get(git_tree_entrycount)).map { index in
-            let entry = GitPointer(tree.get { git_tree_entry_byindex($0, index) })
-            return try Entry(entry)
+extension Tree {
+
+    public var entries: [Entry] {
+        get throws {
+            try GitCollection(
+                pointer: tree,
+                count: git_tree_entrycount,
+                element: git_tree_entry_byindex
+            )
+            .map(Unwrap)
+            .map(GitPointer.init)
+            .map(Entry.init)
         }
     }
 }
