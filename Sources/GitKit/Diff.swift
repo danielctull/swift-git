@@ -4,17 +4,27 @@ import Tagged
 
 public struct Diff {
     let diff: GitPointer
-    public let deltas: [Delta]
 }
 
 extension Diff {
 
     init(_ diff: GitPointer) throws {
         self.diff = diff
-        let deltaCount = diff.get(git_diff_num_deltas)
-        deltas = try (0..<deltaCount).map { index in
-            let pointer = try Unwrap(diff.get { git_diff_get_delta($0, index) })
-            return try Delta(pointer.pointee)
+    }
+}
+
+extension Diff {
+
+    public var deltas: [Delta] {
+        get throws {
+            try GitCollection(
+                pointer: diff,
+                count: git_diff_num_deltas,
+                element: git_diff_get_delta
+            )
+            .map(Unwrap)
+            .map(\.pointee)
+            .map(Delta.init)
         }
     }
 }

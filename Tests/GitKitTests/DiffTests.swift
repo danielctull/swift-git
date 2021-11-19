@@ -14,7 +14,7 @@ final class DiffTests: XCTestCase {
             let first = try commits.value(at: 0)
             let second = try commits.value(at: 1)
             let diff = try repo.diff(from: first.tree, to: second.tree)
-            XCTAssertEqual(diff.deltas.count, 1)
+            XCTAssertEqual(try diff.deltas.count, 1)
             let delta = try diff.deltas.value(at: 0)
             XCTAssertEqual(delta.status, .added)
             XCTAssertEqual(delta.flags, [])
