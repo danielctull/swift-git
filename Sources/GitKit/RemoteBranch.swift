@@ -13,12 +13,12 @@ public struct RemoteBranch: Identifiable {
 
 extension RemoteBranch {
 
-    init(_ branch: GitPointer) throws {
-        guard branch.check(git_reference_is_remote) else { throw GitKitError.incorrectType(expected: "remote branch") }
+    init(_ branch: GitPointer) async throws {
+        guard await branch.check(git_reference_is_remote) else { throw GitKitError.incorrectType(expected: "remote branch") }
         self.branch = branch
-        id = try ID(reference: branch)
-        name = try Unwrap(String(validatingUTF8: branch.get(git_branch_name)))
-        target = try Object.ID(reference: branch)
+        id = try await ID(reference: branch)
+        name = try await Unwrap(String(validatingUTF8: branch.get(git_branch_name)))
+        target = try await Object.ID(reference: branch)
         remote = try Remote.ID(rawValue: String(Unwrap(name.split(separator: "/").first)))
     }
 }

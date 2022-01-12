@@ -15,12 +15,12 @@ public struct Blob: Identifiable {
 
 extension Blob {
 
-    init(_ blob: GitPointer) throws {
+    init(_ blob: GitPointer) async throws {
         self.blob = blob
-        id = try ID(object: blob)
-        let size = Int(blob.get(git_blob_rawsize))
-        let content = try Unwrap(blob.get(git_blob_rawcontent))
+        id = try await ID(object: blob)
+        let size = await Int(blob.get(git_blob_rawsize))
+        let content = try await Unwrap(blob.get(git_blob_rawcontent))
         data = Data(bytes: content, count: size)
-        isBinary = blob.check(git_blob_is_binary)
+        isBinary = await blob.check(git_blob_is_binary)
     }
 }

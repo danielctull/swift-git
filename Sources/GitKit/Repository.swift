@@ -28,15 +28,19 @@ public struct Repository {
         let remoteString = remote.isFileURL ? remote.path : remote.absoluteString
 
         repository = try GitPointer(create: { pointer in
-            local.withUnsafeFileSystemRepresentation { path in
-                git_clone(pointer, remoteString, path, nil)
+            print("CREATE REPO")
+            return local.withUnsafeFileSystemRepresentation { path in
+                print("CLONE REPO")
+                return git_clone(pointer, remoteString, path, nil)
             }
         }, free: git_repository_free)
     }
 
     public var workingDirectory: URL? {
-        guard let path = try? String(validatingUTF8: repository.get(git_repository_workdir)) else { return nil }
-        return URL(fileURLWithPath: path)
+        get async {
+            guard let path = try? await String(validatingUTF8: repository.get(git_repository_workdir)) else { return nil }
+            return URL(fileURLWithPath: path)
+        }
     }
 }
 

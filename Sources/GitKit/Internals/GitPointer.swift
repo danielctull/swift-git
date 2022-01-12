@@ -1,7 +1,7 @@
 
 import Clibgit2
 
-final class GitPointer {
+actor GitPointer {
 
     typealias Create = (UnsafeMutablePointer<OpaquePointer?>) -> Int32
     typealias Configure = (OpaquePointer) -> Int32

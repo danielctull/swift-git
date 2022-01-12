@@ -4,30 +4,30 @@ import Clibgit2
 extension Repository {
 
     public var head: Reference {
-        get throws {
-            let head = try GitPointer(
+        get async throws {
+            let head = try await GitPointer(
                 create: repository.create(git_repository_head),
                 free: git_reference_free)
-            return try Reference(head)
+            return try await Reference(head)
         }
     }
 
-    public var references: [Reference] {
-        get throws {
-            try GitIterator(
-                createIterator: repository.create(git_reference_iterator_new),
-                freeIterator: git_reference_iterator_free,
-                nextElement: git_reference_next,
-                freeElement: git_reference_free)
-                .map(Reference.init)
-        }
-    }
+//    public var references: [Reference] {
+//        get throws {
+//            try GitIterator(
+//                createIterator: repository.create(git_reference_iterator_new),
+//                freeIterator: git_reference_iterator_free,
+//                nextElement: git_reference_next,
+//                freeElement: git_reference_free)
+//                .map(Reference.init)
+//        }
+//    }
 
-    public func reference(for id: Reference.ID) throws -> Reference {
-        let pointer = try GitPointer(
+    public func reference(for id: Reference.ID) async throws -> Reference {
+        let pointer = try await GitPointer(
             create: repository.create(git_reference_lookup, id.rawValue),
             free: git_reference_free)
-        return try Reference(pointer)
+        return try await Reference(pointer)
     }
 }
 
@@ -39,20 +39,20 @@ extension Repository {
     @available(macOS 10.15, *)
     public func remove<SomeReference>(
         _ reference: SomeReference
-    ) throws where SomeReference: Identifiable,
+    ) async throws where SomeReference: Identifiable,
                    SomeReference.ID: RawRepresentable,
                    SomeReference.ID.RawValue == Reference.ID {
-        try remove(reference.id.rawValue)
+        try await remove(reference.id.rawValue)
     }
 
     public func remove<ID>(
         _ id: ID
-    ) throws where ID: RawRepresentable, ID.RawValue == Reference.ID {
-        try remove(id.rawValue)
+    ) async throws where ID: RawRepresentable, ID.RawValue == Reference.ID {
+        try await remove(id.rawValue)
     }
 
-    public func remove(_ id: Reference.ID) throws {
-        try remove(reference(for: id))
+    public func remove(_ id: Reference.ID) async throws {
+        try await remove(reference(for: id))
     }
 
     public func remove(_ reference: Reference) throws {

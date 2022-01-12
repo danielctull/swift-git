@@ -12,12 +12,12 @@ public struct Branch: Identifiable {
 
 extension Branch {
 
-    init(_ branch: GitPointer) throws {
-        guard branch.check(git_reference_is_branch) else { throw GitKitError.incorrectType(expected: "branch") }
+    init(_ branch: GitPointer) async throws {
+        guard await branch.check(git_reference_is_branch) else { throw GitKitError.incorrectType(expected: "branch") }
         self.branch = branch
-        id = try ID(reference: branch)
-        name = try Unwrap(String(validatingUTF8: branch.get(git_branch_name)))
-        target = try Object.ID(reference: branch)
+        id = try await ID(reference: branch)
+        name = try await Unwrap(String(validatingUTF8: branch.get(git_branch_name)))
+        target = try await Object.ID(reference: branch)
     }
 }
 

@@ -12,6 +12,15 @@ extension FileManager {
         try perform(url)
         try removeItem(at: url)
     }
+
+    func withTemporaryDirectory(_ perform: (URL) async throws -> Void) async throws {
+        let url = temporaryDirectory
+            .appendingPathComponent("GitKitTests")
+            .appendingPathComponent(UUID().uuidString)
+        try createDirectory(at: url, withIntermediateDirectories: true, attributes: [:])
+        try await perform(url)
+        try removeItem(at: url)
+    }
 }
 
 extension Bundle {

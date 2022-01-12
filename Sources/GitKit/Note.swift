@@ -10,10 +10,10 @@ public struct Note: Identifiable {
 
 extension Note {
 
-    init(_ note: GitPointer) throws {
-        guard note.check(git_reference_is_note) else { throw GitKitError.incorrectType(expected: "note") }
-        id = try ID(reference: note)
-        target = try Object.ID(reference: note)
+    init(_ note: GitPointer) async throws {
+        guard await note.check(git_reference_is_note) else { throw GitKitError.incorrectType(expected: "note") }
+        id = try await ID(reference: note)
+        target = try await Object.ID(reference: note)
     }
 }
 

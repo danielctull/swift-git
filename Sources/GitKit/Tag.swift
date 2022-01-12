@@ -41,14 +41,14 @@ extension Tag {
 
 extension Tag {
 
-    init(_ tagReference: GitPointer) throws {
-        guard tagReference.check(git_reference_is_tag) else { throw GitKitError.incorrectType(expected: "tag") }
+    init(_ tagReference: GitPointer) async throws {
+        guard await tagReference.check(git_reference_is_tag) else { throw GitKitError.incorrectType(expected: "tag") }
 
-        let id = try Tag.ID(reference: tagReference)
-        let target = try Object.ID(reference: tagReference)
+        let id = try await Tag.ID(reference: tagReference)
+        let target = try await Object.ID(reference: tagReference)
 
-        let repository = try Repository(tagReference.get(git_reference_owner))
-        let object = try repository.object(for: target)
+        let repository = try await Repository(tagReference.get(git_reference_owner))
+        let object = try await repository.object(for: target)
 
         switch object {
         case .tag(let annotatedTag):
@@ -81,12 +81,12 @@ public struct AnnotatedTag {
 
 extension AnnotatedTag {
 
-    init(_ tag: GitPointer) throws {
+    init(_ tag: GitPointer) async throws {
         self.tag = tag
-        id = try ID(object: tag)
-        name = try Unwrap(String(validatingUTF8: tag.get(git_tag_name)))
-        target = try Object.ID(tag.get(git_tag_target_id))
-        tagger = try Signature(tag.get(git_tag_tagger))
-        message = try Unwrap(String(validatingUTF8: tag.get(git_tag_message)))
+        id = try await ID(object: tag)
+        name = try await Unwrap(String(validatingUTF8: tag.get(git_tag_name)))
+        target = try await Object.ID(tag.get(git_tag_target_id))
+        tagger = try await Signature(tag.get(git_tag_tagger))
+        message = try await Unwrap(String(validatingUTF8: tag.get(git_tag_message)))
     }
 }

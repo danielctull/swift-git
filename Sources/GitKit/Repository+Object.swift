@@ -5,15 +5,15 @@ extension Repository {
 
     public func object<ID>(
         for id: ID
-    ) throws -> Object where ID: RawRepresentable, ID.RawValue == Object.ID {
-        try object(for: id.rawValue)
+    ) async throws -> Object where ID: RawRepresentable, ID.RawValue == Object.ID {
+        try await object(for: id.rawValue)
     }
 
-    public func object(for id: Object.ID) throws -> Object {
+    public func object(for id: Object.ID) async throws -> Object {
         var oid = id.oid
-        let pointer = try GitPointer(
+        let pointer = try await GitPointer(
             create: repository.create(git_object_lookup, &oid, GIT_OBJECT_ANY),
             free: git_object_free)
-        return try Object(pointer)
+        return try await Object(pointer)
     }
 }

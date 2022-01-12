@@ -5,12 +5,12 @@ import XCTest
 
 final class ReflogTests: XCTestCase {
 
-    func testRepositoryReflog() throws {
+    func testRepositoryReflog() async throws {
         let remote = try Bundle.module.url(forRepository: "Test.git")
-        try FileManager.default.withTemporaryDirectory { local in
+        try await FileManager.default.withTemporaryDirectory { local in
             let cloneDate = Date()
             let repo = try Repository(local: local, remote: remote)
-            let reflog = try repo.reflog
+            let reflog = try await repo.reflog
             XCTAssertEqual(try reflog.items.count, 1)
             let item = try XCTUnwrap(reflog.items.last)
 //            XCTAssertEqual(item.message, "checkout: moving from master to main")

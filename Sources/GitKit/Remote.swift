@@ -16,9 +16,9 @@ extension Remote {
 
 extension Remote {
 
-    init(_ remote: GitPointer) throws {
+    init(_ remote: GitPointer) async throws {
         self.remote = remote
-        id = try ID(remote.get(git_remote_name))
+        id = try await ID(remote.get(git_remote_name))
 //        let urlString = try Unwrap(String(remote.get(git_remote_url)))
 //        url = try Unwrap(URL(string: urlString))
     }

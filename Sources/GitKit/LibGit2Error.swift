@@ -112,6 +112,13 @@ extension LibGit2Error.Code: Equatable {
     public static let applyFail = Self(code: GIT_EAPPLYFAIL)
 }
 
+extension LibGit2Error: CustomDebugStringConvertible {
+
+    public var debugDescription: String {
+        description
+    }
+}
+
 extension LibGit2Error: CustomStringConvertible {
 
     public var description: String {

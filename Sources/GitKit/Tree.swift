@@ -20,32 +20,32 @@ extension Tree {
 
 extension Tree {
 
-    init(_ tree: GitPointer) throws {
+    init(_ tree: GitPointer) async throws {
         self.tree = tree
-        id = try ID(object: tree)
+        id = try await ID(object: tree)
     }
 }
 
 extension Tree {
 
-    public var entries: [Entry] {
-        get throws {
-            try GitCollection(
-                pointer: tree,
-                count: git_tree_entrycount,
-                element: git_tree_entry_byindex
-            )
-            .map(Unwrap)
-            .map(GitPointer.init)
-            .map(Entry.init)
-        }
-    }
+//    public var entries: [Entry] {
+//        get throws {
+//            try GitCollection(
+//                pointer: tree,
+//                count: git_tree_entrycount,
+//                element: git_tree_entry_byindex
+//            )
+//            .map(Unwrap)
+//            .map(GitPointer.init)
+//            .map(Entry.init)
+//        }
+//    }
 }
 
 extension Tree.Entry {
 
-    init(_ entry: GitPointer) throws {
-        target = try Object.ID(entry.get(git_tree_entry_id))
-        name = try Unwrap(String(validatingUTF8: entry.get(git_tree_entry_name)))
+    init(_ entry: GitPointer) async throws {
+        target = try await Object.ID(entry.get(git_tree_entry_id))
+        name = try await Unwrap(String(validatingUTF8: entry.get(git_tree_entry_name)))
     }
 }

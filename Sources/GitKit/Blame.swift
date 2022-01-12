@@ -28,8 +28,8 @@ extension Blame {
         public let path: FilePath
     }
 
-    public func hunk(for line: LineNumber) throws -> Hunk {
-        let hunk: git_blame_hunk = try blame.get { git_blame_get_hunk_byline($0, line.rawValue) }
+    public func hunk(for line: LineNumber) async throws -> Hunk {
+        let hunk: git_blame_hunk = try await blame.get { git_blame_get_hunk_byline($0, line.rawValue) }
         return try Hunk(hunk)
     }
 

@@ -11,24 +11,24 @@ public struct Commit: Identifiable {
     public let author: Signature
     public let committer: Signature
 
-    init(_ pointer: GitPointer) throws {
+    init(_ pointer: GitPointer) async throws {
         commit = pointer
-        id = try ID(object: pointer)
-        summary = try Unwrap(String(validatingUTF8: commit.get(git_commit_summary)))
-        body = try? Unwrap(String(validatingUTF8: commit.get(git_commit_body)))
-        author = try Signature(commit.get(git_commit_author))
-        committer = try Signature(commit.get(git_commit_committer))
+        id = try await ID(object: pointer)
+        summary = try await Unwrap(String(validatingUTF8: commit.get(git_commit_summary)))
+        body = try? await Unwrap(String(validatingUTF8: commit.get(git_commit_body)))
+        author = try await Signature(commit.get(git_commit_author))
+        committer = try await Signature(commit.get(git_commit_committer))
     }
 }
 
 extension Commit {
 
     public var tree: Tree {
-        get throws {
-            let pointer = try GitPointer(
+        get async throws {
+            let pointer = try await GitPointer(
                 create: commit.create(git_commit_tree),
                 free: git_tree_free)
-            return try Tree(pointer)
+            return try await Tree(pointer)
         }
     }
 
@@ -45,15 +45,15 @@ extension Commit {
         }
     }
 
-    public var parents: [Commit] {
-        get throws {
-            try (0..<commit.get(git_commit_parentcount)).map { index in
-                try GitPointer(create: commit.create(git_commit_parent, index),
-                               free: git_commit_free)
-            }
-            .map(Commit.init)
-        }
-    }
+//    public var parents: [Commit] {
+//        get throws {
+//            try (0..<commit.get(git_commit_parentcount)).map { index in
+//                try GitPointer(create: commit.create(git_commit_parent, index),
+//                               free: git_commit_free)
+//            }
+//            .map(Commit.init)
+//        }
+//    }
 }
 
 // MARK: - Commit.ID

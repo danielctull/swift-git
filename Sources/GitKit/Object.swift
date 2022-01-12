@@ -13,23 +13,23 @@ public enum Object {
 
 extension Object {
 
-    init(_ object: GitPointer) throws {
+    init(_ object: GitPointer) async throws {
 
-        let type = object.get(git_object_type)
+        let type = await object.get(git_object_type)
 
         switch type {
 
         case GIT_OBJECT_BLOB:
-            self = try .blob(Blob(object))
+            self = try await .blob(Blob(object))
 
         case GIT_OBJECT_COMMIT:
-            self = try .commit(Commit(object))
+            self = try await .commit(Commit(object))
 
         case GIT_OBJECT_TAG:
-            self = try .tag(AnnotatedTag(object))
+            self = try await .tag(AnnotatedTag(object))
 
         case GIT_OBJECT_TREE:
-            self = try .tree(Tree(object))
+            self = try await .tree(Tree(object))
 
         default:
             let typeName = try Unwrap(String(validatingUTF8: git_object_type2string(type)))
@@ -64,11 +64,11 @@ extension Object.ID {
         self.oid = oid
     }
 
-    init(reference: GitPointer) throws {
-        let resolved = try GitPointer(
+    init(reference: GitPointer) async throws {
+        let resolved = try await GitPointer(
             create: reference.create(git_reference_resolve),
             free: git_reference_free)
-        try self.init(resolved.get(git_reference_target))
+        try await self.init(resolved.get(git_reference_target))
     }
 }
 
@@ -117,8 +117,8 @@ extension Object.ID: Hashable {
 
 extension Tagged where RawValue == Object.ID {
 
-    init(object: GitPointer) throws {
-        try self.init(oid: object.get(git_object_id))
+    init(object: GitPointer) async throws {
+        try await self.init(oid: object.get(git_object_id))
     }
 
     init(oid: git_oid) {
