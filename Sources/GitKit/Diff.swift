@@ -226,6 +226,8 @@ extension Diff {
         /// File exists at this side of the delta
         public static let exists = Self(GIT_DIFF_FLAG_EXISTS)
 
+        /// File size value is known correct
+        public static let validSize = Self(GIT_DIFF_FLAG_VALID_SIZE)
     }
 }
 
