@@ -3,6 +3,8 @@ import Clibgit2
 import Foundation
 import Tagged
 
+// MARK: - Blob
+
 public struct Blob: Identifiable {
     let blob: GitPointer
     public typealias ID = Tagged<Blob, Object.ID>
@@ -10,8 +12,6 @@ public struct Blob: Identifiable {
     public let data: Data
     public let isBinary: Bool
 }
-
-// MARK: - Git Initialiser
 
 extension Blob {
 

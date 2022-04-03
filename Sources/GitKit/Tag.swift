@@ -2,12 +2,26 @@
 import Clibgit2
 import Tagged
 
+extension Repository {
+
+    public func tag(named name: String) throws -> Tag {
+        try tags.first(where: { $0.name == name })
+            ?? { throw LibGit2Error(.notFound) }()
+    }
+
+    public var tags: [Tag] {
+        get throws {
+            try references.compactMap(\.tag)
+        }
+    }
+}
+
+// MARK: - Tag
+
 public enum Tag {
     case lightweight(id: ID, target: Object.ID)
     case annotated(id: ID, target: AnnotatedTag)
 }
-
-// MARK: - Tag.ID
 
 extension Tag: Identifiable {
 
@@ -20,8 +34,6 @@ extension Tag: Identifiable {
         }
     }
 }
-
-// MARK: - Properties
 
 extension Tag {
 
@@ -36,8 +48,6 @@ extension Tag {
         }
     }
 }
-
-// MARK: - Git Initialiser
 
 extension Tag {
 
@@ -58,8 +68,6 @@ extension Tag {
         }
     }
 }
-
-// MARK: - CustomDebugStringConvertible
 
 extension Tag: CustomDebugStringConvertible {
     public var debugDescription: String {

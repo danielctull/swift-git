@@ -2,21 +2,13 @@
 import Clibgit2
 import Tagged
 
+// MARK: - Tree
+
 public struct Tree: Identifiable {
     let tree: GitPointer
     public typealias ID = Tagged<Tree, Object.ID>
     public let id: ID
 }
-
-extension Tree {
-
-    public struct Entry {
-        public let target: Object.ID
-        public let name: String
-    }
-}
-
-// MARK: - Git Initialisers
 
 extension Tree {
 
@@ -39,6 +31,16 @@ extension Tree {
             .map(GitPointer.init)
             .map(Entry.init)
         }
+    }
+}
+
+// MARK: - Tree.Entry
+
+extension Tree {
+
+    public struct Entry {
+        public let target: Object.ID
+        public let name: String
     }
 }
 

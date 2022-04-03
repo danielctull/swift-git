@@ -2,6 +2,8 @@
 import Clibgit2
 import Foundation
 
+// MARK: - Signature
+
 public struct Signature: Equatable, Hashable {
     public let name: String
     public let email: String

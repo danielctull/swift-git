@@ -3,6 +3,18 @@ import Clibgit2
 // import Foundation
 import Tagged
 
+extension Repository {
+
+    public func remote(for id: Remote.ID) throws -> Remote {
+        let remote = try GitPointer(
+            create: repository.create(git_remote_lookup, id.rawValue),
+            free: git_remote_free)
+        return try Remote(remote)
+    }
+}
+
+// MARK: Remote
+
 public struct Remote: Identifiable {
     let remote: GitPointer
     public typealias ID = Tagged<Remote, String>

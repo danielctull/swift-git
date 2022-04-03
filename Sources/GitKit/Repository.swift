@@ -2,6 +2,8 @@
 import Clibgit2
 import Foundation
 
+// MARK: - Repository
+
 public struct Repository {
     let repository: GitPointer
 
@@ -44,8 +46,6 @@ extension Repository: CustomStringConvertible {
 
     public var description: String { "Repository" }
 }
-
-// MARK: - Git Initialiser
 
 extension Repository {
 

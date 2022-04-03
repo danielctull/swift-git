@@ -1,6 +1,18 @@
 
 import Clibgit2
 
+extension Repository {
+
+    public func blame(for path: FilePath) throws -> Blame {
+        let blame = try GitPointer(
+            create: repository.create(git_blame_file, path.rawValue, nil),
+            free: git_blame_free)
+        return try Blame(blame)
+    }
+}
+
+// MARK: - Blame
+
 public struct Blame {
     let blame: GitPointer
 }
@@ -13,20 +25,10 @@ extension Blame {
 }
 
 extension Blame: CustomStringConvertible {
-
     public var description: String { "Blame" }
 }
 
-// MARK: - Blame.Hunk
-
 extension Blame {
-
-    public struct Hunk: Equatable {
-        public let lines: ClosedRange<LineNumber>
-        public let signature: Signature
-        public let commitID: Commit.ID
-        public let path: FilePath
-    }
 
     public func hunk(for line: LineNumber) throws -> Hunk {
         let hunk: git_blame_hunk = try blame.get { git_blame_get_hunk_byline($0, line.rawValue) }
@@ -44,6 +46,18 @@ extension Blame {
             .map(\.pointee)
             .map(Hunk.init)
         }
+    }
+}
+
+// MARK: - Blame.Hunk
+
+extension Blame {
+
+    public struct Hunk: Equatable {
+        public let lines: ClosedRange<LineNumber>
+        public let signature: Signature
+        public let commitID: Commit.ID
+        public let path: FilePath
     }
 }
 

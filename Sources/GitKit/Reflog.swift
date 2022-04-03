@@ -1,19 +1,25 @@
 
 import Clibgit2
 
+extension Repository {
+
+    public var reflog: Reflog {
+        get throws {
+            let reflog = try GitPointer(
+                create: repository.create(git_reflog_read, "HEAD"),
+                free: git_reflog_free)
+            return Reflog(reflog: reflog)
+        }
+    }
+}
+
+// MARK: - Reflog
+
 public struct Reflog {
     let reflog: GitPointer
 }
 
 extension Reflog {
-
-    public struct Item: Equatable, Hashable, Identifiable {
-        public let id: ID
-        public var message: String { id.message }
-        public var committer: Signature { id.committer }
-        public var old: Object.ID { id.old }
-        public var new: Object.ID { id.new }
-    }
 
     public var items: [Item] {
         get throws {
@@ -23,6 +29,19 @@ extension Reflog {
                 element: git_reflog_entry_byindex)
                 .map(Reflog.Item.init)
         }
+    }
+}
+
+// MARK: - Reflog.Item
+
+extension Reflog {
+
+    public struct Item: Equatable, Hashable, Identifiable {
+        public let id: ID
+        public var message: String { id.message }
+        public var committer: Signature { id.committer }
+        public var old: Object.ID { id.old }
+        public var new: Object.ID { id.new }
     }
 }
 
@@ -44,6 +63,11 @@ extension Reflog.Item {
         let id = ID(message: message, committer: committer, old: old, new: new)
         self.init(id: id)
     }
+}
+
+// MARK: - Reflog.Item.ID
+
+extension Reflog.Item {
 
     public struct ID: Equatable, Hashable {
         let message: String

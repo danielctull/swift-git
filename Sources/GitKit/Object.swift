@@ -2,14 +2,31 @@
 import Clibgit2
 import Tagged
 
+extension Repository {
+
+    public func object<ID>(
+        for id: ID
+    ) throws -> Object where ID: RawRepresentable, ID.RawValue == Object.ID {
+        try object(for: id.rawValue)
+    }
+
+    public func object(for id: Object.ID) throws -> Object {
+        var oid = id.oid
+        let pointer = try GitPointer(
+            create: repository.create(git_object_lookup, &oid, GIT_OBJECT_ANY),
+            free: git_object_free)
+        return try Object(pointer)
+    }
+}
+
+// MARK: - Object
+
 public enum Object {
     case blob(Blob)
     case commit(Commit)
     case tag(AnnotatedTag)
     case tree(Tree)
 }
-
-// MARK: - Git Initialiser
 
 extension Object {
 
@@ -40,13 +57,7 @@ extension Object {
     }
 }
 
-// MARK: - Identifiable
-
 extension Object: Identifiable {
-
-    public struct ID {
-        let oid: git_oid
-    }
 
     public var id: ID {
         switch self {
@@ -55,6 +66,15 @@ extension Object: Identifiable {
         case let .tag(tag): return tag.id.rawValue
         case let .tree(tree): return tree.id.rawValue
         }
+    }
+}
+
+// MARK: - Object.ID
+
+extension Object {
+
+    public struct ID {
+        let oid: git_oid
     }
 }
 

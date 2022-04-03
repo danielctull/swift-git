@@ -2,6 +2,8 @@
 import Clibgit2
 import Tagged
 
+// MARK: - Note
+
 public struct Note: Identifiable {
     public typealias ID = Tagged<Note, Reference.ID>
     public let id: ID
@@ -16,8 +18,6 @@ extension Note {
         target = try Object.ID(reference: note)
     }
 }
-
-// MARK: - CustomDebugStringConvertible
 
 extension Note: CustomDebugStringConvertible {
     public var debugDescription: String {

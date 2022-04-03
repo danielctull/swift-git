@@ -1,4 +1,6 @@
 
+// MARK: - FilePath
+
 public struct FilePath: Equatable {
     let rawValue: String
 }
@@ -11,6 +13,5 @@ extension FilePath: ExpressibleByStringLiteral {
 }
 
 extension FilePath: CustomStringConvertible {
-
     public var description: String { rawValue }
 }

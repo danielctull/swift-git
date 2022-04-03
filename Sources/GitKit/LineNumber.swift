@@ -1,4 +1,6 @@
 
+// MARK: - LineNumber
+
 public struct LineNumber: Equatable {
     let rawValue: Int
     init(_ rawValue: Int) {
@@ -35,8 +37,6 @@ extension LineNumber: CustomStringConvertible {
 
     public var description: String { String(rawValue) }
 }
-
-// MARK: - Git initialiser
 
 extension ClosedRange where Bound == LineNumber {
 
