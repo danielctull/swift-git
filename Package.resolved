@@ -1,16 +1,14 @@
 {
-  "object": {
-    "pins": [
-      {
-        "package": "swift-tagged",
-        "repositoryURL": "https://github.com/pointfreeco/swift-tagged.git",
-        "state": {
-          "branch": null,
-          "revision": "6c36cf66f58553d0481a2628e3e27177f698a897",
-          "version": "0.6.0"
-        }
+  "pins" : [
+    {
+      "identity" : "swift-tagged",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/pointfreeco/swift-tagged.git",
+      "state" : {
+        "revision" : "f3f773a5e13f3c8f0ab1ce2ae6378058acefa87d",
+        "version" : "0.7.0"
       }
-    ]
-  },
-  "version": 1
+    }
+  ],
+  "version" : 2
 }
