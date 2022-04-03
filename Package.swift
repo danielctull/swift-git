@@ -1,12 +1,12 @@
-// swift-tools-version:5.3
+// swift-tools-version:5.6
 
 import PackageDescription
 
 let package = Package(
     name: "GitKit",
     platforms: [
-      .macOS(.v10_13),
-      .iOS(.v11),
+      .macOS(.v12),
+      .iOS(.v15),
     ],
     products: [
         .library(
