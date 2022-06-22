@@ -15,6 +15,7 @@ public struct Blob: Identifiable {
 
 extension Blob {
 
+    @GitActor
     init(_ blob: GitPointer) throws {
         self.blob = blob
         id = try ID(object: blob)

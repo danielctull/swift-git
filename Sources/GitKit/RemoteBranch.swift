@@ -4,6 +4,7 @@ import Tagged
 
 extension Repository {
 
+    @GitActor
     public var remoteBranches: [RemoteBranch] {
         get throws {
             try GitIterator(
@@ -19,6 +20,7 @@ extension Repository {
         }
     }
 
+    @GitActor
     public func remoteBranch(on remote: Remote.ID, named branch: String) throws -> RemoteBranch {
         let name = remote.rawValue + "/" + branch
         let pointer = try GitPointer(
@@ -41,6 +43,7 @@ public struct RemoteBranch: Identifiable {
 
 extension RemoteBranch {
 
+    @GitActor
     init(_ branch: GitPointer) throws {
         guard branch.check(git_reference_is_remote) else { throw GitKitError.incorrectType(expected: "remote branch") }
         self.branch = branch

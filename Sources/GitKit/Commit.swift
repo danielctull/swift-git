@@ -4,6 +4,7 @@ import Tagged
 
 extension Repository {
 
+    @GitActor
     public func commit(for id: Commit.ID) throws -> Commit {
         var oid = id.rawValue.oid
         let commit = try GitPointer(
@@ -12,12 +13,14 @@ extension Repository {
         return try Commit(commit)
     }
 
+    @GitActor
     public var commits: [Commit] {
         get throws {
             try commits(for: [])
         }
     }
 
+    @GitActor
     public func commits(
         for references: Reference...,
         sortedBy sortOptions: SortOptions = SortOptions(),
@@ -28,6 +31,7 @@ extension Repository {
                     includeHead: includeHead)
     }
 
+    @GitActor
     public func commits(
         for references: [Reference],
         sortedBy sortOptions: SortOptions = SortOptions(),
@@ -72,6 +76,7 @@ public struct Commit: Identifiable {
     public let author: Signature
     public let committer: Signature
 
+    @GitActor
     init(_ pointer: GitPointer) throws {
         commit = pointer
         id = try ID(object: pointer)
@@ -84,6 +89,7 @@ public struct Commit: Identifiable {
 
 extension Commit {
 
+    @GitActor
     public var tree: Tree {
         get throws {
             let pointer = try GitPointer(
@@ -106,6 +112,7 @@ extension Commit {
         }
     }
 
+    @GitActor
     public var parents: [Commit] {
         get throws {
             try (0..<commit.get(git_commit_parentcount)).map { index in

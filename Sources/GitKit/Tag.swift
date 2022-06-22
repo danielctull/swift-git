@@ -4,11 +4,13 @@ import Tagged
 
 extension Repository {
 
+    @GitActor
     public func tag(named name: String) throws -> Tag {
         try tags.first(where: { $0.name == name })
             ?? { throw LibGit2Error(.notFound) }()
     }
 
+    @GitActor
     public var tags: [Tag] {
         get throws {
             try references.compactMap(\.tag)
@@ -51,6 +53,7 @@ extension Tag {
 
 extension Tag {
 
+    @GitActor
     init(_ tagReference: GitPointer) throws {
         guard tagReference.check(git_reference_is_tag) else { throw GitKitError.incorrectType(expected: "tag") }
 
@@ -89,6 +92,7 @@ public struct AnnotatedTag {
 
 extension AnnotatedTag {
 
+    @GitActor
     init(_ tag: GitPointer) throws {
         self.tag = tag
         id = try ID(object: tag)

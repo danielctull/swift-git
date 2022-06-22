@@ -12,6 +12,7 @@ public struct Tree: Identifiable {
 
 extension Tree {
 
+    @GitActor
     init(_ tree: GitPointer) throws {
         self.tree = tree
         id = try ID(object: tree)
@@ -20,6 +21,7 @@ extension Tree {
 
 extension Tree {
 
+    @GitActor
     public var entries: [Entry] {
         get throws {
             try GitCollection(
@@ -46,6 +48,7 @@ extension Tree {
 
 extension Tree.Entry {
 
+    @GitActor
     init(_ entry: GitPointer) throws {
         target = try Object.ID(entry.get(git_tree_entry_id))
         name = try Unwrap(String(validatingUTF8: entry.get(git_tree_entry_name)))

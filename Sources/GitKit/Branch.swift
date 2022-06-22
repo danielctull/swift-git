@@ -4,6 +4,7 @@ import Tagged
 
 extension Repository {
 
+    @GitActor
     public var branches: [Branch] {
         get throws {
 
@@ -20,6 +21,7 @@ extension Repository {
         }
     }
 
+    @GitActor
     public func createBranch(named name: String, at commit: Commit) throws -> Branch {
         let pointer = try GitPointer(
             create: repository.create(git_branch_create, name, commit.commit.pointer, 0),
@@ -27,6 +29,7 @@ extension Repository {
         return try Branch(pointer)
     }
 
+    @GitActor
     public func branch(named name: String) throws -> Branch {
         let pointer = try GitPointer(
             create: repository.create(git_branch_lookup, name, GIT_BRANCH_LOCAL),
@@ -47,6 +50,7 @@ public struct Branch: Identifiable {
 
 extension Branch {
 
+    @GitActor
     init(_ branch: GitPointer) throws {
         guard branch.check(git_reference_is_branch) else { throw GitKitError.incorrectType(expected: "branch") }
         self.branch = branch

@@ -4,12 +4,14 @@ import Tagged
 
 extension Repository {
 
+    @GitActor
     public func object<ID>(
         for id: ID
     ) throws -> Object where ID: RawRepresentable, ID.RawValue == Object.ID {
         try object(for: id.rawValue)
     }
 
+    @GitActor
     public func object(for id: Object.ID) throws -> Object {
         var oid = id.oid
         let pointer = try GitPointer(
@@ -30,6 +32,7 @@ public enum Object {
 
 extension Object {
 
+    @GitActor
     init(_ object: GitPointer) throws {
 
         let type = object.get(git_object_type)
@@ -84,6 +87,7 @@ extension Object.ID {
         self.oid = oid
     }
 
+    @GitActor
     init(reference: GitPointer) throws {
         let resolved = try GitPointer(
             create: reference.create(git_reference_resolve),
@@ -137,6 +141,7 @@ extension Object.ID: Hashable {
 
 extension Tagged where RawValue == Object.ID {
 
+    @GitActor
     init(object: GitPointer) throws {
         try self.init(oid: object.get(git_object_id))
     }

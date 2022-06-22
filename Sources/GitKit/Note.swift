@@ -12,6 +12,7 @@ public struct Note: Identifiable {
 
 extension Note {
 
+    @GitActor
     init(_ note: GitPointer) throws {
         guard note.check(git_reference_is_note) else { throw GitKitError.incorrectType(expected: "note") }
         id = try ID(reference: note)

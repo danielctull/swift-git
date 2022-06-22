@@ -4,6 +4,7 @@ import Tagged
 
 extension Repository {
 
+    @GitActor
     public var head: Reference {
         get throws {
             let head = try GitPointer(
@@ -13,6 +14,7 @@ extension Repository {
         }
     }
 
+    @GitActor
     public var references: [Reference] {
         get throws {
             try GitIterator(
@@ -24,6 +26,7 @@ extension Repository {
         }
     }
 
+    @GitActor
     public func reference(for id: Reference.ID) throws -> Reference {
         let pointer = try GitPointer(
             create: repository.create(git_reference_lookup, id.rawValue),
@@ -33,6 +36,7 @@ extension Repository {
 
     @available(iOS 13, *)
     @available(macOS 10.15, *)
+    @GitActor
     public func remove<SomeReference>(
         _ reference: SomeReference
     ) throws where SomeReference: Identifiable,
@@ -41,12 +45,14 @@ extension Repository {
         try remove(reference.id.rawValue)
     }
 
+    @GitActor
     public func remove<ID>(
         _ id: ID
     ) throws where ID: RawRepresentable, ID.RawValue == Reference.ID {
         try remove(id.rawValue)
     }
 
+    @GitActor
     public func remove(_ id: Reference.ID) throws {
         try remove(reference(for: id))
     }
@@ -59,6 +65,7 @@ extension Repository {
 
 // MARK: - Reference
 
+@GitActor
 public enum Reference {
     case branch(Branch)
     case note(Note)
@@ -68,6 +75,7 @@ public enum Reference {
 
 extension Reference {
 
+    @GitActor
     init(_ reference: GitPointer) throws {
 
         switch reference {
@@ -141,6 +149,7 @@ extension Reference: CustomDebugStringConvertible {
 
 extension Tagged where RawValue == Reference.ID {
 
+    @GitActor
     init(reference: GitPointer) throws {
         let name = try Unwrap(String(validatingUTF8: reference.get(git_reference_name)))
         let referenceID = Reference.ID(rawValue: name)

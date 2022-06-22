@@ -5,6 +5,7 @@ import Tagged
 
 extension Repository {
 
+    @GitActor
     public func remote(for id: Remote.ID) throws -> Remote {
         let remote = try GitPointer(
             create: repository.create(git_remote_lookup, id.rawValue),
@@ -28,6 +29,7 @@ extension Remote {
 
 extension Remote {
 
+    @GitActor
     init(_ remote: GitPointer) throws {
         self.remote = remote
         id = try ID(remote.get(git_remote_name))

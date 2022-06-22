@@ -4,6 +4,7 @@ import Tagged
 
 extension Repository {
 
+    @GitActor
     public func diff(from tree1: Tree, to tree2: Tree) throws -> Diff {
         let diff = try GitPointer(
             create: repository.create(git_diff_tree_to_tree, tree1.tree.pointer, tree2.tree.pointer, nil),

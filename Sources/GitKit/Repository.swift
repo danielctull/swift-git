@@ -4,6 +4,7 @@ import Foundation
 
 // MARK: - Repository
 
+@GitActor
 public struct Repository {
     let repository: GitPointer
 
@@ -14,6 +15,7 @@ public struct Repository {
         public static let create = Self.create(isBare: false)
     }
 
+    @GitActor
     public init(url: URL, options: Options = .create) throws {
         repository = try GitPointer(create: { pointer in
             url.withUnsafeFileSystemRepresentation { path in
@@ -25,6 +27,7 @@ public struct Repository {
         }, free: git_repository_free)
     }
 
+    @GitActor
     public init(local: URL, remote: URL) throws {
 
         let remoteString = remote.isFileURL ? remote.path : remote.absoluteString
@@ -36,6 +39,7 @@ public struct Repository {
         }, free: git_repository_free)
     }
 
+    @GitActor
     public var workingDirectory: URL? {
         guard let path = try? String(validatingUTF8: repository.get(git_repository_workdir)) else { return nil }
         return URL(fileURLWithPath: path)
