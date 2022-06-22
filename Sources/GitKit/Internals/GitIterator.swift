@@ -1,4 +1,5 @@
 
+@GitActor
 struct GitIterator<Element> {
 
     let iterator: GitPointer
