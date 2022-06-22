@@ -15,6 +15,7 @@ private func AssertEqualResolvingSymlinks(
                    line: line)
 }
 
+@GitActor
 final class RepositoryTests: XCTestCase {
 
     func testClone() throws {

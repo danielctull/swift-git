@@ -3,6 +3,7 @@ import Foundation
 import GitKit
 import XCTest
 
+@GitActor
 final class TagTests: XCTestCase {
 
     func testRepositoryTags() throws {

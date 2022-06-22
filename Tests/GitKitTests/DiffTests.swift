@@ -3,6 +3,7 @@ import Foundation
 import GitKit
 import XCTest
 
+@GitActor
 final class DiffTests: XCTestCase {
 
     func testAddedFile() throws {
