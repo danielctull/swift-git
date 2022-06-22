@@ -4,6 +4,7 @@ import Foundation
 
 // MARK: - Repository
 
+@GitActor
 public struct Repository {
     let repository: GitPointer
 

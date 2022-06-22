@@ -18,6 +18,7 @@ extension Repository {
 
 // MARK: - Tag
 
+@GitActor
 public enum Tag {
     case lightweight(id: ID, target: Object.ID)
     case annotated(id: ID, target: AnnotatedTag)
@@ -77,6 +78,7 @@ extension Tag: CustomDebugStringConvertible {
 
 // MARK: - AnnotatedTag
 
+@GitActor
 public struct AnnotatedTag {
     let tag: GitPointer
     public typealias ID = Tagged<AnnotatedTag, Object.ID>

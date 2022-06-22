@@ -15,6 +15,7 @@ extension Repository {
 
 // MARK: Remote
 
+@GitActor
 public struct Remote: Identifiable {
     let remote: GitPointer
     public typealias ID = Tagged<Remote, String>

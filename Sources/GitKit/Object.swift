@@ -21,6 +21,7 @@ extension Repository {
 
 // MARK: - Object
 
+@GitActor
 public enum Object {
     case blob(Blob)
     case commit(Commit)
@@ -73,6 +74,7 @@ extension Object: Identifiable {
 
 extension Object {
 
+    @GitActor
     public struct ID {
         let oid: git_oid
     }
@@ -137,10 +139,12 @@ extension Object.ID: Hashable {
 
 extension Tagged where RawValue == Object.ID {
 
+    @GitActor
     init(object: GitPointer) throws {
         try self.init(oid: object.get(git_object_id))
     }
 
+    @GitActor
     init(oid: git_oid) {
         let objectID = Object.ID(oid)
         self.init(rawValue: objectID)

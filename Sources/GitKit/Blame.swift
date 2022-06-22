@@ -13,6 +13,7 @@ extension Repository {
 
 // MARK: - Blame
 
+@GitActor
 public struct Blame {
     let blame: GitPointer
 }
@@ -53,6 +54,7 @@ extension Blame {
 
 extension Blame {
 
+    @GitActor
     public struct Hunk: Equatable {
         public let lines: ClosedRange<LineNumber>
         public let signature: Signature

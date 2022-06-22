@@ -30,6 +30,7 @@ extension Repository {
 
 // MARK: - RemoteBranch
 
+@GitActor
 public struct RemoteBranch: Identifiable {
     let branch: GitPointer
     public typealias ID = Tagged<RemoteBranch, Reference.ID>

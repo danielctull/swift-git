@@ -14,6 +14,7 @@ extension Repository {
 
 // MARK: - Diff
 
+@GitActor
 public struct Diff {
     let diff: GitPointer
 }
@@ -45,6 +46,7 @@ extension Diff {
 
 extension Diff {
 
+    @GitActor
     public struct Hunk {
         public let lines: ClosedRange<LineNumber>
         public let file: File
@@ -89,6 +91,7 @@ extension Diff.Hunk {
 
 extension Diff {
 
+    @GitActor
     public struct Delta {
         public let status: Status
         public let from: File?
@@ -152,6 +155,7 @@ extension Diff.Delta.Status {
 
 extension Diff {
 
+    @GitActor
     public struct File: Identifiable {
         public typealias ID = Tagged<File, Object.ID>
         public let id: ID

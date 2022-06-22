@@ -4,6 +4,7 @@ import Tagged
 
 // MARK: - Note
 
+@GitActor
 public struct Note: Identifiable {
     public typealias ID = Tagged<Note, Reference.ID>
     public let id: ID

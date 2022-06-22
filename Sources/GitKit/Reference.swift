@@ -59,6 +59,7 @@ extension Repository {
 
 // MARK: - Reference
 
+@GitActor
 public enum Reference {
     case branch(Branch)
     case note(Note)
@@ -141,6 +142,7 @@ extension Reference: CustomDebugStringConvertible {
 
 extension Tagged where RawValue == Reference.ID {
 
+    @GitActor
     init(reference: GitPointer) throws {
         let name = try Unwrap(String(validatingUTF8: reference.get(git_reference_name)))
         let referenceID = Reference.ID(rawValue: name)

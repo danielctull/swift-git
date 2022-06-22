@@ -15,6 +15,7 @@ extension Repository {
 
 // MARK: - Reflog
 
+@GitActor
 public struct Reflog {
     let reflog: GitPointer
 }
@@ -36,6 +37,7 @@ extension Reflog {
 
 extension Reflog {
 
+    @GitActor
     public struct Item: Equatable, Hashable, Identifiable {
         public let id: ID
         public var message: String { id.message }

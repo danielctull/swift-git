@@ -63,6 +63,7 @@ extension Repository {
 
 // MARK: - Commit
 
+@GitActor
 public struct Commit: Identifiable {
     let commit: GitPointer
     public typealias ID = Tagged<Commit, Object.ID>
@@ -128,6 +129,7 @@ extension Commit: CustomDebugStringConvertible {
 
 extension Commit.ID {
 
+    @GitActor
     init(_ oid: git_oid) {
         self.init(rawValue: Object.ID(oid))
     }
