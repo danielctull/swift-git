@@ -50,8 +50,7 @@ extension Repository {
     }
 
     public func remove(_ reference: Reference) throws {
-        let result = git_reference_remove(pointer.pointer, reference.id.rawValue)
-        if let error = LibGit2Error(result) { throw error }
+        try perform(git_reference_remove, reference.id.rawValue)
     }
 }
 

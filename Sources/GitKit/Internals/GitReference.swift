@@ -95,3 +95,37 @@ extension GitReference {
         { create($0, pointer.pointer, a, b, c) }
     }
 }
+
+extension GitReference {
+
+    func perform(
+        _ task: @escaping (OpaquePointer) -> Int32
+    ) throws {
+        let result = task(pointer.pointer)
+        if let error = LibGit2Error(result) { throw error }
+    }
+
+    func perform<A>(
+        _ task: @escaping (OpaquePointer, A) -> Int32,
+        _ a: A
+    ) throws {
+        try perform { task($0, a) }
+    }
+
+    func perform<A, B>(
+        _ task: @escaping (OpaquePointer, A, B) -> Int32,
+        _ a: A,
+        _ b: B
+    ) throws {
+        try perform { task($0, a, b) }
+    }
+
+    func perform<A, B, C>(
+        _ task: @escaping (OpaquePointer, A, B, C) -> Int32,
+        _ a: A,
+        _ b: B,
+        _ c: C
+    ) throws {
+        try perform { task($0, a, b, c) }
+    }
+}
