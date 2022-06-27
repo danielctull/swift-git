@@ -6,8 +6,7 @@ extension Repository {
 
     public func commit(for id: Commit.ID) throws -> Commit {
         var oid = id.rawValue.oid
-        return try reference(
-            of: Commit.self,
+        return try Commit(
             create: create(git_commit_lookup, &oid),
             free: git_commit_free)
     }
@@ -87,10 +86,9 @@ extension Commit {
 
     public var tree: Tree {
         get throws {
-            let pointer = try GitPointer(
+            try Tree(
                 create: pointer.create(git_commit_tree),
                 free: git_tree_free)
-            return try Tree(pointer: pointer)
         }
     }
 

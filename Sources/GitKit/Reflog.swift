@@ -5,8 +5,7 @@ extension Repository {
 
     public var reflog: Reflog {
         get throws {
-            try reference(
-                of: Reflog.self,
+            try Reflog(
                 create: create(git_reflog_read, "HEAD"),
                 free: git_reflog_free)
         }

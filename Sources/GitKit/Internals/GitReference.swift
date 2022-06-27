@@ -6,13 +6,12 @@ protocol GitReference {
 
 extension GitReference {
 
-    func reference<Reference: GitReference>(
-        of type: Reference.Type,
+    init(
         create: GitPointer.Create,
         configure: GitPointer.Configure? = nil,
         free: @escaping GitPointer.Free
-    ) throws -> Reference {
-        try Reference(
+    ) throws {
+        try self.init(
             pointer: GitPointer(
                 create: create,
                 configure: configure,

@@ -4,8 +4,7 @@ import Clibgit2
 extension Repository {
 
     public func blame(for path: FilePath) throws -> Blame {
-        try reference(
-            of: Blame.self,
+        try Blame(
             create: create(git_blame_file, path.rawValue, nil),
             free: git_blame_free)
     }
