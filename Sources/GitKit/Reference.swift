@@ -82,7 +82,7 @@ extension Reference {
             self = try .remoteBranch(RemoteBranch(pointer: reference))
 
         case let reference where reference.check(git_reference_is_tag):
-            self = try .tag(Tag(reference))
+            self = try .tag(Tag(pointer: reference))
 
         default:
             struct UnknownReferenceType: Error {}

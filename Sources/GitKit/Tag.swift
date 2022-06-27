@@ -51,13 +51,13 @@ extension Tag {
 
 extension Tag {
 
-    init(_ tagReference: GitPointer) throws {
-        guard tagReference.check(git_reference_is_tag) else { throw GitKitError.incorrectType(expected: "tag") }
+    init(pointer: GitPointer) throws {
+        guard pointer.check(git_reference_is_tag) else { throw GitKitError.incorrectType(expected: "tag") }
 
-        let id = try Tag.ID(reference: tagReference)
-        let target = try Object.ID(reference: tagReference)
+        let id = try Tag.ID(reference: pointer)
+        let target = try Object.ID(reference: pointer)
 
-        let repository = try Repository(pointer: tagReference.get(git_reference_owner))
+        let repository = try Repository(pointer: pointer.get(git_reference_owner))
         let object = try repository.object(for: target)
 
         switch object {
