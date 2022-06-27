@@ -13,14 +13,14 @@ extension Repository {
 
 // MARK: - Blame
 
-public struct Blame {
-    let blame: GitPointer
+public struct Blame: GitReference {
+    let pointer: GitPointer
 }
 
 extension Blame {
 
-    init(_ blame: GitPointer) throws {
-        self.blame = blame
+    init(_ pointer: GitPointer) throws {
+        self.pointer = pointer
     }
 }
 
@@ -31,14 +31,14 @@ extension Blame: CustomStringConvertible {
 extension Blame {
 
     public func hunk(for line: LineNumber) throws -> Hunk {
-        let hunk: git_blame_hunk = try blame.get { git_blame_get_hunk_byline($0, line.rawValue) }
+        let hunk: git_blame_hunk = try get { git_blame_get_hunk_byline($0, line.rawValue) }
         return try Hunk(hunk)
     }
 
     public var hunks: [Hunk] {
         get throws {
             try GitCollection(
-                pointer: blame,
+                pointer: pointer,
                 count: git_blame_get_hunk_count,
                 element: git_blame_get_hunk_byindex
             )
