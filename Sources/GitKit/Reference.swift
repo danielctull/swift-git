@@ -76,7 +76,7 @@ extension Reference {
             self = try .branch(Branch(pointer: reference))
 
         case let reference where reference.check(git_reference_is_note):
-            self = try .note(Note(reference))
+            self = try .note(Note(pointer: reference))
 
         case let reference where reference.check(git_reference_is_remote):
             self = try .remoteBranch(RemoteBranch(pointer: reference))

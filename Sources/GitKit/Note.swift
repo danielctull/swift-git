@@ -4,18 +4,18 @@ import Tagged
 
 // MARK: - Note
 
-public struct Note: Identifiable {
+public struct Note: GitReference, Identifiable {
+
+    let pointer: GitPointer
     public typealias ID = Tagged<Note, Reference.ID>
     public let id: ID
     public let target: Object.ID
-}
 
-extension Note {
-
-    init(_ note: GitPointer) throws {
-        guard note.check(git_reference_is_note) else { throw GitKitError.incorrectType(expected: "note") }
-        id = try ID(reference: note)
-        target = try Object.ID(reference: note)
+    init(pointer: GitPointer) throws {
+        guard pointer.check(git_reference_is_note) else { throw GitKitError.incorrectType(expected: "note") }
+        self.pointer = pointer
+        id = try ID(reference: pointer)
+        target = try Object.ID(reference: pointer)
     }
 }
 
