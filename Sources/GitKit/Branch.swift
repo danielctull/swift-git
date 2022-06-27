@@ -31,6 +31,10 @@ extension Repository {
             create: create(git_branch_lookup, name, GIT_BRANCH_LOCAL),
             free: git_reference_free)
     }
+
+    public func delete(_ branch: Branch) throws {
+        try branch.perform(git_branch_delete)
+    }
 }
 
 // MARK: - Branch
