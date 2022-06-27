@@ -14,14 +14,14 @@ extension Repository {
 
 // MARK: - Diff
 
-public struct Diff {
-    let diff: GitPointer
+public struct Diff: GitReference {
+    let pointer: GitPointer
 }
 
 extension Diff {
 
-    init(_ diff: GitPointer) throws {
-        self.diff = diff
+    init(_ pointer: GitPointer) throws {
+        self.pointer = pointer
     }
 }
 
@@ -30,7 +30,7 @@ extension Diff {
     public var deltas: [Delta] {
         get throws {
             try GitCollection(
-                pointer: diff,
+                pointer: pointer,
                 count: git_diff_num_deltas,
                 element: git_diff_get_delta
             )
@@ -55,7 +55,7 @@ extension Diff {
             var hunks: [Hunk] = []
 
             let error = withUnsafeMutablePointer(to: &hunks) {
-                LibGit2Error(git_diff_foreach(diff.pointer, nil, nil, { delta, hunk, hunks in
+                LibGit2Error(git_diff_foreach(pointer.pointer, nil, nil, { delta, hunk, hunks in
 
                     do {
                         let hunks = try Unwrap(hunks).assumingMemoryBound(to: [Hunk].self)
