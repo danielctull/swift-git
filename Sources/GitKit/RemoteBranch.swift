@@ -30,8 +30,8 @@ extension Repository {
 
 // MARK: - RemoteBranch
 
-public struct RemoteBranch: Identifiable {
-    let branch: GitPointer
+public struct RemoteBranch: GitReference, Identifiable {
+    let pointer: GitPointer
     public typealias ID = Tagged<RemoteBranch, Reference.ID>
     public let id: ID
     public let target: Object.ID
@@ -41,12 +41,12 @@ public struct RemoteBranch: Identifiable {
 
 extension RemoteBranch {
 
-    init(_ branch: GitPointer) throws {
-        guard branch.check(git_reference_is_remote) else { throw GitKitError.incorrectType(expected: "remote branch") }
-        self.branch = branch
-        id = try ID(reference: branch)
-        name = try Unwrap(String(validatingUTF8: branch.get(git_branch_name)))
-        target = try Object.ID(reference: branch)
+    init(_ pointer: GitPointer) throws {
+        guard pointer.check(git_reference_is_remote) else { throw GitKitError.incorrectType(expected: "remote branch") }
+        self.pointer = pointer
+        id = try ID(reference: pointer)
+        name = try Unwrap(String(validatingUTF8: pointer.get(git_branch_name)))
+        target = try Object.ID(reference: pointer)
         remote = try Remote.ID(rawValue: String(Unwrap(name.split(separator: "/").first)))
     }
 }
