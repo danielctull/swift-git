@@ -40,6 +40,20 @@ extension GitTask where Input == Void {
     }
 }
 
+// MARK: - Converting a task
+
+extension GitTask {
+
+    func map<NewOutput>(
+        _ transform: @escaping (Output) throws -> NewOutput
+    ) -> GitTask<Input, NewOutput> {
+        .init { input in
+            let output = try function(input)
+            return try transform(output)
+        }
+    }
+}
+
 // MARK: - Creating a task from a GitPointer
 
 extension GitPointer {

@@ -44,7 +44,7 @@ extension Tree {
         init(pointer: GitPointer) throws {
             self.pointer = pointer
             target = try Object.ID(pointer.get(git_tree_entry_id))
-            name = try String(pointer.task(for: git_tree_entry_name))
+            name = try pointer.task(for: git_tree_entry_name).map(String.init)()
         }
     }
 }
