@@ -6,10 +6,9 @@ extension Repository {
 
     public var head: Reference {
         get throws {
-            let head = try GitPointer(
+            try Reference(
                 create: create(git_repository_head),
                 free: git_reference_free)
-            return try Reference(head)
         }
     }
 
@@ -25,10 +24,9 @@ extension Repository {
     }
 
     public func reference(for id: Reference.ID) throws -> Reference {
-        let pointer = try GitPointer(
+        try Reference(
             create: create(git_reference_lookup, id.rawValue),
             free: git_reference_free)
-        return try Reference(pointer)
     }
 
     @available(iOS 13, *)
@@ -66,23 +64,32 @@ public enum Reference {
     case tag(Tag)
 }
 
-extension Reference {
+extension Reference: GitReference {
 
-    init(_ reference: GitPointer) throws {
+    var pointer: GitPointer {
+        switch self {
+        case .branch(let branch): return branch.pointer
+        case .note(let note): return note.pointer
+        case .remoteBranch(let remoteBranch): return remoteBranch.pointer
+        case .tag(let tag): return tag.pointer
+        }
+    }
 
-        switch reference {
+    init(pointer: GitPointer) throws {
 
-        case let reference where reference.check(git_reference_is_branch):
-            self = try .branch(Branch(pointer: reference))
+        switch pointer {
 
-        case let reference where reference.check(git_reference_is_note):
-            self = try .note(Note(pointer: reference))
+        case let pointer where pointer.check(git_reference_is_branch):
+            self = try .branch(Branch(pointer: pointer))
 
-        case let reference where reference.check(git_reference_is_remote):
-            self = try .remoteBranch(RemoteBranch(pointer: reference))
+        case let pointer where pointer.check(git_reference_is_note):
+            self = try .note(Note(pointer: pointer))
 
-        case let reference where reference.check(git_reference_is_tag):
-            self = try .tag(Tag(pointer: reference))
+        case let pointer where pointer.check(git_reference_is_remote):
+            self = try .remoteBranch(RemoteBranch(pointer: pointer))
+
+        case let pointer where pointer.check(git_reference_is_tag):
+            self = try .tag(Tag(pointer: pointer))
 
         default:
             struct UnknownReferenceType: Error {}
