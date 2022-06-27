@@ -12,10 +12,9 @@ extension Repository {
 
     public func object(for id: Object.ID) throws -> Object {
         var oid = id.oid
-        let pointer = try GitPointer(
+        return try Object(
             create: create(git_object_lookup, &oid, GIT_OBJECT_ANY),
             free: git_object_free)
-        return try Object(pointer)
     }
 }
 
@@ -28,25 +27,34 @@ public enum Object {
     case tree(Tree)
 }
 
-extension Object {
+extension Object: GitReference {
 
-    init(_ object: GitPointer) throws {
+    var pointer: GitPointer {
+        switch self {
+        case .blob(let blob): return blob.pointer
+        case .commit(let commit): return commit.pointer
+        case .tag(let annotatedTag): return annotatedTag.pointer
+        case .tree(let tree): return tree.pointer
+        }
+    }
 
-        let type = object.get(git_object_type)
+    init(pointer: GitPointer) throws {
+
+        let type = pointer.get(git_object_type)
 
         switch type {
 
         case GIT_OBJECT_BLOB:
-            self = try .blob(Blob(pointer: object))
+            self = try .blob(Blob(pointer: pointer))
 
         case GIT_OBJECT_COMMIT:
-            self = try .commit(Commit(pointer: object))
+            self = try .commit(Commit(pointer: pointer))
 
         case GIT_OBJECT_TAG:
-            self = try .tag(AnnotatedTag(pointer: object))
+            self = try .tag(AnnotatedTag(pointer: pointer))
 
         case GIT_OBJECT_TREE:
-            self = try .tree(Tree(pointer: object))
+            self = try .tree(Tree(pointer: pointer))
 
         default:
             let typeName = try Unwrap(String(validatingUTF8: git_object_type2string(type)))
