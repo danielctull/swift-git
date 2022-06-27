@@ -148,7 +148,7 @@ extension Reference: CustomDebugStringConvertible {
 extension Tagged where RawValue == Reference.ID {
 
     init(reference: GitPointer) throws {
-        let name = try Unwrap(String(validatingUTF8: reference.get(git_reference_name)))
+        let name = try String(reference.task(for: git_reference_name))
         let referenceID = Reference.ID(rawValue: name)
         self.init(rawValue: referenceID)
     }
