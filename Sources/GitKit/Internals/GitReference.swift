@@ -1,5 +1,6 @@
 
 protocol GitReference {
+    init(pointer: GitPointer) throws
     var pointer: GitPointer { get }
 }
 

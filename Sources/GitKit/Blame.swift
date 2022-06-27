@@ -7,7 +7,7 @@ extension Repository {
         let blame = try GitPointer(
             create: create(git_blame_file, path.rawValue, nil),
             free: git_blame_free)
-        return try Blame(blame)
+        return try Blame(pointer: blame)
     }
 }
 
@@ -15,11 +15,8 @@ extension Repository {
 
 public struct Blame: GitReference {
     let pointer: GitPointer
-}
 
-extension Blame {
-
-    init(_ pointer: GitPointer) throws {
+    init(pointer: GitPointer) throws {
         self.pointer = pointer
     }
 }

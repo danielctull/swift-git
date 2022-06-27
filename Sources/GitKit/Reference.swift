@@ -73,13 +73,13 @@ extension Reference {
         switch reference {
 
         case let reference where reference.check(git_reference_is_branch):
-            self = try .branch(Branch(reference))
+            self = try .branch(Branch(pointer: reference))
 
         case let reference where reference.check(git_reference_is_note):
             self = try .note(Note(reference))
 
         case let reference where reference.check(git_reference_is_remote):
-            self = try .remoteBranch(RemoteBranch(reference))
+            self = try .remoteBranch(RemoteBranch(pointer: reference))
 
         case let reference where reference.check(git_reference_is_tag):
             self = try .tag(Tag(reference))

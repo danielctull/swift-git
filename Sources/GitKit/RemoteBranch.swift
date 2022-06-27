@@ -24,24 +24,22 @@ extension Repository {
         let pointer = try GitPointer(
             create: create(git_branch_lookup, name, GIT_BRANCH_REMOTE),
             free: git_reference_free)
-        return try RemoteBranch(pointer)
+        return try RemoteBranch(pointer: pointer)
     }
 }
 
 // MARK: - RemoteBranch
 
 public struct RemoteBranch: GitReference, Identifiable {
+
     let pointer: GitPointer
     public typealias ID = Tagged<RemoteBranch, Reference.ID>
     public let id: ID
     public let target: Object.ID
     public let remote: Remote.ID
     public let name: String
-}
 
-extension RemoteBranch {
-
-    init(_ pointer: GitPointer) throws {
+    init(pointer: GitPointer) throws {
         guard pointer.check(git_reference_is_remote) else { throw GitKitError.incorrectType(expected: "remote branch") }
         self.pointer = pointer
         id = try ID(reference: pointer)

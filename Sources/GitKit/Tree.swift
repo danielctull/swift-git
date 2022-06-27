@@ -5,14 +5,12 @@ import Tagged
 // MARK: - Tree
 
 public struct Tree: GitReference, Identifiable {
+
     let pointer: GitPointer
     public typealias ID = Tagged<Tree, Object.ID>
     public let id: ID
-}
 
-extension Tree {
-
-    init(_ pointer: GitPointer) throws {
+    init(pointer: GitPointer) throws {
         self.pointer = pointer
         id = try ID(object: pointer)
     }

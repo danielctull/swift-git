@@ -24,30 +24,28 @@ extension Repository {
         let pointer = try GitPointer(
             create: create(git_branch_create, name, commit.pointer.pointer, 0),
             free: git_reference_free)
-        return try Branch(pointer)
+        return try Branch(pointer: pointer)
     }
 
     public func branch(named name: String) throws -> Branch {
         let pointer = try GitPointer(
             create: create(git_branch_lookup, name, GIT_BRANCH_LOCAL),
             free: git_reference_free)
-        return try Branch(pointer)
+        return try Branch(pointer: pointer)
     }
 }
 
 // MARK: - Branch
 
 public struct Branch: GitReference, Identifiable {
+
     let pointer: GitPointer
     public typealias ID = Tagged<Branch, Reference.ID>
     public let id: ID
     public let target: Object.ID
     public let name: String
-}
 
-extension Branch {
-
-    init(_ pointer: GitPointer) throws {
+    init(pointer: GitPointer) throws {
         guard pointer.check(git_reference_is_branch) else { throw GitKitError.incorrectType(expected: "branch") }
         self.pointer = pointer
         id = try ID(reference: pointer)

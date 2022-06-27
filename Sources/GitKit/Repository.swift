@@ -5,7 +5,15 @@ import Foundation
 // MARK: - Repository
 
 public struct Repository: GitReference {
+
     let pointer: GitPointer
+
+    init(pointer: GitPointer) throws {
+        self.pointer = pointer
+    }
+}
+
+extension Repository {
 
     public enum Options {
         case open
@@ -45,11 +53,4 @@ public struct Repository: GitReference {
 extension Repository: CustomStringConvertible {
 
     public var description: String { "Repository" }
-}
-
-extension Repository {
-
-    init(_ pointer: GitPointer) {
-        self.pointer = pointer
-    }
 }

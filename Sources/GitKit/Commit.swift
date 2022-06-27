@@ -9,7 +9,7 @@ extension Repository {
         let commit = try GitPointer(
             create: create(git_commit_lookup, &oid),
             free: git_commit_free)
-        return try Commit(commit)
+        return try Commit(pointer: commit)
     }
 
     public var commits: [Commit] {
@@ -64,6 +64,7 @@ extension Repository {
 // MARK: - Commit
 
 public struct Commit: GitReference, Identifiable {
+
     let pointer: GitPointer
     public typealias ID = Tagged<Commit, Object.ID>
     public let id: ID
@@ -72,7 +73,7 @@ public struct Commit: GitReference, Identifiable {
     public let author: Signature
     public let committer: Signature
 
-    init(_ pointer: GitPointer) throws {
+    init(pointer: GitPointer) throws {
         self.pointer = pointer
         id = try ID(object: pointer)
         summary = try Unwrap(String(validatingUTF8: pointer.get(git_commit_summary)))
@@ -89,7 +90,7 @@ extension Commit {
             let pointer = try GitPointer(
                 create: pointer.create(git_commit_tree),
                 free: git_tree_free)
-            return try Tree(pointer)
+            return try Tree(pointer: pointer)
         }
     }
 

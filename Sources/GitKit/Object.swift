@@ -37,16 +37,16 @@ extension Object {
         switch type {
 
         case GIT_OBJECT_BLOB:
-            self = try .blob(Blob(object))
+            self = try .blob(Blob(pointer: object))
 
         case GIT_OBJECT_COMMIT:
-            self = try .commit(Commit(object))
+            self = try .commit(Commit(pointer: object))
 
         case GIT_OBJECT_TAG:
-            self = try .tag(AnnotatedTag(object))
+            self = try .tag(AnnotatedTag(pointer: object))
 
         case GIT_OBJECT_TREE:
-            self = try .tree(Tree(object))
+            self = try .tree(Tree(pointer: object))
 
         default:
             let typeName = try Unwrap(String(validatingUTF8: git_object_type2string(type)))

@@ -57,7 +57,7 @@ extension Tag {
         let id = try Tag.ID(reference: tagReference)
         let target = try Object.ID(reference: tagReference)
 
-        let repository = try Repository(tagReference.get(git_reference_owner))
+        let repository = try Repository(pointer: tagReference.get(git_reference_owner))
         let object = try repository.object(for: target)
 
         switch object {
@@ -78,6 +78,7 @@ extension Tag: CustomDebugStringConvertible {
 // MARK: - AnnotatedTag
 
 public struct AnnotatedTag: GitReference {
+
     let pointer: GitPointer
     public typealias ID = Tagged<AnnotatedTag, Object.ID>
     public let id: ID
@@ -85,11 +86,8 @@ public struct AnnotatedTag: GitReference {
     public let target: Object.ID
     public let tagger: Signature
     public let message: String
-}
 
-extension AnnotatedTag {
-
-    init(_ pointer: GitPointer) throws {
+    init(pointer: GitPointer) throws {
         self.pointer = pointer
         id = try ID(object: pointer)
         name = try Unwrap(String(validatingUTF8: pointer.get(git_tag_name)))
