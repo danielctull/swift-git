@@ -3,7 +3,6 @@ import Clibgit2
 
 final class GitPointer {
 
-    typealias Configure = (OpaquePointer) -> Int32
     typealias Free = (OpaquePointer) -> Void
 
     let pointer: OpaquePointer
@@ -27,7 +26,7 @@ final class GitPointer {
     /// - Throws: A LibGit2Error if the results of the functions are not GIT_OK.
     init(
         create: GitTask<Void, OpaquePointer>,
-        configure: Configure? = nil,
+        configure: GitTask<OpaquePointer, Void>? = nil,
         free: @escaping Free
     ) throws {
 
@@ -39,8 +38,8 @@ final class GitPointer {
 
         self.pointer = try create()
         if let configure = configure {
-            let result = configure(self.pointer)
-            if let error = LibGit2Error(result) { free(self.pointer); throw error }
+            do { try configure(self.pointer) }
+            catch { free(self.pointer); throw error }
         }
         self.free = free
     }

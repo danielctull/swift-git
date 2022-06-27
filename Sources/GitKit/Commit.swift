@@ -35,7 +35,7 @@ extension Repository {
 
         try GitIterator(
             createIterator: task(for: git_revwalk_new),
-            configureIterator: { iterator in
+            configureIterator: GitTask { iterator in
                 for reference in references {
                     var oid = reference.target.oid
                     let result = git_revwalk_push(iterator, &oid)

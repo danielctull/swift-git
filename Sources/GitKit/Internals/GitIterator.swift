@@ -6,7 +6,7 @@ struct GitIterator<Element> {
 
     init(
         createIterator: GitTask<Void, OpaquePointer>,
-        configureIterator: (GitPointer.Configure)? = nil,
+        configureIterator: GitTask<OpaquePointer, Void>? = nil,
         freeIterator: @escaping GitPointer.Free,
         nextElement: @escaping (GitPointer) throws -> Element?
     ) throws {
@@ -32,10 +32,10 @@ extension GitIterator where Element == GitPointer {
 
     init(
         createIterator: GitTask<Void, OpaquePointer>,
-        configureIterator: (GitPointer.Configure)? = nil,
+        configureIterator: GitTask<OpaquePointer, Void>? = nil,
         freeIterator: @escaping GitPointer.Free,
         nextElement: @escaping (UnsafeMutablePointer<OpaquePointer?>, OpaquePointer) -> Int32,
-        configureElement: (GitPointer.Configure)? = nil,
+        configureElement: GitTask<OpaquePointer, Void>? = nil,
         freeElement: @escaping GitPointer.Free
     ) throws {
 

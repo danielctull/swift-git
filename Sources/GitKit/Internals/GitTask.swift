@@ -8,6 +8,16 @@ extension GitTask where Input == Void {
     func callAsFunction() throws -> Output { try function(()) }
 }
 
+extension GitTask where Output == Void {
+
+    init(task: @escaping (Input) -> Int32) {
+        self.init { input in
+            let result = task(input)
+            if let error = LibGit2Error(result) { throw error }
+        }
+    }
+}
+
 extension GitTask where Input == Void, Output == Void {
 
     init(task: @escaping () -> Int32) {
