@@ -77,8 +77,8 @@ extension Tag: CustomDebugStringConvertible {
 
 // MARK: - AnnotatedTag
 
-public struct AnnotatedTag {
-    let tag: GitPointer
+public struct AnnotatedTag: GitReference {
+    let pointer: GitPointer
     public typealias ID = Tagged<AnnotatedTag, Object.ID>
     public let id: ID
     public let name: String
@@ -89,12 +89,12 @@ public struct AnnotatedTag {
 
 extension AnnotatedTag {
 
-    init(_ tag: GitPointer) throws {
-        self.tag = tag
-        id = try ID(object: tag)
-        name = try Unwrap(String(validatingUTF8: tag.get(git_tag_name)))
-        target = try Object.ID(tag.get(git_tag_target_id))
-        tagger = try Signature(tag.get(git_tag_tagger))
-        message = try Unwrap(String(validatingUTF8: tag.get(git_tag_message)))
+    init(_ pointer: GitPointer) throws {
+        self.pointer = pointer
+        id = try ID(object: pointer)
+        name = try Unwrap(String(validatingUTF8: pointer.get(git_tag_name)))
+        target = try Object.ID(pointer.get(git_tag_target_id))
+        tagger = try Signature(pointer.get(git_tag_tagger))
+        message = try Unwrap(String(validatingUTF8: pointer.get(git_tag_message)))
     }
 }
