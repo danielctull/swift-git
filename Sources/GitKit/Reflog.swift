@@ -5,18 +5,18 @@ extension Repository {
 
     public var reflog: Reflog {
         get throws {
-            let reflog = try GitPointer(
+            let pointer = try GitPointer(
                 create: create(git_reflog_read, "HEAD"),
                 free: git_reflog_free)
-            return Reflog(reflog: reflog)
+            return Reflog(pointer: pointer)
         }
     }
 }
 
 // MARK: - Reflog
 
-public struct Reflog {
-    let reflog: GitPointer
+public struct Reflog: GitReference {
+    let pointer: GitPointer
 }
 
 extension Reflog {
@@ -24,7 +24,7 @@ extension Reflog {
     public var items: [Item] {
         get throws {
             try GitCollection(
-                pointer: reflog,
+                pointer: pointer,
                 count: git_reflog_entrycount,
                 element: git_reflog_entry_byindex)
                 .map(Reflog.Item.init)
