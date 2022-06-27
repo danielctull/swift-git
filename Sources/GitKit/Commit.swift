@@ -7,7 +7,7 @@ extension Repository {
     public func commit(for id: Commit.ID) throws -> Commit {
         var oid = id.rawValue.oid
         let commit = try GitPointer(
-            create: repository.create(git_commit_lookup, &oid),
+            create: create(git_commit_lookup, &oid),
             free: git_commit_free)
         return try Commit(commit)
     }
@@ -35,7 +35,7 @@ extension Repository {
     ) throws -> [Commit] {
 
         try GitIterator(
-            createIterator: repository.create(git_revwalk_new),
+            createIterator: create(git_revwalk_new),
             configureIterator: { iterator in
                 for reference in references {
                     var oid = reference.target.oid
@@ -54,7 +54,7 @@ extension Repository {
                 defer { oid.deallocate() }
                 let result = git_revwalk_next(oid, iterator)
                 if LibGit2Error(result) != nil { return result }
-                return git_commit_lookup(commit, repository.pointer, oid)
+                return git_commit_lookup(commit, pointer.pointer, oid)
             },
             freeElement: git_commit_free)
             .map(Commit.init)

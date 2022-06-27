@@ -7,7 +7,7 @@ extension Repository {
     public var head: Reference {
         get throws {
             let head = try GitPointer(
-                create: repository.create(git_repository_head),
+                create: create(git_repository_head),
                 free: git_reference_free)
             return try Reference(head)
         }
@@ -16,7 +16,7 @@ extension Repository {
     public var references: [Reference] {
         get throws {
             try GitIterator(
-                createIterator: repository.create(git_reference_iterator_new),
+                createIterator: create(git_reference_iterator_new),
                 freeIterator: git_reference_iterator_free,
                 nextElement: git_reference_next,
                 freeElement: git_reference_free)
@@ -26,7 +26,7 @@ extension Repository {
 
     public func reference(for id: Reference.ID) throws -> Reference {
         let pointer = try GitPointer(
-            create: repository.create(git_reference_lookup, id.rawValue),
+            create: create(git_reference_lookup, id.rawValue),
             free: git_reference_free)
         return try Reference(pointer)
     }
@@ -52,7 +52,7 @@ extension Repository {
     }
 
     public func remove(_ reference: Reference) throws {
-        let result = git_reference_remove(repository.pointer, reference.id.rawValue)
+        let result = git_reference_remove(pointer.pointer, reference.id.rawValue)
         if let error = LibGit2Error(result) { throw error }
     }
 }

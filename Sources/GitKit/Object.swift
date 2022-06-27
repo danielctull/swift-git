@@ -13,7 +13,7 @@ extension Repository {
     public func object(for id: Object.ID) throws -> Object {
         var oid = id.oid
         let pointer = try GitPointer(
-            create: repository.create(git_object_lookup, &oid, GIT_OBJECT_ANY),
+            create: create(git_object_lookup, &oid, GIT_OBJECT_ANY),
             free: git_object_free)
         return try Object(pointer)
     }

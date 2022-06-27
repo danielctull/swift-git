@@ -4,8 +4,8 @@ import Foundation
 
 // MARK: - Repository
 
-public struct Repository {
-    let repository: GitPointer
+public struct Repository: GitReference {
+    let pointer: GitPointer
 
     public enum Options {
         case open
@@ -15,7 +15,7 @@ public struct Repository {
     }
 
     public init(url: URL, options: Options = .create) throws {
-        repository = try GitPointer(create: { pointer in
+        pointer = try GitPointer(create: { pointer in
             url.withUnsafeFileSystemRepresentation { path in
                 switch options {
                 case .open:               return git_repository_open(pointer, path)
@@ -29,7 +29,7 @@ public struct Repository {
 
         let remoteString = remote.isFileURL ? remote.path : remote.absoluteString
 
-        repository = try GitPointer(create: { pointer in
+        pointer = try GitPointer(create: { pointer in
             local.withUnsafeFileSystemRepresentation { path in
                 git_clone(pointer, remoteString, path, nil)
             }
@@ -37,7 +37,7 @@ public struct Repository {
     }
 
     public var workingDirectory: URL? {
-        guard let path = try? String(validatingUTF8: repository.get(git_repository_workdir)) else { return nil }
+        guard let path = try? String(validatingUTF8: get(git_repository_workdir)) else { return nil }
         return URL(fileURLWithPath: path)
     }
 }
@@ -50,6 +50,6 @@ extension Repository: CustomStringConvertible {
 extension Repository {
 
     init(_ pointer: GitPointer) {
-        repository = pointer
+        self.pointer = pointer
     }
 }
