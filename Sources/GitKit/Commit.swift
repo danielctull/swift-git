@@ -6,10 +6,10 @@ extension Repository {
 
     public func commit(for id: Commit.ID) throws -> Commit {
         var oid = id.rawValue.oid
-        let commit = try GitPointer(
+        return try reference(
+            of: Commit.self,
             create: create(git_commit_lookup, &oid),
             free: git_commit_free)
-        return try Commit(pointer: commit)
     }
 
     public var commits: [Commit] {

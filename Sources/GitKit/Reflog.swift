@@ -5,10 +5,10 @@ extension Repository {
 
     public var reflog: Reflog {
         get throws {
-            let pointer = try GitPointer(
+            try reference(
+                of: Reflog.self,
                 create: create(git_reflog_read, "HEAD"),
                 free: git_reflog_free)
-            return Reflog(pointer: pointer)
         }
     }
 }

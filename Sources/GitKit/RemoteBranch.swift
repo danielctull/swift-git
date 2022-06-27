@@ -21,10 +21,10 @@ extension Repository {
 
     public func remoteBranch(on remote: Remote.ID, named branch: String) throws -> RemoteBranch {
         let name = remote.rawValue + "/" + branch
-        let pointer = try GitPointer(
+        return try reference(
+            of: RemoteBranch.self,
             create: create(git_branch_lookup, name, GIT_BRANCH_REMOTE),
             free: git_reference_free)
-        return try RemoteBranch(pointer: pointer)
     }
 }
 

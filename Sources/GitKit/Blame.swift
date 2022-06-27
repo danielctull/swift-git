@@ -4,10 +4,10 @@ import Clibgit2
 extension Repository {
 
     public func blame(for path: FilePath) throws -> Blame {
-        let blame = try GitPointer(
+        try reference(
+            of: Blame.self,
             create: create(git_blame_file, path.rawValue, nil),
             free: git_blame_free)
-        return try Blame(pointer: blame)
     }
 }
 

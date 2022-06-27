@@ -6,6 +6,23 @@ protocol GitReference {
 
 extension GitReference {
 
+    func reference<Reference: GitReference>(
+        of type: Reference.Type,
+        create: GitPointer.Create,
+        configure: GitPointer.Configure? = nil,
+        free: @escaping GitPointer.Free
+    ) throws -> Reference {
+        try Reference(
+            pointer: GitPointer(
+                create: create,
+                configure: configure,
+                free: free)
+        )
+    }
+}
+
+extension GitReference {
+
     func check(_ check: (OpaquePointer) -> Int32) -> Bool {
         check(pointer.pointer) != 0
     }
