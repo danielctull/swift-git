@@ -51,7 +51,7 @@ public struct Branch: GitReference, Identifiable {
         guard pointer.check(git_reference_is_branch) else { throw GitKitError.incorrectType(expected: "branch") }
         self.pointer = pointer
         id = try ID(reference: pointer)
-        name = try Unwrap(String(validatingUTF8: pointer.get(git_branch_name)))
+        name = try String(pointer.task(for: git_branch_name))
         target = try Object.ID(reference: pointer)
     }
 }
