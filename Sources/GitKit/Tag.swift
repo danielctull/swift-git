@@ -18,20 +18,35 @@ extension Repository {
 
 // MARK: - Tag
 
-public enum Tag {
-    case lightweight(id: ID, target: Object.ID)
-    case annotated(id: ID, target: AnnotatedTag)
+public struct Tag: GitReference, Identifiable {
+
+    let pointer: GitPointer
+    public typealias ID = Tagged<Tag, Reference.ID>
+    public let id: ID
+    let kind: Kind
+
+    init(pointer: GitPointer) throws {
+        guard pointer.check(git_reference_is_tag) else { throw GitKitError.incorrectType(expected: "tag") }
+        self.pointer = pointer
+        id = try Tag.ID(reference: pointer)
+
+        let target = try Object.ID(reference: pointer)
+        let repository = try Repository(pointer: pointer.get(git_reference_owner))
+        let object = try repository.object(for: target)
+        switch object {
+        case .tag(let annotatedTag):
+            kind = .annotated(target: annotatedTag)
+        default:
+            kind = .lightweight(target: target)
+        }
+    }
 }
 
-extension Tag: Identifiable {
+extension Tag {
 
-    public typealias ID = Tagged<Tag, Reference.ID>
-
-    public var id: ID {
-        switch self {
-        case let .annotated(id, _): return id
-        case let .lightweight(id, _): return id
-        }
+    enum Kind {
+        case lightweight(target: Object.ID)
+        case annotated(target: AnnotatedTag)
     }
 }
 
@@ -42,29 +57,9 @@ extension Tag {
     }
 
     public var target: Object.ID {
-        switch self {
-        case let .annotated(_, tag): return tag.target
-        case let .lightweight(_, target): return target
-        }
-    }
-}
-
-extension Tag {
-
-    init(pointer: GitPointer) throws {
-        guard pointer.check(git_reference_is_tag) else { throw GitKitError.incorrectType(expected: "tag") }
-
-        let id = try Tag.ID(reference: pointer)
-        let target = try Object.ID(reference: pointer)
-
-        let repository = try Repository(pointer: pointer.get(git_reference_owner))
-        let object = try repository.object(for: target)
-
-        switch object {
-        case .tag(let annotatedTag):
-            self = .annotated(id: id, target: annotatedTag)
-        default:
-            self = .lightweight(id: id, target: target)
+        switch kind {
+        case let .annotated(tag): return tag.target
+        case let .lightweight(target): return target
         }
     }
 }
