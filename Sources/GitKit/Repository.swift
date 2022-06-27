@@ -23,7 +23,7 @@ extension Repository {
     }
 
     public init(url: URL, options: Options = .create) throws {
-        pointer = try GitPointer(create: { pointer in
+        pointer = try GitPointer(create: GitTask { pointer in
             url.withUnsafeFileSystemRepresentation { path in
                 switch options {
                 case .open:               return git_repository_open(pointer, path)
@@ -37,7 +37,7 @@ extension Repository {
 
         let remoteString = remote.isFileURL ? remote.path : remote.absoluteString
 
-        pointer = try GitPointer(create: { pointer in
+        pointer = try GitPointer(create: GitTask { pointer in
             local.withUnsafeFileSystemRepresentation { path in
                 git_clone(pointer, remoteString, path, nil)
             }

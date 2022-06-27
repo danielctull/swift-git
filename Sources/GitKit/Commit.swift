@@ -7,7 +7,7 @@ extension Repository {
     public func commit(for id: Commit.ID) throws -> Commit {
         var oid = id.rawValue.oid
         return try Commit(
-            create: create(git_commit_lookup, &oid),
+            create: task(for: git_commit_lookup, &oid),
             free: git_commit_free)
     }
 
@@ -34,7 +34,7 @@ extension Repository {
     ) throws -> [Commit] {
 
         try GitIterator(
-            createIterator: create(git_revwalk_new),
+            createIterator: task(for: git_revwalk_new),
             configureIterator: { iterator in
                 for reference in references {
                     var oid = reference.target.oid
@@ -87,7 +87,7 @@ extension Commit {
     public var tree: Tree {
         get throws {
             try Tree(
-                create: pointer.create(git_commit_tree),
+                create: task(for: git_commit_tree),
                 free: git_tree_free)
         }
     }
@@ -108,10 +108,10 @@ extension Commit {
     public var parents: [Commit] {
         get throws {
             try (0..<pointer.get(git_commit_parentcount)).map { index in
-                try GitPointer(create: pointer.create(git_commit_parent, index),
-                               free: git_commit_free)
+                try Commit(
+                    create: task(for: git_commit_parent, index),
+                    free: git_commit_free)
             }
-            .map(Commit.init)
         }
     }
 }

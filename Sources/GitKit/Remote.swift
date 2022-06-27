@@ -7,7 +7,7 @@ extension Repository {
 
     public func remote(for id: Remote.ID) throws -> Remote {
         try Remote(
-            create: create(git_remote_lookup, id.rawValue),
+            create: task(for: git_remote_lookup, id.rawValue),
             free: git_remote_free)
     }
 }

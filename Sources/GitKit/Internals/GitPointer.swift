@@ -3,7 +3,6 @@ import Clibgit2
 
 final class GitPointer {
 
-    typealias Create = (UnsafeMutablePointer<OpaquePointer?>) -> Int32
     typealias Configure = (OpaquePointer) -> Int32
     typealias Free = (OpaquePointer) -> Void
 
@@ -27,7 +26,7 @@ final class GitPointer {
     ///   - free: The function to free the pointer.
     /// - Throws: A LibGit2Error if the results of the functions are not GIT_OK.
     init(
-        create: Create,
+        create: GitTask<OpaquePointer>,
         configure: Configure? = nil,
         free: @escaping Free
     ) throws {
@@ -38,10 +37,7 @@ final class GitPointer {
             git_libgit2_shutdown()
         }
 
-        var pointer: OpaquePointer?
-        let result = withUnsafeMutablePointer(to: &pointer, create)
-        if let error = LibGit2Error(result) { throw error }
-        self.pointer = try Unwrap(pointer)
+        self.pointer = try create()
         if let configure = configure {
             let result = configure(self.pointer)
             if let error = LibGit2Error(result) { free(self.pointer); throw error }
@@ -100,38 +96,5 @@ extension GitPointer {
         if let error = LibGit2Error(result) { throw error }
         guard let unwrapped = value else { throw GitKitError.unexpectedNilValue }
         return unwrapped
-    }
-}
-
-extension GitPointer {
-
-    func create(
-        _ create: @escaping (UnsafeMutablePointer<OpaquePointer?>, OpaquePointer) -> Int32
-    ) -> Create {
-        { create($0, self.pointer) }
-    }
-
-    func create<A>(
-        _ create: @escaping (UnsafeMutablePointer<OpaquePointer?>, OpaquePointer, A) -> Int32,
-        _ a: A
-    ) -> Create {
-        { create($0, self.pointer, a) }
-    }
-
-    func create<A, B>(
-        _ create: @escaping (UnsafeMutablePointer<OpaquePointer?>, OpaquePointer, A, B) -> Int32,
-        _ a: A,
-        _ b: B
-    ) -> Create {
-        { create($0, self.pointer, a, b) }
-    }
-
-    func create<A, B, C>(
-        _ create: @escaping (UnsafeMutablePointer<OpaquePointer?>, OpaquePointer, A, B, C) -> Int32,
-        _ a: A,
-        _ b: B,
-        _ c: C
-    ) -> Create {
-        { create($0, self.pointer, a, b, c) }
     }
 }
