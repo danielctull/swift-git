@@ -26,7 +26,7 @@ final class GitPointer {
     ///   - free: The function to free the pointer.
     /// - Throws: A LibGit2Error if the results of the functions are not GIT_OK.
     init(
-        create: GitTask<OpaquePointer>,
+        create: GitTask<Void, OpaquePointer>,
         configure: Configure? = nil,
         free: @escaping Free
     ) throws {
