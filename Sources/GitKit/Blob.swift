@@ -5,8 +5,8 @@ import Tagged
 
 // MARK: - Blob
 
-public struct Blob: Identifiable {
-    let blob: GitPointer
+public struct Blob: GitReference, Identifiable {
+    let pointer: GitPointer
     public typealias ID = Tagged<Blob, Object.ID>
     public let id: ID
     public let data: Data
@@ -15,12 +15,12 @@ public struct Blob: Identifiable {
 
 extension Blob {
 
-    init(_ blob: GitPointer) throws {
-        self.blob = blob
-        id = try ID(object: blob)
-        let size = Int(blob.get(git_blob_rawsize))
-        let content = try Unwrap(blob.get(git_blob_rawcontent))
+    init(_ pointer: GitPointer) throws {
+        self.pointer = pointer
+        id = try ID(object: pointer)
+        let size = Int(pointer.get(git_blob_rawsize))
+        let content = try Unwrap(pointer.get(git_blob_rawcontent))
         data = Data(bytes: content, count: size)
-        isBinary = blob.check(git_blob_is_binary)
+        isBinary = pointer.check(git_blob_is_binary)
     }
 }
