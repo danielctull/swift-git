@@ -4,17 +4,17 @@ import Tagged
 
 // MARK: - Tree
 
-public struct Tree: Identifiable {
-    let tree: GitPointer
+public struct Tree: GitReference, Identifiable {
+    let pointer: GitPointer
     public typealias ID = Tagged<Tree, Object.ID>
     public let id: ID
 }
 
 extension Tree {
 
-    init(_ tree: GitPointer) throws {
-        self.tree = tree
-        id = try ID(object: tree)
+    init(_ pointer: GitPointer) throws {
+        self.pointer = pointer
+        id = try ID(object: pointer)
     }
 }
 
@@ -23,7 +23,7 @@ extension Tree {
     public var entries: [Entry] {
         get throws {
             try GitCollection(
-                pointer: tree,
+                pointer: pointer,
                 count: git_tree_entrycount,
                 element: git_tree_entry_byindex
             )
