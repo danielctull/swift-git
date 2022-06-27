@@ -37,8 +37,8 @@ extension Repository {
 
 // MARK: - Branch
 
-public struct Branch: Identifiable {
-    let branch: GitPointer
+public struct Branch: GitReference, Identifiable {
+    let pointer: GitPointer
     public typealias ID = Tagged<Branch, Reference.ID>
     public let id: ID
     public let target: Object.ID
@@ -47,12 +47,12 @@ public struct Branch: Identifiable {
 
 extension Branch {
 
-    init(_ branch: GitPointer) throws {
-        guard branch.check(git_reference_is_branch) else { throw GitKitError.incorrectType(expected: "branch") }
-        self.branch = branch
-        id = try ID(reference: branch)
-        name = try Unwrap(String(validatingUTF8: branch.get(git_branch_name)))
-        target = try Object.ID(reference: branch)
+    init(_ pointer: GitPointer) throws {
+        guard pointer.check(git_reference_is_branch) else { throw GitKitError.incorrectType(expected: "branch") }
+        self.pointer = pointer
+        id = try ID(reference: pointer)
+        name = try Unwrap(String(validatingUTF8: pointer.get(git_branch_name)))
+        target = try Object.ID(reference: pointer)
     }
 }
 
