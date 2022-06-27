@@ -63,8 +63,8 @@ extension Repository {
 
 // MARK: - Commit
 
-public struct Commit: Identifiable {
-    let commit: GitPointer
+public struct Commit: GitReference, Identifiable {
+    let pointer: GitPointer
     public typealias ID = Tagged<Commit, Object.ID>
     public let id: ID
     public let summary: String
@@ -73,12 +73,12 @@ public struct Commit: Identifiable {
     public let committer: Signature
 
     init(_ pointer: GitPointer) throws {
-        commit = pointer
+        self.pointer = pointer
         id = try ID(object: pointer)
-        summary = try Unwrap(String(validatingUTF8: commit.get(git_commit_summary)))
-        body = try? Unwrap(String(validatingUTF8: commit.get(git_commit_body)))
-        author = try Signature(commit.get(git_commit_author))
-        committer = try Signature(commit.get(git_commit_committer))
+        summary = try Unwrap(String(validatingUTF8: pointer.get(git_commit_summary)))
+        body = try? Unwrap(String(validatingUTF8: pointer.get(git_commit_body)))
+        author = try Signature(pointer.get(git_commit_author))
+        committer = try Signature(pointer.get(git_commit_committer))
     }
 }
 
@@ -87,7 +87,7 @@ extension Commit {
     public var tree: Tree {
         get throws {
             let pointer = try GitPointer(
-                create: commit.create(git_commit_tree),
+                create: pointer.create(git_commit_tree),
                 free: git_tree_free)
             return try Tree(pointer)
         }
@@ -96,7 +96,7 @@ extension Commit {
     public var parentIDs: [ID] {
         get throws {
             try GitCollection(
-                pointer: commit,
+                pointer: pointer,
                 count: git_commit_parentcount,
                 element: git_commit_parent_id
             )
@@ -108,8 +108,8 @@ extension Commit {
 
     public var parents: [Commit] {
         get throws {
-            try (0..<commit.get(git_commit_parentcount)).map { index in
-                try GitPointer(create: commit.create(git_commit_parent, index),
+            try (0..<pointer.get(git_commit_parentcount)).map { index in
+                try GitPointer(create: pointer.create(git_commit_parent, index),
                                free: git_commit_free)
             }
             .map(Commit.init)

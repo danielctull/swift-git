@@ -22,7 +22,7 @@ extension Repository {
 
     public func createBranch(named name: String, at commit: Commit) throws -> Branch {
         let pointer = try GitPointer(
-            create: create(git_branch_create, name, commit.commit.pointer, 0),
+            create: create(git_branch_create, name, commit.pointer.pointer, 0),
             free: git_reference_free)
         return try Branch(pointer)
     }
