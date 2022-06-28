@@ -75,10 +75,26 @@ public struct Commit: GitReference, Identifiable {
     init(pointer: GitPointer) throws {
         self.pointer = pointer
         id = try ID(object: pointer)
-        summary = try pointer.task(for: git_commit_summary).map(String.init)()
-        body = try? pointer.task(for: git_commit_body).map(String.init)()
-        author = try Signature(pointer.get(git_commit_author))
-        committer = try Signature(pointer.get(git_commit_committer))
+
+        summary = try pointer
+            .task(for: git_commit_summary)
+            .map(String.init)()
+
+        body = try? pointer
+            .task(for: git_commit_body)
+            .map(String.init)()
+
+        author = try pointer
+            .task(for: git_commit_author)
+            .map(Unwrap)
+            .map(\.pointee)
+            .map(Signature.init)()
+
+        committer = try pointer
+            .task(for: git_commit_committer)
+            .map(Unwrap)
+            .map(\.pointee)
+            .map(Signature.init)()
     }
 }
 
@@ -128,7 +144,7 @@ extension Commit: CustomDebugStringConvertible {
 extension Commit.ID {
 
     init(_ oid: git_oid) {
-        self.init(rawValue: Object.ID(oid))
+        self.init(rawValue: Object.ID(oid: oid))
     }
 }
 

@@ -51,8 +51,8 @@ extension Reflog.Item {
         self.init(
             message: try Unwrap(String(validatingUTF8: git_reflog_entry_message(pointer))),
             committer: try Signature(Unwrap(git_reflog_entry_committer(pointer)).pointee),
-            old: try Object.ID(Unwrap(git_reflog_entry_id_old(pointer)).pointee),
-            new: try Object.ID(Unwrap(git_reflog_entry_id_new(pointer)).pointee))
+            old: try Object.ID(oid: Unwrap(git_reflog_entry_id_old(pointer)).pointee),
+            new: try Object.ID(oid: Unwrap(git_reflog_entry_id_new(pointer)).pointee))
     }
 }
 

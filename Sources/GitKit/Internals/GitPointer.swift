@@ -68,13 +68,6 @@ extension GitPointer {
         return value
     }
 
-    func get<Value>(
-        _ get: (OpaquePointer?) -> UnsafePointer<Value>?
-    ) throws -> Value {
-        guard let value = get(pointer) else { throw GitKitError.unexpectedNilValue }
-        return value.pointee
-    }
-
     func get(
         _ get: (OpaquePointer?) -> OpaquePointer?
     ) throws -> GitPointer {
