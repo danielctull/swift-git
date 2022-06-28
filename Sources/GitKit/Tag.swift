@@ -31,7 +31,13 @@ public struct Tag: GitReference, Identifiable {
         id = try Tag.ID(reference: pointer)
 
         let target = try Object.ID(reference: pointer)
-        let repository = try Repository(pointer: pointer.get(git_reference_owner))
+
+        let repository = try pointer
+            .task(for: git_reference_owner)
+            .map(Unwrap)
+            .map(GitPointer.init)
+            .map(Repository.init)()
+
         let object = try repository.object(for: target)
         switch object {
         case .tag(let annotatedTag):
