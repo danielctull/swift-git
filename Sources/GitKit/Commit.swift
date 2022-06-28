@@ -123,7 +123,8 @@ extension Commit {
 
     public var parents: [Commit] {
         get throws {
-            try (0..<pointer.get(git_commit_parentcount)).map { index in
+            let count = try pointer.task(for: git_commit_parentcount)()
+            return try (0..<count).map { index in
                 try Commit(
                     create: task(for: git_commit_parent, index),
                     free: git_commit_free)

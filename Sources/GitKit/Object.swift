@@ -40,7 +40,8 @@ extension Object: GitReference {
 
     init(pointer: GitPointer) throws {
 
-        let type = pointer.get(git_object_type)
+        let type = try pointer
+            .task(for: git_object_type)()
 
         switch type {
 

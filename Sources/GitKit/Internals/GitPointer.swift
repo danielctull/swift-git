@@ -60,12 +60,4 @@ extension GitPointer {
     func check(_ check: (OpaquePointer) -> Int32) -> Bool {
         check(pointer) != 0
     }
-
-    
-
-    func get<Value>(
-        _ get: (OpaquePointer?) -> Value
-    ) -> Value {
-        get(pointer)
-    }
 }
