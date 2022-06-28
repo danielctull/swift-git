@@ -51,14 +51,4 @@ extension GitReference {
     ) -> Value {
         get(pointer.pointer)
     }
-
-    func get<Value>(
-        _ get: (UnsafeMutablePointer<Value?>?, OpaquePointer?) -> Int32
-    ) throws -> Value {
-        var value: Value?
-        let result = withUnsafeMutablePointer(to: &value) { get($0, pointer.pointer) }
-        if let error = LibGit2Error(result) { throw error }
-        guard let unwrapped = value else { throw GitKitError.unexpectedNilValue }
-        return unwrapped
-    }
 }
