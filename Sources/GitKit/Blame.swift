@@ -5,7 +5,7 @@ extension Repository {
 
     public func blame(for path: FilePath) throws -> Blame {
         try Blame(
-            create: task(for: git_blame_file, path.rawValue, nil),
+            create: task(git_blame_file, path.rawValue, nil),
             free: git_blame_free)
     }
 }
@@ -27,7 +27,7 @@ extension Blame: CustomStringConvertible {
 extension Blame {
 
     public func hunk(for line: LineNumber) throws -> Hunk {
-        try pointer.task(for: git_blame_get_hunk_byline, line.rawValue)
+        try pointer.task(git_blame_get_hunk_byline, line.rawValue)
             .map(Unwrap)
             .map(\.pointee)
             .map(Hunk.init)()

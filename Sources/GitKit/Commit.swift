@@ -7,7 +7,7 @@ extension Repository {
     public func commit(for id: Commit.ID) throws -> Commit {
         var oid = id.rawValue.oid
         return try Commit(
-            create: task(for: git_commit_lookup, &oid),
+            create: task(git_commit_lookup, &oid),
             free: git_commit_free)
     }
 
@@ -34,7 +34,7 @@ extension Repository {
     ) throws -> [Commit] {
 
         try GitIterator(
-            createIterator: task(for: git_revwalk_new),
+            createIterator: task(git_revwalk_new),
             configureIterator: GitTask { iterator in
                 for reference in references {
                     var oid = reference.target.oid
@@ -77,21 +77,21 @@ public struct Commit: GitReference, Identifiable {
         id = try ID(object: pointer)
 
         summary = try pointer
-            .task(for: git_commit_summary)
+            .task(git_commit_summary)
             .map(String.init)()
 
         body = try? pointer
-            .task(for: git_commit_body)
+            .task(git_commit_body)
             .map(String.init)()
 
         author = try pointer
-            .task(for: git_commit_author)
+            .task(git_commit_author)
             .map(Unwrap)
             .map(\.pointee)
             .map(Signature.init)()
 
         committer = try pointer
-            .task(for: git_commit_committer)
+            .task(git_commit_committer)
             .map(Unwrap)
             .map(\.pointee)
             .map(Signature.init)()
@@ -103,7 +103,7 @@ extension Commit {
     public var tree: Tree {
         get throws {
             try Tree(
-                create: task(for: git_commit_tree),
+                create: task(git_commit_tree),
                 free: git_tree_free)
         }
     }
@@ -123,10 +123,10 @@ extension Commit {
 
     public var parents: [Commit] {
         get throws {
-            let count = try pointer.task(for: git_commit_parentcount)()
+            let count = try pointer.task(git_commit_parentcount)()
             return try (0..<count).map { index in
                 try Commit(
-                    create: task(for: git_commit_parent, index),
+                    create: task(git_commit_parent, index),
                     free: git_commit_free)
             }
         }

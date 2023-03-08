@@ -45,13 +45,13 @@ extension Tree {
             self.pointer = pointer
 
             target = try pointer
-                .task(for: git_tree_entry_id)
+                .task(git_tree_entry_id)
                 .map(Unwrap)
                 .map(\.pointee)
                 .map(Object.ID.init)()
 
             name = try pointer
-                .task(for: git_tree_entry_name)
+                .task(git_tree_entry_name)
                 .map(String.init)()
         }
     }

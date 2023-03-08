@@ -44,7 +44,7 @@ extension GitIterator where Element == GitPointer {
             configureIterator: configureIterator,
             freeIterator: freeIterator,
             nextElement: { iterator in
-                try GitPointer(create: iterator.task(for: nextElement),
+                try GitPointer(create: iterator.task(nextElement),
                                configure: configureElement,
                                free: freeElement)
             })

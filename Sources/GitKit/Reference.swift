@@ -7,7 +7,7 @@ extension Repository {
     public var head: Reference {
         get throws {
             try Reference(
-                create: task(for: git_repository_head),
+                create: task(git_repository_head),
                 free: git_reference_free)
         }
     }
@@ -15,7 +15,7 @@ extension Repository {
     public var references: [Reference] {
         get throws {
             try GitIterator(
-                createIterator: task(for: git_reference_iterator_new),
+                createIterator: task(git_reference_iterator_new),
                 freeIterator: git_reference_iterator_free,
                 nextElement: git_reference_next,
                 freeElement: git_reference_free)
@@ -25,7 +25,7 @@ extension Repository {
 
     public func reference(for id: Reference.ID) throws -> Reference {
         try Reference(
-            create: task(for: git_reference_lookup, id.rawValue),
+            create: task(git_reference_lookup, id.rawValue),
             free: git_reference_free)
     }
 
@@ -50,7 +50,7 @@ extension Repository {
     }
 
     public func remove(_ reference: Reference) throws {
-        try task(for: git_reference_remove, reference.id.rawValue)()
+        try task(git_reference_remove, reference.id.rawValue)()
     }
 }
 
@@ -148,7 +148,7 @@ extension Reference: CustomDebugStringConvertible {
 extension Tagged where RawValue == Reference.ID {
 
     init(reference: GitPointer) throws {
-        let name = try reference.task(for: git_reference_name).map(String.init)()
+        let name = try reference.task(git_reference_name).map(String.init)()
         let referenceID = Reference.ID(rawValue: name)
         self.init(rawValue: referenceID)
     }

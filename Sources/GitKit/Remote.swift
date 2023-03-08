@@ -7,7 +7,7 @@ extension Repository {
 
     public func remote(for id: Remote.ID) throws -> Remote {
         try Remote(
-            create: task(for: git_remote_lookup, id.rawValue),
+            create: task(git_remote_lookup, id.rawValue),
             free: git_remote_free)
     }
 }
@@ -24,7 +24,7 @@ public struct Remote: GitReference, Identifiable {
     init(pointer: GitPointer) throws {
         self.pointer = pointer
         id = try pointer
-            .task(for: git_remote_name)
+            .task(git_remote_name)
             .map(String.init)
             .map { try ID($0) }()
 

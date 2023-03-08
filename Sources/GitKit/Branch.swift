@@ -8,7 +8,7 @@ extension Repository {
         get throws {
 
             try GitIterator(
-                createIterator: task(for: git_branch_iterator_new, GIT_BRANCH_LOCAL),
+                createIterator: task(git_branch_iterator_new, GIT_BRANCH_LOCAL),
                 freeIterator: git_branch_iterator_free,
                 nextElement: {
                     let type = UnsafeMutablePointer<git_branch_t>.allocate(capacity: 1)
@@ -22,18 +22,18 @@ extension Repository {
 
     public func createBranch(named name: String, at commit: Commit) throws -> Branch {
         try Branch(
-            create: task(for: git_branch_create, name, commit.pointer.pointer, 0),
+            create: task(git_branch_create, name, commit.pointer.pointer, 0),
             free: git_reference_free)
     }
 
     public func branch(named name: String) throws -> Branch {
         try Branch(
-            create: task(for: git_branch_lookup, name, GIT_BRANCH_LOCAL),
+            create: task(git_branch_lookup, name, GIT_BRANCH_LOCAL),
             free: git_reference_free)
     }
 
     public func delete(_ branch: Branch) throws {
-        try branch.task(for: git_branch_delete)()
+        try branch.task(git_branch_delete)()
     }
 }
 
@@ -51,7 +51,7 @@ public struct Branch: GitReference, Identifiable {
         guard pointer.check(git_reference_is_branch) else { throw GitKitError.incorrectType(expected: "branch") }
         self.pointer = pointer
         id = try ID(reference: pointer)
-        name = try pointer.task(for: git_branch_name).map(String.init)()
+        name = try pointer.task(git_branch_name).map(String.init)()
         target = try Object.ID(reference: pointer)
     }
 }

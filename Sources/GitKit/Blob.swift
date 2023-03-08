@@ -18,11 +18,11 @@ public struct Blob: GitReference, Identifiable {
         id = try ID(object: pointer)
 
         let size = try pointer
-            .task(for: git_blob_rawsize)
+            .task(git_blob_rawsize)
             .map(Int.init)()
 
         let content = try pointer
-            .task(for: git_blob_rawcontent)
+            .task(git_blob_rawcontent)
             .map(Unwrap)()
 
         data = Data(bytes: content, count: size)

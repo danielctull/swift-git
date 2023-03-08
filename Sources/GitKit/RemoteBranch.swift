@@ -7,7 +7,7 @@ extension Repository {
     public var remoteBranches: [RemoteBranch] {
         get throws {
             try GitIterator(
-                createIterator: task(for: git_branch_iterator_new, GIT_BRANCH_REMOTE),
+                createIterator: task(git_branch_iterator_new, GIT_BRANCH_REMOTE),
                 freeIterator: git_branch_iterator_free,
                 nextElement: {
                     let type = UnsafeMutablePointer<git_branch_t>.allocate(capacity: 1)
@@ -22,7 +22,7 @@ extension Repository {
     public func remoteBranch(on remote: Remote.ID, named branch: String) throws -> RemoteBranch {
         let name = remote.rawValue + "/" + branch
         return try RemoteBranch(
-            create: task(for: git_branch_lookup, name, GIT_BRANCH_REMOTE),
+            create: task(git_branch_lookup, name, GIT_BRANCH_REMOTE),
             free: git_reference_free)
     }
 }
@@ -42,7 +42,7 @@ public struct RemoteBranch: GitReference, Identifiable {
         guard pointer.check(git_reference_is_remote) else { throw GitKitError.incorrectType(expected: "remote branch") }
         self.pointer = pointer
         id = try ID(reference: pointer)
-        name = try pointer.task(for: git_branch_name).map(String.init)()
+        name = try pointer.task(git_branch_name).map(String.init)()
         target = try Object.ID(reference: pointer)
         remote = try Remote.ID(rawValue: String(Unwrap(name.split(separator: "/").first)))
     }

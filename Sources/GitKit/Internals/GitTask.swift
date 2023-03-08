@@ -59,20 +59,20 @@ extension GitTask {
 extension GitPointer {
 
     func task<Output>(
-        for task: @escaping (UnsafeMutablePointer<Output?>, OpaquePointer) -> Int32
+        _ task: @escaping (UnsafeMutablePointer<Output?>, OpaquePointer) -> Int32
     ) -> GitTask<Void, Output> {
         GitTask { task($0, self.pointer) }
     }
 
     func task<A, Output>(
-        for task: @escaping (UnsafeMutablePointer<Output?>, OpaquePointer, A) -> Int32,
+        _ task: @escaping (UnsafeMutablePointer<Output?>, OpaquePointer, A) -> Int32,
         _ a: A
     ) -> GitTask<Void, Output> {
         GitTask { task($0, self.pointer, a) }
     }
 
     func task<A, B, Output>(
-        for task: @escaping (UnsafeMutablePointer<Output?>, OpaquePointer, A, B) -> Int32,
+        _ task: @escaping (UnsafeMutablePointer<Output?>, OpaquePointer, A, B) -> Int32,
         _ a: A,
         _ b: B
     ) -> GitTask<Void, Output> {
@@ -80,7 +80,7 @@ extension GitPointer {
     }
 
     func task<A, B, C, Output>(
-        for task: @escaping (UnsafeMutablePointer<Output?>, OpaquePointer, A, B, C) -> Int32,
+        _ task: @escaping (UnsafeMutablePointer<Output?>, OpaquePointer, A, B, C) -> Int32,
         _ a: A,
         _ b: B,
         _ c: C
@@ -89,7 +89,7 @@ extension GitPointer {
     }
 
     func task<A, B, C, D, Output>(
-        for task: @escaping (UnsafeMutablePointer<Output?>, OpaquePointer, A, B, C, D) -> Int32,
+        _ task: @escaping (UnsafeMutablePointer<Output?>, OpaquePointer, A, B, C, D) -> Int32,
         _ a: A,
         _ b: B,
         _ c: C,
@@ -102,20 +102,20 @@ extension GitPointer {
 extension GitPointer {
 
     func task(
-        for task: @escaping (OpaquePointer) -> Int32
+        _ task: @escaping (OpaquePointer) -> Int32
     ) -> GitTask<Void, Void> {
         GitTask { task(self.pointer) }
     }
 
     func task<A>(
-        for task: @escaping (OpaquePointer, A) -> Int32,
+        _ task: @escaping (OpaquePointer, A) -> Int32,
         _ a: A
     ) -> GitTask<Void, Void> {
         GitTask { task(self.pointer, a) }
     }
 
     func task<A, B>(
-        for task: @escaping (OpaquePointer, A, B) -> Int32,
+        _ task: @escaping (OpaquePointer, A, B) -> Int32,
         _ a: A,
         _ b: B
     ) -> GitTask<Void, Void> {
@@ -123,7 +123,7 @@ extension GitPointer {
     }
 
     func task<A, B, C>(
-        for task: @escaping (OpaquePointer, A, B, C) -> Int32,
+        _ task: @escaping (OpaquePointer, A, B, C) -> Int32,
         _ a: A,
         _ b: B,
         _ c: C
@@ -132,7 +132,7 @@ extension GitPointer {
     }
 
     func task<A, B, C, D>(
-        for task: @escaping (OpaquePointer, A, B, C, D) -> Int32,
+        _ task: @escaping (OpaquePointer, A, B, C, D) -> Int32,
         _ a: A,
         _ b: B,
         _ c: C,
@@ -145,20 +145,20 @@ extension GitPointer {
 extension GitPointer {
 
     func task<Output>(
-        for task: @escaping (OpaquePointer) -> Output
+        _ task: @escaping (OpaquePointer) -> Output
     ) -> GitTask<Void, Output> {
         GitTask { task(self.pointer) }
     }
 
     func task<A, Output>(
-        for task: @escaping (OpaquePointer, A) -> Output,
+        _ task: @escaping (OpaquePointer, A) -> Output,
         _ a: A
     ) -> GitTask<Void, Output> {
         GitTask { task(self.pointer, a) }
     }
 
     func task<A, B, Output>(
-        for task: @escaping (OpaquePointer, A, B) -> Output,
+        _ task: @escaping (OpaquePointer, A, B) -> Output,
         _ a: A,
         _ b: B
     ) -> GitTask<Void, Output> {
@@ -166,7 +166,7 @@ extension GitPointer {
     }
 
     func task<A, B, C, Output>(
-        for task: @escaping (OpaquePointer, A, B, C) -> Output,
+        _ task: @escaping (OpaquePointer, A, B, C) -> Output,
         _ a: A,
         _ b: B,
         _ c: C
@@ -175,7 +175,7 @@ extension GitPointer {
     }
 
     func task<A, B, C, D, Output>(
-        for task: @escaping (OpaquePointer, A, B, C, D) -> Output,
+        _ task: @escaping (OpaquePointer, A, B, C, D) -> Output,
         _ a: A,
         _ b: B,
         _ c: C,
@@ -190,20 +190,20 @@ extension GitPointer {
 extension GitReference {
 
     func task<Output>(
-        for task: @escaping (UnsafeMutablePointer<Output?>, OpaquePointer) -> Int32
+        _ task: @escaping (UnsafeMutablePointer<Output?>, OpaquePointer) -> Int32
     ) -> GitTask<Void, Output> {
         GitTask { task($0, pointer.pointer) }
     }
 
     func task<A, Output>(
-        for task: @escaping (UnsafeMutablePointer<Output?>, OpaquePointer, A) -> Int32,
+        _ task: @escaping (UnsafeMutablePointer<Output?>, OpaquePointer, A) -> Int32,
         _ a: A
     ) -> GitTask<Void, Output> {
         GitTask { task($0, pointer.pointer, a) }
     }
 
     func task<A, B, Output>(
-        for task: @escaping (UnsafeMutablePointer<Output?>, OpaquePointer, A, B) -> Int32,
+        _ task: @escaping (UnsafeMutablePointer<Output?>, OpaquePointer, A, B) -> Int32,
         _ a: A,
         _ b: B
     ) -> GitTask<Void, Output> {
@@ -211,7 +211,7 @@ extension GitReference {
     }
 
     func task<A, B, C, Output>(
-        for task: @escaping (UnsafeMutablePointer<Output?>, OpaquePointer, A, B, C) -> Int32,
+        _ task: @escaping (UnsafeMutablePointer<Output?>, OpaquePointer, A, B, C) -> Int32,
         _ a: A,
         _ b: B,
         _ c: C
@@ -220,7 +220,7 @@ extension GitReference {
     }
 
     func task<A, B, C, D, Output>(
-        for task: @escaping (UnsafeMutablePointer<Output?>, OpaquePointer, A, B, C, D) -> Int32,
+        _ task: @escaping (UnsafeMutablePointer<Output?>, OpaquePointer, A, B, C, D) -> Int32,
         _ a: A,
         _ b: B,
         _ c: C,
@@ -233,20 +233,20 @@ extension GitReference {
 extension GitReference {
 
     func task(
-        for task: @escaping (OpaquePointer) -> Int32
+        _ task: @escaping (OpaquePointer) -> Int32
     ) -> GitTask<Void, Void> {
         GitTask { task(pointer.pointer) }
     }
 
     func task<A>(
-        for task: @escaping (OpaquePointer, A) -> Int32,
+        _ task: @escaping (OpaquePointer, A) -> Int32,
         _ a: A
     ) -> GitTask<Void, Void> {
         GitTask { task(pointer.pointer, a) }
     }
 
     func task<A, B>(
-        for task: @escaping (OpaquePointer, A, B) -> Int32,
+        _ task: @escaping (OpaquePointer, A, B) -> Int32,
         _ a: A,
         _ b: B
     ) -> GitTask<Void, Void> {
@@ -254,7 +254,7 @@ extension GitReference {
     }
 
     func task<A, B, C>(
-        for task: @escaping (OpaquePointer, A, B, C) -> Int32,
+        _ task: @escaping (OpaquePointer, A, B, C) -> Int32,
         _ a: A,
         _ b: B,
         _ c: C
@@ -263,7 +263,7 @@ extension GitReference {
     }
 
     func task<A, B, C, D>(
-        for task: @escaping (OpaquePointer, A, B, C, D) -> Int32,
+        _ task: @escaping (OpaquePointer, A, B, C, D) -> Int32,
         _ a: A,
         _ b: B,
         _ c: C,

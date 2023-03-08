@@ -33,7 +33,7 @@ public struct Tag: GitReference, Identifiable {
         let target = try Object.ID(reference: pointer)
 
         let repository = try pointer
-            .task(for: git_reference_owner)
+            .task(git_reference_owner)
             .map(Unwrap)
             .map(GitPointer.init)
             .map(Repository.init)()
@@ -93,23 +93,23 @@ public struct AnnotatedTag: GitReference {
         id = try ID(object: pointer)
 
         name = try pointer
-            .task(for: git_tag_name)
+            .task(git_tag_name)
             .map(String.init)()
 
         target = try pointer
-            .task(for: git_tag_target_id)
+            .task(git_tag_target_id)
             .map(Unwrap)
             .map(\.pointee)
             .map(Object.ID.init)()
 
         tagger = try pointer
-            .task(for: git_tag_tagger)
+            .task(git_tag_tagger)
             .map(Unwrap)
             .map(\.pointee)
             .map(Signature.init)()
 
         message = try pointer
-            .task(for: git_tag_message)
+            .task(git_tag_message)
             .map(String.init)()
     }
 }

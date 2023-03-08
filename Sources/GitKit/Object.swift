@@ -13,7 +13,7 @@ extension Repository {
     public func object(for id: Object.ID) throws -> Object {
         var oid = id.oid
         return try Object(
-            create: task(for: git_object_lookup, &oid, GIT_OBJECT_ANY),
+            create: task(git_object_lookup, &oid, GIT_OBJECT_ANY),
             free: git_object_free)
     }
 }
@@ -41,7 +41,7 @@ extension Object: GitReference {
     init(pointer: GitPointer) throws {
 
         let type = try pointer
-            .task(for: git_object_type)()
+            .task(git_object_type)()
 
         switch type {
 
@@ -91,11 +91,11 @@ extension Object.ID {
 
     init(reference: GitPointer) throws {
         let resolved = try GitPointer(
-            create: reference.task(for: git_reference_resolve),
+            create: reference.task(git_reference_resolve),
             free: git_reference_free)
 
         self = try resolved
-            .task(for: git_reference_target)
+            .task(git_reference_target)
             .map(Unwrap)
             .map(\.pointee)
             .map(Self.init)()
@@ -149,7 +149,7 @@ extension Tagged where RawValue == Object.ID {
 
     init(object: GitPointer) throws {
         self = try object
-            .task(for: git_object_id)
+            .task(git_object_id)
             .map(Unwrap)
             .map(\.pointee)
             .map(Self.init)()
