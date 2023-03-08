@@ -195,6 +195,7 @@ extension GitReference {
         GitTask { task($0, pointer.pointer) }
     }
 
+    @_disfavoredOverload
     func task<A, Output>(
         _ task: @escaping (UnsafeMutablePointer<Output?>, OpaquePointer, A) -> Int32,
         _ a: A
@@ -202,6 +203,7 @@ extension GitReference {
         GitTask { task($0, pointer.pointer, a) }
     }
 
+    @_disfavoredOverload
     func task<A, B, Output>(
         _ task: @escaping (UnsafeMutablePointer<Output?>, OpaquePointer, A, B) -> Int32,
         _ a: A,
@@ -210,6 +212,7 @@ extension GitReference {
         GitTask { task($0, pointer.pointer, a, b) }
     }
 
+    @_disfavoredOverload
     func task<A, B, C, Output>(
         _ task: @escaping (UnsafeMutablePointer<Output?>, OpaquePointer, A, B, C) -> Int32,
         _ a: A,
@@ -219,6 +222,7 @@ extension GitReference {
         GitTask { task($0, pointer.pointer, a, b, c) }
     }
 
+    @_disfavoredOverload
     func task<A, B, C, D, Output>(
         _ task: @escaping (UnsafeMutablePointer<Output?>, OpaquePointer, A, B, C, D) -> Int32,
         _ a: A,
@@ -227,6 +231,36 @@ extension GitReference {
         _ d: D
     ) -> GitTask<Void, Output> {
         GitTask { task($0, pointer.pointer, a, b, c, d) }
+    }
+}
+
+// String variants, which will correctly convert String to UnsafePointer<CChar>,
+// unlike the generic functions above.
+extension GitReference {
+
+    func task<Output>(
+        _ task: @escaping (UnsafeMutablePointer<Output?>, OpaquePointer, UnsafePointer<CChar>) -> Int32,
+        _ a: String
+    ) -> GitTask<Void, Output> {
+        GitTask { task($0, pointer.pointer, a) }
+    }
+
+    func task<B, Output>(
+        _ task: @escaping (UnsafeMutablePointer<Output?>, OpaquePointer, UnsafePointer<CChar>, B) -> Int32,
+        _ a: String,
+        _ b: B
+    ) -> GitTask<Void, Output> {
+        GitTask { task($0, pointer.pointer, a, b) }
+    }
+
+
+    func task<B, C, Output>(
+        _ task: @escaping (UnsafeMutablePointer<Output?>, OpaquePointer, UnsafePointer<CChar>, B, C) -> Int32,
+        _ a: String,
+        _ b: B,
+        _ c: C
+    ) -> GitTask<Void, Output> {
+        GitTask { task($0, pointer.pointer, a, b, c) }
     }
 }
 
@@ -262,6 +296,7 @@ extension GitReference {
         GitTask { task(pointer.pointer) }
     }
 
+    @_disfavoredOverload
     func task<A>(
         _ task: @escaping (OpaquePointer, A) -> Int32,
         _ a: A
@@ -294,5 +329,17 @@ extension GitReference {
         _ d: D
     ) -> GitTask<Void, Void> {
         GitTask { task(pointer.pointer, a, b, c, d) }
+    }
+}
+
+// String variants, which will correctly convert String to UnsafePointer<CChar>,
+// unlike the generic functions above.
+extension GitReference {
+
+    func task(
+        _ task: @escaping (OpaquePointer, UnsafePointer<CChar>) -> Int32,
+        _ a: String
+    ) -> GitTask<Void, Void> {
+        GitTask { task(pointer.pointer, a) }
     }
 }
