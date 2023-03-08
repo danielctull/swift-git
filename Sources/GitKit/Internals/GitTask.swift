@@ -232,6 +232,30 @@ extension GitReference {
 
 extension GitReference {
 
+    func task<A, Output>(
+        _ task: @escaping (UnsafeMutablePointer<Output?>, OpaquePointer, UnsafePointer<A>) -> Int32,
+        _ a: A
+    ) -> GitTask<Void, Output> {
+        GitTask {
+            var a = a
+            return task($0, pointer.pointer, &a)
+        }
+    }
+
+    func task<A, B, Output>(
+        _ task: @escaping (UnsafeMutablePointer<Output?>, OpaquePointer, UnsafePointer<A>, B) -> Int32,
+        _ a: A,
+        _ b: B
+    ) -> GitTask<Void, Output> {
+        GitTask {
+            var a = a
+            return task($0, pointer.pointer, &a, b)
+        }
+    }
+}
+
+extension GitReference {
+
     func task(
         _ task: @escaping (OpaquePointer) -> Int32
     ) -> GitTask<Void, Void> {

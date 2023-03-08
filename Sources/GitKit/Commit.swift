@@ -5,9 +5,8 @@ import Tagged
 extension Repository {
 
     public func commit(for id: Commit.ID) throws -> Commit {
-        var oid = id.rawValue.oid
-        return try Commit(
-            create: task(git_commit_lookup, &oid),
+        try Commit(
+            create: task(git_commit_lookup, id.rawValue.oid),
             free: git_commit_free)
     }
 

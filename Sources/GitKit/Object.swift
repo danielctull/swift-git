@@ -11,9 +11,8 @@ extension Repository {
     }
 
     public func object(for id: Object.ID) throws -> Object {
-        var oid = id.oid
-        return try Object(
-            create: task(git_object_lookup, &oid, GIT_OBJECT_ANY),
+        try Object(
+            create: task(git_object_lookup, id.oid, GIT_OBJECT_ANY),
             free: git_object_free)
     }
 }
