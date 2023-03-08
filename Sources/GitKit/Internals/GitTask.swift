@@ -290,45 +290,50 @@ extension GitReference {
 
 extension GitReference {
 
-    func task(
+    func perform(
         _ task: @escaping (OpaquePointer) -> Int32
-    ) -> GitTask<Void, Void> {
-        GitTask { task(pointer.pointer) }
+    ) throws {
+        let task = GitTask { task(pointer.pointer) }
+        try task()
     }
 
     @_disfavoredOverload
-    func task<A>(
+    func perform<A>(
         _ task: @escaping (OpaquePointer, A) -> Int32,
         _ a: A
-    ) -> GitTask<Void, Void> {
-        GitTask { task(pointer.pointer, a) }
+    ) throws {
+        let task = GitTask { task(pointer.pointer, a) }
+        try task()
     }
 
-    func task<A, B>(
+    func perform<A, B>(
         _ task: @escaping (OpaquePointer, A, B) -> Int32,
         _ a: A,
         _ b: B
-    ) -> GitTask<Void, Void> {
-        GitTask { task(pointer.pointer, a, b) }
+    ) throws {
+        let task = GitTask { task(pointer.pointer, a, b) }
+        try task()
     }
 
-    func task<A, B, C>(
+    func perform<A, B, C>(
         _ task: @escaping (OpaquePointer, A, B, C) -> Int32,
         _ a: A,
         _ b: B,
         _ c: C
-    ) -> GitTask<Void, Void> {
-        GitTask { task(pointer.pointer, a, b, c) }
+    ) throws {
+        let task = GitTask { task(pointer.pointer, a, b, c) }
+        try task()
     }
 
-    func task<A, B, C, D>(
+    func perform<A, B, C, D>(
         _ task: @escaping (OpaquePointer, A, B, C, D) -> Int32,
         _ a: A,
         _ b: B,
         _ c: C,
         _ d: D
-    ) -> GitTask<Void, Void> {
-        GitTask { task(pointer.pointer, a, b, c, d) }
+    ) throws {
+        let task = GitTask { task(pointer.pointer, a, b, c, d) }
+        try task()
     }
 }
 
@@ -336,10 +341,11 @@ extension GitReference {
 // unlike the generic functions above.
 extension GitReference {
 
-    func task(
+    func perform(
         _ task: @escaping (OpaquePointer, UnsafePointer<CChar>) -> Int32,
         _ a: String
-    ) -> GitTask<Void, Void> {
-        GitTask { task(pointer.pointer, a) }
+    ) throws {
+        let task = GitTask { task(pointer.pointer, a) }
+        try task()
     }
 }
