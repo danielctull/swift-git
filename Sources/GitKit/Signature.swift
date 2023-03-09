@@ -13,6 +13,10 @@ public struct Signature: Equatable, Hashable {
 
 extension Signature {
 
+    init(_ git: UnsafePointer<git_signature>?) throws {
+        try self.init(Unwrap(git).pointee)
+    }
+
     init(_ signature: git_signature) throws {
         name = try Unwrap(String(validatingUTF8: signature.name))
         email = try Unwrap(String(validatingUTF8: signature.email))

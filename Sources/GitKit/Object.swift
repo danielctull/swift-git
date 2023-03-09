@@ -88,6 +88,10 @@ extension Object {
 
 extension Object.ID {
 
+    init(_ git: UnsafePointer<git_oid>?) throws {
+        try self.init(oid: Unwrap(git).pointee)
+    }
+
     init(reference: GitPointer) throws {
         let resolved = try GitPointer(
             create: reference.task(git_reference_resolve),

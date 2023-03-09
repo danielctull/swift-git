@@ -74,21 +74,10 @@ public struct Commit: GitReference, Identifiable {
     init(pointer: GitPointer) throws {
         self.pointer = pointer
         id = try ID(object: pointer)
-
-        summary = try pointer.get(git_commit_summary, as: String.self)
-        body = try? pointer.get(git_commit_body, as: String.self)
-
-        author = try pointer
-            .task(git_commit_author)
-            .map(Unwrap)
-            .map(\.pointee)
-            .map(Signature.init)()
-
-        committer = try pointer
-            .task(git_commit_committer)
-            .map(Unwrap)
-            .map(\.pointee)
-            .map(Signature.init)()
+        summary = try pointer.get(git_commit_summary, as: String.init)
+        body = try? pointer.get(git_commit_body, as: String.init)
+        author = try pointer.get(git_commit_author, as: Signature.init)
+        committer = try pointer.get(git_commit_committer, as: Signature.init)
     }
 }
 

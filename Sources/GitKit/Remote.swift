@@ -23,7 +23,7 @@ public struct Remote: GitReference, Identifiable {
 
     init(pointer: GitPointer) throws {
         self.pointer = pointer
-        let name = try pointer.get(git_remote_name, as: String.self)
+        let name = try pointer.get(git_remote_name, as: String.init)
         id = try ID(name)
 
 //        let urlString = try Unwrap(String(remote.get(git_remote_url)))

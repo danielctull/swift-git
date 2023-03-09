@@ -59,6 +59,17 @@ final class GitPointer {
 
 extension GitPointer {
 
+    func get<CType, Value>(
+        _ task: @escaping (OpaquePointer) -> CType,
+        as conversion: (CType) throws -> Value
+    ) throws -> Value {
+        let task = GitTask { task(self.pointer) }
+        return try conversion(task())
+    }
+}
+
+extension GitPointer {
+
     func check(_ check: (OpaquePointer) -> Int32) -> Bool {
         check(pointer) != 0
     }
