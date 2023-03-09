@@ -75,13 +75,8 @@ public struct Commit: GitReference, Identifiable {
         self.pointer = pointer
         id = try ID(object: pointer)
 
-        summary = try pointer
-            .task(git_commit_summary)
-            .map(String.init)()
-
-        body = try? pointer
-            .task(git_commit_body)
-            .map(String.init)()
+        summary = try pointer.get(git_commit_summary, as: String.self)
+        body = try? pointer.get(git_commit_body, as: String.self)
 
         author = try pointer
             .task(git_commit_author)

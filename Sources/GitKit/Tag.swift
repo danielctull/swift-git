@@ -92,9 +92,7 @@ public struct AnnotatedTag: GitReference {
         self.pointer = pointer
         id = try ID(object: pointer)
 
-        name = try pointer
-            .task(git_tag_name)
-            .map(String.init)()
+        name = try pointer.get(git_tag_name, as: String.self)
 
         target = try pointer
             .task(git_tag_target_id)
@@ -108,8 +106,6 @@ public struct AnnotatedTag: GitReference {
             .map(\.pointee)
             .map(Signature.init)()
 
-        message = try pointer
-            .task(git_tag_message)
-            .map(String.init)()
+        message = try pointer.get(git_tag_message, as: String.self)
     }
 }
