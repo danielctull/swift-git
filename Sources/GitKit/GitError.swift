@@ -1,7 +1,7 @@
 
 import Clibgit2
 
-public struct LibGit2Error: Error, Equatable {
+public struct GitError: Error, Equatable {
     public let code: Code
 
     init(_ code: Code) {
@@ -9,7 +9,7 @@ public struct LibGit2Error: Error, Equatable {
     }
 }
 
-extension LibGit2Error {
+extension GitError {
 
     init?(_ result: Int32) {
         let code = git_error_code(result)
@@ -18,7 +18,7 @@ extension LibGit2Error {
     }
 }
 
-extension LibGit2Error {
+extension GitError {
 
     static func check(_ result: Int32) throws {
         let code = git_error_code(result)
@@ -26,14 +26,14 @@ extension LibGit2Error {
     }
 }
 
-extension LibGit2Error {
+extension GitError {
 
     public struct Code {
         let code: git_error_code
     }
 }
 
-extension LibGit2Error.Code: Equatable {
+extension GitError.Code: Equatable {
 
     /// Generic error
     public static let unknown = Self(code: GIT_ERROR)
@@ -120,7 +120,7 @@ extension LibGit2Error.Code: Equatable {
     public static let applyFail = Self(code: GIT_EAPPLYFAIL)
 }
 
-extension LibGit2Error: CustomStringConvertible {
+extension GitError: CustomStringConvertible {
 
     public var description: String {
         switch code {

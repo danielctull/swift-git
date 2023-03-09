@@ -38,11 +38,11 @@ extension Repository {
                 for reference in references {
                     var oid = reference.target.oid
                     let result = git_revwalk_push(iterator, &oid)
-                    if LibGit2Error(result) != nil { return result }
+                    if GitError(result) != nil { return result }
                 }
                 if includeHead {
                     let result = git_revwalk_push_head(iterator)
-                    if LibGit2Error(result) != nil { return result }
+                    if GitError(result) != nil { return result }
                 }
                 return git_revwalk_sorting(iterator, sortOptions.rawValue)
             },
@@ -51,7 +51,7 @@ extension Repository {
                 let oid = UnsafeMutablePointer<git_oid>.allocate(capacity: 1)
                 defer { oid.deallocate() }
                 let result = git_revwalk_next(oid, iterator)
-                if LibGit2Error(result) != nil { return result }
+                if GitError(result) != nil { return result }
                 return git_commit_lookup(commit, pointer.pointer, oid)
             },
             freeElement: git_commit_free)

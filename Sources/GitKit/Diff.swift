@@ -54,7 +54,7 @@ extension Diff {
             var hunks: [Hunk] = []
 
             let error = withUnsafeMutablePointer(to: &hunks) {
-                LibGit2Error(git_diff_foreach(pointer.pointer, nil, nil, { delta, hunk, hunks in
+                GitError(git_diff_foreach(pointer.pointer, nil, nil, { delta, hunk, hunks in
 
                     do {
                         let hunks = try Unwrap(hunks).assumingMemoryBound(to: [Hunk].self)
@@ -63,7 +63,7 @@ extension Diff {
                         hunks.pointee.append(try Hunk(delta: delta, hunk: hunk))
                         return 0
                     } catch {
-                        return LibGit2Error.Code.unknown.code.rawValue
+                        return GitError.Code.unknown.code.rawValue
                     }
 
                 }, nil, $0))

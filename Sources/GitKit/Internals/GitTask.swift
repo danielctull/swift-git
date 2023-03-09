@@ -13,7 +13,7 @@ extension GitTask where Output == Void {
     init(task: @escaping (Input) -> Int32) {
         self.init { input in
             let result = task(input)
-            try LibGit2Error.check(result)
+            try GitError.check(result)
         }
     }
 }
@@ -23,7 +23,7 @@ extension GitTask where Input == Void, Output == Void {
     init(task: @escaping () -> Int32) {
         self.init {
             let result = task()
-            try LibGit2Error.check(result)
+            try GitError.check(result)
         }
     }
 }
@@ -34,7 +34,7 @@ extension GitTask where Input == Void {
         self.init {
             var output: Output?
             let result = withUnsafeMutablePointer(to: &output, task)
-            try LibGit2Error.check(result)
+            try GitError.check(result)
             return try Unwrap(output)
         }
     }
