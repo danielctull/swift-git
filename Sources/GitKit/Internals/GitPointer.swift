@@ -66,6 +66,14 @@ extension GitPointer {
         let task = GitTask { task(self.pointer) }
         return try conversion(task())
     }
+
+    func get<CType, Value>(
+        _ task: @escaping (UnsafeMutablePointer<CType?>, OpaquePointer) -> Int32,
+        as conversion: (CType) throws -> Value
+    ) throws -> Value {
+        let task = GitTask<Void, CType> { task($0, self.pointer) }
+        return try conversion(task())
+    }
 }
 
 extension GitPointer {

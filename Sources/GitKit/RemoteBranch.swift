@@ -42,7 +42,7 @@ public struct RemoteBranch: GitReference, Identifiable {
         pointer.assert(git_reference_is_remote, "Expected remote branch.")
         self.pointer = pointer
         id = try ID(reference: pointer)
-        name = try pointer.task(git_branch_name).map(String.init)()
+        name = try pointer.get(git_branch_name, as: String.init)
         target = try Object.ID(reference: pointer)
         remote = try Remote.ID(rawValue: String(Unwrap(name.split(separator: "/").first)))
     }
