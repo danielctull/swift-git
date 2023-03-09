@@ -1,6 +1,6 @@
 
 import Foundation
-import GitKit
+import Git
 import XCTest
 
 final class BlameTests: XCTestCase {

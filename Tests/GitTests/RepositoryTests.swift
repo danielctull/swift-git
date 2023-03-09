@@ -1,6 +1,6 @@
 
 import Foundation
-import GitKit
+import Git
 import XCTest
 
 private func AssertEqualResolvingSymlinks(

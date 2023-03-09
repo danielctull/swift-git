@@ -10,8 +10,8 @@ let package = Package(
     ],
     products: [
         .library(
-            name: "GitKit",
-            targets: ["GitKit"]),
+            name: "Git",
+            targets: ["Git"]),
     ],
     dependencies: [
         .package(url: "https://github.com/pointfreeco/swift-tagged", from: "0.7.0"),
@@ -19,15 +19,15 @@ let package = Package(
     targets: [
 
         .target(
-            name: "GitKit",
+            name: "Git",
             dependencies: [
                 "Clibgit2",
                 .product(name: "Tagged", package: "swift-tagged"),
             ]),
 
         .testTarget(
-            name: "GitKitTests",
-            dependencies: ["GitKit"],
+            name: "GitTests",
+            dependencies: ["Git"],
             resources: [
                 .copy("Repositories"),
             ]),
