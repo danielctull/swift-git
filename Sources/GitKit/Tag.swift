@@ -26,7 +26,7 @@ public struct Tag: GitReference, Identifiable {
     let kind: Kind
 
     init(pointer: GitPointer) throws {
-        guard pointer.check(git_reference_is_tag) else { throw GitKitError.incorrectType(expected: "tag") }
+        pointer.assert(git_reference_is_tag, "Expected tag.")
         self.pointer = pointer
         id = try Tag.ID(reference: pointer)
 

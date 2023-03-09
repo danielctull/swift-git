@@ -17,10 +17,6 @@ extension GitKitError {
         GitKitError("Expected: \(expected). Received \(received)")
     }
 
-    static func incorrectType(expected: String) -> GitKitError {
-        GitKitError("Incorrect type. Expected: \(expected).")
-    }
-
     static var unexpectedNilValue: GitKitError {
         GitKitError("Unexpted nil value.")
     }

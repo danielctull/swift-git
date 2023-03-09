@@ -48,7 +48,7 @@ public struct Branch: GitReference, Identifiable {
     public let name: String
 
     init(pointer: GitPointer) throws {
-        guard pointer.check(git_reference_is_branch) else { throw GitKitError.incorrectType(expected: "branch") }
+        pointer.assert(git_reference_is_branch, "Expected branch.")
         self.pointer = pointer
         id = try ID(reference: pointer)
         name = try pointer.task(git_branch_name).map(String.init)()

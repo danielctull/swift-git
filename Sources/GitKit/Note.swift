@@ -12,7 +12,7 @@ public struct Note: GitReference, Identifiable {
     public let target: Object.ID
 
     init(pointer: GitPointer) throws {
-        guard pointer.check(git_reference_is_note) else { throw GitKitError.incorrectType(expected: "note") }
+        pointer.assert(git_reference_is_note, "Expected note.")
         self.pointer = pointer
         id = try ID(reference: pointer)
         target = try Object.ID(reference: pointer)

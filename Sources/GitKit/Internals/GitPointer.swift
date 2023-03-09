@@ -60,4 +60,17 @@ extension GitPointer {
     func check(_ check: (OpaquePointer) -> Int32) -> Bool {
         check(pointer) != 0
     }
+
+    /// Performs a traditional C-style assert with a message.
+    ///
+    /// Use this function for internal sanity checks that are active during
+    /// testing but do not impact performance of shipping code.
+    func assert(
+        _ assertion: @escaping (OpaquePointer) -> Int32,
+        _ message: @autoclosure () -> String,
+        file: StaticString = #file,
+        line: UInt = #line
+    ) {
+        Swift.assert(assertion(pointer) == 1, message())
+    }
 }
