@@ -3,6 +3,8 @@ import Clibgit2
 
 final class GitPointer {
 
+    typealias Create = GitTask<Void, OpaquePointer>
+    typealias Configure = GitTask<OpaquePointer, Void>
     typealias Free = (OpaquePointer) -> Void
 
     let pointer: OpaquePointer
@@ -25,8 +27,8 @@ final class GitPointer {
     ///   - free: The function to free the pointer.
     /// - Throws: A LibGit2Error if the results of the functions are not GIT_OK.
     init(
-        create: GitTask<Void, OpaquePointer>,
-        configure: GitTask<OpaquePointer, Void>? = nil,
+        create: Create,
+        configure: Configure? = nil,
         free: @escaping Free
     ) throws {
 

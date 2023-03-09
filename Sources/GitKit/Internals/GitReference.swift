@@ -7,8 +7,8 @@ protocol GitReference {
 extension GitReference {
 
     init(
-        create: GitTask<Void, OpaquePointer>,
-        configure: GitTask<OpaquePointer, Void>? = nil,
+        create: GitPointer.Create,
+        configure: GitPointer.Configure? = nil,
         free: @escaping GitPointer.Free
     ) throws {
         try self.init(
