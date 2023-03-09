@@ -27,10 +27,7 @@ extension Blame: CustomStringConvertible {
 extension Blame {
 
     public func hunk(for line: LineNumber) throws -> Hunk {
-        try pointer.task(git_blame_get_hunk_byline, line.rawValue)
-            .map(Unwrap)
-            .map(\.pointee)
-            .map(Hunk.init)()
+        try get(git_blame_get_hunk_byline, line.rawValue, as: Hunk.init)
     }
 
     public var hunks: [Hunk] {
@@ -60,6 +57,10 @@ extension Blame {
 }
 
 extension Blame.Hunk {
+
+    init(_ git: UnsafePointer<git_blame_hunk>?) throws {
+        try self.init(Unwrap(git).pointee)
+    }
 
     init(_ hunk: git_blame_hunk) throws {
         lines = ClosedRange(start: hunk.final_start_line_number, count: hunk.lines_in_hunk)

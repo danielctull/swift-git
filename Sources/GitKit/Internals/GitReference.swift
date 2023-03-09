@@ -22,6 +22,24 @@ extension GitReference {
 
 extension GitReference {
 
+    func get<CType, Value>(
+        _ task: @escaping (OpaquePointer) -> CType,
+        as conversion: (CType) throws -> Value
+    ) throws -> Value {
+        try pointer.get(task, as: conversion)
+    }
+
+    func get<A, CType, Value>(
+        _ task: @escaping (OpaquePointer, A) -> CType,
+        _ a: A,
+        as conversion: (CType) throws -> Value
+    ) throws -> Value {
+        try pointer.get(task, a, as: conversion)
+    }
+}
+
+extension GitReference {
+
     func check(_ check: (OpaquePointer) -> Int32) -> Bool {
         check(pointer.pointer) != 0
     }

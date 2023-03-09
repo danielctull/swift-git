@@ -97,11 +97,7 @@ extension Object.ID {
             create: reference.task(git_reference_resolve),
             free: git_reference_free)
 
-        self = try resolved
-            .task(git_reference_target)
-            .map(Unwrap)
-            .map(\.pointee)
-            .map(Self.init)()
+        self = try resolved.get(git_reference_target, as: Self.init)
     }
 }
 
@@ -151,15 +147,15 @@ extension Object.ID: Hashable {
 extension Tagged where RawValue == Object.ID {
 
     init(object: GitPointer) throws {
-        self = try object
-            .task(git_object_id)
-            .map(Unwrap)
-            .map(\.pointee)
-            .map(Self.init)()
+        self = try object.get(git_object_id, as: Self.init)
     }
 
     init(oid: git_oid) {
         let objectID = Object.ID(oid: oid)
         self.init(rawValue: objectID)
+    }
+
+    init(oid: UnsafePointer<git_oid>?) throws {
+        try self.init(oid: Unwrap(oid).pointee)
     }
 }
