@@ -20,6 +20,14 @@ extension LibGit2Error {
 
 extension LibGit2Error {
 
+    static func check(_ result: Int32) throws {
+        let code = git_error_code(result)
+        if code != GIT_OK { throw Self(Code(code: code)) }
+    }
+}
+
+extension LibGit2Error {
+
     public struct Code {
         let code: git_error_code
     }
