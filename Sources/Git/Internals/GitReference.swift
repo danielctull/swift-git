@@ -47,15 +47,13 @@ extension GitReference {
     func get<Value>(
         _ get: (OpaquePointer?) -> UnsafePointer<Value>?
     ) throws -> UnsafePointer<Value> {
-        guard let value = get(pointer.pointer) else { throw GitKitError.unexpectedNilValue }
-        return value
+        try Unwrap(get(pointer.pointer))
     }
 
     func get<Value>(
         _ get: (OpaquePointer?) -> UnsafePointer<Value>?
     ) throws -> Value {
-        guard let value = get(pointer.pointer) else { throw GitKitError.unexpectedNilValue }
-        return value.pointee
+        try Unwrap(get(pointer.pointer)).pointee
     }
 
     func get(
