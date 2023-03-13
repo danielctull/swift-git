@@ -35,17 +35,15 @@ extension Repository {
 
         try GitIterator(
             createIterator: pointer.get(git_revwalk_new),
-            configureIterator: GitTask { iterator in
+            configureIterator: { iterator in
                 for reference in references {
                     var oid = reference.target.oid
-                    let result = git_revwalk_push(iterator, &oid)
-                    if GitError(result) != nil { return result }
+                    try iterator.perform(git_revwalk_push, &oid)
                 }
                 if includeHead {
-                    let result = git_revwalk_push_head(iterator)
-                    if GitError(result) != nil { return result }
+                    try iterator.perform(git_revwalk_push_head)
                 }
-                return git_revwalk_sorting(iterator, sortOptions.rawValue)
+                try iterator.perform(git_revwalk_sorting, sortOptions.rawValue)
             },
             freeIterator: git_revwalk_free,
             nextElement: { commit, iterator in
