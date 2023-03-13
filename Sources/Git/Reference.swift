@@ -15,7 +15,7 @@ extension Repository {
     public var references: [Reference] {
         get throws {
             try GitIterator(
-                createIterator: pointer.task(git_reference_iterator_new),
+                createIterator: pointer.get(git_reference_iterator_new),
                 freeIterator: git_reference_iterator_free,
                 nextElement: git_reference_next,
                 freeElement: git_reference_free)

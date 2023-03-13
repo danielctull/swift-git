@@ -34,7 +34,7 @@ extension Repository {
     ) throws -> [Commit] {
 
         try GitIterator(
-            createIterator: pointer.task(git_revwalk_new),
+            createIterator: pointer.get(git_revwalk_new),
             configureIterator: GitTask { iterator in
                 for reference in references {
                     var oid = reference.target.oid

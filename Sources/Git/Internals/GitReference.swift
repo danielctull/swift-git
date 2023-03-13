@@ -7,26 +7,13 @@ protocol GitReference {
 extension GitReference {
 
     init(
-        create: GitPointer.Create,
-        configure: GitPointer.Configure? = nil,
-        free: @escaping GitPointer.Free
-    ) throws {
-        try self.init(
-            pointer: GitPointer(
-                create: create,
-                configure: configure,
-                free: free)
-        )
-    }
-
-    init(
         create: @autoclosure () throws -> OpaquePointer,
         configure: GitPointer.Configure? = nil,
         free: @escaping GitPointer.Free
     ) throws {
         try self.init(
             pointer: GitPointer(
-                create: create,
+                create: create(),
                 configure: configure,
                 free: free)
         )

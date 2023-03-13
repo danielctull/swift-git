@@ -8,7 +8,7 @@ extension Repository {
         get throws {
 
             try GitIterator(
-                createIterator: pointer.task(git_branch_iterator_new, GIT_BRANCH_LOCAL),
+                createIterator: pointer.get(git_branch_iterator_new, GIT_BRANCH_LOCAL),
                 freeIterator: git_branch_iterator_free,
                 nextElement: {
                     let type = UnsafeMutablePointer<git_branch_t>.allocate(capacity: 1)
