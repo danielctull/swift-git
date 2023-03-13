@@ -7,8 +7,8 @@ struct GitCollection<Index: BinaryInteger, Element> {
 
 extension GitCollection: RandomAccessCollection {
     public var startIndex: Index { .zero }
-    public var endIndex: Index { count(pointer.pointer) }
+    public var endIndex: Index { pointer.get(count) }
     public func index(before i: Index) -> Index { i - 1 }
     public func index(after i: Index) -> Index { i + 1 }
-    public subscript(position: Index) -> Element { element(pointer.pointer, position) }
+    public subscript(position: Index) -> Element { pointer.get(element, position) }
 }

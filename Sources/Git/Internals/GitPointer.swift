@@ -59,6 +59,19 @@ final class GitPointer {
 
 extension GitPointer {
 
+    func get<Value>(
+        _ task: (OpaquePointer) -> Value
+    ) -> Value {
+        task(pointer)
+    }
+
+    func get<A, Value>(
+        _ task: (OpaquePointer, A) -> Value,
+        _ a: A
+    ) -> Value {
+        task(pointer, a)
+    }
+
     func get<CType, Value>(
         _ task: @escaping (OpaquePointer) -> CType,
         as conversion: (CType) throws -> Value
