@@ -97,7 +97,7 @@ extension Object.ID {
             create: reference.task(git_reference_resolve),
             free: git_reference_free)
 
-        self = try resolved.get(git_reference_target, as: Self.init)
+        self = try resolved.get(git_reference_target) |> Self.init
     }
 }
 
@@ -147,7 +147,7 @@ extension Object.ID: Hashable {
 extension Tagged where RawValue == Object.ID {
 
     init(object: GitPointer) throws {
-        self = try object.get(git_object_id, as: Self.init)
+        self = try object.get(git_object_id) |> Self.init
     }
 
     init(oid: git_oid) {

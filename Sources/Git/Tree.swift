@@ -50,7 +50,7 @@ extension Tree {
                 .map(\.pointee)
                 .map(Object.ID.init)()
 
-            name = try pointer.get(git_tree_entry_name, as: String.init)
+            name = try pointer.get(git_tree_entry_name) |> String.init
         }
     }
 }

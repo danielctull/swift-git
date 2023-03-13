@@ -17,7 +17,7 @@ public struct Blob: GitReference, Identifiable {
         self.pointer = pointer
         id = try ID(object: pointer)
 
-        let size = pointer.get(git_blob_rawsize, as: Int.init)
+        let size = pointer.get(git_blob_rawsize) |> Int.init
 
         let content = try pointer
             .task(git_blob_rawcontent)

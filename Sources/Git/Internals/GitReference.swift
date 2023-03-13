@@ -26,7 +26,7 @@ extension GitReference {
         _ task: @escaping (OpaquePointer) -> CType,
         as conversion: (CType) throws -> Value
     ) throws -> Value {
-        try pointer.get(task, as: conversion)
+        try pointer.get(task) |> conversion
     }
 
     func get<A, CType, Value>(
@@ -34,7 +34,7 @@ extension GitReference {
         _ a: A,
         as conversion: (CType) throws -> Value
     ) throws -> Value {
-        try pointer.get(task, a, as: conversion)
+        try pointer.get(task, a) |> conversion
     }
 }
 

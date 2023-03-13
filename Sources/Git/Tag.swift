@@ -91,9 +91,9 @@ public struct AnnotatedTag: GitReference {
     init(pointer: GitPointer) throws {
         self.pointer = pointer
         id = try ID(object: pointer)
-        name = try pointer.get(git_tag_name, as: String.init)
-        target = try pointer.get(git_tag_target_id, as: Object.ID.init)
-        tagger = try pointer.get(git_tag_tagger, as: Signature.init)
-        message = try pointer.get(git_tag_message, as: String.init)
+        name = try pointer.get(git_tag_name) |> String.init
+        target = try pointer.get(git_tag_target_id) |> Object.ID.init
+        tagger = try pointer.get(git_tag_tagger) |> Signature.init
+        message = try pointer.get(git_tag_message) |> String.init
     }
 }

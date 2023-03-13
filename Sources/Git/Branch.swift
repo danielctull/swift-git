@@ -51,7 +51,7 @@ public struct Branch: GitReference, Identifiable {
         pointer.assert(git_reference_is_branch, "Expected branch.")
         self.pointer = pointer
         id = try ID(reference: pointer)
-        name = try pointer.get(git_branch_name, as: String.init)
+        name = try pointer.get(git_branch_name) |> String.init
         target = try Object.ID(reference: pointer)
     }
 }
