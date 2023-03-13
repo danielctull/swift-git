@@ -33,7 +33,7 @@ extension Repository {
     }
 
     public func delete(_ branch: Branch) throws {
-        try branch.perform(git_branch_delete)
+        try branch.pointer.perform(git_branch_delete)
     }
 }
 
