@@ -45,8 +45,11 @@ extension Repository {
     }
 
     public var workingDirectory: URL? {
-        guard let path = try? String(validatingUTF8: get(git_repository_workdir)) else { return nil }
-        return URL(fileURLWithPath: path)
+        try? pointer.get(git_repository_workdir)
+            |> Unwrap
+            |> String.init(validatingUTF8:)
+            |> Unwrap
+            |> URL.init(fileURLWithPath:)
     }
 }
 

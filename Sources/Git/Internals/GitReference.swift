@@ -37,34 +37,3 @@ extension GitReference {
         try pointer.get(task, a) |> conversion
     }
 }
-
-extension GitReference {
-
-    func check(_ check: (OpaquePointer) -> Int32) -> Bool {
-        check(pointer.pointer) != 0
-    }
-
-    func get<Value>(
-        _ get: (OpaquePointer?) -> UnsafePointer<Value>?
-    ) throws -> UnsafePointer<Value> {
-        try Unwrap(get(pointer.pointer))
-    }
-
-    func get<Value>(
-        _ get: (OpaquePointer?) -> UnsafePointer<Value>?
-    ) throws -> Value {
-        try Unwrap(get(pointer.pointer)).pointee
-    }
-
-    func get(
-        _ get: (OpaquePointer?) -> OpaquePointer?
-    ) throws -> GitPointer {
-        GitPointer(try Unwrap(get(pointer.pointer)))
-    }
-
-    func get<Value>(
-        _ get: (OpaquePointer?) -> Value
-    ) -> Value {
-        get(pointer.pointer)
-    }
-}
