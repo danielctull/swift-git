@@ -50,7 +50,7 @@ extension Repository {
     }
 
     public func remove(_ reference: Reference) throws {
-        try perform(git_reference_remove, reference.id.rawValue)
+        try pointer.perform(git_reference_remove, reference.id.rawValue)
     }
 }
 

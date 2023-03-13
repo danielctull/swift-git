@@ -100,6 +100,24 @@ extension GitPointer {
 
 extension GitPointer {
 
+    func perform(
+        _ task: @escaping (OpaquePointer) -> Int32
+    ) throws {
+        let result = task(pointer)
+        try GitError.check(result)
+    }
+
+    func perform<A>(
+        _ task: @escaping (OpaquePointer, A) -> Int32,
+        _ a: A
+    ) throws {
+        let result = task(pointer, a)
+        try GitError.check(result)
+    }
+}
+
+extension GitPointer {
+
     func check(_ check: (OpaquePointer) -> Int32) -> Bool {
         check(pointer) != 0
     }
