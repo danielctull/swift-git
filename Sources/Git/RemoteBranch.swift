@@ -22,7 +22,7 @@ extension Repository {
     public func remoteBranch(on remote: Remote.ID, named branch: String) throws -> RemoteBranch {
         let name = remote.rawValue + "/" + branch
         return try RemoteBranch(
-            create: pointer.task(git_branch_lookup, name, GIT_BRANCH_REMOTE),
+            create: pointer.get(git_branch_lookup, name, GIT_BRANCH_REMOTE),
             free: git_reference_free)
     }
 }

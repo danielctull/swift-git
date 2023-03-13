@@ -23,25 +23,27 @@ extension Repository {
     }
 
     public init(url: URL, options: Options = .create) throws {
-        pointer = try GitPointer(create: GitTask { pointer in
+        pointer = try GitPointer { pointer in
             url.withUnsafeFileSystemRepresentation { path in
                 switch options {
                 case .open:               return git_repository_open(pointer, path)
                 case .create(let isBare): return git_repository_init(pointer, path, UInt32(isBare))
                 }
             }
-        }, free: git_repository_free)
+        } free: {
+            git_repository_free($0)
+        }
     }
 
     public init(local: URL, remote: URL) throws {
-
         let remoteString = remote.isFileURL ? remote.path : remote.absoluteString
-
-        pointer = try GitPointer(create: GitTask { pointer in
+        pointer = try GitPointer { pointer in
             local.withUnsafeFileSystemRepresentation { path in
                 git_clone(pointer, remoteString, path, nil)
             }
-        }, free: git_repository_free)
+        } free: {
+            git_repository_free($0)
+        }
     }
 
     public var workingDirectory: URL? {

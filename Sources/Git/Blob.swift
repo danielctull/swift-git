@@ -18,11 +18,7 @@ public struct Blob: GitReference, Identifiable {
         id = try ID(object: pointer)
 
         let size = pointer.get(git_blob_rawsize) |> Int.init
-
-        let content = try pointer
-            .task(git_blob_rawcontent)
-            .map(Unwrap)()
-
+        let content = try pointer.get(git_blob_rawcontent) |> Unwrap
         data = Data(bytes: content, count: size)
 
         isBinary = pointer.check(git_blob_is_binary)

@@ -5,7 +5,7 @@ extension Repository {
 
     public func blame(for path: FilePath) throws -> Blame {
         try Blame(
-            create: pointer.task(git_blame_file, path.rawValue, nil),
+            create: pointer.get(git_blame_file, path.rawValue, nil),
             free: git_blame_free)
     }
 }

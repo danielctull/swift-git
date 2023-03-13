@@ -7,7 +7,7 @@ extension Repository {
     public func commit(for id: Commit.ID) throws -> Commit {
         var oid = id.oid
         return try Commit(
-            create: pointer.task(git_commit_lookup, &oid),
+            create: pointer.get(git_commit_lookup, &oid),
             free: git_commit_free)
     }
 
@@ -88,7 +88,7 @@ extension Commit {
     public var tree: Tree {
         get throws {
             try Tree(
-                create: pointer.task(git_commit_tree),
+                create: pointer.get(git_commit_tree),
                 free: git_tree_free)
         }
     }
@@ -108,10 +108,10 @@ extension Commit {
 
     public var parents: [Commit] {
         get throws {
-            let count = try pointer.task(git_commit_parentcount)()
+            let count = pointer.get(git_commit_parentcount)
             return try (0..<count).map { index in
                 try Commit(
-                    create: pointer.task(git_commit_parent, index),
+                    create: pointer.get(git_commit_parent, index),
                     free: git_commit_free)
             }
         }

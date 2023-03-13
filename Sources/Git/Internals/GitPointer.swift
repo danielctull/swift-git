@@ -3,7 +3,7 @@ import Clibgit2
 
 final class GitPointer {
 
-    typealias Create = GitTask<Void, OpaquePointer>
+    typealias Create = () throws -> OpaquePointer
     typealias Configure = GitTask<OpaquePointer, Void>
     typealias Free = (OpaquePointer) -> Void
 
@@ -54,6 +54,34 @@ final class GitPointer {
     init(_ pointer: OpaquePointer) {
         self.pointer = pointer
         self.free = { _ in }
+    }
+}
+
+extension GitPointer {
+
+    convenience init(
+        create: @autoclosure () throws -> OpaquePointer,
+        configure: Configure? = nil,
+        free: @escaping Free
+    ) throws {
+        try self.init(create: create, configure: configure, free: free)
+    }
+}
+
+extension GitPointer {
+
+    convenience init(
+        create: (UnsafeMutablePointer<OpaquePointer?>) -> Int32,
+        configure: Configure? = nil,
+        free: @escaping Free
+    ) throws {
+
+        try self.init(create: {
+            var pointer: OpaquePointer?
+            let result = withUnsafeMutablePointer(to: &pointer, create)
+            try GitError.check(result)
+            return try Unwrap(pointer)
+        }, configure: configure, free: free)
     }
 }
 

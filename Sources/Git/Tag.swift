@@ -32,11 +32,10 @@ public struct Tag: GitReference, Identifiable {
 
         let target = try Object.ID(reference: pointer)
 
-        let repository = try pointer
-            .task(git_reference_owner)
-            .map(Unwrap)
-            .map(GitPointer.init)
-            .map(Repository.init)()
+        let repository = try pointer.get(git_reference_owner)
+            |> Unwrap
+            |> GitPointer.init
+            |> Repository.init
 
         let object = try repository.object(for: target)
         switch object {

@@ -7,7 +7,7 @@ extension Repository {
     public var head: Reference {
         get throws {
             try Reference(
-                create: pointer.task(git_repository_head),
+                create: pointer.get(git_repository_head),
                 free: git_reference_free)
         }
     }
@@ -25,7 +25,7 @@ extension Repository {
 
     public func reference(for id: Reference.ID) throws -> Reference {
         try Reference(
-            create: pointer.task(git_reference_lookup, id.rawValue),
+            create: pointer.get(git_reference_lookup, id.rawValue),
             free: git_reference_free)
     }
 

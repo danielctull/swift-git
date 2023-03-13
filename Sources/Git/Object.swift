@@ -13,7 +13,7 @@ extension Repository {
     public func object(for id: Object.ID) throws -> Object {
         var oid = id.oid
         return try Object(
-            create: pointer.task(git_object_lookup, &oid, GIT_OBJECT_ANY),
+            create: pointer.get(git_object_lookup, &oid, GIT_OBJECT_ANY),
             free: git_object_free)
     }
 }
@@ -40,8 +40,7 @@ extension Object: GitReference {
 
     init(pointer: GitPointer) throws {
 
-        let type = try pointer
-            .task(git_object_type)()
+        let type = pointer.get(git_object_type)
 
         switch type {
 
@@ -95,7 +94,7 @@ extension Object.ID {
 
     init(reference: GitPointer) throws {
         let resolved = try GitPointer(
-            create: reference.task(git_reference_resolve),
+            create: reference.get(git_reference_resolve),
             free: git_reference_free)
 
         self = try resolved.get(git_reference_target) |> Self.init

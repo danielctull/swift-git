@@ -58,48 +58,60 @@ extension GitTask {
 
 extension GitPointer {
 
-    func task<Output>(
-        _ task: @escaping (UnsafeMutablePointer<Output?>, OpaquePointer) -> Int32
-    ) -> GitTask<Void, Output> {
-        GitTask { task($0, self.pointer) }
+    func task<Value>(
+        _ task: @escaping (UnsafeMutablePointer<Value?>, OpaquePointer) -> Int32
+    ) -> () throws -> Value {
+        {
+            var value: Value?
+            let result = withUnsafeMutablePointer(to: &value) { task($0, self.pointer) }
+            try GitError.check(result)
+            return try Unwrap(value)
+        }
     }
 
-    @_disfavoredOverload
-    func task<A, Output>(
-        _ task: @escaping (UnsafeMutablePointer<Output?>, OpaquePointer, A) -> Int32,
+    func task<A, Value>(
+        _ task: @escaping (UnsafeMutablePointer<Value?>, OpaquePointer, A) -> Int32,
         _ a: A
-    ) -> GitTask<Void, Output> {
-        GitTask { task($0, self.pointer, a) }
+    ) -> () throws -> Value {
+        {
+            var value: Value?
+            let result = withUnsafeMutablePointer(to: &value) { task($0, self.pointer, a) }
+            try GitError.check(result)
+            return try Unwrap(value)
+        }
     }
 
-    @_disfavoredOverload
-    func task<A, B, Output>(
-        _ task: @escaping (UnsafeMutablePointer<Output?>, OpaquePointer, A, B) -> Int32,
+    func task<A, B, Value>(
+        _ task: @escaping (UnsafeMutablePointer<Value?>, OpaquePointer, A, B) -> Int32,
         _ a: A,
         _ b: B
-    ) -> GitTask<Void, Output> {
-        GitTask { task($0, self.pointer, a, b) }
+    ) -> () throws -> Value {
+        {
+            var value: Value?
+            let result = withUnsafeMutablePointer(to: &value) { task($0, self.pointer, a, b) }
+            try GitError.check(result)
+            return try Unwrap(value)
+        }
+//        self.task { output, pointer in task(output, pointer, a, b) }
     }
 
-    @_disfavoredOverload
-    func task<A, B, C, Output>(
-        _ task: @escaping (UnsafeMutablePointer<Output?>, OpaquePointer, A, B, C) -> Int32,
+    func task<A, B, C, Value>(
+        _ task: @escaping (UnsafeMutablePointer<Value?>, OpaquePointer, A, B, C) -> Int32,
         _ a: A,
         _ b: B,
         _ c: C
-    ) -> GitTask<Void, Output> {
-        GitTask { task($0, self.pointer, a, b, c) }
+    ) -> () throws -> Value {
+        self.task { output, pointer in task(output, pointer, a, b, c) }
     }
 
-    @_disfavoredOverload
-    func task<A, B, C, D, Output>(
-        _ task: @escaping (UnsafeMutablePointer<Output?>, OpaquePointer, A, B, C, D) -> Int32,
+    func task<A, B, C, D, Value>(
+        _ task: @escaping (UnsafeMutablePointer<Value?>, OpaquePointer, A, B, C, D) -> Int32,
         _ a: A,
         _ b: B,
         _ c: C,
         _ d: D
-    ) -> GitTask<Void, Output> {
-        GitTask { task($0, self.pointer, a, b, c, d) }
+    ) -> () throws -> Value {
+        self.task { output, pointer in task(output, pointer, a, b, c, d) }
     }
 }
 
@@ -107,23 +119,23 @@ extension GitPointer {
 
     func task(
         _ task: @escaping (OpaquePointer) -> Int32
-    ) -> GitTask<Void, Void> {
-        GitTask { task(self.pointer) }
+    ) -> () throws -> Void {
+        { try self.perform(task) }
     }
 
     func task<A>(
         _ task: @escaping (OpaquePointer, A) -> Int32,
         _ a: A
-    ) -> GitTask<Void, Void> {
-        GitTask { task(self.pointer, a) }
+    ) -> () throws -> Void {
+        { try self.perform(task, a) }
     }
 
     func task<A, B>(
         _ task: @escaping (OpaquePointer, A, B) -> Int32,
         _ a: A,
         _ b: B
-    ) -> GitTask<Void, Void> {
-        GitTask { task(self.pointer, a, b) }
+    ) -> () throws -> Void {
+        { try self.perform(task, a, b) }
     }
 
     func task<A, B, C>(
@@ -131,8 +143,8 @@ extension GitPointer {
         _ a: A,
         _ b: B,
         _ c: C
-    ) -> GitTask<Void, Void> {
-        GitTask { task(self.pointer, a, b, c) }
+    ) -> () throws -> Void {
+        { try self.perform(task, a, b, c) }
     }
 
     func task<A, B, C, D>(
@@ -141,80 +153,50 @@ extension GitPointer {
         _ b: B,
         _ c: C,
         _ d: D
-    ) -> GitTask<Void, Void> {
-        GitTask { task(self.pointer, a, b, c, d) }
+    ) -> () throws -> Void {
+        { try self.perform(task, a, b, c, d) }
     }
 }
 
 extension GitPointer {
 
-    func task<Output>(
-        _ task: @escaping (OpaquePointer) -> Output
-    ) -> GitTask<Void, Output> {
-        GitTask { task(self.pointer) }
+    func task<Value>(
+        _ task: @escaping (OpaquePointer) -> Value
+    ) -> () -> Value {
+        { self.get(task) }
     }
 
-    func task<A, Output>(
-        _ task: @escaping (OpaquePointer, A) -> Output,
+    func task<A, Value>(
+        _ task: @escaping (OpaquePointer, A) -> Value,
         _ a: A
-    ) -> GitTask<Void, Output> {
-        GitTask { task(self.pointer, a) }
+    ) -> () -> Value {
+        { self.get(task, a) }
     }
 
-    func task<A, B, Output>(
-        _ task: @escaping (OpaquePointer, A, B) -> Output,
+    func task<A, B, Value>(
+        _ task: @escaping (OpaquePointer, A, B) -> Value,
         _ a: A,
         _ b: B
-    ) -> GitTask<Void, Output> {
-        GitTask { task(self.pointer, a, b) }
+    ) -> () -> Value {
+        { self.get(task, a, b) }
     }
 
-    func task<A, B, C, Output>(
-        _ task: @escaping (OpaquePointer, A, B, C) -> Output,
+    func task<A, B, C, Value>(
+        _ task: @escaping (OpaquePointer, A, B, C) -> Value,
         _ a: A,
         _ b: B,
         _ c: C
-    ) -> GitTask<Void, Output> {
-        GitTask { task(self.pointer, a, b, c) }
+    ) -> () -> Value {
+        { self.get(task, a, b, c) }
     }
 
-    func task<A, B, C, D, Output>(
-        _ task: @escaping (OpaquePointer, A, B, C, D) -> Output,
+    func task<A, B, C, D, Value>(
+        _ task: @escaping (OpaquePointer, A, B, C, D) -> Value,
         _ a: A,
         _ b: B,
         _ c: C,
         _ d: D
-    ) -> GitTask<Void, Output> {
-        GitTask { task(self.pointer, a, b, c, d) }
-    }
-}
-
-// String variants, which will correctly convert String to UnsafePointer<CChar>,
-// unlike the generic functions above.
-extension GitPointer {
-
-    func task<Output>(
-        _ task: @escaping (UnsafeMutablePointer<Output?>, OpaquePointer, UnsafePointer<CChar>) -> Int32,
-        _ a: String
-    ) -> GitTask<Void, Output> {
-        GitTask { task($0, self.pointer, a) }
-    }
-
-    func task<B, Output>(
-        _ task: @escaping (UnsafeMutablePointer<Output?>, OpaquePointer, UnsafePointer<CChar>, B) -> Int32,
-        _ a: String,
-        _ b: B
-    ) -> GitTask<Void, Output> {
-        GitTask { task($0, self.pointer, a, b) }
-    }
-
-
-    func task<B, C, Output>(
-        _ task: @escaping (UnsafeMutablePointer<Output?>, OpaquePointer, UnsafePointer<CChar>, B, C) -> Int32,
-        _ a: String,
-        _ b: B,
-        _ c: C
-    ) -> GitTask<Void, Output> {
-        GitTask { task($0, self.pointer, a, b, c) }
+    ) -> () -> Value {
+        { self.get(task, a, b, c, d) }
     }
 }

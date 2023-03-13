@@ -44,11 +44,10 @@ extension Tree {
         init(pointer: GitPointer) throws {
             self.pointer = pointer
 
-            target = try pointer
-                .task(git_tree_entry_id)
-                .map(Unwrap)
-                .map(\.pointee)
-                .map(Object.ID.init)()
+            target = try pointer.get(git_tree_entry_id)
+                |> Unwrap
+                |> \.pointee
+                |> Object.ID.init
 
             name = try pointer.get(git_tree_entry_name) |> String.init
         }
