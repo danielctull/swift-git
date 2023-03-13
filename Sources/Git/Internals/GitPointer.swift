@@ -57,6 +57,53 @@ final class GitPointer {
     }
 }
 
+// MARK: - Perform a task
+
+extension GitPointer {
+
+    func perform(
+        _ task: @escaping (OpaquePointer) -> Int32
+    ) throws {
+        try GitError.check(task(pointer))
+    }
+
+    func perform<A>(
+        _ task: @escaping (OpaquePointer, A) -> Int32,
+        _ a: A
+    ) throws {
+        try GitError.check(task(pointer, a))
+    }
+
+    func perform<A, B>(
+        _ task: @escaping (OpaquePointer, A, B) -> Int32,
+        _ a: A,
+        _ b: B
+    ) throws {
+        try GitError.check(task(pointer, a, b))
+    }
+
+    func perform<A, B, C>(
+        _ task: @escaping (OpaquePointer, A, B, C) -> Int32,
+        _ a: A,
+        _ b: B,
+        _ c: C
+    ) throws {
+        try GitError.check(task(pointer, a, b, c))
+    }
+
+    func perform<A, B, C, D>(
+        _ task: @escaping (OpaquePointer, A, B, C, D) -> Int32,
+        _ a: A,
+        _ b: B,
+        _ c: C,
+        _ d: D
+    ) throws {
+        try GitError.check(task(pointer, a, b, c, d))
+    }
+}
+
+// MARK: - Get a Value
+
 extension GitPointer {
 
     func get<Value>(
@@ -72,49 +119,179 @@ extension GitPointer {
         task(pointer, a)
     }
 
-    func get<CType, Value>(
-        _ task: @escaping (OpaquePointer) -> CType,
-        as conversion: (CType) throws -> Value
-    ) throws -> Value {
-        let task = GitTask { task(self.pointer) }
-        return try conversion(task())
-    }
-
-    func get<A, CType, Value>(
-        _ task: @escaping (OpaquePointer, A) -> CType,
+    func get<A, B, Value>(
+        _ task: (OpaquePointer, A, B) -> Value,
         _ a: A,
-        as conversion: (CType) throws -> Value
-    ) throws -> Value {
-        let task = GitTask { task(self.pointer, a) }
-        return try conversion(task())
+        _ b: B
+    ) -> Value {
+        task(pointer, a, b)
     }
 
-    func get<CType, Value>(
-        _ task: @escaping (UnsafeMutablePointer<CType?>, OpaquePointer) -> Int32,
-        as conversion: (CType) throws -> Value
-    ) throws -> Value {
-        let task = GitTask<Void, CType> { task($0, self.pointer) }
-        return try conversion(task())
+    func get<A, B, C, Value>(
+        _ task: (OpaquePointer, A, B, C) -> Value,
+        _ a: A,
+        _ b: B,
+        _ c: C
+    ) -> Value {
+        task(pointer, a, b, c)
+    }
+
+    func get<A, B, C, D, Value>(
+        _ task: (OpaquePointer, A, B, C, D) -> Value,
+        _ a: A,
+        _ b: B,
+        _ c: C,
+        _ d: D
+    ) -> Value {
+        task(pointer, a, b, c, d)
     }
 }
 
 extension GitPointer {
 
-    func perform(
-        _ task: @escaping (OpaquePointer) -> Int32
-    ) throws {
-        let result = task(pointer)
+    func get<Value>(
+        _ task: @escaping (UnsafeMutablePointer<Value?>, OpaquePointer) -> Int32
+    ) throws -> Value {
+        var value: Value?
+        let result = withUnsafeMutablePointer(to: &value) { task($0, pointer) }
         try GitError.check(result)
+        return try Unwrap(value)
     }
 
-    func perform<A>(
-        _ task: @escaping (OpaquePointer, A) -> Int32,
+    func get<A, Value>(
+        _ task: @escaping (UnsafeMutablePointer<Value?>, OpaquePointer, A) -> Int32,
         _ a: A
-    ) throws {
-        let result = task(pointer, a)
-        try GitError.check(result)
+    ) throws -> Value {
+        try get { output, pointer in task(output, pointer, a) }
+    }
+
+    func get<A, B, Value>(
+        _ task: @escaping (UnsafeMutablePointer<Value?>, OpaquePointer, A, B) -> Int32,
+        _ a: A,
+        _ b: B
+    ) throws -> Value {
+        try get { output, pointer in task(output, pointer, a, b) }
+    }
+
+    func get<A, B, C, Value>(
+        _ task: @escaping (UnsafeMutablePointer<Value?>, OpaquePointer, A, B, C) -> Int32,
+        _ a: A,
+        _ b: B,
+        _ c: C
+    ) throws -> Value {
+        try get { output, pointer in task(output, pointer, a, b, c) }
+    }
+
+    func get<A, B, C, D, Value>(
+        _ task: @escaping (UnsafeMutablePointer<Value?>, OpaquePointer, A, B, C, D) -> Int32,
+        _ a: A,
+        _ b: B,
+        _ c: C,
+        _ d: D
+    ) throws -> Value {
+        try get { output, pointer in task(output, pointer, a, b, c, d) }
     }
 }
+
+// MARK: - Get a value and transform
+
+extension GitPointer {
+
+    func get<Output, Value>(
+        _ task: @escaping (OpaquePointer) -> Output,
+        as transform: (Output) throws -> Value
+    ) rethrows -> Value {
+        try transform(get(task))
+    }
+
+    func get<A, Output, Value>(
+        _ task: @escaping (OpaquePointer, A) -> Output,
+        _ a: A,
+        as transform: (Output) throws -> Value
+    ) rethrows -> Value {
+        try transform(get(task, a))
+    }
+
+    func get<A, B, Output, Value>(
+        _ task: @escaping (OpaquePointer, A, B) -> Output,
+        _ a: A,
+        _ b: B,
+        as transform: (Output) throws -> Value
+    ) rethrows -> Value {
+        try transform(get(task, a, b))
+    }
+
+    func get<A, B, C, Output, Value>(
+        _ task: @escaping (OpaquePointer, A, B, C) -> Output,
+        _ a: A,
+        _ b: B,
+        _ c: C,
+        as transform: (Output) throws -> Value
+    ) rethrows -> Value {
+        try transform(get(task, a, b, c))
+    }
+
+    func get<A, B, C, D, Output, Value>(
+        _ task: @escaping (OpaquePointer, A, B, C, D) -> Output,
+        _ a: A,
+        _ b: B,
+        _ c: C,
+        _ d: D,
+        as transform: (Output) throws -> Value
+    ) rethrows -> Value {
+        try transform(get(task, a, b, c, d))
+    }
+}
+
+extension GitPointer {
+
+    func get<Output, Value>(
+        _ task: @escaping (UnsafeMutablePointer<Output?>, OpaquePointer) -> Int32,
+        as transform: (Output) throws -> Value
+    ) throws -> Value {
+        try transform(get(task))
+    }
+
+    func get<A, Output, Value>(
+        _ task: @escaping (UnsafeMutablePointer<Output?>, OpaquePointer, A) -> Int32,
+        _ a: A,
+        as transform: (Output) throws -> Value
+    ) throws -> Value {
+        try transform(get(task, a))
+    }
+
+    func get<A, B, Output, Value>(
+        _ task: @escaping (UnsafeMutablePointer<Output?>, OpaquePointer, A, B) -> Int32,
+        _ a: A,
+        _ b: B,
+        as transform: (Output) throws -> Value
+    ) throws -> Value {
+        try transform(get(task, a, b))
+    }
+
+    func get<A, B, C, Output, Value>(
+        _ task: @escaping (UnsafeMutablePointer<Output?>, OpaquePointer, A, B, C) -> Int32,
+        _ a: A,
+        _ b: B,
+        _ c: C,
+        as transform: (Output) throws -> Value
+    ) throws -> Value {
+        try transform(get(task, a, b, c))
+    }
+
+    func get<A, B, C, D, Output, Value>(
+        _ task: @escaping (UnsafeMutablePointer<Output?>, OpaquePointer, A, B, C, D) -> Int32,
+        _ a: A,
+        _ b: B,
+        _ c: C,
+        _ d: D,
+        as transform: (Output) throws -> Value
+    ) throws -> Value {
+        try transform(get(task, a, b, c, d))
+    }
+}
+
+// MARK: - Assert
 
 extension GitPointer {
 
