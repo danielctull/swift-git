@@ -27,7 +27,8 @@ extension Blame: CustomStringConvertible {
 extension Blame {
 
     public func hunk(for line: LineNumber) throws -> Hunk {
-        try get(git_blame_get_hunk_byline, line.rawValue, as: Hunk.init)
+        try pointer.get(git_blame_get_hunk_byline, line.rawValue)
+            |> Hunk.init
     }
 
     public var hunks: [Hunk] {
