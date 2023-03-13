@@ -5,8 +5,9 @@ import Tagged
 extension Repository {
 
     public func commit(for id: Commit.ID) throws -> Commit {
-        try Commit(
-            create: task(git_commit_lookup, id.rawValue.oid),
+        var oid = id.oid
+        return try Commit(
+            create: pointer.task(git_commit_lookup, &oid),
             free: git_commit_free)
     }
 
@@ -33,7 +34,7 @@ extension Repository {
     ) throws -> [Commit] {
 
         try GitIterator(
-            createIterator: task(git_revwalk_new),
+            createIterator: pointer.task(git_revwalk_new),
             configureIterator: GitTask { iterator in
                 for reference in references {
                     var oid = reference.target.oid
@@ -87,7 +88,7 @@ extension Commit {
     public var tree: Tree {
         get throws {
             try Tree(
-                create: task(git_commit_tree),
+                create: pointer.task(git_commit_tree),
                 free: git_tree_free)
         }
     }
@@ -110,7 +111,7 @@ extension Commit {
             let count = try pointer.task(git_commit_parentcount)()
             return try (0..<count).map { index in
                 try Commit(
-                    create: task(git_commit_parent, index),
+                    create: pointer.task(git_commit_parent, index),
                     free: git_commit_free)
             }
         }

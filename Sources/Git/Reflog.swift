@@ -6,7 +6,7 @@ extension Repository {
     public var reflog: Reflog {
         get throws {
             try Reflog(
-                create: task(git_reflog_read, "HEAD"),
+                create: pointer.task(git_reflog_read, "HEAD"),
                 free: git_reflog_free)
         }
     }

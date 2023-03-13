@@ -64,6 +64,7 @@ extension GitPointer {
         GitTask { task($0, self.pointer) }
     }
 
+    @_disfavoredOverload
     func task<A, Output>(
         _ task: @escaping (UnsafeMutablePointer<Output?>, OpaquePointer, A) -> Int32,
         _ a: A
@@ -71,6 +72,7 @@ extension GitPointer {
         GitTask { task($0, self.pointer, a) }
     }
 
+    @_disfavoredOverload
     func task<A, B, Output>(
         _ task: @escaping (UnsafeMutablePointer<Output?>, OpaquePointer, A, B) -> Int32,
         _ a: A,
@@ -79,6 +81,7 @@ extension GitPointer {
         GitTask { task($0, self.pointer, a, b) }
     }
 
+    @_disfavoredOverload
     func task<A, B, C, Output>(
         _ task: @escaping (UnsafeMutablePointer<Output?>, OpaquePointer, A, B, C) -> Int32,
         _ a: A,
@@ -88,6 +91,7 @@ extension GitPointer {
         GitTask { task($0, self.pointer, a, b, c) }
     }
 
+    @_disfavoredOverload
     func task<A, B, C, D, Output>(
         _ task: @escaping (UnsafeMutablePointer<Output?>, OpaquePointer, A, B, C, D) -> Int32,
         _ a: A,
@@ -185,64 +189,15 @@ extension GitPointer {
     }
 }
 
-// MARK: - Creating a task from a GitReference
-
-extension GitReference {
-
-    func task<Output>(
-        _ task: @escaping (UnsafeMutablePointer<Output?>, OpaquePointer) -> Int32
-    ) -> GitTask<Void, Output> {
-        GitTask { task($0, pointer.pointer) }
-    }
-
-    @_disfavoredOverload
-    func task<A, Output>(
-        _ task: @escaping (UnsafeMutablePointer<Output?>, OpaquePointer, A) -> Int32,
-        _ a: A
-    ) -> GitTask<Void, Output> {
-        GitTask { task($0, pointer.pointer, a) }
-    }
-
-    @_disfavoredOverload
-    func task<A, B, Output>(
-        _ task: @escaping (UnsafeMutablePointer<Output?>, OpaquePointer, A, B) -> Int32,
-        _ a: A,
-        _ b: B
-    ) -> GitTask<Void, Output> {
-        GitTask { task($0, pointer.pointer, a, b) }
-    }
-
-    @_disfavoredOverload
-    func task<A, B, C, Output>(
-        _ task: @escaping (UnsafeMutablePointer<Output?>, OpaquePointer, A, B, C) -> Int32,
-        _ a: A,
-        _ b: B,
-        _ c: C
-    ) -> GitTask<Void, Output> {
-        GitTask { task($0, pointer.pointer, a, b, c) }
-    }
-
-    @_disfavoredOverload
-    func task<A, B, C, D, Output>(
-        _ task: @escaping (UnsafeMutablePointer<Output?>, OpaquePointer, A, B, C, D) -> Int32,
-        _ a: A,
-        _ b: B,
-        _ c: C,
-        _ d: D
-    ) -> GitTask<Void, Output> {
-        GitTask { task($0, pointer.pointer, a, b, c, d) }
-    }
-}
-
 // String variants, which will correctly convert String to UnsafePointer<CChar>,
 // unlike the generic functions above.
-extension GitReference {
+extension GitPointer {
 
     func task<Output>(
         _ task: @escaping (UnsafeMutablePointer<Output?>, OpaquePointer, UnsafePointer<CChar>) -> Int32,
         _ a: String
     ) -> GitTask<Void, Output> {
-        GitTask { task($0, pointer.pointer, a) }
+        GitTask { task($0, self.pointer, a) }
     }
 
     func task<B, Output>(
@@ -250,7 +205,7 @@ extension GitReference {
         _ a: String,
         _ b: B
     ) -> GitTask<Void, Output> {
-        GitTask { task($0, pointer.pointer, a, b) }
+        GitTask { task($0, self.pointer, a, b) }
     }
 
 
@@ -260,30 +215,6 @@ extension GitReference {
         _ b: B,
         _ c: C
     ) -> GitTask<Void, Output> {
-        GitTask { task($0, pointer.pointer, a, b, c) }
-    }
-}
-
-extension GitReference {
-
-    func task<A, Output>(
-        _ task: @escaping (UnsafeMutablePointer<Output?>, OpaquePointer, UnsafePointer<A>) -> Int32,
-        _ a: A
-    ) -> GitTask<Void, Output> {
-        GitTask {
-            var a = a
-            return task($0, pointer.pointer, &a)
-        }
-    }
-
-    func task<A, B, Output>(
-        _ task: @escaping (UnsafeMutablePointer<Output?>, OpaquePointer, UnsafePointer<A>, B) -> Int32,
-        _ a: A,
-        _ b: B
-    ) -> GitTask<Void, Output> {
-        GitTask {
-            var a = a
-            return task($0, pointer.pointer, &a, b)
-        }
+        GitTask { task($0, self.pointer, a, b, c) }
     }
 }

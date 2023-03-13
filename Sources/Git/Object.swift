@@ -11,8 +11,9 @@ extension Repository {
     }
 
     public func object(for id: Object.ID) throws -> Object {
-        try Object(
-            create: task(git_object_lookup, id.oid, GIT_OBJECT_ANY),
+        var oid = id.oid
+        return try Object(
+            create: pointer.task(git_object_lookup, &oid, GIT_OBJECT_ANY),
             free: git_object_free)
     }
 }
@@ -82,7 +83,7 @@ extension Object: Identifiable {
 extension Object {
 
     public struct ID {
-        let oid: git_oid
+        var oid: git_oid
     }
 }
 
