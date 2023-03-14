@@ -10,3 +10,10 @@ extension UInt32 {
         }
     }
 }
+
+extension Bool {
+
+    init(_ value: Int32) {
+        self = value == 1
+    }
+}

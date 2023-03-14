@@ -78,16 +78,16 @@ extension Reference: GitReference {
 
         switch pointer {
 
-        case let pointer where pointer.check(git_reference_is_branch):
+        case let pointer where pointer.get(git_reference_is_branch) |> Bool.init:
             self = try .branch(Branch(pointer: pointer))
 
-        case let pointer where pointer.check(git_reference_is_note):
+        case let pointer where pointer.get(git_reference_is_note) |> Bool.init:
             self = try .note(Note(pointer: pointer))
 
-        case let pointer where pointer.check(git_reference_is_remote):
+        case let pointer where pointer.get(git_reference_is_remote) |> Bool.init:
             self = try .remoteBranch(RemoteBranch(pointer: pointer))
 
-        case let pointer where pointer.check(git_reference_is_tag):
+        case let pointer where pointer.get(git_reference_is_tag) |> Bool.init:
             self = try .tag(Tag(pointer: pointer))
 
         default:
