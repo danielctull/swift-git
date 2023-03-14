@@ -13,17 +13,10 @@ final class GitPointer {
     /// Creates a wrapper around an opaque pointer that will call the free
     /// function on deinit of the object.
     ///
-    /// Because the configuration may cause a failure after the creation was
-    /// successful, only the creation should be done in the `create` function,
-    /// with the `configure` function used to perform post-creation setup. If
-    /// a failure occurs during the `configure` function, `free` will be called
-    /// to clean up the memory.
-    ///
     /// - Parameters:
     ///   - create: The function to create the pointer.
-    ///   - configure: Any configuration should be done in this function.
     ///   - free: The function to free the pointer.
-    /// - Throws: A LibGit2Error if the results of the functions are not GIT_OK.
+    /// - Throws: A ``GitError`` if the results of the functions are not GIT_OK.
     init(
         create: @autoclosure () throws -> OpaquePointer,
         free: @escaping Free
