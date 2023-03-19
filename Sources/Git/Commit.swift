@@ -46,14 +46,12 @@ extension Repository {
                 try iterator.perform(git_revwalk_sorting, sortOptions.rawValue)
             },
             freeIterator: git_revwalk_free,
-            nextElement: { commit, iterator in
-                let oid = UnsafeMutablePointer<git_oid>.allocate(capacity: 1)
-                defer { oid.deallocate() }
-                let result = git_revwalk_next(oid, iterator)
-                if GitError(result) != nil { return result }
-                return git_commit_lookup(commit, pointer.pointer, oid)
-            },
-            freeElement: git_commit_free)
+            nextElement: { iterator in
+                var oid: git_oid = try iterator.get(git_revwalk_next)
+                return try GitPointer(
+                    create: pointer.get(git_commit_lookup, &oid),
+                    free: git_commit_free)
+            })
             .map(Commit.init)
     }
 }

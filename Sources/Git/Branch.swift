@@ -10,12 +10,11 @@ extension Repository {
             try GitIterator(
                 createIterator: pointer.get(git_branch_iterator_new, GIT_BRANCH_LOCAL),
                 freeIterator: git_branch_iterator_free,
-                nextElement: {
-                    let type = UnsafeMutablePointer<git_branch_t>.allocate(capacity: 1)
-                    defer { type.deallocate() }
-                    return git_branch_next($0, type, $1)
-                },
-                freeElement: git_reference_free)
+                nextElement: { iterator in
+                    try GitPointer(
+                        create: try iterator.get(git_branch_next).0,
+                        free: git_reference_free)
+                })
                 .map(Branch.init)
         }
     }

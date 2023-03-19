@@ -17,8 +17,11 @@ extension Repository {
             try GitIterator(
                 createIterator: pointer.get(git_reference_iterator_new),
                 freeIterator: git_reference_iterator_free,
-                nextElement: git_reference_next,
-                freeElement: git_reference_free)
+                nextElement: { iterator in
+                    try GitPointer(
+                        create: iterator.get(git_reference_next),
+                        free: git_reference_free)
+                })
                 .map(Reference.init)
         }
     }

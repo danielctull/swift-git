@@ -28,24 +28,3 @@ extension GitIterator: IteratorProtocol, Sequence {
         }
     }
 }
-
-extension GitIterator where Element == GitPointer {
-
-    init(
-        createIterator: @autoclosure () throws -> OpaquePointer,
-        configureIterator: ((GitPointer) throws -> Void)? = nil,
-        freeIterator: @escaping GitPointer.Free,
-        nextElement: @escaping (UnsafeMutablePointer<OpaquePointer?>, OpaquePointer) -> Int32,
-        freeElement: @escaping GitPointer.Free
-    ) throws {
-
-        try self.init(
-            createIterator: createIterator(),
-            configureIterator: configureIterator,
-            freeIterator: freeIterator,
-            nextElement: { iterator in
-                try GitPointer(create: iterator.get(nextElement),
-                               free: freeElement)
-            })
-    }
-}

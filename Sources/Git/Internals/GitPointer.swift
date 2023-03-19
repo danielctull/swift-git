@@ -195,6 +195,31 @@ extension GitPointer {
     }
 }
 
+extension GitPointer {
+
+    func get<Value>(
+        _ task: @escaping (UnsafeMutablePointer<Value>, OpaquePointer) -> Int32
+    ) throws -> Value {
+        let value = UnsafeMutablePointer<Value>.allocate(capacity: 1)
+        defer { value.deallocate() }
+        let result = task(value, pointer)
+        try GitError.check(result)
+        return value.pointee
+    }
+}
+
+extension GitPointer {
+
+    func get<A, B>(
+        _ task: @escaping (UnsafeMutablePointer<A?>, UnsafeMutablePointer<B>, OpaquePointer) -> Int32
+    ) throws -> (A, B) {
+        let b = UnsafeMutablePointer<B>.allocate(capacity: 1)
+        defer { b.deallocate() }
+        let a = try get { output, pointer in task(output, b, pointer) }
+        return (a, b.pointee)
+    }
+}
+
 // MARK: - Assert
 
 extension GitPointer {
