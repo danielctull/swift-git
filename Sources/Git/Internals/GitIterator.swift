@@ -1,8 +1,8 @@
 
 struct GitIterator<Iterator, Element> {
 
-    let iterator: Iterator
-    let nextElement: (Iterator) throws -> Element?
+    private let iterator: Iterator
+    private let nextElement: (Iterator) throws -> Element?
 
     init(
         iterator: () throws -> Iterator,
