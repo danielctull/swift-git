@@ -33,26 +33,33 @@ extension Repository {
         includeHead: Bool = true
     ) throws -> [Commit] {
 
-        try GitIterator(
-            createIterator: pointer.get(git_revwalk_new),
-            configureIterator: { iterator in
-                for reference in references {
-                    var oid = reference.target.oid
-                    try iterator.perform(git_revwalk_push, &oid)
-                }
-                if includeHead {
-                    try iterator.perform(git_revwalk_push_head)
-                }
-                try iterator.perform(git_revwalk_sorting, sortOptions.rawValue)
-            },
-            freeIterator: git_revwalk_free,
-            nextElement: { iterator in
-                var oid: git_oid = try iterator.get(git_revwalk_next)
-                return try GitPointer(
-                    create: pointer.get(git_commit_lookup, &oid),
-                    free: git_commit_free)
-            })
-            .map(Commit.init)
+        try GitIterator {
+
+            let iterator = try GitPointer(
+                create: pointer.get(git_revwalk_new),
+                free: git_revwalk_free)
+
+            for reference in references {
+                var oid = reference.target.oid
+                try iterator.perform(git_revwalk_push, &oid)
+            }
+
+            if includeHead {
+                try iterator.perform(git_revwalk_push_head)
+            }
+
+            try iterator.perform(git_revwalk_sorting, sortOptions.rawValue)
+
+            return iterator
+
+        } nextElement: { iterator in
+
+            var oid: git_oid = try iterator.get(git_revwalk_next)
+            return try GitPointer(
+                create: pointer.get(git_commit_lookup, &oid),
+                free: git_commit_free)
+        }
+        .map(Commit.init)
     }
 }
 

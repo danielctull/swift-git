@@ -5,13 +5,10 @@ struct GitIterator<Element> {
     let nextElement: (GitPointer) throws -> Element?
 
     init(
-        createIterator: @autoclosure () throws -> OpaquePointer,
-        configureIterator: ((GitPointer) throws -> Void)? = nil,
-        freeIterator: @escaping GitPointer.Free,
+        iterator: () throws -> GitPointer,
         nextElement: @escaping (GitPointer) throws -> Element?
     ) throws {
-        iterator = try GitPointer(create: createIterator(), free: freeIterator)
-        try configureIterator?(iterator)
+        self.iterator = try iterator()
         self.nextElement = nextElement
     }
 }

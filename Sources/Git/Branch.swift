@@ -6,16 +6,19 @@ extension Repository {
 
     public var branches: [Branch] {
         get throws {
+            try GitIterator {
 
-            try GitIterator(
-                createIterator: pointer.get(git_branch_iterator_new, GIT_BRANCH_LOCAL),
-                freeIterator: git_branch_iterator_free,
-                nextElement: { iterator in
-                    try GitPointer(
-                        create: try iterator.get(git_branch_next).0,
-                        free: git_reference_free)
-                })
-                .map(Branch.init)
+                try GitPointer(
+                    create: pointer.get(git_branch_iterator_new, GIT_BRANCH_LOCAL),
+                    free: git_branch_iterator_free)
+
+            } nextElement: { iterator in
+
+                try GitPointer(
+                    create: try iterator.get(git_branch_next).0,
+                    free: git_reference_free)
+            }
+            .map(Branch.init)
         }
     }
 

@@ -14,15 +14,19 @@ extension Repository {
 
     public var references: [Reference] {
         get throws {
-            try GitIterator(
-                createIterator: pointer.get(git_reference_iterator_new),
-                freeIterator: git_reference_iterator_free,
-                nextElement: { iterator in
-                    try GitPointer(
-                        create: iterator.get(git_reference_next),
-                        free: git_reference_free)
-                })
-                .map(Reference.init)
+            try GitIterator {
+
+                try GitPointer(
+                    create: pointer.get(git_reference_iterator_new),
+                    free: git_reference_iterator_free)
+
+            } nextElement: { iterator in
+
+                try GitPointer(
+                    create: iterator.get(git_reference_next),
+                    free: git_reference_free)
+            }
+            .map(Reference.init)
         }
     }
 
