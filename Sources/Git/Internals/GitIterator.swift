@@ -1,12 +1,12 @@
 
-struct GitIterator<Element> {
+struct GitIterator<Iterator, Element> {
 
-    let iterator: GitPointer
-    let nextElement: (GitPointer) throws -> Element?
+    let iterator: Iterator
+    let nextElement: (Iterator) throws -> Element?
 
     init(
-        iterator: () throws -> GitPointer,
-        nextElement: @escaping (GitPointer) throws -> Element?
+        iterator: () throws -> Iterator,
+        nextElement: @escaping (Iterator) throws -> Element?
     ) throws {
         self.iterator = try iterator()
         self.nextElement = nextElement
