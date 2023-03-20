@@ -105,11 +105,12 @@ extension Object.ID: CustomStringConvertible {
 
     public var description: String {
         withUnsafePointer(to: oid) { oid in
-            let length = Int(GIT_OID_RAWSZ) * 2
-            let string = UnsafeMutablePointer<Int8>.allocate(capacity: length)
-            git_oid_fmt(string, oid)
+            let length = Int(GIT_OID_HEXSZ)
+            let cchar = UnsafeMutablePointer<CChar>.allocate(capacity: length)
+            defer { cchar.deallocate() }
+            git_oid_fmt(cchar, oid)
             // swiftlint:disable force_unwrapping
-            return String(bytesNoCopy: string, length: length, encoding: .ascii, freeWhenDone: true)!
+            return try! String(cchar)
             // swiftlint:enable force_unwrapping
         }
     }
