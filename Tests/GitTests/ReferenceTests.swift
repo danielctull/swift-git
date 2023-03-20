@@ -191,7 +191,6 @@ final class ReferenceTests: XCTestCase {
                 XCTAssertEqual(try references.value(at: 2).id, "refs/tags/lightweight-tag")
             }
 
-
             do {
                 try repo.remove("refs/tags/1.0")
                 let references = try Array(repo.references)

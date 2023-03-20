@@ -109,9 +109,9 @@ extension Object.ID: CustomStringConvertible {
             let cchar = UnsafeMutablePointer<CChar>.allocate(capacity: length)
             defer { cchar.deallocate() }
             git_oid_fmt(cchar, oid)
-            // swiftlint:disable force_unwrapping
+            // swiftlint:disable force_try
             return try! String(cchar)
-            // swiftlint:enable force_unwrapping
+            // swiftlint:enable force_try
         }
     }
 }

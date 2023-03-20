@@ -4,10 +4,12 @@ excluded:
   - .**/XCTestManifests.swift
 disabled_rules:
   - cyclomatic_complexity
+  - function_body_length
   - identifier_name
   - leading_whitespace
   - line_length
   - nesting
+  - static_operator
   - trailing_comma
   - type_name
 opt_in_rules:
