@@ -9,8 +9,8 @@ final class BranchTests: XCTestCase {
         let remote = try Bundle.module.url(forRepository: "Test.git")
         try FileManager.default.withTemporaryDirectory { local in
             let repo = try Repository(local: local, remote: remote)
-            let branches = try repo.branches
-//            XCTAssertEqual(branches.count, 1)
+            let branches = try Array(repo.branches)
+            XCTAssertEqual(branches.count, 1)
             let branch = try XCTUnwrap(branches.first)
             XCTAssertEqual(branch.name, "main")
             XCTAssertEqual(branch.id, "refs/heads/main")
@@ -23,7 +23,7 @@ final class BranchTests: XCTestCase {
         try FileManager.default.withTemporaryDirectory { local in
             let repo = try Repository(local: local, remote: remote)
             let main = try repo.branch(named: "main")
-            let commits = try repo.commits(for: .branch(main))
+            let commits = try Array(repo.commits(for: .branch(main)))
             let commit = try XCTUnwrap(commits.first)
             let main2 = try repo.createBranch(named: "main2", at: commit)
             XCTAssertEqual(main2.name, "main2")
@@ -48,7 +48,7 @@ final class BranchTests: XCTestCase {
         try FileManager.default.withTemporaryDirectory { local in
             let repo = try Repository(local: local, remote: remote)
             let main = try repo.branch(named: "main")
-            let commits = try repo.commits(for: .branch(main))
+            let commits = try Array(repo.commits(for: .branch(main)))
             let commit = try XCTUnwrap(commits.first)
             let main2 = try repo.createBranch(named: "main2", at: commit)
             XCTAssertNoThrow(try repo.branch(named: "main2"))

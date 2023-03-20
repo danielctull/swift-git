@@ -11,7 +11,7 @@ extension Repository {
             free: git_commit_free)
     }
 
-    public var commits: [Commit] {
+    public var commits: some Sequence<Commit> {
         get throws {
             try commits(for: [])
         }
@@ -21,7 +21,7 @@ extension Repository {
         for references: Reference...,
         sortedBy sortOptions: SortOptions = SortOptions(),
         includeHead: Bool = true
-    ) throws -> [Commit] {
+    ) throws -> some Sequence<Commit> {
         try commits(for: references,
                     sortedBy: sortOptions,
                     includeHead: includeHead)
@@ -31,7 +31,7 @@ extension Repository {
         for references: [Reference],
         sortedBy sortOptions: SortOptions = SortOptions(),
         includeHead: Bool = true
-    ) throws -> [Commit] {
+    ) throws -> some Sequence<Commit> {
 
         try GitIterator {
 

@@ -12,7 +12,7 @@ extension Repository {
         }
     }
 
-    public var references: [Reference] {
+    public var references: some Sequence<Reference> {
         get throws {
             try GitIterator {
 
@@ -22,11 +22,10 @@ extension Repository {
 
             } nextElement: { iterator in
 
-                try GitPointer(
+                try Reference(
                     create: iterator.get(git_reference_next),
                     free: git_reference_free)
             }
-            .map(Reference.init)
         }
     }
 

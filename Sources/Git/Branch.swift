@@ -4,7 +4,7 @@ import Tagged
 
 extension Repository {
 
-    public var branches: [Branch] {
+    public var branches: some Sequence<Branch> {
         get throws {
             try GitIterator {
 
@@ -14,11 +14,10 @@ extension Repository {
 
             } nextElement: { iterator in
 
-                try GitPointer(
+                try Branch(
                     create: try iterator.get(git_branch_next).0,
                     free: git_reference_free)
             }
-            .map(Branch.init)
         }
     }
 

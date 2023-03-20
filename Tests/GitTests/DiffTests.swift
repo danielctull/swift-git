@@ -9,7 +9,7 @@ final class DiffTests: XCTestCase {
         let remote = try Bundle.module.url(forRepository: "Test.git")
         try FileManager.default.withTemporaryDirectory { local in
             let repo = try Repository(local: local, remote: remote)
-            let commits = try repo.commits(sortedBy: .reverse)
+            let commits = try Array(repo.commits(sortedBy: .reverse))
             XCTAssertEqual(commits.count, 4)
             let first = try commits.value(at: 0)
             let second = try commits.value(at: 1)
@@ -39,7 +39,7 @@ final class DiffTests: XCTestCase {
         let remote = try Bundle.module.url(forRepository: "Test.git")
         try FileManager.default.withTemporaryDirectory { local in
             let repo = try Repository(local: local, remote: remote)
-            let commits = try repo.commits(sortedBy: .reverse)
+            let commits = try Array(repo.commits(sortedBy: .reverse))
             XCTAssertEqual(commits.count, 4)
             let first = try commits.value(at: 0)
             let second = try commits.value(at: 1)
