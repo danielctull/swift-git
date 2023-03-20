@@ -55,11 +55,10 @@ extension Repository {
         } nextElement: { iterator in
 
             var oid: git_oid = try iterator.get(git_revwalk_next)
-            return try GitPointer(
+            return try Commit(
                 create: pointer.get(git_commit_lookup, &oid),
                 free: git_commit_free)
         }
-        .map(Commit.init)
     }
 }
 
