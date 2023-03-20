@@ -22,6 +22,7 @@ extension Repository {
         public static let create = Self.create(isBare: false)
     }
 
+    @GitActor
     public init(url: URL, options: Options = .create) throws {
         pointer = try GitPointer { pointer in
             url.withUnsafeFileSystemRepresentation { path in
@@ -35,6 +36,7 @@ extension Repository {
         }
     }
 
+    @GitActor
     public init(local: URL, remote: URL) throws {
         let remoteString = remote.isFileURL ? remote.path : remote.absoluteString
         pointer = try GitPointer { pointer in
@@ -46,6 +48,7 @@ extension Repository {
         }
     }
 
+    @GitActor
     public var workingDirectory: URL? {
         try? pointer.get(git_repository_workdir)
             |> Unwrap

@@ -7,6 +7,7 @@ public struct Index: GitReference {
 
 extension Repository {
 
+    @GitActor
     public var index: Index {
         get throws {
             try Index(

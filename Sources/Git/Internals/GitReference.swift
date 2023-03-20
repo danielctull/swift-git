@@ -1,11 +1,14 @@
 
 protocol GitReference {
+
+    @GitActor
     init(pointer: GitPointer) throws
     var pointer: GitPointer { get }
 }
 
 extension GitReference {
 
+    @GitActor
     init(
         create: @autoclosure () throws -> OpaquePointer,
         free: @escaping GitPointer.Free

@@ -1,4 +1,5 @@
 
+@GitActor
 struct GitCollection<Index: BinaryInteger, Element> {
     let pointer: GitPointer
     let count: (OpaquePointer) -> Index

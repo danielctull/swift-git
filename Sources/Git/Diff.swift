@@ -4,6 +4,7 @@ import Tagged
 
 extension Repository {
 
+    @GitActor
     public func diff(from tree1: Tree, to tree2: Tree) throws -> Diff {
         try Diff(
             create: pointer.get(git_diff_tree_to_tree, tree1.pointer.pointer, tree2.pointer.pointer, nil),
@@ -49,6 +50,7 @@ extension Diff {
         public let file: File
     }
 
+    @GitActor
     public var hunks: [Hunk] {
         get throws {
             var hunks: [Hunk] = []

@@ -5,6 +5,7 @@ import Tagged
 
 extension Repository {
 
+    @GitActor
     public func remote(for id: Remote.ID) throws -> Remote {
         try Remote(
             create: pointer.get(git_remote_lookup, id.rawValue),

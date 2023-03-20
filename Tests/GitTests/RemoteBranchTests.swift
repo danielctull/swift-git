@@ -3,6 +3,7 @@ import Foundation
 import Git
 import XCTest
 
+@GitActor
 final class RemoteBranchTests: XCTestCase {
 
     func testRepositoryRemoteBranches() throws {

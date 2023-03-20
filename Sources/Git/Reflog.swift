@@ -3,6 +3,7 @@ import Clibgit2
 
 extension Repository {
 
+    @GitActor
     public var reflog: Reflog {
         get throws {
             try Reflog(

@@ -3,6 +3,7 @@ import Clibgit2
 
 extension Repository {
 
+    @GitActor
     public func blame(for path: FilePath) throws -> Blame {
         try Blame(
             create: pointer.get(git_blame_file, path.rawValue, nil),
@@ -26,6 +27,7 @@ extension Blame: CustomStringConvertible {
 
 extension Blame {
 
+    @GitActor
     public func hunk(for line: LineNumber) throws -> Hunk {
         try pointer.get(git_blame_get_hunk_byline, line.rawValue)
             |> Hunk.init

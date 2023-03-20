@@ -4,6 +4,7 @@ import Tagged
 
 extension Repository {
 
+    @GitActor
     public var remoteBranches: some Sequence<RemoteBranch> {
         get throws {
             try GitIterator {
@@ -21,6 +22,7 @@ extension Repository {
         }
     }
 
+    @GitActor
     public func remoteBranch(on remote: Remote.ID, named branch: String) throws -> RemoteBranch {
         let name = remote.rawValue + "/" + branch
         return try RemoteBranch(

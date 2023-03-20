@@ -4,11 +4,13 @@ import Tagged
 
 extension Repository {
 
+    @GitActor
     public func tag(named name: String) throws -> Tag {
         try tags.first(where: { $0.name == name })
             ?? { throw GitError(.notFound) }()
     }
 
+    @GitActor
     public var tags: [Tag] {
         get throws {
             try references.compactMap(\.tag)
@@ -32,10 +34,7 @@ public struct Tag: GitReference, Identifiable {
 
         let target = try Object.ID(reference: pointer)
 
-        let repository = try pointer.get(git_reference_owner)
-            |> Unwrap
-            |> GitPointer.init
-            |> Repository.init
+        let repository = try Repository(pointer: GitPointer(Unwrap(pointer.get(git_reference_owner))))
 
         let object = try repository.object(for: target)
         switch object {

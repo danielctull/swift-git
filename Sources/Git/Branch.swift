@@ -4,6 +4,7 @@ import Tagged
 
 extension Repository {
 
+    @GitActor
     public var branches: some Sequence<Branch> {
         get throws {
             try GitIterator {
@@ -21,18 +22,21 @@ extension Repository {
         }
     }
 
+    @GitActor
     public func createBranch(named name: String, at commit: Commit) throws -> Branch {
         try Branch(
             create: pointer.get(git_branch_create, name, commit.pointer.pointer, 0),
             free: git_reference_free)
     }
 
+    @GitActor
     public func branch(named name: String) throws -> Branch {
         try Branch(
             create: pointer.get(git_branch_lookup, name, GIT_BRANCH_LOCAL),
             free: git_reference_free)
     }
 
+    @GitActor
     public func delete(_ branch: Branch) throws {
         try branch.pointer.perform(git_branch_delete)
     }
@@ -59,6 +63,7 @@ public struct Branch: GitReference, Identifiable {
 
 extension Branch {
 
+    @GitActor
     public func move(to name: String, force: Bool = false) throws -> Branch {
         try Branch(
             create: pointer.get(git_branch_move, name, Int32(force)),

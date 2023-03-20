@@ -4,6 +4,7 @@ import Tagged
 
 extension Repository {
 
+    @GitActor
     public var head: Reference {
         get throws {
             try Reference(
@@ -12,6 +13,7 @@ extension Repository {
         }
     }
 
+    @GitActor
     public var references: some Sequence<Reference> {
         get throws {
             try GitIterator {
@@ -29,6 +31,7 @@ extension Repository {
         }
     }
 
+    @GitActor
     public func reference(for id: Reference.ID) throws -> Reference {
         try Reference(
             create: pointer.get(git_reference_lookup, id.rawValue),
@@ -37,6 +40,7 @@ extension Repository {
 
     @available(iOS 13, *)
     @available(macOS 10.15, *)
+    @GitActor
     public func remove<SomeReference>(
         _ reference: SomeReference
     ) throws where SomeReference: Identifiable,
@@ -45,16 +49,19 @@ extension Repository {
         try remove(reference.id.rawValue)
     }
 
+    @GitActor
     public func remove<ID>(
         _ id: ID
     ) throws where ID: RawRepresentable, ID.RawValue == Reference.ID {
         try remove(id.rawValue)
     }
 
+    @GitActor
     public func remove(_ id: Reference.ID) throws {
         try remove(reference(for: id))
     }
 
+    @GitActor
     public func remove(_ reference: Reference) throws {
         try pointer.perform(git_reference_remove, reference.id.rawValue)
     }
@@ -153,6 +160,7 @@ extension Reference: CustomDebugStringConvertible {
 
 extension Tagged where RawValue == Reference.ID {
 
+    @GitActor
     init(reference: GitPointer) throws {
         let name = try reference.get(git_reference_name) |> String.init
         let referenceID = Reference.ID(rawValue: name)

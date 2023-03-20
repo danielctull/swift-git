@@ -1,6 +1,7 @@
 
 import Clibgit2
 
+@GitActor
 final class GitPointer {
 
     typealias Free = (OpaquePointer) -> Void
