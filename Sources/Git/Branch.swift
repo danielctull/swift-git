@@ -57,6 +57,15 @@ public struct Branch: GitReference, Identifiable {
     }
 }
 
+extension Branch {
+
+    public func move(to name: String, force: Bool = false) throws -> Branch {
+        try Branch(
+            create: pointer.get(git_branch_move, name, Int32(force)),
+            free: git_reference_free)
+    }
+}
+
 extension Branch: CustomDebugStringConvertible {
     public var debugDescription: String {
         "Branch(name: \(name), id: \(id), target: \(target.debugDescription))"

@@ -43,6 +43,27 @@ final class BranchTests: XCTestCase {
         }
     }
 
+    func testBranchMove() throws {
+        let remote = try Bundle.module.url(forRepository: "Test.git")
+        try FileManager.default.withTemporaryDirectory { local in
+            let repo = try Repository(local: local, remote: remote)
+            let branch = try repo.branch(named: "main")
+            do {
+                let moved = try branch.move(to: "moved")
+                XCTAssertEqual(moved.name, "moved")
+                XCTAssertEqual(moved.id, "refs/heads/moved")
+                XCTAssertEqual(moved.target.description, "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
+            }
+            do {
+                let moved = try repo.branch(named: "moved")
+                XCTAssertEqual(moved.name, "moved")
+                XCTAssertEqual(moved.id, "refs/heads/moved")
+                XCTAssertEqual(moved.target.description, "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
+            }
+            XCTAssertThrowsError(try repo.branch(named: "main"))
+        }
+    }
+
     func testBranchDelete() throws {
         let remote = try Bundle.module.url(forRepository: "Test.git")
         try FileManager.default.withTemporaryDirectory { local in
