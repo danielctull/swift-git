@@ -54,7 +54,7 @@ extension Diff {
             var hunks: [Hunk] = []
 
             try withUnsafeMutablePointer(to: &hunks) {
-                try GitError.check(git_diff_foreach(pointer.pointer, nil, nil, { delta, hunk, hunks in
+                try pointer.perform(git_diff_foreach, nil, nil, { delta, hunk, hunks in
 
                     do {
                         let hunks = try Unwrap(hunks).assumingMemoryBound(to: [Hunk].self)
@@ -66,7 +66,7 @@ extension Diff {
                         return GitError.Code.unknown.code.rawValue
                     }
 
-                }, nil, $0))
+                }, nil, $0)
             }
 
             return hunks
