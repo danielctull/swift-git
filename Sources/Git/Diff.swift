@@ -55,17 +55,12 @@ extension Diff {
 
             try withUnsafeMutablePointer(to: &hunks) {
                 try pointer.perform(git_diff_foreach, nil, nil, { delta, hunk, hunks in
-
-                    do {
+                    GitError.catching {
                         let hunks = try Unwrap(hunks).assumingMemoryBound(to: [Hunk].self)
                         let delta = try Unwrap(delta?.pointee)
                         let hunk = try Unwrap(hunk?.pointee)
                         hunks.pointee.append(try Hunk(delta: delta, hunk: hunk))
-                        return 0
-                    } catch {
-                        return GitError.Code.unknown.code.rawValue
                     }
-
                 }, nil, $0)
             }
 

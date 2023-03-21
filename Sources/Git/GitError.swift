@@ -33,6 +33,31 @@ extension GitError {
     }
 }
 
+extension GitError {
+
+    /// This runs a throwing function and translates thrown errors to the error
+    /// codes expected by libgit2.
+    ///
+    /// This is useful for callback functions, where we want to use usual Swift
+    /// error throwing, but the library only wants the raw code returned.
+    ///
+    /// If a ``GitError`` is thrown, its error code will be used as the return,
+    /// otherwise ``GitError.unknown`` will be used.
+    ///
+    /// - Parameter f: A throwing function.
+    /// - Returns: The libgit raw error code.
+    static func catching(_ f: () throws -> Void) -> Int32 {
+        do {
+            try f()
+            return GIT_OK.rawValue
+        } catch let error as GitError {
+            return error.code.code.rawValue
+        } catch {
+            return GitError.Code.unknown.code.rawValue
+        }
+    }
+}
+
 extension GitError.Code: Equatable {
 
     /// Generic error
