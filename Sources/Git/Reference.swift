@@ -159,12 +159,3 @@ extension Tagged where RawValue == Reference.ID {
         self.init(rawValue: referenceID)
     }
 }
-
-extension Tagged where RawValue == String {
-    // swiftlint:disable implicitly_unwrapped_optional
-    init(_ utf8: UnsafePointer<Int8>!) throws {
-    // swiftlint:enable implicitly_unwrapped_optional
-        let value = try Unwrap(String(validatingUTF8: utf8))
-        self.init(rawValue: value)
-    }
-}
