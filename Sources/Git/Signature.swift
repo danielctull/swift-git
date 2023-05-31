@@ -4,7 +4,7 @@ import Foundation
 
 // MARK: - Signature
 
-public struct Signature: Equatable, Hashable {
+public struct Signature: Equatable, Hashable, Sendable {
     public let name: String
     public let email: String
     public let date: Date

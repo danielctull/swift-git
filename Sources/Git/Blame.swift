@@ -51,7 +51,7 @@ extension Blame {
 
 extension Blame {
 
-    public struct Hunk: Equatable {
+    public struct Hunk: Equatable, Sendable {
         public let lines: ClosedRange<LineNumber>
         public let signature: Signature
         public let commitID: Commit.ID

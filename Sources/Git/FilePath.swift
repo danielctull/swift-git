@@ -1,7 +1,7 @@
 
 // MARK: - FilePath
 
-public struct FilePath: Equatable {
+public struct FilePath: Equatable, Hashable, Sendable {
     let rawValue: String
 }
 

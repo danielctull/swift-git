@@ -1,7 +1,7 @@
 
 // MARK: - LineNumber
 
-public struct LineNumber: Equatable {
+public struct LineNumber: Equatable, Sendable {
     let rawValue: Int
     init(_ rawValue: Int) {
         self.rawValue = rawValue

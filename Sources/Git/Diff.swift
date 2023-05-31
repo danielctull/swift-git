@@ -147,7 +147,7 @@ extension Diff.Delta.Status {
 
 extension Diff {
 
-    public struct File: Identifiable {
+    public struct File: Identifiable, Sendable {
         public typealias ID = Tagged<File, Object.ID>
         public let id: ID
         public let path: String
@@ -171,7 +171,7 @@ extension Diff.File {
 
 extension Diff {
 
-    public struct Status: OptionSet {
+    public struct Status: OptionSet, Sendable {
 
         public let rawValue: UInt32
         public init(rawValue: UInt32) {
@@ -210,7 +210,7 @@ extension Diff {
     ///
     /// These flags are used for both the `flags` values of `Diff.Delta` and
     /// `Diff.File` objects representing the old and new sides of the delta.
-    public struct Flags: OptionSet {
+    public struct Flags: OptionSet, Sendable {
 
         public let rawValue: UInt32
         public init(rawValue: UInt32) {

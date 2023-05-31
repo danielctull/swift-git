@@ -48,7 +48,7 @@ public struct Tag: GitReference, Identifiable {
 
 extension Tag {
 
-    enum Kind {
+    enum Kind: Sendable {
         case lightweight(target: Object.ID)
         case annotated(target: AnnotatedTag)
     }

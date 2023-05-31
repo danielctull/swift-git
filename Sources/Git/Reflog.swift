@@ -36,7 +36,7 @@ extension Reflog {
 
 extension Reflog {
 
-    public struct Item: Equatable, Hashable, Identifiable {
+    public struct Item: Equatable, Hashable, Identifiable, Sendable {
         public let id: ID
         public var message: String { id.message }
         public var committer: Signature { id.committer }
@@ -69,7 +69,7 @@ extension Reflog.Item {
 
 extension Reflog.Item {
 
-    public struct ID: Equatable, Hashable {
+    public struct ID: Equatable, Hashable, Sendable {
         let message: String
         let committer: Signature
         let old: Object.ID

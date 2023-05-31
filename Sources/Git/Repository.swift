@@ -15,7 +15,7 @@ public struct Repository: GitReference {
 
 extension Repository {
 
-    public enum Options {
+    public enum Options: Sendable {
         case open
         case create(isBare: Bool)
 

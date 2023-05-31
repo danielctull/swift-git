@@ -83,7 +83,7 @@ extension Object: Identifiable {
 
 extension Object {
 
-    public struct ID {
+    public struct ID: Sendable {
         var oid: git_oid
     }
 }
