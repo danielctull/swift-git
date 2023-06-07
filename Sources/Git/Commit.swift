@@ -44,8 +44,9 @@ extension Repository {
                 free: git_revwalk_free)
 
             for reference in references {
-                var oid = reference.target.oid
-                try iterator.perform(git_revwalk_push, &oid)
+                try withUnsafePointer(to: reference.target.oid) { oid in
+                    try iterator.perform(git_revwalk_push, oid)
+                }
             }
 
             if includeHead {

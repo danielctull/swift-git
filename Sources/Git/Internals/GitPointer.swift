@@ -64,55 +64,11 @@ extension GitPointer {
 
 extension GitPointer {
 
-    func perform(
-        _ task: @escaping (OpaquePointer) -> Int32
+    func perform<each Parameter>(
+        _ task: @escaping (OpaquePointer?, repeat each Parameter) -> Int32,
+        _ parameter: repeat each Parameter
     ) throws {
-        try GitError.check(task(pointer))
-    }
-
-    func perform<A>(
-        _ task: @escaping (OpaquePointer, A) -> Int32,
-        _ a: A
-    ) throws {
-        try GitError.check(task(pointer, a))
-    }
-
-    func perform<A, B>(
-        _ task: @escaping (OpaquePointer, A, B) -> Int32,
-        _ a: A,
-        _ b: B
-    ) throws {
-        try GitError.check(task(pointer, a, b))
-    }
-
-    func perform<A, B, C>(
-        _ task: @escaping (OpaquePointer, A, B, C) -> Int32,
-        _ a: A,
-        _ b: B,
-        _ c: C
-    ) throws {
-        try GitError.check(task(pointer, a, b, c))
-    }
-
-    func perform<A, B, C, D>(
-        _ task: @escaping (OpaquePointer, A, B, C, D) -> Int32,
-        _ a: A,
-        _ b: B,
-        _ c: C,
-        _ d: D
-    ) throws {
-        try GitError.check(task(pointer, a, b, c, d))
-    }
-
-    func perform<A, B, C, D, E>(
-        _ task: @escaping (OpaquePointer, A, B, C, D, E) -> Int32,
-        _ a: A,
-        _ b: B,
-        _ c: C,
-        _ d: D,
-        _ e: E
-    ) throws {
-        try GitError.check(task(pointer, a, b, c, d, e))
+        try GitError.check(task(pointer, repeat each parameter))
     }
 }
 
@@ -120,101 +76,36 @@ extension GitPointer {
 
 extension GitPointer {
 
-    func get<Value>(
-        _ task: (OpaquePointer) -> Value
+    func get<Value, each Parameter>(
+        _ task: (OpaquePointer?, repeat each Parameter) -> Value,
+        _ parameter: repeat each Parameter
     ) -> Value {
-        task(pointer)
-    }
-
-    func get<A, Value>(
-        _ task: (OpaquePointer, A) -> Value,
-        _ a: A
-    ) -> Value {
-        task(pointer, a)
-    }
-
-    func get<A, B, Value>(
-        _ task: (OpaquePointer, A, B) -> Value,
-        _ a: A,
-        _ b: B
-    ) -> Value {
-        task(pointer, a, b)
-    }
-
-    func get<A, B, C, Value>(
-        _ task: (OpaquePointer, A, B, C) -> Value,
-        _ a: A,
-        _ b: B,
-        _ c: C
-    ) -> Value {
-        task(pointer, a, b, c)
-    }
-
-    func get<A, B, C, D, Value>(
-        _ task: (OpaquePointer, A, B, C, D) -> Value,
-        _ a: A,
-        _ b: B,
-        _ c: C,
-        _ d: D
-    ) -> Value {
-        task(pointer, a, b, c, d)
+        task(pointer, repeat each parameter)
     }
 }
 
 extension GitPointer {
 
-    func get<Value>(
-        _ task: @escaping (UnsafeMutablePointer<Value?>, OpaquePointer) -> Int32
+    func get<Value, each Parameter>(
+        _ task: @escaping (UnsafeMutablePointer<Value?>?, OpaquePointer?, repeat each Parameter) -> Int32,
+        _ parameter: repeat each Parameter
     ) throws -> Value {
         var value: Value?
-        let result = withUnsafeMutablePointer(to: &value) { task($0, pointer) }
+        let result = withUnsafeMutablePointer(to: &value) { task($0, pointer, repeat each parameter) }
         try GitError.check(result)
         return try Unwrap(value)
     }
-
-    func get<A, Value>(
-        _ task: @escaping (UnsafeMutablePointer<Value?>, OpaquePointer, A) -> Int32,
-        _ a: A
-    ) throws -> Value {
-        try get { output, pointer in task(output, pointer, a) }
-    }
-
-    func get<A, B, Value>(
-        _ task: @escaping (UnsafeMutablePointer<Value?>, OpaquePointer, A, B) -> Int32,
-        _ a: A,
-        _ b: B
-    ) throws -> Value {
-        try get { output, pointer in task(output, pointer, a, b) }
-    }
-
-    func get<A, B, C, Value>(
-        _ task: @escaping (UnsafeMutablePointer<Value?>, OpaquePointer, A, B, C) -> Int32,
-        _ a: A,
-        _ b: B,
-        _ c: C
-    ) throws -> Value {
-        try get { output, pointer in task(output, pointer, a, b, c) }
-    }
-
-    func get<A, B, C, D, Value>(
-        _ task: @escaping (UnsafeMutablePointer<Value?>, OpaquePointer, A, B, C, D) -> Int32,
-        _ a: A,
-        _ b: B,
-        _ c: C,
-        _ d: D
-    ) throws -> Value {
-        try get { output, pointer in task(output, pointer, a, b, c, d) }
-    }
 }
 
 extension GitPointer {
 
-    func get<Value>(
-        _ task: @escaping (UnsafeMutablePointer<Value>, OpaquePointer) -> Int32
+    func get<Value, each Parameter>(
+        _ task: @escaping (UnsafeMutablePointer<Value>, OpaquePointer, repeat each Parameter) -> Int32,
+        _ parameter: repeat each Parameter
     ) throws -> Value {
         let value = UnsafeMutablePointer<Value>.allocate(capacity: 1)
         defer { value.deallocate() }
-        let result = task(value, pointer)
+        let result = task(value, pointer, repeat each parameter)
         try GitError.check(result)
         return value.pointee
     }
@@ -223,11 +114,11 @@ extension GitPointer {
 extension GitPointer {
 
     func get<A, B>(
-        _ task: @escaping (UnsafeMutablePointer<A?>, UnsafeMutablePointer<B>, OpaquePointer) -> Int32
+        _ task: @escaping (UnsafeMutablePointer<A?>?, UnsafeMutablePointer<B>, OpaquePointer) -> Int32
     ) throws -> (A, B) {
         let b = UnsafeMutablePointer<B>.allocate(capacity: 1)
         defer { b.deallocate() }
-        let a = try get { output, pointer in task(output, b, pointer) }
+        let a = try self.get { output, pointer in task(output, b, pointer) }
         return (a, b.pointee)
     }
 }
