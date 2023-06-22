@@ -23,7 +23,10 @@ let package = Package(
             dependencies: [
                 "Clibgit2",
                 .product(name: "Tagged", package: "swift-tagged"),
-            ]),
+            ],
+        swiftSettings: [
+            .unsafeFlags(["-enable-experimental-feature", "VariadicGenerics"]),
+        ]),
 
         .testTarget(
             name: "GitTests",
