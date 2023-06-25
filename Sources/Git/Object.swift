@@ -13,10 +13,11 @@ extension Repository {
 
     @GitActor
     public func object(for id: Object.ID) throws -> Object {
-        var oid = id.oid
-        return try Object(
-            create: pointer.get(git_object_lookup, &oid, GIT_OBJECT_ANY),
-            free: git_object_free)
+        try withUnsafePointer(to: id.oid) { oid in
+            try Object(
+                create: pointer.get(git_object_lookup, oid, GIT_OBJECT_ANY),
+                free: git_object_free)
+        }
     }
 }
 

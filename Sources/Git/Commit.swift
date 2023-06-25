@@ -6,10 +6,11 @@ extension Repository {
 
     @GitActor
     public func commit(for id: Commit.ID) throws -> Commit {
-        var oid = id.oid
-        return try Commit(
-            create: pointer.get(git_commit_lookup, &oid),
-            free: git_commit_free)
+        try withUnsafePointer(to: id.oid) { oid in
+            try Commit(
+                create: pointer.get(git_commit_lookup, oid),
+                free: git_commit_free)
+        }
     }
 
     @GitActor
@@ -44,8 +45,9 @@ extension Repository {
                 free: git_revwalk_free)
 
             for reference in references {
-                var oid = reference.target.oid
-                try iterator.perform(git_revwalk_push, &oid)
+                try withUnsafePointer(to: reference.target.oid) { oid in
+                    try iterator.perform(git_revwalk_push, oid)
+                }
             }
 
             if includeHead {
@@ -58,10 +60,11 @@ extension Repository {
 
         } nextElement: { iterator in
 
-            var oid: git_oid = try iterator.get(git_revwalk_next)
-            return try Commit(
-                create: pointer.get(git_commit_lookup, &oid),
-                free: git_commit_free)
+            try withUnsafePointer(to: iterator.get(git_revwalk_next)) { oid in
+                try Commit(
+                    create: pointer.get(git_commit_lookup, oid),
+                    free: git_commit_free)
+            }
         }
     }
 }
