@@ -33,7 +33,7 @@ extension Repository {
 
     @GitActor
     public func commits(
-        for references: [Reference],
+        for references: [Reference] = [],
         sortedBy sortOptions: SortOptions = SortOptions(),
         includeHead: Bool = true
     ) throws -> some Sequence<Commit> {
