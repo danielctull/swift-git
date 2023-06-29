@@ -30,6 +30,9 @@ extension GitError {
 
     public struct Code {
         let code: git_error_code
+        fileprivate init(code: git_error_code) {
+            self.code = code
+        }
     }
 }
 
