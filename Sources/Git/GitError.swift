@@ -11,15 +11,6 @@ public struct GitError: Error, Equatable {
 
 extension GitError {
 
-    init?(_ result: Int32) {
-        let code = git_error_code(result)
-        guard code != GIT_OK else { return nil }
-        self.init(Code(code: code))
-    }
-}
-
-extension GitError {
-
     static func check(_ result: Int32) throws {
         let code = git_error_code(result)
         if code != GIT_OK { throw Self(Code(code: code)) }
