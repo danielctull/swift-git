@@ -18,8 +18,15 @@ final class GitPointer {
     ///   - create: The function to create the pointer.
     ///   - free: The function to free the pointer.
     /// - Throws: A ``GitError`` if the results of the functions are not GIT_OK.
+    convenience init(
+        create: @escaping @autoclosure () throws -> OpaquePointer,
+        free: @escaping Free
+    ) throws {
+        try self.init(create: Create(create), free: free)
+    }
+
     init(
-        create: @autoclosure () throws -> OpaquePointer,
+        create: Create,
         free: @escaping Free
     ) throws {
 
@@ -41,6 +48,31 @@ final class GitPointer {
     init(_ pointer: OpaquePointer) {
         self.pointer = pointer
         self.free = { _ in }
+    }
+}
+
+// MARK: - GitPointer.Create
+
+extension GitPointer {
+
+    struct Create {
+        private let create: () throws -> OpaquePointer
+    }
+}
+
+extension GitPointer.Create {
+
+    fileprivate func callAsFunction() throws -> OpaquePointer {
+        try create()
+    }
+}
+
+extension GitPointer.Create {
+
+    fileprivate init(
+        _ create: @escaping () throws -> OpaquePointer
+    ) {
+        self.create = create
     }
 }
 
