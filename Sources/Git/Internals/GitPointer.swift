@@ -49,6 +49,15 @@ final class GitPointer {
         self.pointer = pointer
         self.free = { _ in }
     }
+
+    convenience init(
+        create: @escaping (UnsafeMutablePointer<OpaquePointer?>) -> Int32,
+        free: @escaping Free
+    ) throws {
+        try self.init(
+            create: Create(create),
+            free: free)
+    }
 }
 
 // MARK: - GitPointer.Create
@@ -74,21 +83,16 @@ extension GitPointer.Create {
     ) {
         self.create = create
     }
-}
 
-extension GitPointer {
-
-    convenience init(
-        create: @escaping (UnsafeMutablePointer<OpaquePointer?>) -> Int32,
-        free: @escaping Free
-    ) throws {
-
-        try self.init(create: {
+    fileprivate init(
+        _ create: @escaping (UnsafeMutablePointer<OpaquePointer?>) -> (Int32)
+    ) {
+        self.create = {
             var pointer: OpaquePointer?
             let result = withUnsafeMutablePointer(to: &pointer, create)
             try GitError.check(result)
             return try Unwrap(pointer)
-        }(), free: free)
+        }
     }
 }
 
