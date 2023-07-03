@@ -4,7 +4,7 @@ import Tagged
 
 // MARK: - Note
 
-public struct Note: GitReference, Identifiable {
+public struct Note: Equatable, Hashable, Identifiable, GitReference {
 
     let pointer: GitPointer
     public typealias ID = Tagged<Note, Reference.ID>

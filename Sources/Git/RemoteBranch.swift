@@ -33,7 +33,7 @@ extension Repository {
 
 // MARK: - RemoteBranch
 
-public struct RemoteBranch: GitReference, Identifiable {
+public struct RemoteBranch: Equatable, Hashable, Identifiable, GitReference {
 
     let pointer: GitPointer
     public typealias ID = Tagged<RemoteBranch, Reference.ID>

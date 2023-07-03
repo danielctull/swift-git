@@ -20,7 +20,7 @@ extension Repository {
 
 // MARK: - Tag
 
-public struct Tag: GitReference, Identifiable {
+public struct Tag: Equatable, Hashable, Identifiable, GitReference {
 
     let pointer: GitPointer
     public typealias ID = Tagged<Tag, Reference.ID>
@@ -48,7 +48,7 @@ public struct Tag: GitReference, Identifiable {
 
 extension Tag {
 
-    enum Kind: Sendable {
+    enum Kind: Equatable, Hashable, Sendable {
         case lightweight(target: Object.ID)
         case annotated(target: AnnotatedTag)
     }
@@ -76,7 +76,7 @@ extension Tag: CustomDebugStringConvertible {
 
 // MARK: - AnnotatedTag
 
-public struct AnnotatedTag: GitReference {
+public struct AnnotatedTag: Equatable, Hashable, Identifiable, GitReference {
 
     let pointer: GitPointer
     public typealias ID = Tagged<AnnotatedTag, Object.ID>

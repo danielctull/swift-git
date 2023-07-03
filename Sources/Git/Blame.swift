@@ -13,7 +13,7 @@ extension Repository {
 
 // MARK: - Blame
 
-public struct Blame: GitReference {
+public struct Blame: Equatable, Hashable, GitReference {
     let pointer: GitPointer
 
     init(pointer: GitPointer) throws {

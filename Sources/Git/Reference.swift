@@ -69,7 +69,7 @@ extension Repository {
 
 // MARK: - Reference
 
-public enum Reference {
+public enum Reference: Equatable, Hashable {
     case branch(Branch)
     case note(Note)
     case remoteBranch(RemoteBranch)

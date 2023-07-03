@@ -60,6 +60,25 @@ extension GitPointer {
     }
 }
 
+// MARK: - Equatable
+
+extension GitPointer: Equatable {
+
+    nonisolated
+    static func == (lhs: GitPointer, rhs: GitPointer) -> Bool {
+        lhs.pointer == rhs.pointer
+    }
+}
+
+// MARK: - Hashable
+
+extension GitPointer: Hashable {
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(pointer)
+    }
+}
+
 // MARK: - Perform a task
 
 extension GitPointer {

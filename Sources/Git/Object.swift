@@ -23,7 +23,7 @@ extension Repository {
 
 // MARK: - Object
 
-public enum Object {
+public enum Object: Equatable, Hashable {
     case blob(Blob)
     case commit(Commit)
     case tag(AnnotatedTag)
