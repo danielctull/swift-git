@@ -25,7 +25,7 @@ extension Repository {
             } nextElement: { iterator in
 
                 try Reference(
-                    create: iterator.get(git_reference_next),
+                    create: iterator.create(git_reference_next),
                     free: git_reference_free)
             }
         }

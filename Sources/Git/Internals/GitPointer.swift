@@ -96,6 +96,49 @@ extension GitPointer.Create {
     }
 }
 
+extension GitPointer {
+
+    func create(
+        _ task: @escaping (UnsafeMutablePointer<OpaquePointer?>, OpaquePointer) -> Int32
+    ) -> Create {
+        Create { output in task(output, self.pointer) }
+    }
+
+    func create<A>(
+        _ task: @escaping (UnsafeMutablePointer<OpaquePointer?>, OpaquePointer, A) -> Int32,
+        _ a: A
+    ) -> Create {
+        Create { output in task(output, self.pointer, a) }
+    }
+
+    func create<A, B>(
+        _ task: @escaping (UnsafeMutablePointer<OpaquePointer?>, OpaquePointer, A, B) -> Int32,
+        _ a: A,
+        _ b: B
+    ) -> Create {
+        Create { output in task(output, self.pointer, a, b) }
+    }
+
+    func create<A, B, C>(
+        _ task: @escaping (UnsafeMutablePointer<OpaquePointer?>, OpaquePointer, A, B, C) -> Int32,
+        _ a: A,
+        _ b: B,
+        _ c: C
+    ) -> Create {
+        Create { output in task(output, self.pointer, a, b, c) }
+    }
+
+    func create<A, B, C, D>(
+        _ task: @escaping (UnsafeMutablePointer<OpaquePointer?>, OpaquePointer, A, B, C, D) -> Int32,
+        _ a: A,
+        _ b: B,
+        _ c: C,
+        _ d: D
+    ) -> Create {
+        Create { output in task(output, self.pointer, a, b, c, d) }
+    }
+}
+
 // MARK: - Equatable
 
 extension GitPointer: Equatable {

@@ -19,4 +19,16 @@ extension GitReference {
                 free: free)
         )
     }
+
+    @GitActor
+    init(
+        create: GitPointer.Create,
+        free: @escaping GitPointer.Free
+    ) throws {
+        try self.init(
+            pointer: GitPointer(
+                create: create,
+                free: free)
+        )
+    }
 }
