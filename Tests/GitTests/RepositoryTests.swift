@@ -23,6 +23,7 @@ final class RepositoryTests: XCTestCase {
         try FileManager.default.withTemporaryDirectory { local in
             let repo = try Repository(local: local, remote: remote)
             AssertEqualResolvingSymlinks(repo.workingDirectory, local)
+            try AssertEqualResolvingSymlinks(repo.gitDirectory, local.appending(path: ".git"))
         }
     }
 
@@ -30,6 +31,7 @@ final class RepositoryTests: XCTestCase {
         try FileManager.default.withTemporaryDirectory { url in
             let repo = try Repository(url: url)
             AssertEqualResolvingSymlinks(repo.workingDirectory, url)
+            try AssertEqualResolvingSymlinks(repo.gitDirectory, url.appending(path: ".git"))
         }
     }
 
@@ -37,6 +39,7 @@ final class RepositoryTests: XCTestCase {
         try FileManager.default.withTemporaryDirectory { url in
             let bare = try Repository(url: url, options: .create(isBare: true))
             XCTAssertNil(bare.workingDirectory)
+            try AssertEqualResolvingSymlinks(bare.gitDirectory, url)
         }
     }
 
@@ -44,6 +47,7 @@ final class RepositoryTests: XCTestCase {
         try FileManager.default.withTemporaryDirectory { url in
             let repo = try Repository(url: url, options: .create(isBare: false))
             AssertEqualResolvingSymlinks(repo.workingDirectory, url)
+            try AssertEqualResolvingSymlinks(repo.gitDirectory, url.appending(path: ".git"))
         }
     }
 
@@ -53,6 +57,7 @@ final class RepositoryTests: XCTestCase {
             XCTAssertNoThrow(try Repository(local: local, remote: remote))
             let repo = try Repository(url: local, options: .open)
             AssertEqualResolvingSymlinks(repo.workingDirectory, local)
+            try AssertEqualResolvingSymlinks(repo.gitDirectory, local.appending(path: ".git"))
         }
     }
 }

@@ -48,6 +48,24 @@ extension Repository {
         }
     }
 
+    /// Get the ``URL`` of the shared common directory for this repository.
+    ///
+    /// If the repository is bare, it is the root directory for the repository.
+    ///
+    /// If the repository is a worktree, it is the parent repo’s git directory.
+    ///
+    /// Otherwise, it is the git directory.
+    @GitActor
+    public var gitDirectory: URL {
+        get throws {
+            try pointer.get(git_repository_commondir)
+                |> Unwrap
+                |> String.init(validatingUTF8:)
+                |> Unwrap
+                |> URL.init(fileURLWithPath:)
+        }
+    }
+
     @GitActor
     public var workingDirectory: URL? {
         try? pointer.get(git_repository_workdir)
