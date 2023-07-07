@@ -98,7 +98,7 @@ extension Object.ID {
     @GitActor
     init(reference: GitPointer) throws {
         let resolved = try GitPointer(
-            create: reference.get(git_reference_resolve),
+            create: reference.create(git_reference_resolve),
             free: git_reference_free)
 
         self = try resolved.get(git_reference_target) |> Self.init
