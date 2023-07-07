@@ -7,9 +7,11 @@ extension Repository {
 
     @GitActor
     public func remote(for id: Remote.ID) throws -> Remote {
-        try Remote(
-            create: pointer.get(git_remote_lookup, id.rawValue),
-            free: git_remote_free)
+        try id.rawValue.withCString { id in
+            try Remote(
+                create: pointer.create(git_remote_lookup, id),
+                free: git_remote_free)
+        }
     }
 }
 

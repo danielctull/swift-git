@@ -11,7 +11,7 @@ extension Repository {
     public var index: Index {
         get throws {
             try Index(
-                create: pointer.get(git_repository_index),
+                create: pointer.create(git_repository_index),
                 free: git_index_free)
         }
     }

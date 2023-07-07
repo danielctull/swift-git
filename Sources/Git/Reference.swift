@@ -8,7 +8,7 @@ extension Repository {
     public var head: Reference {
         get throws {
             try Reference(
-                create: pointer.get(git_repository_head),
+                create: pointer.create(git_repository_head),
                 free: git_reference_free)
         }
     }
@@ -19,7 +19,7 @@ extension Repository {
             try GitIterator {
 
                 try GitPointer(
-                    create: pointer.get(git_reference_iterator_new),
+                    create: pointer.create(git_reference_iterator_new),
                     free: git_reference_iterator_free)
 
             } nextElement: { iterator in
@@ -33,9 +33,11 @@ extension Repository {
 
     @GitActor
     public func reference(for id: Reference.ID) throws -> Reference {
-        try Reference(
-            create: pointer.get(git_reference_lookup, id.rawValue),
-            free: git_reference_free)
+        try id.rawValue.withCString { id in
+            try Reference(
+                create: pointer.create(git_reference_lookup, id),
+                free: git_reference_free)
+        }
     }
 
     @available(iOS 13, *)

@@ -6,9 +6,11 @@ extension Repository {
     @GitActor
     public var reflog: Reflog {
         get throws {
-            try Reflog(
-                create: pointer.get(git_reflog_read, "HEAD"),
-                free: git_reflog_free)
+            try "HEAD".withCString { head in
+                try Reflog(
+                    create: pointer.create(git_reflog_read, head),
+                    free: git_reflog_free)
+            }
         }
     }
 }

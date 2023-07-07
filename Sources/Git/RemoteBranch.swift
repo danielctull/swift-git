@@ -10,7 +10,7 @@ extension Repository {
             try GitIterator {
 
                 try GitPointer(
-                    create: pointer.get(git_branch_iterator_new, GIT_BRANCH_REMOTE),
+                    create: pointer.create(git_branch_iterator_new, GIT_BRANCH_REMOTE),
                     free: git_branch_iterator_free)
 
             } nextElement: { iterator in
@@ -24,10 +24,11 @@ extension Repository {
 
     @GitActor
     public func remoteBranch(on remote: Remote.ID, named branch: String) throws -> RemoteBranch {
-        let name = remote.rawValue + "/" + branch
-        return try RemoteBranch(
-            create: pointer.get(git_branch_lookup, name, GIT_BRANCH_REMOTE),
-            free: git_reference_free)
+        try (remote.rawValue + "/" + branch).withCString { name in
+            try RemoteBranch(
+                create: pointer.create(git_branch_lookup, name, GIT_BRANCH_REMOTE),
+                free: git_reference_free)
+        }
     }
 }
 
