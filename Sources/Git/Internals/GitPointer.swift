@@ -18,13 +18,6 @@ final class GitPointer {
     ///   - create: The function to create the pointer.
     ///   - free: The function to free the pointer.
     /// - Throws: A ``GitError`` if the results of the functions are not GIT_OK.
-    convenience init(
-        create: @escaping @autoclosure () throws -> OpaquePointer,
-        free: @escaping Free
-    ) throws {
-        try self.init(create: Create(create), free: free)
-    }
-
     init(
         create: Create,
         free: @escaping Free
