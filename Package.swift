@@ -12,8 +12,12 @@ let package = Package(
         .library(
             name: "Git",
             targets: ["Git"]),
+        .executable(
+            name: "git2",
+            targets: ["GitTool"])
     ],
     dependencies: [
+        .package(url: "https://github.com/apple/swift-argument-parser", from: "1.2.0"),
         .package(url: "https://github.com/pointfreeco/swift-tagged", from: "0.10.0"),
     ],
     targets: [
@@ -31,6 +35,14 @@ let package = Package(
             resources: [
                 .copy("Repositories"),
             ]),
+
+        .executableTarget(
+            name: "GitTool",
+            dependencies: [
+                .product(name: "ArgumentParser", package: "swift-argument-parser"),
+                "Git",
+            ]
+        ),
 
         .systemLibrary(
             name: "Clibgit2",
