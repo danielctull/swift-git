@@ -16,7 +16,7 @@ extension Repository {
             } nextElement: { iterator in
 
                 try Branch(
-                    create: try iterator.get(git_branch_next).0,
+                    create: iterator.create(firstOutput(of: git_branch_next)),
                     free: git_reference_free)
             }
         }
