@@ -10,7 +10,7 @@ let package = Package(
   ],
   products: [
     .library(name: "Git", targets: ["Git"]),
-    .executable(name: "git2", targets: ["GitTool"]),
+    .executable(name: "swiftgit", targets: ["GitTool"]),
   ],
   dependencies: [
     .package(
