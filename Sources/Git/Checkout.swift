@@ -2,7 +2,38 @@
 import Clibgit2
 import Tagged
 
+extension Repository {
+
+    @GitActor
+    public func checkoutHead(options: Checkout.Options = .init()) throws {
+        try withUnsafePointer(to: options.rawValue) { options in
+            try pointer.perform(git_checkout_head, nil)
+        }
+    }
+}
+
 public enum Checkout {}
+
+// MARK: - Checkout.Options
+
+extension Checkout {
+
+    public struct Options {
+
+        public init (
+        ) {
+        }
+    }
+}
+
+extension Checkout.Options {
+
+    fileprivate var rawValue: git_checkout_options {
+        let options = git_checkout_options()
+        return options
+    }
+}
+
 
 // MARK: - Checkout.Strategy
 
