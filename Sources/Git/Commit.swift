@@ -71,7 +71,7 @@ extension Repository {
 
 // MARK: - Commit
 
-public struct Commit: Equatable, Hashable, Identifiable, Sendable, GitReference {
+public struct Commit: Equatable, Hashable, Identifiable, Sendable, GitPointerInitialization {
 
     let pointer: GitPointer
     public typealias ID = Tagged<Commit, Object.ID>

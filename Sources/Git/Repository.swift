@@ -4,7 +4,7 @@ import Foundation
 
 // MARK: - Repository
 
-public struct Repository: Equatable, Hashable, Sendable, GitReference {
+public struct Repository: Equatable, Hashable, Sendable, GitPointerInitialization {
 
     let pointer: GitPointer
 

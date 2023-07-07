@@ -20,7 +20,7 @@ extension Repository {
 
 // MARK: - Tag
 
-public struct Tag: Equatable, Hashable, Identifiable, Sendable, GitReference {
+public struct Tag: Equatable, Hashable, Identifiable, Sendable, GitPointerInitialization {
 
     let pointer: GitPointer
     public typealias ID = Tagged<Tag, Reference.ID>
@@ -76,7 +76,7 @@ extension Tag: CustomDebugStringConvertible {
 
 // MARK: - AnnotatedTag
 
-public struct AnnotatedTag: Equatable, Hashable, Identifiable, Sendable, GitReference {
+public struct AnnotatedTag: Equatable, Hashable, Identifiable, Sendable, GitPointerInitialization {
 
     let pointer: GitPointer
     public typealias ID = Tagged<AnnotatedTag, Object.ID>

@@ -14,7 +14,7 @@ extension Repository {
 
 // MARK: - Diff
 
-public struct Diff: Equatable, Hashable, Sendable, GitReference {
+public struct Diff: Equatable, Hashable, Sendable, GitPointerInitialization {
     let pointer: GitPointer
 }
 

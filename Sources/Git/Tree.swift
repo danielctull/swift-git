@@ -4,7 +4,7 @@ import Tagged
 
 // MARK: - Tree
 
-public struct Tree: Equatable, Hashable, Identifiable, Sendable, GitReference {
+public struct Tree: Equatable, Hashable, Identifiable, Sendable, GitPointerInitialization {
 
     let pointer: GitPointer
     public typealias ID = Tagged<Tree, Object.ID>
@@ -36,7 +36,7 @@ extension Tree {
 
 extension Tree {
 
-    public struct Entry: Equatable, Hashable, Sendable, GitReference {
+    public struct Entry: Equatable, Hashable, Sendable, GitPointerInitialization {
         let pointer: GitPointer
         public let target: Object.ID
         public let name: String

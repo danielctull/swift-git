@@ -1,11 +1,11 @@
 
-protocol GitReference {
+protocol GitPointerInitialization {
 
     @GitActor
     init(pointer: GitPointer) throws
 }
 
-extension GitReference {
+extension GitPointerInitialization {
 
     @GitActor
     init(

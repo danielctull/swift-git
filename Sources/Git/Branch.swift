@@ -49,7 +49,7 @@ extension Repository {
 
 // MARK: - Branch
 
-public struct Branch: Equatable, Hashable, Identifiable, Sendable, GitReference {
+public struct Branch: Equatable, Hashable, Identifiable, Sendable, GitPointerInitialization {
 
     let pointer: GitPointer
     public typealias ID = Tagged<Branch, Reference.ID>
