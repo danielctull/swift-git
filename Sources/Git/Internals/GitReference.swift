@@ -10,7 +10,7 @@ extension GitReference {
 
     @GitActor
     init(
-        create: GitPointer.Create,
+        create: @escaping GitPointer.Create,
         free: @escaping GitPointer.Free
     ) throws {
         try self.init(

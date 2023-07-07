@@ -4,6 +4,7 @@ import Clibgit2
 @GitActor
 final class GitPointer {
 
+    typealias Create = () throws -> OpaquePointer
     typealias Free = (OpaquePointer) -> Void
 
     let pointer: OpaquePointer
@@ -19,7 +20,7 @@ final class GitPointer {
     ///   - free: The function to free the pointer.
     /// - Throws: A ``GitError`` if the results of the functions are not GIT_OK.
     init(
-        create: Create,
+        create: @escaping Create,
         free: @escaping Free
     ) throws {
 
@@ -48,7 +49,7 @@ final class GitPointer {
         free: @escaping Free
     ) throws {
         try self.init(
-            create: Create(create),
+            create: withUnsafeMutablePointer(create),
             free: free)
     }
 }
@@ -57,51 +58,17 @@ final class GitPointer {
 
 extension GitPointer {
 
-    struct Create {
-        private let create: () throws -> OpaquePointer
-    }
-}
-
-extension GitPointer.Create {
-
-    fileprivate func callAsFunction() throws -> OpaquePointer {
-        try create()
-    }
-}
-
-extension GitPointer.Create {
-
-    fileprivate init(
-        _ create: @escaping () throws -> OpaquePointer
-    ) {
-        self.create = create
-    }
-
-    fileprivate init(
-        _ create: @escaping (UnsafeMutablePointer<OpaquePointer?>) -> (Int32)
-    ) {
-        self.create = {
-            var pointer: OpaquePointer?
-            let result = withUnsafeMutablePointer(to: &pointer, create)
-            try GitError.check(result)
-            return try Unwrap(pointer)
-        }
-    }
-}
-
-extension GitPointer {
-
     func create(
         _ task: @escaping (UnsafeMutablePointer<OpaquePointer?>, OpaquePointer) -> Int32
     ) -> Create {
-        Create { output in task(output, self.pointer) }
+        withUnsafeMutablePointer { output in task(output, self.pointer) }
     }
 
     func create<A>(
         _ task: @escaping (UnsafeMutablePointer<OpaquePointer?>, OpaquePointer, A) -> Int32,
         _ a: A
     ) -> Create {
-        Create { output in task(output, self.pointer, a) }
+        withUnsafeMutablePointer { output in task(output, self.pointer, a) }
     }
 
     func create<A, B>(
@@ -109,7 +76,7 @@ extension GitPointer {
         _ a: A,
         _ b: B
     ) -> Create {
-        Create { output in task(output, self.pointer, a, b) }
+        withUnsafeMutablePointer { output in task(output, self.pointer, a, b) }
     }
 
     func create<A, B, C>(
@@ -118,7 +85,7 @@ extension GitPointer {
         _ b: B,
         _ c: C
     ) -> Create {
-        Create { output in task(output, self.pointer, a, b, c) }
+        withUnsafeMutablePointer { output in task(output, self.pointer, a, b, c) }
     }
 
     func create<A, B, C, D>(
@@ -128,7 +95,7 @@ extension GitPointer {
         _ c: C,
         _ d: D
     ) -> Create {
-        Create { output in task(output, self.pointer, a, b, c, d) }
+        withUnsafeMutablePointer { output in task(output, self.pointer, a, b, c, d) }
     }
 }
 
@@ -140,6 +107,17 @@ func firstOutput<A, B, C, Value>(
         let b = UnsafeMutablePointer<B>.allocate(capacity: 1)
         defer { b.deallocate() }
         return task(a, b, c)
+    }
+}
+
+fileprivate func withUnsafeMutablePointer<Value>(
+    _ task: @escaping (UnsafeMutablePointer<Value?>) -> Int32
+) -> () throws -> Value {
+    {
+        var value: Value?
+        let result = withUnsafeMutablePointer(to: &value, task)
+        try GitError.check(result)
+        return try Unwrap(value)
     }
 }
 
