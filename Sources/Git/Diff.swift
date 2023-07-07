@@ -7,22 +7,15 @@ extension Repository {
     @GitActor
     public func diff(from tree1: Tree, to tree2: Tree) throws -> Diff {
         try Diff(
-            create: pointer.get(git_diff_tree_to_tree, tree1.pointer.pointer, tree2.pointer.pointer, nil),
+            create: pointer.create(git_diff_tree_to_tree, tree1.pointer.pointer, tree2.pointer.pointer, nil),
             free: git_diff_free)
     }
 }
 
 // MARK: - Diff
 
-public struct Diff: Equatable, Hashable, GitReference {
+public struct Diff: Equatable, Hashable, Sendable {
     let pointer: GitPointer
-}
-
-extension Diff {
-
-    init(_ pointer: GitPointer) throws {
-        self.pointer = pointer
-    }
 }
 
 extension Diff {
@@ -261,3 +254,7 @@ extension Diff {
 //            public static let commit = Self(GIT_FILEMODE_COMMIT)
 //        }
 //    }
+
+// MARK: - GitPointerInitialization
+
+extension Diff: GitPointerInitialization {}

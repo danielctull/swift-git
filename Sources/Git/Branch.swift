@@ -10,13 +10,13 @@ extension Repository {
             try GitIterator {
 
                 try GitPointer(
-                    create: pointer.get(git_branch_iterator_new, GIT_BRANCH_LOCAL),
+                    create: pointer.create(git_branch_iterator_new, GIT_BRANCH_LOCAL),
                     free: git_branch_iterator_free)
 
             } nextElement: { iterator in
 
                 try Branch(
-                    create: try iterator.get(git_branch_next).0,
+                    create: iterator.create(firstOutput(of: git_branch_next)),
                     free: git_reference_free)
             }
         }
@@ -24,16 +24,21 @@ extension Repository {
 
     @GitActor
     public func createBranch(named name: String, at commit: Commit) throws -> Branch {
-        try Branch(
-            create: pointer.get(git_branch_create, name, commit.pointer.pointer, 0),
-            free: git_reference_free)
+        try name.withCString { name in
+            try Branch(
+                create: pointer.create(git_branch_create, name, commit.pointer.pointer, 0),
+                free: git_reference_free
+            )
+        }
     }
 
     @GitActor
     public func branch(named name: String) throws -> Branch {
-        try Branch(
-            create: pointer.get(git_branch_lookup, name, GIT_BRANCH_LOCAL),
-            free: git_reference_free)
+        try name.withCString { name in
+            try Branch(
+                create: pointer.create(git_branch_lookup, name, GIT_BRANCH_LOCAL),
+                free: git_reference_free)
+        }
     }
 
     @GitActor
@@ -44,7 +49,7 @@ extension Repository {
 
 // MARK: - Branch
 
-public struct Branch: Equatable, Hashable, Identifiable, GitReference {
+public struct Branch: Equatable, Hashable, Identifiable, Sendable {
 
     let pointer: GitPointer
     public typealias ID = Tagged<Branch, Reference.ID>
@@ -52,6 +57,7 @@ public struct Branch: Equatable, Hashable, Identifiable, GitReference {
     public let target: Object.ID
     public let name: String
 
+    @GitActor
     init(pointer: GitPointer) throws {
         pointer.assert(git_reference_is_branch, "Expected branch.")
         self.pointer = pointer
@@ -65,9 +71,11 @@ extension Branch {
 
     @GitActor
     public func move(to name: String, force: Bool = false) throws -> Branch {
-        try Branch(
-            create: pointer.get(git_branch_move, name, Int32(force)),
-            free: git_reference_free)
+        try name.withCString { name in
+            try Branch(
+                create: pointer.create(git_branch_move, name, Int32(force)),
+                free: git_reference_free)
+        }
     }
 }
 
@@ -76,3 +84,7 @@ extension Branch: CustomDebugStringConvertible {
         "Branch(name: \(name), id: \(id), target: \(target.debugDescription))"
     }
 }
+
+// MARK: - GitPointerInitialization
+
+extension Branch: GitPointerInitialization {}

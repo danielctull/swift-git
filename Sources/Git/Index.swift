@@ -1,7 +1,7 @@
 
 import Clibgit2
 
-public struct Index: Equatable, Hashable, GitReference {
+public struct Index: Equatable, Hashable, Sendable {
     let pointer: GitPointer
 }
 
@@ -11,7 +11,7 @@ extension Repository {
     public var index: Index {
         get throws {
             try Index(
-                create: pointer.get(git_repository_index),
+                create: pointer.create(git_repository_index),
                 free: git_index_free)
         }
     }
@@ -43,3 +43,7 @@ extension Index.Entry {
         objectID = Object.ID(oid: entry.id)
     }
 }
+
+// MARK: - GitPointerInitialization
+
+extension Index: GitPointerInitialization {}

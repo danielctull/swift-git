@@ -1,21 +1,18 @@
 
-protocol GitReference: Sendable {
-
-    @GitActor
+protocol GitPointerInitialization {
     init(pointer: GitPointer) throws
-    var pointer: GitPointer { get }
 }
 
-extension GitReference {
+extension GitPointerInitialization {
 
     @GitActor
     init(
-        create: @autoclosure () throws -> OpaquePointer,
+        create: @escaping GitPointer.Create,
         free: @escaping GitPointer.Free
     ) throws {
         try self.init(
             pointer: GitPointer(
-                create: create(),
+                create: create,
                 free: free)
         )
     }

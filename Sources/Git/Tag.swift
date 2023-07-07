@@ -20,13 +20,14 @@ extension Repository {
 
 // MARK: - Tag
 
-public struct Tag: Equatable, Hashable, Identifiable, GitReference {
+public struct Tag: Equatable, Hashable, Identifiable, Sendable {
 
     let pointer: GitPointer
     public typealias ID = Tagged<Tag, Reference.ID>
     public let id: ID
     let kind: Kind
 
+    @GitActor
     init(pointer: GitPointer) throws {
         pointer.assert(git_reference_is_tag, "Expected tag.")
         self.pointer = pointer
@@ -76,7 +77,7 @@ extension Tag: CustomDebugStringConvertible {
 
 // MARK: - AnnotatedTag
 
-public struct AnnotatedTag: Equatable, Hashable, Identifiable, GitReference {
+public struct AnnotatedTag: Equatable, Hashable, Identifiable, Sendable {
 
     let pointer: GitPointer
     public typealias ID = Tagged<AnnotatedTag, Object.ID>
@@ -86,6 +87,7 @@ public struct AnnotatedTag: Equatable, Hashable, Identifiable, GitReference {
     public let tagger: Signature
     public let message: String
 
+    @GitActor
     init(pointer: GitPointer) throws {
         self.pointer = pointer
         id = try ID(object: pointer)
@@ -95,3 +97,8 @@ public struct AnnotatedTag: Equatable, Hashable, Identifiable, GitReference {
         message = try pointer.get(git_tag_message) |> String.init
     }
 }
+
+// MARK: - GitPointerInitialization
+
+extension Tag: GitPointerInitialization {}
+extension AnnotatedTag: GitPointerInitialization {}

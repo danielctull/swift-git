@@ -4,13 +4,14 @@ import Tagged
 
 // MARK: - Note
 
-public struct Note: Equatable, Hashable, Identifiable, GitReference {
+public struct Note: Equatable, Hashable, Identifiable, Sendable {
 
     let pointer: GitPointer
     public typealias ID = Tagged<Note, Reference.ID>
     public let id: ID
     public let target: Object.ID
 
+    @GitActor
     init(pointer: GitPointer) throws {
         pointer.assert(git_reference_is_note, "Expected note.")
         self.pointer = pointer
@@ -24,3 +25,7 @@ extension Note: CustomDebugStringConvertible {
         "Note(id: \(id), target: \(target.debugDescription))"
     }
 }
+
+// MARK: - GitPointerInitialization
+
+extension Note: GitPointerInitialization {}

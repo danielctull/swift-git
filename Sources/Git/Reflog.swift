@@ -6,16 +6,18 @@ extension Repository {
     @GitActor
     public var reflog: Reflog {
         get throws {
-            try Reflog(
-                create: pointer.get(git_reflog_read, "HEAD"),
-                free: git_reflog_free)
+            try "HEAD".withCString { head in
+                try Reflog(
+                    create: pointer.create(git_reflog_read, head),
+                    free: git_reflog_free)
+            }
         }
     }
 }
 
 // MARK: - Reflog
 
-public struct Reflog: Equatable, Hashable, GitReference {
+public struct Reflog: Equatable, Hashable, Sendable {
     let pointer: GitPointer
 }
 
@@ -76,3 +78,7 @@ extension Reflog.Item {
         let new: Object.ID
     }
 }
+
+// MARK: - GitPointerInitialization
+
+extension Reflog: GitPointerInitialization {}

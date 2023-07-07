@@ -7,21 +7,24 @@ extension Repository {
 
     @GitActor
     public func remote(for id: Remote.ID) throws -> Remote {
-        try Remote(
-            create: pointer.get(git_remote_lookup, id.rawValue),
-            free: git_remote_free)
+        try id.rawValue.withCString { id in
+            try Remote(
+                create: pointer.create(git_remote_lookup, id),
+                free: git_remote_free)
+        }
     }
 }
 
 // MARK: Remote
 
-public struct Remote: Equatable, Hashable, Identifiable, GitReference {
+public struct Remote: Equatable, Hashable, Identifiable, Sendable {
 
     let pointer: GitPointer
     public typealias ID = Tagged<Remote, String>
     public let id: ID
 //    public let url: URL
 
+    @GitActor
     init(pointer: GitPointer) throws {
         self.pointer = pointer
         let name = try pointer.get(git_remote_name) |> String.init
@@ -35,3 +38,7 @@ public struct Remote: Equatable, Hashable, Identifiable, GitReference {
 extension Remote {
     public var name: String { id.rawValue }
 }
+
+// MARK: - GitPointerInitialization
+
+extension Remote: GitPointerInitialization {}

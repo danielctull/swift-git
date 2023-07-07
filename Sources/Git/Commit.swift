@@ -8,7 +8,7 @@ extension Repository {
     public func commit(for id: Commit.ID) throws -> Commit {
         try withUnsafePointer(to: id.oid) { oid in
             try Commit(
-                create: pointer.get(git_commit_lookup, oid),
+                create: pointer.create(git_commit_lookup, oid),
                 free: git_commit_free)
         }
     }
@@ -41,7 +41,7 @@ extension Repository {
         try GitIterator {
 
             let iterator = try GitPointer(
-                create: pointer.get(git_revwalk_new),
+                create: pointer.create(git_revwalk_new),
                 free: git_revwalk_free)
 
             for reference in references {
@@ -62,7 +62,7 @@ extension Repository {
 
             try withUnsafePointer(to: iterator.get(git_revwalk_next)) { oid in
                 try Commit(
-                    create: pointer.get(git_commit_lookup, oid),
+                    create: pointer.create(git_commit_lookup, oid),
                     free: git_commit_free)
             }
         }
@@ -71,7 +71,7 @@ extension Repository {
 
 // MARK: - Commit
 
-public struct Commit: Equatable, Hashable, Identifiable, GitReference {
+public struct Commit: Equatable, Hashable, Identifiable, Sendable {
 
     let pointer: GitPointer
     public typealias ID = Tagged<Commit, Object.ID>
@@ -81,6 +81,7 @@ public struct Commit: Equatable, Hashable, Identifiable, GitReference {
     public let author: Signature
     public let committer: Signature
 
+    @GitActor
     init(pointer: GitPointer) throws {
         self.pointer = pointer
         id = try ID(object: pointer)
@@ -98,7 +99,7 @@ extension Commit {
     public var tree: Tree {
         get throws {
             try Tree(
-                create: pointer.get(git_commit_tree),
+                create: pointer.create(git_commit_tree),
                 free: git_tree_free)
         }
     }
@@ -122,7 +123,7 @@ extension Commit {
             let count = pointer.get(git_commit_parentcount)
             return try (0..<count).map { index in
                 try Commit(
-                    create: pointer.get(git_commit_parent, index),
+                    create: pointer.create(git_commit_parent, index),
                     free: git_commit_free)
             }
         }
@@ -170,3 +171,7 @@ extension SortOptions {
     public static let topological = Self(GIT_SORT_TOPOLOGICAL)
     public static let reverse = Self(GIT_SORT_REVERSE)
 }
+
+// MARK: - GitPointerInitialization
+
+extension Commit: GitPointerInitialization {}

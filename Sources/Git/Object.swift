@@ -15,7 +15,7 @@ extension Repository {
     public func object(for id: Object.ID) throws -> Object {
         try withUnsafePointer(to: id.oid) { oid in
             try Object(
-                create: pointer.get(git_object_lookup, oid, GIT_OBJECT_ANY),
+                create: pointer.create(git_object_lookup, oid, GIT_OBJECT_ANY),
                 free: git_object_free)
         }
     }
@@ -30,7 +30,7 @@ public enum Object: Equatable, Hashable {
     case tree(Tree)
 }
 
-extension Object: GitReference {
+extension Object: Sendable {
 
     var pointer: GitPointer {
         switch self {
@@ -41,6 +41,7 @@ extension Object: GitReference {
         }
     }
 
+    @GitActor
     init(pointer: GitPointer) throws {
 
         let type = pointer.get(git_object_type)
@@ -98,7 +99,7 @@ extension Object.ID {
     @GitActor
     init(reference: GitPointer) throws {
         let resolved = try GitPointer(
-            create: reference.get(git_reference_resolve),
+            create: reference.create(git_reference_resolve),
             free: git_reference_free)
 
         self = try resolved.get(git_reference_target) |> Self.init
@@ -165,3 +166,7 @@ extension Tagged where RawValue == Object.ID {
         try self.init(oid: Unwrap(oid).pointee)
     }
 }
+
+// MARK: - GitPointerInitialization
+
+extension Object: GitPointerInitialization {}

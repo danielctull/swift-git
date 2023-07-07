@@ -5,7 +5,7 @@ import Tagged
 
 // MARK: - Blob
 
-public struct Blob: Equatable, Hashable, Identifiable, GitReference {
+public struct Blob: Equatable, Hashable, Identifiable, Sendable {
 
     let pointer: GitPointer
     public typealias ID = Tagged<Blob, Object.ID>
@@ -13,6 +13,7 @@ public struct Blob: Equatable, Hashable, Identifiable, GitReference {
     public let data: Data
     public let isBinary: Bool
 
+    @GitActor
     init(pointer: GitPointer) throws {
         self.pointer = pointer
         id = try ID(object: pointer)
@@ -24,3 +25,7 @@ public struct Blob: Equatable, Hashable, Identifiable, GitReference {
         isBinary = pointer.get(git_blob_is_binary) |> Bool.init
     }
 }
+
+// MARK: - GitPointerInitialization
+
+extension Blob: GitPointerInitialization {}

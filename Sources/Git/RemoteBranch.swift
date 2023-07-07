@@ -10,13 +10,13 @@ extension Repository {
             try GitIterator {
 
                 try GitPointer(
-                    create: pointer.get(git_branch_iterator_new, GIT_BRANCH_REMOTE),
+                    create: pointer.create(git_branch_iterator_new, GIT_BRANCH_REMOTE),
                     free: git_branch_iterator_free)
 
             } nextElement: { iterator in
 
                 try RemoteBranch(
-                    create: iterator.get(git_branch_next).0,
+                    create: iterator.create(firstOutput(of: git_branch_next)),
                     free: git_reference_free)
             }
         }
@@ -24,16 +24,17 @@ extension Repository {
 
     @GitActor
     public func remoteBranch(on remote: Remote.ID, named branch: String) throws -> RemoteBranch {
-        let name = remote.rawValue + "/" + branch
-        return try RemoteBranch(
-            create: pointer.get(git_branch_lookup, name, GIT_BRANCH_REMOTE),
-            free: git_reference_free)
+        try (remote.rawValue + "/" + branch).withCString { name in
+            try RemoteBranch(
+                create: pointer.create(git_branch_lookup, name, GIT_BRANCH_REMOTE),
+                free: git_reference_free)
+        }
     }
 }
 
 // MARK: - RemoteBranch
 
-public struct RemoteBranch: Equatable, Hashable, Identifiable, GitReference {
+public struct RemoteBranch: Equatable, Hashable, Identifiable, Sendable {
 
     let pointer: GitPointer
     public typealias ID = Tagged<RemoteBranch, Reference.ID>
@@ -42,6 +43,7 @@ public struct RemoteBranch: Equatable, Hashable, Identifiable, GitReference {
     public let remote: Remote.ID
     public let name: String
 
+    @GitActor
     init(pointer: GitPointer) throws {
         pointer.assert(git_reference_is_remote, "Expected remote branch.")
         self.pointer = pointer
@@ -57,3 +59,7 @@ extension RemoteBranch: CustomDebugStringConvertible {
         "RemoteBranch(name: \(name), id: \(id), target: \(target.debugDescription))"
     }
 }
+
+// MARK: - GitPointerInitialization
+
+extension RemoteBranch: GitPointerInitialization {}

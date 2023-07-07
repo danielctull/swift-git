@@ -8,7 +8,7 @@ extension Repository {
     public var head: Reference {
         get throws {
             try Reference(
-                create: pointer.get(git_repository_head),
+                create: pointer.create(git_repository_head),
                 free: git_reference_free)
         }
     }
@@ -19,13 +19,13 @@ extension Repository {
             try GitIterator {
 
                 try GitPointer(
-                    create: pointer.get(git_reference_iterator_new),
+                    create: pointer.create(git_reference_iterator_new),
                     free: git_reference_iterator_free)
 
             } nextElement: { iterator in
 
                 try Reference(
-                    create: iterator.get(git_reference_next),
+                    create: iterator.create(git_reference_next),
                     free: git_reference_free)
             }
         }
@@ -33,9 +33,11 @@ extension Repository {
 
     @GitActor
     public func reference(for id: Reference.ID) throws -> Reference {
-        try Reference(
-            create: pointer.get(git_reference_lookup, id.rawValue),
-            free: git_reference_free)
+        try id.rawValue.withCString { id in
+            try Reference(
+                create: pointer.create(git_reference_lookup, id),
+                free: git_reference_free)
+        }
     }
 
     @available(iOS 13, *)
@@ -76,7 +78,7 @@ public enum Reference: Equatable, Hashable {
     case tag(Tag)
 }
 
-extension Reference: GitReference {
+extension Reference: Sendable {
 
     var pointer: GitPointer {
         switch self {
@@ -87,6 +89,7 @@ extension Reference: GitReference {
         }
     }
 
+    @GitActor
     init(pointer: GitPointer) throws {
 
         switch pointer {
@@ -167,3 +170,7 @@ extension Tagged where RawValue == Reference.ID {
         self.init(rawValue: referenceID)
     }
 }
+
+// MARK: - GitPointerInitialization
+
+extension Reference: GitPointerInitialization {}
