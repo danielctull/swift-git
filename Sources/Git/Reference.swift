@@ -78,7 +78,7 @@ public enum Reference: Equatable, Hashable {
     case tag(Tag)
 }
 
-extension Reference: GitReference {
+extension Reference: GitReference, Sendable {
 
     var pointer: GitPointer {
         switch self {

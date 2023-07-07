@@ -1,7 +1,7 @@
 
 import Clibgit2
 
-public struct Index: Equatable, Hashable, GitReference {
+public struct Index: Equatable, Hashable, Sendable, GitReference {
     let pointer: GitPointer
 }
 

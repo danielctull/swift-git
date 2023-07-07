@@ -17,7 +17,7 @@ extension Repository {
 
 // MARK: Remote
 
-public struct Remote: Equatable, Hashable, Identifiable, GitReference {
+public struct Remote: Equatable, Hashable, Identifiable, Sendable, GitReference {
 
     let pointer: GitPointer
     public typealias ID = Tagged<Remote, String>

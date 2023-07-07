@@ -1,5 +1,5 @@
 
-protocol GitReference: Sendable {
+protocol GitReference {
 
     @GitActor
     init(pointer: GitPointer) throws

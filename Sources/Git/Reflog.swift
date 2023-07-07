@@ -17,7 +17,7 @@ extension Repository {
 
 // MARK: - Reflog
 
-public struct Reflog: Equatable, Hashable, GitReference {
+public struct Reflog: Equatable, Hashable, Sendable, GitReference {
     let pointer: GitPointer
 }
 
