@@ -171,7 +171,7 @@ extension Diff {
             self.rawValue = rawValue
         }
 
-        private init(_ status: git_status_t) {
+        init(_ status: git_status_t) {
             self.init(rawValue: status.rawValue)
         }
 
