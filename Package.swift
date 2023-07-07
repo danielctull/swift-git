@@ -13,7 +13,7 @@ let package = Package(
             name: "Git",
             targets: ["Git"]),
         .executable(
-            name: "git2",
+            name: "swiftgit",
             targets: ["GitTool"])
     ],
     dependencies: [
