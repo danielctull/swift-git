@@ -98,7 +98,7 @@ extension Commit {
     public var tree: Tree {
         get throws {
             try Tree(
-                create: pointer.get(git_commit_tree),
+                create: pointer.create(git_commit_tree),
                 free: git_tree_free)
         }
     }

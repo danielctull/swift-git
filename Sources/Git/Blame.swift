@@ -5,9 +5,11 @@ extension Repository {
 
     @GitActor
     public func blame(for path: FilePath) throws -> Blame {
-        try Blame(
-            create: pointer.get(git_blame_file, path.rawValue, nil),
-            free: git_blame_free)
+        try path.rawValue.withCString { path in
+            try Blame(
+                create: pointer.create(git_blame_file, path, nil),
+                free: git_blame_free)
+        }
     }
 }
 
