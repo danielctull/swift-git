@@ -4,13 +4,8 @@ import Foundation
 
 // MARK: - Repository
 
-public struct Repository: Equatable, Hashable, Sendable, GitPointerInitialization {
-
+public struct Repository: Equatable, Hashable, Sendable {
     let pointer: GitPointer
-
-    init(pointer: GitPointer) throws {
-        self.pointer = pointer
-    }
 }
 
 extension Repository {
@@ -80,3 +75,7 @@ extension Repository: CustomStringConvertible {
 
     public var description: String { "Repository" }
 }
+
+// MARK: - GitPointerInitialization
+
+extension Repository: GitPointerInitialization {}

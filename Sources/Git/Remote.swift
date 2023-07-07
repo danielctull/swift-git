@@ -17,13 +17,14 @@ extension Repository {
 
 // MARK: Remote
 
-public struct Remote: Equatable, Hashable, Identifiable, Sendable, GitPointerInitialization {
+public struct Remote: Equatable, Hashable, Identifiable, Sendable {
 
     let pointer: GitPointer
     public typealias ID = Tagged<Remote, String>
     public let id: ID
 //    public let url: URL
 
+    @GitActor
     init(pointer: GitPointer) throws {
         self.pointer = pointer
         let name = try pointer.get(git_remote_name) |> String.init
@@ -37,3 +38,7 @@ public struct Remote: Equatable, Hashable, Identifiable, Sendable, GitPointerIni
 extension Remote {
     public var name: String { id.rawValue }
 }
+
+// MARK: - GitPointerInitialization
+
+extension Remote: GitPointerInitialization {}

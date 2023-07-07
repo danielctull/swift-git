@@ -17,7 +17,7 @@ extension Repository {
 
 // MARK: - Reflog
 
-public struct Reflog: Equatable, Hashable, Sendable, GitPointerInitialization {
+public struct Reflog: Equatable, Hashable, Sendable {
     let pointer: GitPointer
 }
 
@@ -78,3 +78,7 @@ extension Reflog.Item {
         let new: Object.ID
     }
 }
+
+// MARK: - GitPointerInitialization
+
+extension Reflog: GitPointerInitialization {}

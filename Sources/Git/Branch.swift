@@ -49,7 +49,7 @@ extension Repository {
 
 // MARK: - Branch
 
-public struct Branch: Equatable, Hashable, Identifiable, Sendable, GitPointerInitialization {
+public struct Branch: Equatable, Hashable, Identifiable, Sendable {
 
     let pointer: GitPointer
     public typealias ID = Tagged<Branch, Reference.ID>
@@ -57,6 +57,7 @@ public struct Branch: Equatable, Hashable, Identifiable, Sendable, GitPointerIni
     public let target: Object.ID
     public let name: String
 
+    @GitActor
     init(pointer: GitPointer) throws {
         pointer.assert(git_reference_is_branch, "Expected branch.")
         self.pointer = pointer
@@ -83,3 +84,7 @@ extension Branch: CustomDebugStringConvertible {
         "Branch(name: \(name), id: \(id), target: \(target.debugDescription))"
     }
 }
+
+// MARK: - GitPointerInitialization
+
+extension Branch: GitPointerInitialization {}

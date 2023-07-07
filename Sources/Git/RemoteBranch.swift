@@ -34,7 +34,7 @@ extension Repository {
 
 // MARK: - RemoteBranch
 
-public struct RemoteBranch: Equatable, Hashable, Identifiable, Sendable, GitPointerInitialization {
+public struct RemoteBranch: Equatable, Hashable, Identifiable, Sendable {
 
     let pointer: GitPointer
     public typealias ID = Tagged<RemoteBranch, Reference.ID>
@@ -43,6 +43,7 @@ public struct RemoteBranch: Equatable, Hashable, Identifiable, Sendable, GitPoin
     public let remote: Remote.ID
     public let name: String
 
+    @GitActor
     init(pointer: GitPointer) throws {
         pointer.assert(git_reference_is_remote, "Expected remote branch.")
         self.pointer = pointer
@@ -58,3 +59,7 @@ extension RemoteBranch: CustomDebugStringConvertible {
         "RemoteBranch(name: \(name), id: \(id), target: \(target.debugDescription))"
     }
 }
+
+// MARK: - GitPointerInitialization
+
+extension RemoteBranch: GitPointerInitialization {}

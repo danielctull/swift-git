@@ -71,7 +71,7 @@ extension Repository {
 
 // MARK: - Commit
 
-public struct Commit: Equatable, Hashable, Identifiable, Sendable, GitPointerInitialization {
+public struct Commit: Equatable, Hashable, Identifiable, Sendable {
 
     let pointer: GitPointer
     public typealias ID = Tagged<Commit, Object.ID>
@@ -81,6 +81,7 @@ public struct Commit: Equatable, Hashable, Identifiable, Sendable, GitPointerIni
     public let author: Signature
     public let committer: Signature
 
+    @GitActor
     init(pointer: GitPointer) throws {
         self.pointer = pointer
         id = try ID(object: pointer)
@@ -170,3 +171,7 @@ extension SortOptions {
     public static let topological = Self(GIT_SORT_TOPOLOGICAL)
     public static let reverse = Self(GIT_SORT_REVERSE)
 }
+
+// MARK: - GitPointerInitialization
+
+extension Commit: GitPointerInitialization {}

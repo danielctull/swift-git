@@ -14,15 +14,8 @@ extension Repository {
 
 // MARK: - Diff
 
-public struct Diff: Equatable, Hashable, Sendable, GitPointerInitialization {
+public struct Diff: Equatable, Hashable, Sendable {
     let pointer: GitPointer
-}
-
-extension Diff {
-
-    init(_ pointer: GitPointer) throws {
-        self.pointer = pointer
-    }
 }
 
 extension Diff {
@@ -261,3 +254,7 @@ extension Diff {
 //            public static let commit = Self(GIT_FILEMODE_COMMIT)
 //        }
 //    }
+
+// MARK: - GitPointerInitialization
+
+extension Diff: GitPointerInitialization {}

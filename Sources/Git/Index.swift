@@ -1,7 +1,7 @@
 
 import Clibgit2
 
-public struct Index: Equatable, Hashable, Sendable, GitPointerInitialization {
+public struct Index: Equatable, Hashable, Sendable {
     let pointer: GitPointer
 }
 
@@ -43,3 +43,7 @@ extension Index.Entry {
         objectID = Object.ID(oid: entry.id)
     }
 }
+
+// MARK: - GitPointerInitialization
+
+extension Index: GitPointerInitialization {}

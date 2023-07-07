@@ -30,7 +30,7 @@ public enum Object: Equatable, Hashable {
     case tree(Tree)
 }
 
-extension Object: GitPointerInitialization, Sendable {
+extension Object: Sendable {
 
     var pointer: GitPointer {
         switch self {
@@ -41,6 +41,7 @@ extension Object: GitPointerInitialization, Sendable {
         }
     }
 
+    @GitActor
     init(pointer: GitPointer) throws {
 
         let type = pointer.get(git_object_type)
@@ -165,3 +166,7 @@ extension Tagged where RawValue == Object.ID {
         try self.init(oid: Unwrap(oid).pointee)
     }
 }
+
+// MARK: - GitPointerInitialization
+
+extension Object: GitPointerInitialization {}

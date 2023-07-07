@@ -15,12 +15,8 @@ extension Repository {
 
 // MARK: - Blame
 
-public struct Blame: Equatable, Hashable, Sendable, GitPointerInitialization {
+public struct Blame: Equatable, Hashable, Sendable {
     let pointer: GitPointer
-
-    init(pointer: GitPointer) throws {
-        self.pointer = pointer
-    }
 }
 
 extension Blame: CustomStringConvertible {
@@ -81,3 +77,7 @@ extension Blame.Hunk: CustomStringConvertible {
         "Blame.Hunk(path: \(self.path), lines: \(lines.shortDescription), commit: \(self.commitID.shortDescription))"
     }
 }
+
+// MARK: - GitPointerInitialization
+
+extension Blame: GitPointerInitialization {}

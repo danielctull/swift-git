@@ -78,7 +78,7 @@ public enum Reference: Equatable, Hashable {
     case tag(Tag)
 }
 
-extension Reference: GitPointerInitialization, Sendable {
+extension Reference: Sendable {
 
     var pointer: GitPointer {
         switch self {
@@ -89,6 +89,7 @@ extension Reference: GitPointerInitialization, Sendable {
         }
     }
 
+    @GitActor
     init(pointer: GitPointer) throws {
 
         switch pointer {
@@ -169,3 +170,7 @@ extension Tagged where RawValue == Reference.ID {
         self.init(rawValue: referenceID)
     }
 }
+
+// MARK: - GitPointerInitialization
+
+extension Reference: GitPointerInitialization {}
