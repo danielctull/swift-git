@@ -3,7 +3,6 @@ protocol GitReference {
 
     @GitActor
     init(pointer: GitPointer) throws
-    var pointer: GitPointer { get }
 }
 
 extension GitReference {
