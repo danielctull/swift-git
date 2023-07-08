@@ -4,46 +4,31 @@ import Clibgit2
 extension Repository {
 
     @GitActor
-    public var status: Status {
+    public var status: [StatusEntry] {
         get throws {
-            try Status(
+
+            let list = try GitPointer(
                 create: pointer.create(git_status_list_new, nil),
                 free: git_status_list_free)
-        }
-    }
-}
 
-// MARK: - Status
-
-public struct Status: Equatable, Hashable, Sendable {
-    let pointer: GitPointer
-}
-
-extension Status {
-
-    public var entries: [Entry] {
-        get throws {
-            try GitCollection(
-                pointer: pointer,
+            return try GitCollection(
+                pointer: list,
                 count: git_status_list_entrycount,
                 element: git_status_byindex)
-            .map(Entry.init)
+            .map(StatusEntry.init)
         }
     }
 }
 
-// MARK: - Status.Entry
+// MARK: - StatusEntry
 
-extension Status {
-
-    public struct Entry {
-        public let status: Diff.Status
-        public let headToIndex: Diff.Delta?
-        public let indexToWorkingDirectory: Diff.Delta?
-    }
+public struct StatusEntry {
+    public let status: Diff.Status
+    public let headToIndex: Diff.Delta?
+    public let indexToWorkingDirectory: Diff.Delta?
 }
 
-extension Status.Entry {
+extension StatusEntry {
 
     fileprivate init(_ pointer: UnsafePointer<git_status_entry>?) throws {
         let entry = try Unwrap(pointer).pointee
@@ -60,7 +45,3 @@ extension Status.Entry {
         }
     }
 }
-
-// MARK: - GitPointerInitialization
-
-extension Status: GitPointerInitialization {}

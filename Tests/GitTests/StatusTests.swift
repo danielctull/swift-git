@@ -10,13 +10,13 @@ final class StatusTests: XCTestCase {
         let remote = try Bundle.module.url(forRepository: "Test.git")
         try FileManager.default.withTemporaryDirectory { local in
             let repo = try Repository(local: local, remote: remote)
-            XCTAssertEqual(try repo.status.entries.count, 0)
+            XCTAssertEqual(try repo.status.count, 0)
 
             let path = UUID().uuidString
             let content = UUID().uuidString
             try Data(content.utf8).write(to: local.appending(path: path))
 
-            let entries = try repo.status.entries
+            let entries = try repo.status
             XCTAssertEqual(entries.count, 1)
 
             let entry = try XCTUnwrap(entries.first)
