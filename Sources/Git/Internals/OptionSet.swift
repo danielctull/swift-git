@@ -6,7 +6,7 @@
 /// It's undesirable for external users to create options using raw integer
 /// values, so this type exists to allow the external representation required by
 /// ``OptionSet``, but without the ability for external users to create one.
-public struct Option: Equatable, Sendable {
+public struct Option: Equatable, Hashable, Sendable {
     fileprivate let rawValue: UInt32
 }
 

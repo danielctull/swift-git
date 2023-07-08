@@ -48,7 +48,7 @@ extension StatusEntry {
 
 // MARK: - Status
 
-public struct Status: OptionSet, Sendable {
+public struct Status: OptionSet, Equatable, Hashable, Sendable {
     public let rawValue: Option
     public init(rawValue: Option) {
         self.rawValue = rawValue

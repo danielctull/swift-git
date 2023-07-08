@@ -168,7 +168,7 @@ extension Diff {
     ///
     /// These flags are used for both the `flags` values of `Diff.Delta` and
     /// `Diff.File` objects representing the old and new sides of the delta.
-    public struct Flags: OptionSet, Sendable {
+    public struct Flags: OptionSet, Equatable, Hashable, Sendable {
         public let rawValue: Option
         public init(rawValue: Option) {
             self.rawValue = rawValue

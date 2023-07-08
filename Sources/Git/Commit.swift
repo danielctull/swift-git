@@ -155,7 +155,7 @@ extension Commit.ID {
 
 // MARK: - SortOptions
 
-public struct SortOptions: OptionSet, Sendable {
+public struct SortOptions: OptionSet, Equatable, Hashable, Sendable {
     public let rawValue: Option
     public init(rawValue: Option) {
         self.rawValue = rawValue
