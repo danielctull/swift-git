@@ -30,44 +30,46 @@ struct Status: ParsableCommand {
 
     let entries = try repo.status
 
-    let index: [(String, Diff.File)] = entries.compactMap { entry in
+    let indexStatus: [Git.Status: String] = [
+      .indexNew: "new file:   ",
+      .indexDeleted: "deleted:    ",
+      .indexRenamed: "renamed:    ",
+      .indexModified: "modified:   ",
+      .indexTypeChange: "type change:",
+    ]
 
+    let index: [(String, Diff.File)] = entries.compactMap { entry in
       guard let file = entry.headToIndex?.file else { return nil }
 
-      if entry.status.contains(.indexNew) {
-        return ("new file:   ", file)
-      } else if entry.status.contains(.indexDeleted) {
-        return ("deleted:    ", file)
-      } else if entry.status.contains(.indexRenamed) {
-        return ("renamed:    ", file)
-      } else if entry.status.contains(.indexModified) {
-        return ("modified:   ", file)
-      } else if entry.status.contains(.indexTypeChange) {
-        return ("type change:", file)
-      } else {
-        return nil
+      for (status, value) in indexStatus {
+        if entry.status.contains(status) {
+          return (value, file)
+        }
       }
+
+      return nil
     }
+
+    let workingDirectoryStatus: [Git.Status: String] = [
+      .workingTreeNew: "new file:   ",
+      .workingTreeDeleted: "deleted:    ",
+      .workingTreeRenamed: "renamed:    ",
+      .workingTreeModified: "modified:   ",
+      .workingTreeTypeChange: "type change:",
+      .workingTreeUnreadable: "unreadable: ",
+    ]
 
     let workingDirectory: [(String, Diff.File)] = entries.compactMap { entry in
 
       guard let file = entry.indexToWorkingDirectory?.file else { return nil }
 
-      if entry.status.contains(.workingTreeNew) {
-        return ("new file:   ", file)
-      } else if entry.status.contains(.workingTreeDeleted) {
-        return ("deleted:    ", file)
-      } else if entry.status.contains(.workingTreeRenamed) {
-        return ("renamed:    ", file)
-      } else if entry.status.contains(.workingTreeModified) {
-        return ("modified:   ", file)
-      } else if entry.status.contains(.workingTreeUnreadable) {
-        return ("unreadable: ", file)
-      } else if entry.status.contains(.workingTreeTypeChange) {
-        return ("type change:", file)
-      } else {
-        return nil
+      for (status, value) in workingDirectoryStatus {
+        if entry.status.contains(status) {
+          return (value, file)
+        }
       }
+
+      return nil
     }
 
     func printFiles(_ title: String, files: [(String, Diff.File)]) {
