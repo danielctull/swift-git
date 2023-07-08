@@ -166,7 +166,7 @@ extension SortOptions {
         self.init(rawValue: sort.rawValue)
     }
 
-    public init() { self.init(GIT_SORT_NONE) }
+    public static let none = Self(GIT_SORT_NONE)
     public static let time = Self(GIT_SORT_TIME)
     public static let topological = Self(GIT_SORT_TOPOLOGICAL)
     public static let reverse = Self(GIT_SORT_REVERSE)
