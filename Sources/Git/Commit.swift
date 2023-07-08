@@ -166,9 +166,23 @@ extension SortOptions {
         self.init(rawValue: sort.rawValue)
     }
 
+    /// Sort the output with the same default method from `git`: reverse
+    /// chronological order. This is the default sorting for new walkers.
     public static let none = Self(GIT_SORT_NONE)
+
+    /// Sort the repository contents by commit time;
+    /// this sorting mode can be combined with
+    /// topological sorting.
     public static let time = Self(GIT_SORT_TIME)
+
+    /// Sort the repository contents in topological order (no parents before
+    /// all of its children are shown); this sorting mode can be combined
+    /// with time sorting to produce `git`'s `--date-order``.
     public static let topological = Self(GIT_SORT_TOPOLOGICAL)
+
+    /// Iterate through the repository contents in reverse
+    /// order; this sorting mode can be combined with
+    /// any of the above.
     public static let reverse = Self(GIT_SORT_REVERSE)
 }
 
