@@ -54,7 +54,9 @@ extension Repository {
                 try iterator.perform(git_revwalk_push_head)
             }
 
-            try iterator.perform(git_revwalk_sorting, sortOptions.rawValue)
+            try sortOptions.withRawValue { sortOptions in
+                try iterator.perform(git_revwalk_sorting, sortOptions)
+            }
 
             return iterator
 
@@ -154,8 +156,8 @@ extension Commit.ID {
 // MARK: - SortOptions
 
 public struct SortOptions: OptionSet, Sendable {
-    public let rawValue: UInt32
-    public init(rawValue: UInt32) {
+    public let rawValue: Option
+    public init(rawValue: Option) {
         self.rawValue = rawValue
     }
 }

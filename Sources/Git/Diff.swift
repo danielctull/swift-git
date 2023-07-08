@@ -165,8 +165,8 @@ extension Diff.File {
 extension Diff {
 
     public struct Status: OptionSet, Sendable {
-        public let rawValue: UInt32
-        public init(rawValue: UInt32) {
+        public let rawValue: Option
+        public init(rawValue: Option) {
             self.rawValue = rawValue
         }
     }
@@ -204,8 +204,8 @@ extension Diff {
     /// These flags are used for both the `flags` values of `Diff.Delta` and
     /// `Diff.File` objects representing the old and new sides of the delta.
     public struct Flags: OptionSet, Sendable {
-        public let rawValue: UInt32
-        public init(rawValue: UInt32) {
+        public let rawValue: Option
+        public init(rawValue: Option) {
             self.rawValue = rawValue
         }
     }
