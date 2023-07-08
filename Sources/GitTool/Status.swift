@@ -30,7 +30,7 @@ struct Status: ParsableCommand {
 
     let entries = try repo.status
 
-    let indexStatus: [Git.Status: String] = [
+    let index: [Git.Status: String] = [
       .indexNew: "new file:   ",
       .indexDeleted: "deleted:    ",
       .indexRenamed: "renamed:    ",
@@ -38,19 +38,7 @@ struct Status: ParsableCommand {
       .indexTypeChange: "type change:",
     ]
 
-    let index: [(String, Diff.File)] = entries.compactMap { entry in
-      guard let file = entry.headToIndex?.file else { return nil }
-
-      for (status, value) in indexStatus {
-        if entry.status.contains(status) {
-          return (value, file)
-        }
-      }
-
-      return nil
-    }
-
-    let workingDirectoryStatus: [Git.Status: String] = [
+    let workingDirectory: [Git.Status: String] = [
       .workingTreeNew: "new file:   ",
       .workingTreeDeleted: "deleted:    ",
       .workingTreeRenamed: "renamed:    ",
@@ -59,30 +47,43 @@ struct Status: ParsableCommand {
       .workingTreeUnreadable: "unreadable: ",
     ]
 
-    let workingDirectory: [(String, Diff.File)] = entries.compactMap { entry in
+    func printFiles(
+      title: String,
+      delta: (StatusEntry) -> Diff.Delta?,
+      status: [Git.Status: String]
+    ) {
 
-      guard let file = entry.indexToWorkingDirectory?.file else { return nil }
+      let entries: [(String, Diff.File)] = entries.compactMap { entry in
+        guard let file = delta(entry)?.file else { return nil }
 
-      for (status, value) in workingDirectoryStatus {
-        if entry.status.contains(status) {
-          return (value, file)
+        for (status, value) in status {
+          if entry.status.contains(status) {
+            return (value, file)
+          }
         }
+
+        return nil
       }
 
-      return nil
-    }
-
-    func printFiles(_ title: String, files: [(String, Diff.File)]) {
-      if !files.isEmpty {
+      if !entries.isEmpty {
         print("")
         print(title)
-        for entry in files {
+        for entry in entries {
           print("        \(entry.0)\(entry.1.path)")
         }
       }
     }
 
-    printFiles("Changes to be committed:", files: index)
-    printFiles("Changes not staged for commit:", files: workingDirectory)
+    printFiles(
+      title: "Changes to be committed:",
+      delta: \.headToIndex,
+      status: index
+    )
+
+    printFiles(
+      title: "Changes not staged for commit:",
+      delta: \.indexToWorkingDirectory,
+      status: workingDirectory
+    )
   }
 }
