@@ -165,34 +165,34 @@ extension Diff.File {
 extension Diff {
 
     public struct Status: OptionSet, Sendable {
-
         public let rawValue: UInt32
         public init(rawValue: UInt32) {
             self.rawValue = rawValue
         }
-
-        init(_ status: git_status_t) {
-            self.init(rawValue: status.rawValue)
-        }
-
-        public static let current = Self(GIT_STATUS_CURRENT)
-
-        public static let indexNew = Status(GIT_STATUS_INDEX_NEW)
-        public static let indexModified = Status(GIT_STATUS_INDEX_MODIFIED)
-        public static let indexDeleted = Status(GIT_STATUS_INDEX_DELETED)
-        public static let indexRenamed = Status(GIT_STATUS_INDEX_RENAMED)
-        public static let indexTypeChange = Status(GIT_STATUS_INDEX_TYPECHANGE)
-
-        public static let workingTreeNew = Status(GIT_STATUS_WT_NEW)
-        public static let workingTreeModified = Status(GIT_STATUS_WT_MODIFIED)
-        public static let workingTreeDeleted = Status(GIT_STATUS_WT_DELETED)
-        public static let workingTreeTypeChange = Status(GIT_STATUS_WT_TYPECHANGE)
-        public static let workingTreeRenamed = Status(GIT_STATUS_WT_RENAMED)
-        public static let workingTreeUnreadable = Status(GIT_STATUS_WT_UNREADABLE)
-
-        public static let ignored = Self(GIT_STATUS_IGNORED)
-        public static let conflicted = Self(GIT_STATUS_CONFLICTED)
     }
+}
+
+extension Diff.Status: GitOptionSet {
+
+    typealias OptionType = git_status_t
+
+    public static let current = Self(GIT_STATUS_CURRENT)
+
+    public static let indexNew = Self(GIT_STATUS_INDEX_NEW)
+    public static let indexModified = Self(GIT_STATUS_INDEX_MODIFIED)
+    public static let indexDeleted = Self(GIT_STATUS_INDEX_DELETED)
+    public static let indexRenamed = Self(GIT_STATUS_INDEX_RENAMED)
+    public static let indexTypeChange = Self(GIT_STATUS_INDEX_TYPECHANGE)
+
+    public static let workingTreeNew = Self(GIT_STATUS_WT_NEW)
+    public static let workingTreeModified = Self(GIT_STATUS_WT_MODIFIED)
+    public static let workingTreeDeleted = Self(GIT_STATUS_WT_DELETED)
+    public static let workingTreeTypeChange = Self(GIT_STATUS_WT_TYPECHANGE)
+    public static let workingTreeRenamed = Self(GIT_STATUS_WT_RENAMED)
+    public static let workingTreeUnreadable = Self(GIT_STATUS_WT_UNREADABLE)
+
+    public static let ignored = Self(GIT_STATUS_IGNORED)
+    public static let conflicted = Self(GIT_STATUS_CONFLICTED)
 }
 
 // MARK: - Diff.Flags
@@ -204,31 +204,31 @@ extension Diff {
     /// These flags are used for both the `flags` values of `Diff.Delta` and
     /// `Diff.File` objects representing the old and new sides of the delta.
     public struct Flags: OptionSet, Sendable {
-
         public let rawValue: UInt32
         public init(rawValue: UInt32) {
             self.rawValue = rawValue
         }
-
-        private init(_ status: git_diff_flag_t) {
-            self.init(rawValue: status.rawValue)
-        }
-
-        /// File(s) treated as binary data
-        public static let binary = Self(GIT_DIFF_FLAG_BINARY)
-
-        /// File(s) treated as text data
-        public static let notBinary = Self(GIT_DIFF_FLAG_NOT_BINARY)
-
-        /// `id` value is known correct
-        public static let validID = Self(GIT_DIFF_FLAG_VALID_ID)
-
-        /// File exists at this side of the delta
-        public static let exists = Self(GIT_DIFF_FLAG_EXISTS)
-
-        /// File size value is known correct
-        public static let validSize = Self(GIT_DIFF_FLAG_VALID_SIZE)
     }
+}
+
+extension Diff.Flags: GitOptionSet {
+
+    typealias OptionType = git_diff_flag_t
+
+    /// File(s) treated as binary data
+    public static let binary = Self(GIT_DIFF_FLAG_BINARY)
+
+    /// File(s) treated as text data
+    public static let notBinary = Self(GIT_DIFF_FLAG_NOT_BINARY)
+
+    /// `id` value is known correct
+    public static let validID = Self(GIT_DIFF_FLAG_VALID_ID)
+
+    /// File exists at this side of the delta
+    public static let exists = Self(GIT_DIFF_FLAG_EXISTS)
+
+    /// File size value is known correct
+    public static let validSize = Self(GIT_DIFF_FLAG_VALID_SIZE)
 }
 
 // MARK: - Diff.File.Mode

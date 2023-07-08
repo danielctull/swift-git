@@ -160,11 +160,9 @@ public struct SortOptions: OptionSet, Sendable {
     }
 }
 
-extension SortOptions {
+extension SortOptions: GitOptionSet {
 
-    private init(_ sort: git_sort_t) {
-        self.init(rawValue: sort.rawValue)
-    }
+    typealias OptionType = git_sort_t
 
     /// Sort the output with the same default method from `git`: reverse
     /// chronological order. This is the default sorting for new walkers.
