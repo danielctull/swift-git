@@ -15,9 +15,9 @@ final class ResetTests: XCTestCase {
             let content = UUID().uuidString
             try Data(content.utf8).write(to: file)
             XCTAssertEqual(try String(contentsOf: file), content)
-            try repo.reset(to: head, operation: .soft)
+            try repo.reset(to: .commit(head), operation: .soft)
             XCTAssertEqual(try String(contentsOf: file), content)
-            try repo.reset(to: head, operation: .mixed)
+            try repo.reset(to: .commit(head), operation: .mixed)
             XCTAssertEqual(try String(contentsOf: file), content)
 //            try repo.reset(to: head, operation: .hard)
 //            XCTAssertThrowsError(try String(contentsOf: file))
