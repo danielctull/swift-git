@@ -28,7 +28,7 @@ extension Checkout {
 
 extension Checkout.Options {
 
-    fileprivate var rawValue: git_checkout_options {
+    var rawValue: git_checkout_options {
         let options = git_checkout_options()
         return options
     }
