@@ -6,14 +6,38 @@ extension Repository {
 
     @GitActor
     public func reset(
-        commit: Commit,
+        to commit: Commit,
         operation: Reset.Operation,
         checkoutOptions: Checkout.Options = .init()
+    ) throws {
+        try reset(
+            to: .commit(commit),
+            operation: operation,
+            checkoutOptions: checkoutOptions)
+    }
+
+    @GitActor
+    public func reset(
+        to tag: Tag,
+        operation: Reset.Operation,
+        checkoutOptions: Checkout.Options = .init()
+    ) throws {
+        try reset(
+            to: .tag(tag),
+            operation: operation,
+            checkoutOptions: checkoutOptions)
+    }
+
+    @GitActor
+    func reset(
+        to commitish: Commitish,
+        operation: Reset.Operation,
+        checkoutOptions: Checkout.Options
     ) throws {
         try withUnsafePointer(to: checkoutOptions.rawValue) { checkoutOptions in
             try pointer.perform(
                 git_reset,
-                commit.pointer.pointer,
+                commitish.pointer.pointer,
                 git_reset_t(rawValue: operation.rawValue),
                 checkoutOptions
             )
