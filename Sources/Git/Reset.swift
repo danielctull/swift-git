@@ -30,17 +30,14 @@ extension Repository {
     @GitActor
     public func reset(
         to commitish: Commitish,
-        operation: Reset.Operation,
-        checkoutOptions: Checkout.Options = .init()
+        operation: Reset.Operation
     ) throws {
-        try withUnsafePointer(to: checkoutOptions.rawValue) { checkoutOptions in
-            try pointer.perform(
-                git_reset,
-                commitish.pointer.pointer,
-                git_reset_t(rawValue: operation.rawValue),
-                checkoutOptions
-            )
-        }
+        try pointer.perform(
+            git_reset,
+            commitish.pointer.pointer,
+            git_reset_t(rawValue: operation.rawValue),
+            nil
+        )
     }
 }
 
