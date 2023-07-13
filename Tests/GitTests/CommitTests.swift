@@ -6,6 +6,26 @@ import XCTest
 @GitActor
 final class CommitTests: XCTestCase {
 
+    func testRepositoryCommitForString() throws {
+        let remote = try Bundle.module.url(forRepository: "Test.git")
+        try FileManager.default.withTemporaryDirectory { local in
+            let repo = try Repository(local: local, remote: remote)
+            let commit = try repo.commit(for: "41c143541c9d917db83ce4e920084edbf2a4177e")
+            XCTAssertEqual(commit.summary, "Add a file")
+            XCTAssertNil(commit.body)
+            XCTAssertEqual(commit.id.description, "41c143541c9d917db83ce4e920084edbf2a4177e")
+            XCTAssertEqual(commit.author.name, "Daniel Tull")
+            XCTAssertEqual(commit.author.email, "dt@danieltull.co.uk")
+            XCTAssertEqual(commit.author.date, Date(timeIntervalSince1970: 1595676911))
+            XCTAssertEqual(commit.author.timeZone, TimeZone(secondsFromGMT: 3600))
+            XCTAssertEqual(commit.committer.name, "Daniel Tull")
+            XCTAssertEqual(commit.committer.email, "dt@danieltull.co.uk")
+            XCTAssertEqual(commit.committer.date, Date(timeIntervalSince1970: 1595676911))
+            XCTAssertEqual(commit.committer.timeZone, TimeZone(secondsFromGMT: 3600))
+            XCTAssertEqual(commit.debugDescription, "Commit(id: 41c1435, summary: Add a file)")
+        }
+    }
+
     func testRepositoryCommits() throws {
         let remote = try Bundle.module.url(forRepository: "Test.git")
         try FileManager.default.withTemporaryDirectory { local in

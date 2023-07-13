@@ -5,6 +5,11 @@ import Tagged
 extension Repository {
 
     @GitActor
+    public func commit(for string: String) throws -> Commit {
+        try commit(for: Commit.ID(string))
+    }
+
+    @GitActor
     public func commit(for id: Commit.ID) throws -> Commit {
         try withUnsafePointer(to: id.oid) { oid in
             try Commit(
@@ -145,6 +150,11 @@ extension Commit.ID {
 
     init(_ oid: git_oid) {
         self.init(rawValue: Object.ID(oid: oid))
+    }
+
+    @GitActor
+    init(_ string: String)throws {
+        try self.init(rawValue: Object.ID(string))
     }
 }
 

@@ -92,6 +92,18 @@ extension Object {
 
 extension Object.ID {
 
+    @GitActor
+    init(_ string: String) throws {
+        let oid = try string.withCString { string in
+            var oid: git_oid = git_oid()
+            try withUnsafeMutablePointer(to: &oid) { oid in
+                try GitError.check(git_oid_fromstr(oid, string))
+            }
+            return oid
+        }
+        self.init(oid: oid)
+    }
+
     init(_ git: UnsafePointer<git_oid>?) throws {
         try self.init(oid: Unwrap(git).pointee)
     }
