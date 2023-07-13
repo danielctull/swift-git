@@ -5,4 +5,4 @@ precedencegroup ForwardApplication {
 }
 
 infix operator |>: ForwardApplication
-public func |> <A, B>(x: A, f: (A) throws -> B) rethrows -> B { try f(x) }
+func |> <A, B>(x: A, f: (A) throws -> B) rethrows -> B { try f(x) }
