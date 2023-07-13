@@ -21,6 +21,16 @@ extension Repository {
         }
     }
 
+    /// Create a new branch pointing at a target commit
+    ///
+    /// The branch name will be checked for validity.
+    ///
+    /// - Parameters:
+    ///   - name: Name for the branch; this name is validated for consistency.
+    ///     It should also not conflict with an already existing branch name.
+    ///   - commit: Commit to which this branch should point. This object
+    ///     must belong to the receiving ``Repository``.
+    /// - Returns: The created branch.
     @GitActor
     public func createBranch(named name: Branch.Name, at commit: Commit) throws -> Branch {
         try name.withCString { name in

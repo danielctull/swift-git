@@ -3,6 +3,7 @@ import Clibgit2
 
 extension Repository {
 
+    /// Retrieve and resolve the reference pointed at by HEAD.
     @GitActor
     public var head: Reference {
         get throws {
@@ -30,6 +31,7 @@ extension Repository {
         }
     }
 
+    /// Lookup a reference by id in a repository.
     @GitActor
     public func reference(for id: Reference.ID) throws -> Reference {
         try id.name.rawValue.withCString { id in
@@ -39,11 +41,19 @@ extension Repository {
         }
     }
 
+    /// Delete an existing reference by id.
+    ///
+    /// This method removes the reference from the repository without looking at
+    /// its old value.
     @GitActor
     public func remove(_ id: Reference.ID) throws {
         try remove(reference(for: id))
     }
 
+    /// Delete an existing reference.
+    ///
+    /// This method removes the reference from the repository without looking at
+    /// its old value.
     @GitActor
     public func remove(_ reference: Reference) throws {
         try reference.id.name.rawValue.withCString { id in

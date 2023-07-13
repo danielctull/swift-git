@@ -43,7 +43,7 @@ extension Repository {
         }
     }
 
-    /// Get the ``URL`` of the shared common directory for this repository.
+    /// Get the `URL` of the shared common directory for this repository.
     ///
     /// If the repository is bare, it is the root directory for the repository.
     ///
