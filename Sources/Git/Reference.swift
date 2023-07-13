@@ -159,6 +159,24 @@ extension Reference: CustomDebugStringConvertible {
     }
 }
 
+// MARK: - Name
+
+extension Reference {
+    
+    /// The full name of a reference.
+    public struct Name {
+        private let rawValue: String
+    }
+}
+
+extension Reference.Name {
+
+    @GitActor
+    init(pointer: GitPointer) throws {
+        try self.init(rawValue: pointer.get(git_reference_name) |> String.init)
+    }
+}
+
 // MARK: - Tagged + Reference.ID
 
 extension Tagged where RawValue == Reference.ID {
