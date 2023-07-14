@@ -1,6 +1,5 @@
 
 import Clibgit2
-import Tagged
 
 extension Repository {
 
@@ -155,25 +154,6 @@ extension Object.ID: Hashable {
         withUnsafeBytes(of: oid.id) {
             hasher.combine(bytes: $0)
         }
-    }
-}
-
-// MARK: - Tagged + Object.ID
-
-extension Tagged where RawValue == Object.ID {
-
-    @GitActor
-    init(object: GitPointer) throws {
-        self = try object.get(git_object_id) |> Self.init
-    }
-
-    init(oid: git_oid) {
-        let objectID = Object.ID(oid: oid)
-        self.init(rawValue: objectID)
-    }
-
-    init(oid: UnsafePointer<git_oid>?) throws {
-        try self.init(oid: Unwrap(oid).pointee)
     }
 }
 
