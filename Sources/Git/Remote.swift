@@ -1,7 +1,5 @@
 
 import Clibgit2
-// import Foundation
-import Tagged
 
 extension Repository {
 
@@ -20,7 +18,6 @@ extension Repository {
 public struct Remote: Equatable, Hashable, Identifiable, Sendable {
 
     let pointer: GitPointer
-    public typealias ID = Tagged<Remote, String>
     public let id: ID
     public let name: Name
 //    public let url: URL
@@ -29,11 +26,20 @@ public struct Remote: Equatable, Hashable, Identifiable, Sendable {
     init(pointer: GitPointer) throws {
         self.pointer = pointer
         let name = try pointer.get(git_remote_name) |> String.init
-        id = ID(name)
         self.name = Name(rawValue: name)
+        id = ID(name: self.name)
 
 //        let urlString = try Unwrap(String(remote.get(git_remote_url)))
 //        url = try Unwrap(URL(string: urlString))
+    }
+}
+
+// MARK: - Remote.ID
+
+extension Remote {
+
+    public struct ID: Equatable, Hashable, Sendable {
+        let name: Name
     }
 }
 

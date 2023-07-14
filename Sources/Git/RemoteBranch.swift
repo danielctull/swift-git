@@ -22,7 +22,7 @@ extension Repository {
     }
 
     @GitActor
-    public func remoteBranch(on remote: Remote.ID, named branch: String) throws -> RemoteBranch {
+    public func remoteBranch(on remote: Remote.Name, named branch: String) throws -> RemoteBranch {
         try (remote.rawValue + "/" + branch).withCString { name in
             try RemoteBranch(
                 create: pointer.create(git_branch_lookup, name, GIT_BRANCH_REMOTE),
@@ -38,7 +38,7 @@ public struct RemoteBranch: Equatable, Hashable, Sendable {
     let pointer: GitPointer
     public let id: ID
     public let target: Object.ID
-    public let remote: Remote.ID
+    public let remote: Remote.Name
     public let name: String
     public let reference: Reference.Name
 
@@ -49,7 +49,7 @@ public struct RemoteBranch: Equatable, Hashable, Sendable {
         reference = try Reference.Name(pointer: pointer)
         name = try pointer.get(git_branch_name) |> String.init
         target = try Object.ID(reference: pointer)
-        remote = try Remote.ID(rawValue: String(Unwrap(name.split(separator: "/").first)))
+        remote = try Remote.Name(rawValue: String(Unwrap(name.split(separator: "/").first)))
         id = ID(name: reference)
     }
 }
