@@ -1,6 +1,5 @@
 
 import Clibgit2
-import Tagged
 
 extension Repository {
 
@@ -11,7 +10,7 @@ extension Repository {
 
     @GitActor
     public func commit(for id: Commit.ID) throws -> Commit {
-        try withUnsafePointer(to: id.oid) { oid in
+        try withUnsafePointer(to: id.objectID.oid) { oid in
             try Commit(
                 create: pointer.create(git_commit_lookup, oid),
                 free: git_commit_free)
@@ -81,7 +80,6 @@ extension Repository {
 public struct Commit: Equatable, Hashable, Identifiable, Sendable {
 
     let pointer: GitPointer
-    public typealias ID = Tagged<Commit, Object.ID>
     public let id: ID
     public let summary: String
     public let body: String?
@@ -91,8 +89,7 @@ public struct Commit: Equatable, Hashable, Identifiable, Sendable {
     @GitActor
     init(pointer: GitPointer) throws {
         self.pointer = pointer
-        id = try ID(object: pointer)
-
+        id = try ID(objectID: Object.ID(object: pointer))
         summary = try pointer.get(git_commit_summary) |> String.init
         body = try? pointer.get(git_commit_body) |> String.init
         author = try pointer.get(git_commit_author) |> Signature.init
@@ -146,21 +143,32 @@ extension Commit: CustomDebugStringConvertible {
 
 // MARK: - Commit.ID
 
-extension Commit.ID {
+extension Commit {
 
-    init(_ oid: git_oid) {
-        self.init(rawValue: Object.ID(oid: oid))
-    }
-
-    @GitActor
-    init(_ string: String)throws {
-        try self.init(rawValue: Object.ID(string))
+    public struct ID: Equatable, Hashable, Sendable {
+        public let objectID: Object.ID
     }
 }
 
 extension Commit.ID {
 
-    public var shortDescription: String { String(description.dropLast(33)) }
+    init(_ oid: git_oid) {
+        self.init(objectID: Object.ID(oid: oid))
+    }
+
+    @GitActor
+    init(_ string: String)throws {
+        try self.init(objectID: Object.ID(string))
+    }
+}
+
+extension Commit.ID: CustomStringConvertible {
+    public var description: String { objectID.description }
+}
+
+extension Commit.ID {
+
+    public var shortDescription: String { String(objectID.description.dropLast(33)) }
 }
 
 // MARK: - SortOptions
