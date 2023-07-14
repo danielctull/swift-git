@@ -58,7 +58,7 @@ extension Tag {
 extension Tag {
 
     public var name: String {
-        String(id.dropFirst(10)) // length of "refs/tags/"
+        String(id.rawValue.rawValue.rawValue.dropFirst(10)) // length of "refs/tags/"
     }
 
     public var target: Object.ID {

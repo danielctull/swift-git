@@ -33,7 +33,7 @@ extension Repository {
 
     @GitActor
     public func reference(for id: Reference.ID) throws -> Reference {
-        try id.rawValue.withCString { id in
+        try id.rawValue.rawValue.withCString { id in
             try Reference(
                 create: pointer.create(git_reference_lookup, id),
                 free: git_reference_free)
@@ -65,7 +65,9 @@ extension Repository {
 
     @GitActor
     public func remove(_ reference: Reference) throws {
-        try pointer.perform(git_reference_remove, reference.id.rawValue)
+        try reference.id.rawValue.rawValue.withCString { id in
+            try pointer.perform(git_reference_remove, id)
+        }
     }
 }
 
@@ -127,7 +129,7 @@ extension Reference {
 
 extension Reference: Identifiable {
 
-    public typealias ID = Tagged<Reference, String>
+    public typealias ID = Tagged<Reference, Name>
 
     public var id: ID {
         switch self {
@@ -162,11 +164,23 @@ extension Reference: CustomDebugStringConvertible {
 // MARK: - Name
 
 extension Reference {
-    
+
     /// The full name of a reference.
-    public struct Name {
-        private let rawValue: String
+    public struct Name: Equatable, Hashable, Sendable {
+        let rawValue: String
     }
+}
+
+extension Reference.Name: ExpressibleByStringLiteral {
+
+    public init(stringLiteral value: String) {
+        self.init(rawValue: value)
+    }
+}
+
+extension Reference.Name: CustomStringConvertible {
+
+    public var description: String { rawValue }
 }
 
 extension Reference.Name {
@@ -183,7 +197,7 @@ extension Tagged where RawValue == Reference.ID {
 
     @GitActor
     init(reference: GitPointer) throws {
-        let name = try reference.get(git_reference_name) |> String.init
+        let name = try Reference.Name(pointer: reference)
         let referenceID = Reference.ID(rawValue: name)
         self.init(rawValue: referenceID)
     }
