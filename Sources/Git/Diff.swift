@@ -1,6 +1,5 @@
 
 import Clibgit2
-import Tagged
 
 extension Repository {
 
@@ -9,6 +8,11 @@ extension Repository {
         try Diff(
             create: pointer.create(git_diff_tree_to_tree, tree1.pointer.pointer, tree2.pointer.pointer, nil),
             free: git_diff_free)
+    }
+
+    @GitActor
+    public func object(for id: Diff.File.ID) throws -> Object {
+        try object(for: id.objectID)
     }
 }
 
@@ -141,7 +145,6 @@ extension Diff.Delta.Status {
 extension Diff {
 
     public struct File: Identifiable, Sendable {
-        public typealias ID = Tagged<File, Object.ID>
         public let id: ID
         public let path: String
         public let size: UInt64
@@ -154,10 +157,23 @@ extension Diff.File {
     init?(_ file: git_diff_file) throws {
         flags = Diff.Flags(rawValue: file.flags)
         guard flags.contains(.exists) else { return nil }
-        id = ID(oid: file.id)
+        id = ID(objectID: Object.ID(oid: file.id))
         path = try Unwrap(String(validatingUTF8: file.path))
         size = file.size
     }
+}
+
+// MARK: - Diff.File.ID
+
+extension Diff.File {
+
+    public struct ID: Equatable, Hashable, Sendable {
+        public let objectID: Object.ID
+    }
+}
+
+extension Diff.File.ID: CustomStringConvertible {
+    public var description: String { objectID.description }
 }
 
 // MARK: - Diff.Flags

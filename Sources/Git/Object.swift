@@ -5,13 +5,6 @@ import Tagged
 extension Repository {
 
     @GitActor
-    public func object<ID>(
-        for id: ID
-    ) throws -> Object where ID: RawRepresentable, ID.RawValue == Object.ID {
-        try object(for: id.rawValue)
-    }
-
-    @GitActor
     public func object(for id: Object.ID) throws -> Object {
         try withUnsafePointer(to: id.oid) { oid in
             try Object(
