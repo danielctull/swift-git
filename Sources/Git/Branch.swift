@@ -39,11 +39,6 @@ extension Repository {
                 free: git_reference_free)
         }
     }
-
-    @GitActor
-    public func delete(_ branch: Branch) throws {
-        try branch.pointer.perform(git_branch_delete)
-    }
 }
 
 // MARK: - Branch

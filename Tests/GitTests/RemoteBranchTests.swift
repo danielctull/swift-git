@@ -37,4 +37,20 @@ final class RemoteBranchTests: XCTestCase {
             XCTAssertEqual(remoteBranch.target.description, "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
         }
     }
+
+    func testDelete() throws {
+        let remote = try Bundle.module.url(forRepository: "Test.git")
+        try FileManager.default.withTemporaryDirectory { local in
+            let repo = try Repository(local: local, remote: remote)
+            let remoteBranch = try repo.branch(on: "origin", named: "main")
+            try repo.delete(.remoteBranch(remoteBranch))
+            XCTAssertThrowsError(try repo.branch(on: "origin", named: "main"))
+
+            // Does not delete it on remote
+            try FileManager.default.withTemporaryDirectory { local in
+                let repo = try Repository(local: local, remote: remote)
+                XCTAssertNoThrow(try repo.branch(on: "origin", named: "main"))
+            }
+        }
+    }
 }

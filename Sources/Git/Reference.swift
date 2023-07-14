@@ -68,6 +68,11 @@ extension Repository {
             try pointer.perform(git_reference_remove, id)
         }
     }
+
+    @GitActor
+    public func delete(_ reference: Reference) throws {
+        try reference.pointer.perform(git_reference_delete)
+    }
 }
 
 // MARK: - Reference

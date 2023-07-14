@@ -70,7 +70,7 @@ final class BranchTests: XCTestCase {
         }
     }
 
-    func testBranchDelete() throws {
+    func testDelete() throws {
         let remote = try Bundle.module.url(forRepository: "Test.git")
         try FileManager.default.withTemporaryDirectory { local in
             let repo = try Repository(local: local, remote: remote)
@@ -79,7 +79,7 @@ final class BranchTests: XCTestCase {
             let commit = try XCTUnwrap(commits.first)
             let main2 = try repo.createBranch(named: "main2", at: commit)
             XCTAssertNoThrow(try repo.branch(named: "main2"))
-            try repo.delete(main2)
+            try repo.delete(.branch(main2))
             XCTAssertThrowsError(try repo.branch(named: "main2"))
         }
     }

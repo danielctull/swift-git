@@ -39,4 +39,17 @@ final class TagTests: XCTestCase {
 //            XCTAssertEqual(lightweightTarget.description, "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
         }
     }
+
+    func testDelete() throws {
+        let remote = try Bundle.module.url(forRepository: "Test.git")
+        try FileManager.default.withTemporaryDirectory { local in
+            let repo = try Repository(local: local, remote: remote)
+            let tags = try repo.tags
+            XCTAssertEqual(tags.count, 2)
+            let tag0 = try XCTUnwrap(tags.first)
+            try repo.delete(.tag(tag0))
+            XCTAssertEqual(try repo.tags.count, 1)
+            XCTAssertThrowsError(try repo.tag(named: tag0.name))
+        }
+    }
 }
