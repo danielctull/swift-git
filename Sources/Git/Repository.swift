@@ -71,11 +71,6 @@ extension Repository {
     }
 }
 
-extension Repository: CustomStringConvertible {
-
-    public var description: String { "Repository" }
-}
-
 // MARK: - GitPointerInitialization
 
 extension Repository: GitPointerInitialization {}
