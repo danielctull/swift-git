@@ -4,7 +4,7 @@ import Clibgit2
 extension Repository {
 
     @GitActor
-    public func tag(named name: String) throws -> Tag {
+    public func tag(named name: Tag.Name) throws -> Tag {
         try tags.first(where: { $0.name == name })
             ?? { throw GitError(.notFound) }()
     }
@@ -57,8 +57,8 @@ extension Tag {
 
 extension Tag {
 
-    public var name: String {
-        String(reference.rawValue.dropFirst(10)) // length of "refs/tags/"
+    public var name: Name {
+        Name(reference.rawValue.dropFirst(10)) // length of "refs/tags/"
     }
 
     public var target: Object.ID {
@@ -88,13 +88,37 @@ extension Tag.ID: CustomStringConvertible {
     public var description: String { name.description }
 }
 
+// MARK: - Tag.Name
+
+extension Tag {
+
+    public struct Name: Equatable, Hashable, Sendable {
+        private let rawValue: String
+
+        public init(_ string: some StringProtocol) {
+            rawValue = String(string)
+        }
+    }
+}
+
+extension Tag.Name: ExpressibleByStringLiteral {
+
+    public init(stringLiteral value: String) {
+        self.init(value)
+    }
+}
+
+extension Tag.Name: CustomStringConvertible {
+    public var description: String { rawValue }
+}
+
 // MARK: - AnnotatedTag
 
 public struct AnnotatedTag: Equatable, Hashable, Identifiable, Sendable {
 
     let pointer: GitPointer
     public let id: ID
-    public let name: String
+    public let name: Tag.Name
     public let target: Object.ID
     public let tagger: Signature
     public let message: String
@@ -103,7 +127,7 @@ public struct AnnotatedTag: Equatable, Hashable, Identifiable, Sendable {
     init(pointer: GitPointer) throws {
         self.pointer = pointer
         id = try ID(objectID: Object.ID(object: pointer))
-        name = try pointer.get(git_tag_name) |> String.init
+        name = try pointer.get(git_tag_name) |> String.init |> Tag.Name.init
         target = try pointer.get(git_tag_target_id) |> Object.ID.init
         tagger = try pointer.get(git_tag_tagger) |> Signature.init
         message = try pointer.get(git_tag_message) |> String.init
