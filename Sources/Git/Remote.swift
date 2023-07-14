@@ -5,9 +5,9 @@ extension Repository {
 
     @GitActor
     public func remote(named name: Remote.Name) throws -> Remote {
-        try name.rawValue.withCString { id in
+        try name.withCString { name in
             try Remote(
-                create: pointer.create(git_remote_lookup, id),
+                create: pointer.create(git_remote_lookup, name),
                 free: git_remote_free)
         }
     }
@@ -47,7 +47,7 @@ extension Remote {
 extension Remote {
 
     public struct Name: Equatable, Hashable, Sendable {
-        let rawValue: String
+        private let rawValue: String
 
         public init(_ value: some StringProtocol) {
             rawValue = String(value)
@@ -65,6 +65,15 @@ extension Remote.Name: ExpressibleByStringLiteral {
 extension Remote.Name: CustomStringConvertible {
 
     public var description: String { rawValue }
+}
+
+extension Remote.Name {
+
+    fileprivate func withCString<Result>(
+        _ body: (UnsafePointer<Int8>) throws -> Result
+    ) rethrows -> Result {
+        try rawValue.withCString(body)
+    }
 }
 
 // MARK: - GitPointerInitialization
