@@ -75,7 +75,7 @@ extension Object: Identifiable {
         switch self {
         case let .blob(blob): return blob.id.rawValue
         case let .commit(commit): return commit.id.rawValue
-        case let .tag(tag): return tag.id.rawValue
+        case let .tag(tag): return tag.id.objectID
         case let .tree(tree): return tree.id.rawValue
         }
     }
@@ -106,6 +106,11 @@ extension Object.ID {
 
     init(_ git: UnsafePointer<git_oid>?) throws {
         try self.init(oid: Unwrap(git).pointee)
+    }
+
+    @GitActor
+    init(object: GitPointer) throws {
+        self = try object.get(git_object_id) |> Self.init
     }
 
     @GitActor

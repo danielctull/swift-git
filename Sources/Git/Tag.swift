@@ -1,6 +1,5 @@
 
 import Clibgit2
-import Tagged
 
 extension Repository {
 
@@ -94,7 +93,6 @@ extension Tag.ID: CustomStringConvertible {
 public struct AnnotatedTag: Equatable, Hashable, Identifiable, Sendable {
 
     let pointer: GitPointer
-    public typealias ID = Tagged<AnnotatedTag, Object.ID>
     public let id: ID
     public let name: String
     public let target: Object.ID
@@ -104,12 +102,25 @@ public struct AnnotatedTag: Equatable, Hashable, Identifiable, Sendable {
     @GitActor
     init(pointer: GitPointer) throws {
         self.pointer = pointer
-        id = try ID(object: pointer)
+        id = try ID(objectID: Object.ID(object: pointer))
         name = try pointer.get(git_tag_name) |> String.init
         target = try pointer.get(git_tag_target_id) |> Object.ID.init
         tagger = try pointer.get(git_tag_tagger) |> Signature.init
         message = try pointer.get(git_tag_message) |> String.init
     }
+}
+
+// MARK: - AnnotatedTag.ID
+
+extension AnnotatedTag {
+
+    public struct ID: Equatable, Hashable, Sendable {
+        let objectID: Object.ID
+    }
+}
+
+extension AnnotatedTag.ID: CustomStringConvertible {
+    public var description: String { objectID.description }
 }
 
 // MARK: - Reference.tag
