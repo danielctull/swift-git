@@ -22,7 +22,7 @@ extension Repository {
     }
 
     @GitActor
-    public func createBranch(named name: String, at commit: Commit) throws -> Branch {
+    public func createBranch(named name: Branch.Name, at commit: Commit) throws -> Branch {
         try name.withCString { name in
             try Branch(
                 create: pointer.create(git_branch_create, name, commit.pointer.pointer, 0),
@@ -32,7 +32,7 @@ extension Repository {
     }
 
     @GitActor
-    public func branch(named name: String) throws -> Branch {
+    public func branch(named name: Branch.Name) throws -> Branch {
         try name.withCString { name in
             try Branch(
                 create: pointer.create(git_branch_lookup, name, GIT_BRANCH_LOCAL),
@@ -60,7 +60,7 @@ public struct Branch: Equatable, Hashable, Identifiable, Sendable {
     init(pointer: GitPointer) throws {
         pointer.assert(git_reference_is_branch, "Expected branch.")
         self.pointer = pointer
-        name = try pointer.get(git_branch_name) |> String.init |> Name.init(rawValue:)
+        name = try pointer.get(git_branch_name) |> String.init |> Name.init(_:)
         target = try Object.ID(reference: pointer)
         reference = try Reference.Name(pointer: pointer)
         id = ID(name: reference)
@@ -97,20 +97,33 @@ extension Branch.ID: CustomStringConvertible {
 extension Branch {
 
     public struct Name: Equatable, Hashable, Sendable {
-        let rawValue: String
+        private let rawValue: String
+
+        public init(_ string: some StringProtocol) {
+            rawValue = String(string)
+        }
     }
 }
 
 extension Branch.Name: ExpressibleByStringLiteral {
 
     public init(stringLiteral value: String) {
-        self.init(rawValue: value)
+        self.init(value)
     }
 }
 
 extension Branch.Name: CustomStringConvertible {
 
     public var description: String { rawValue }
+}
+
+extension Branch.Name {
+
+    fileprivate func withCString<Result>(
+        _ body: (UnsafePointer<Int8>) throws -> Result
+    ) rethrows -> Result {
+        try rawValue.withCString(body)
+    }
 }
 
 // MARK: - CustomDebugStringConvertible

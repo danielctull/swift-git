@@ -72,8 +72,8 @@ extension RemoteBranch.ID: CustomStringConvertible {
 extension RemoteBranch {
 
     public struct Name: Equatable, Hashable, Sendable {
-        let remote: Remote.Name
-        let branch: Branch.Name
+        fileprivate let remote: Remote.Name
+        fileprivate let branch: Branch.Name
     }
 }
 
@@ -87,7 +87,7 @@ extension RemoteBranch.Name {
         let parts = string.split(separator: "/")
         guard parts.count == 2 else { throw InitializationError(name: string) }
         remote = Remote.Name(parts[0])
-        branch = Branch.Name(rawValue: String(parts[1]))
+        branch = Branch.Name(parts[1])
     }
 }
 
