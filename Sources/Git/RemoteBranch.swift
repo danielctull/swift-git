@@ -86,7 +86,7 @@ extension RemoteBranch.Name {
     fileprivate init(_ string: String) throws {
         let parts = string.split(separator: "/")
         guard parts.count == 2 else { throw InitializationError(name: string) }
-        remote = Remote.Name(rawValue: String(parts[0]))
+        remote = Remote.Name(parts[0])
         branch = Branch.Name(rawValue: String(parts[1]))
     }
 }

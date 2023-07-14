@@ -25,9 +25,8 @@ public struct Remote: Equatable, Hashable, Identifiable, Sendable {
     @GitActor
     init(pointer: GitPointer) throws {
         self.pointer = pointer
-        let name = try pointer.get(git_remote_name) |> String.init
-        self.name = Name(rawValue: name)
-        id = ID(name: self.name)
+        name = try Name(pointer.get(git_remote_name) |> String.init)
+        id = ID(name: name)
 
 //        let urlString = try Unwrap(String(remote.get(git_remote_url)))
 //        url = try Unwrap(URL(string: urlString))
@@ -49,13 +48,17 @@ extension Remote {
 
     public struct Name: Equatable, Hashable, Sendable {
         let rawValue: String
+
+        public init(_ value: some StringProtocol) {
+            rawValue = String(value)
+        }
     }
 }
 
 extension Remote.Name: ExpressibleByStringLiteral {
 
     public init(stringLiteral value: String) {
-        self.init(rawValue: value)
+        self.init(value)
     }
 }
 
