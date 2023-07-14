@@ -3,7 +3,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "GitKit",
+    name: "swift-git",
     platforms: [
       .macOS(.v13),
       .iOS(.v15),
