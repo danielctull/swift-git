@@ -53,10 +53,7 @@ extension Object: Sendable {
             self = try .tree(Tree(pointer: pointer))
 
         default:
-            let typeName = try Unwrap(String(validatingUTF8: git_object_type2string(type)))
-            let expected = try [GIT_OBJECT_BLOB, GIT_OBJECT_COMMIT, GIT_OBJECT_TAG, GIT_OBJECT_TREE]
-                .map { try Unwrap(String(validatingUTF8: git_object_type2string($0))) }
-            throw GitKitError.unexpectedValue(expected: expected, received: typeName)
+            fatalError()
         }
     }
 }
