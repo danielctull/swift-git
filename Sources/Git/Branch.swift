@@ -53,14 +53,14 @@ public struct Branch: Equatable, Hashable, Identifiable, Sendable {
     let pointer: GitPointer
     public let id: ID
     public let target: Object.ID
-    public let name: String
+    public let name: Name
     public let reference: Reference.Name
 
     @GitActor
     init(pointer: GitPointer) throws {
         pointer.assert(git_reference_is_branch, "Expected branch.")
         self.pointer = pointer
-        name = try pointer.get(git_branch_name) |> String.init
+        name = try pointer.get(git_branch_name) |> String.init |> Name.init(rawValue:)
         target = try Object.ID(reference: pointer)
         reference = try Reference.Name(pointer: pointer)
         id = ID(name: reference)
@@ -90,6 +90,27 @@ extension Branch {
 
 extension Branch.ID: CustomStringConvertible {
     public var description: String { name.description }
+}
+
+// MARK: - Branch.Name
+
+extension Branch {
+
+    public struct Name: Equatable, Hashable, Sendable {
+        let rawValue: String
+    }
+}
+
+extension Branch.Name: ExpressibleByStringLiteral {
+
+    public init(stringLiteral value: String) {
+        self.init(rawValue: value)
+    }
+}
+
+extension Branch.Name: CustomStringConvertible {
+
+    public var description: String { rawValue }
 }
 
 // MARK: - CustomDebugStringConvertible
