@@ -1,19 +1,17 @@
 
 import Clibgit2
-import Tagged
 
 // MARK: - Tree
 
 public struct Tree: Equatable, Hashable, Identifiable, Sendable {
 
     let pointer: GitPointer
-    public typealias ID = Tagged<Tree, Object.ID>
     public let id: ID
 
     @GitActor
     init(pointer: GitPointer) throws {
         self.pointer = pointer
-        id = try ID(object: pointer)
+        id = try ID(objectID: Object.ID(object: pointer))
     }
 }
 
@@ -31,6 +29,19 @@ extension Tree {
             .map(Entry.init)
         }
     }
+}
+
+// MARK: - Tree.ID
+
+extension Tree {
+
+    public struct ID: Equatable, Hashable, Sendable {
+        public let objectID: Object.ID
+    }
+}
+
+extension Tree.ID: CustomStringConvertible {
+    public var description: String { objectID.description }
 }
 
 // MARK: - Tree.Entry

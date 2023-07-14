@@ -76,7 +76,7 @@ extension Object: Identifiable {
         case let .blob(blob): return blob.id.objectID
         case let .commit(commit): return commit.id.objectID
         case let .tag(tag): return tag.id.objectID
-        case let .tree(tree): return tree.id.rawValue
+        case let .tree(tree): return tree.id.objectID
         }
     }
 }
