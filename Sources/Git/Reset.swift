@@ -1,6 +1,5 @@
 
 import Clibgit2
-import Tagged
 
 extension Repository {
 

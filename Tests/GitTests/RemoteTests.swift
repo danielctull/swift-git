@@ -10,8 +10,7 @@ final class RemoteTests: XCTestCase {
         let remote = try Bundle.module.url(forRepository: "Test.git")
         try FileManager.default.withTemporaryDirectory { local in
             let repo = try Repository(local: local, remote: remote)
-            let remote = try repo.remote(for: "origin")
-            XCTAssertEqual(remote.id, "origin")
+            let remote = try repo.remote(named: "origin")
             XCTAssertEqual(remote.name, "origin")
 //            XCTAssertEqual(remote.url, local)
         }

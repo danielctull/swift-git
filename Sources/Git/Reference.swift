@@ -1,6 +1,5 @@
 
 import Clibgit2
-import Tagged
 
 extension Repository {
 
@@ -33,7 +32,7 @@ extension Repository {
 
     @GitActor
     public func reference(for id: Reference.ID) throws -> Reference {
-        try id.rawValue.withCString { id in
+        try id.name.rawValue.withCString { id in
             try Reference(
                 create: pointer.create(git_reference_lookup, id),
                 free: git_reference_free)
@@ -65,7 +64,9 @@ extension Repository {
 
     @GitActor
     public func remove(_ reference: Reference) throws {
-        try pointer.perform(git_reference_remove, reference.id.rawValue)
+        try reference.id.name.rawValue.withCString { id in
+            try pointer.perform(git_reference_remove, id)
+        }
     }
 }
 
@@ -125,27 +126,40 @@ extension Reference {
     }
 }
 
-extension Reference: Identifiable {
+// MARK: - Identifiable
 
-    public typealias ID = Tagged<Reference, String>
+extension Reference {
+
+    public struct ID: Equatable, Hashable, Sendable {
+        let name: Name
+    }
+}
+
+extension Reference.ID: ExpressibleByStringLiteral {
+
+    public init(stringLiteral value: String) {
+        self.init(name: Reference.Name(stringLiteral: value))
+    }
+}
+
+extension Reference.ID: CustomStringConvertible {
+
+    public var description: String { name.description }
+}
+
+extension Reference: Identifiable {
 
     public var id: ID {
         switch self {
-        case let .branch(branch): return branch.id.rawValue
-        case let .note(note): return note.id.rawValue
-        case let .remoteBranch(remoteBranch): return remoteBranch.id.rawValue
-        case let .tag(tag): return tag.id.rawValue
+        case let .branch(branch): return ID(name: branch.reference)
+        case let .note(note): return ID(name: note.reference)
+        case let .remoteBranch(remoteBranch): return ID(name: remoteBranch.reference)
+        case let .tag(tag): return ID(name: tag.reference)
         }
     }
 }
 
-extension Reference {
-
-    var tag: Tag? {
-        guard case .tag(let tag) = self else { return nil }
-        return tag
-    }
-}
+// MARK: - CustomDebugStringConvertible
 
 extension Reference: CustomDebugStringConvertible {
 
@@ -159,15 +173,33 @@ extension Reference: CustomDebugStringConvertible {
     }
 }
 
-// MARK: - Tagged + Reference.ID
+// MARK: - Name
 
-extension Tagged where RawValue == Reference.ID {
+extension Reference {
+
+    /// The full name of a reference.
+    public struct Name: Equatable, Hashable, Sendable {
+        let rawValue: String
+    }
+}
+
+extension Reference.Name: ExpressibleByStringLiteral {
+
+    public init(stringLiteral value: String) {
+        self.init(rawValue: value)
+    }
+}
+
+extension Reference.Name: CustomStringConvertible {
+
+    public var description: String { rawValue }
+}
+
+extension Reference.Name {
 
     @GitActor
-    init(reference: GitPointer) throws {
-        let name = try reference.get(git_reference_name) |> String.init
-        let referenceID = Reference.ID(rawValue: name)
-        self.init(rawValue: referenceID)
+    init(pointer: GitPointer) throws {
+        try self.init(rawValue: pointer.get(git_reference_name) |> String.init)
     }
 }
 

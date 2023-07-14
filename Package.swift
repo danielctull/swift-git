@@ -14,7 +14,6 @@ let package = Package(
             targets: ["Git"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/pointfreeco/swift-tagged", from: "0.10.0"),
     ],
     targets: [
 
@@ -22,7 +21,6 @@ let package = Package(
             name: "Git",
             dependencies: [
                 "Clibgit2",
-                .product(name: "Tagged", package: "swift-tagged"),
             ]),
 
         .testTarget(

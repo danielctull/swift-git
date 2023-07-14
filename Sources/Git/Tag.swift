@@ -1,6 +1,5 @@
 
 import Clibgit2
-import Tagged
 
 extension Repository {
 
@@ -23,15 +22,16 @@ extension Repository {
 public struct Tag: Equatable, Hashable, Identifiable, Sendable {
 
     let pointer: GitPointer
-    public typealias ID = Tagged<Tag, Reference.ID>
-    public let id: ID
     let kind: Kind
+    public let id: ID
+    public let reference: Reference.Name
 
     @GitActor
     init(pointer: GitPointer) throws {
         pointer.assert(git_reference_is_tag, "Expected tag.")
         self.pointer = pointer
-        id = try Tag.ID(reference: pointer)
+        reference = try Reference.Name(pointer: pointer)
+        id = ID(name: reference)
 
         let target = try Object.ID(reference: pointer)
 
@@ -58,7 +58,7 @@ extension Tag {
 extension Tag {
 
     public var name: String {
-        String(id.dropFirst(10)) // length of "refs/tags/"
+        String(reference.rawValue.dropFirst(10)) // length of "refs/tags/"
     }
 
     public var target: Object.ID {
@@ -71,8 +71,21 @@ extension Tag {
 
 extension Tag: CustomDebugStringConvertible {
     public var debugDescription: String {
-        "Tag(name: \(name), id: \(id), target: \(target.debugDescription))"
+        "Tag(name: \(name), reference: \(reference), target: \(target.debugDescription))"
     }
+}
+
+// MARK: - Tag.ID
+
+extension Tag {
+
+    public struct ID: Equatable, Hashable, Sendable {
+        fileprivate let name: Reference.Name
+    }
+}
+
+extension Tag.ID: CustomStringConvertible {
+    public var description: String { name.description }
 }
 
 // MARK: - AnnotatedTag
@@ -80,7 +93,6 @@ extension Tag: CustomDebugStringConvertible {
 public struct AnnotatedTag: Equatable, Hashable, Identifiable, Sendable {
 
     let pointer: GitPointer
-    public typealias ID = Tagged<AnnotatedTag, Object.ID>
     public let id: ID
     public let name: String
     public let target: Object.ID
@@ -90,11 +102,34 @@ public struct AnnotatedTag: Equatable, Hashable, Identifiable, Sendable {
     @GitActor
     init(pointer: GitPointer) throws {
         self.pointer = pointer
-        id = try ID(object: pointer)
+        id = try ID(objectID: Object.ID(object: pointer))
         name = try pointer.get(git_tag_name) |> String.init
         target = try pointer.get(git_tag_target_id) |> Object.ID.init
         tagger = try pointer.get(git_tag_tagger) |> Signature.init
         message = try pointer.get(git_tag_message) |> String.init
+    }
+}
+
+// MARK: - AnnotatedTag.ID
+
+extension AnnotatedTag {
+
+    public struct ID: Equatable, Hashable, Sendable {
+        let objectID: Object.ID
+    }
+}
+
+extension AnnotatedTag.ID: CustomStringConvertible {
+    public var description: String { objectID.description }
+}
+
+// MARK: - Reference.tag
+
+extension Reference {
+
+    fileprivate var tag: Tag? {
+        guard case .tag(let tag) = self else { return nil }
+        return tag
     }
 }
 

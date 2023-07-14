@@ -1,15 +1,7 @@
 
 import Clibgit2
-import Tagged
 
 extension Repository {
-
-    @GitActor
-    public func object<ID>(
-        for id: ID
-    ) throws -> Object where ID: RawRepresentable, ID.RawValue == Object.ID {
-        try object(for: id.rawValue)
-    }
 
     @GitActor
     public func object(for id: Object.ID) throws -> Object {
@@ -73,10 +65,10 @@ extension Object: Identifiable {
 
     public var id: ID {
         switch self {
-        case let .blob(blob): return blob.id.rawValue
-        case let .commit(commit): return commit.id.rawValue
-        case let .tag(tag): return tag.id.rawValue
-        case let .tree(tree): return tree.id.rawValue
+        case let .blob(blob): return blob.id.objectID
+        case let .commit(commit): return commit.id.objectID
+        case let .tag(tag): return tag.id.objectID
+        case let .tree(tree): return tree.id.objectID
         }
     }
 }
@@ -106,6 +98,11 @@ extension Object.ID {
 
     init(_ git: UnsafePointer<git_oid>?) throws {
         try self.init(oid: Unwrap(git).pointee)
+    }
+
+    @GitActor
+    init(object: GitPointer) throws {
+        self = try object.get(git_object_id) |> Self.init
     }
 
     @GitActor
@@ -157,25 +154,6 @@ extension Object.ID: Hashable {
         withUnsafeBytes(of: oid.id) {
             hasher.combine(bytes: $0)
         }
-    }
-}
-
-// MARK: - Tagged + Object.ID
-
-extension Tagged where RawValue == Object.ID {
-
-    @GitActor
-    init(object: GitPointer) throws {
-        self = try object.get(git_object_id) |> Self.init
-    }
-
-    init(oid: git_oid) {
-        let objectID = Object.ID(oid: oid)
-        self.init(rawValue: objectID)
-    }
-
-    init(oid: UnsafePointer<git_oid>?) throws {
-        try self.init(oid: Unwrap(oid).pointee)
     }
 }
 

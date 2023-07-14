@@ -1,28 +1,43 @@
 
 import Clibgit2
-import Tagged
 
 // MARK: - Note
 
 public struct Note: Equatable, Hashable, Identifiable, Sendable {
 
     let pointer: GitPointer
-    public typealias ID = Tagged<Note, Reference.ID>
     public let id: ID
+    public let reference: Reference.Name
     public let target: Object.ID
 
     @GitActor
     init(pointer: GitPointer) throws {
         pointer.assert(git_reference_is_note, "Expected note.")
         self.pointer = pointer
-        id = try ID(reference: pointer)
+        reference = try Reference.Name(pointer: pointer)
         target = try Object.ID(reference: pointer)
+        id = ID(name: reference)
     }
 }
 
+// MARK: - Branch.ID
+
+extension Note {
+
+    public struct ID: Equatable, Hashable, Sendable {
+        fileprivate let name: Reference.Name
+    }
+}
+
+extension Note.ID: CustomStringConvertible {
+    public var description: String { name.description }
+}
+
+// MARK: - CustomDebugStringConvertible
+
 extension Note: CustomDebugStringConvertible {
     public var debugDescription: String {
-        "Note(id: \(id), target: \(target.debugDescription))"
+        "Note(reference: \(reference), target: \(target.debugDescription))"
     }
 }
 
