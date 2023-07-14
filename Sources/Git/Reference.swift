@@ -153,7 +153,7 @@ extension Reference: Identifiable {
     public var id: ID {
         switch self {
         case let .branch(branch): return ID(name: branch.reference)
-        case let .note(note): return note.id.rawValue
+        case let .note(note): return ID(name: note.reference)
         case let .remoteBranch(remoteBranch): return remoteBranch.id.rawValue
         case let .tag(tag): return ID(name: tag.reference)
         }
