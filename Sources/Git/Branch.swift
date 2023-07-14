@@ -65,7 +65,7 @@ public struct Branch: Equatable, Hashable, Identifiable, Sendable {
     init(pointer: GitPointer) throws {
         pointer.assert(git_reference_is_branch, "Expected branch.")
         self.pointer = pointer
-        name = try pointer.get(git_branch_name) |> String.init |> Name.init(_:)
+        name = try pointer.get(git_branch_name) |> String.init |> Name.init
         target = try Object.ID(reference: pointer)
         reference = try Reference.Name(pointer: pointer)
         id = ID(name: reference)
