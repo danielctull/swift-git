@@ -1,6 +1,5 @@
 
 import Clibgit2
-import Tagged
 
 extension Repository {
 
@@ -34,29 +33,45 @@ extension Repository {
 
 // MARK: - RemoteBranch
 
-public struct RemoteBranch: Equatable, Hashable, Identifiable, Sendable {
+public struct RemoteBranch: Equatable, Hashable, Sendable {
 
     let pointer: GitPointer
-    public typealias ID = Tagged<RemoteBranch, Reference.ID>
     public let id: ID
     public let target: Object.ID
     public let remote: Remote.ID
     public let name: String
+    public let reference: Reference.Name
 
     @GitActor
     init(pointer: GitPointer) throws {
         pointer.assert(git_reference_is_remote, "Expected remote branch.")
         self.pointer = pointer
-        id = try ID(reference: pointer)
+        reference = try Reference.Name(pointer: pointer)
         name = try pointer.get(git_branch_name) |> String.init
         target = try Object.ID(reference: pointer)
         remote = try Remote.ID(rawValue: String(Unwrap(name.split(separator: "/").first)))
+        id = ID(name: reference)
     }
 }
 
+// MARK: - RemoteBranch.ID
+
+extension RemoteBranch {
+
+    public struct ID: Equatable, Hashable, Sendable {
+        fileprivate let name: Reference.Name
+    }
+}
+
+extension RemoteBranch.ID: CustomStringConvertible {
+    public var description: String { name.description }
+}
+
+// MARK: - CustomDebugStringConvertible
+
 extension RemoteBranch: CustomDebugStringConvertible {
     public var debugDescription: String {
-        "RemoteBranch(name: \(name), id: \(id), target: \(target.debugDescription))"
+        "RemoteBranch(name: \(name), reference: \(reference), target: \(target.debugDescription))"
     }
 }
 
