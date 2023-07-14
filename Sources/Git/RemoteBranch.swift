@@ -22,7 +22,7 @@ extension Repository {
     }
 
     @GitActor
-    public func remoteBranch(on remote: Remote.Name, named branch: Branch.Name) throws -> RemoteBranch {
+    public func branch(on remote: Remote.Name, named branch: Branch.Name) throws -> RemoteBranch {
         try RemoteBranch.Name(remote: remote, branch: branch).withCString { name in
             try RemoteBranch(
                 create: pointer.create(git_branch_lookup, name, GIT_BRANCH_REMOTE),

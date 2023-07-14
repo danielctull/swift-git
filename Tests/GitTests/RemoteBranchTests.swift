@@ -29,7 +29,7 @@ final class RemoteBranchTests: XCTestCase {
         let remote = try Bundle.module.url(forRepository: "Test.git")
         try FileManager.default.withTemporaryDirectory { local in
             let repo = try Repository(local: local, remote: remote)
-            let remoteBranch = try repo.remoteBranch(on: "origin", named: "main")
+            let remoteBranch = try repo.branch(on: "origin", named: "main")
             XCTAssertEqual(remoteBranch.name.description, "origin/main")
             XCTAssertEqual(remoteBranch.id.description, "refs/remotes/origin/main")
             XCTAssertEqual(remoteBranch.reference, "refs/remotes/origin/main")
