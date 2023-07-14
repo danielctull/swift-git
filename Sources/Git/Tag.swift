@@ -98,6 +98,16 @@ public struct AnnotatedTag: Equatable, Hashable, Identifiable, Sendable {
     }
 }
 
+// MARK: - Reference.tag
+
+extension Reference {
+
+    fileprivate var tag: Tag? {
+        guard case .tag(let tag) = self else { return nil }
+        return tag
+    }
+}
+
 // MARK: - GitPointerInitialization
 
 extension Tag: GitPointerInitialization {}

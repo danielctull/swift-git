@@ -127,6 +127,8 @@ extension Reference {
     }
 }
 
+// MARK: - Identifiable
+
 extension Reference: Identifiable {
 
     public typealias ID = Tagged<Reference, Name>
@@ -141,13 +143,7 @@ extension Reference: Identifiable {
     }
 }
 
-extension Reference {
-
-    var tag: Tag? {
-        guard case .tag(let tag) = self else { return nil }
-        return tag
-    }
-}
+// MARK: - CustomDebugStringConvertible
 
 extension Reference: CustomDebugStringConvertible {
 
