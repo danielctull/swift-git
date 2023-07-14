@@ -1,6 +1,5 @@
 
 import Clibgit2
-import Tagged
 
 extension Repository {
 
@@ -201,18 +200,6 @@ extension Reference.Name {
     @GitActor
     init(pointer: GitPointer) throws {
         try self.init(rawValue: pointer.get(git_reference_name) |> String.init)
-    }
-}
-
-// MARK: - Tagged + Reference.ID
-
-extension Tagged where RawValue == Reference.ID {
-
-    @GitActor
-    init(reference: GitPointer) throws {
-        let name = try Reference.Name(pointer: reference)
-        let referenceID = Reference.ID(name: name)
-        self.init(rawValue: referenceID)
     }
 }
 
