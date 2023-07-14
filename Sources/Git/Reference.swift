@@ -39,24 +39,6 @@ extension Repository {
         }
     }
 
-    @available(iOS 13, *)
-    @available(macOS 10.15, *)
-    @GitActor
-    public func remove<SomeReference>(
-        _ reference: SomeReference
-    ) throws where SomeReference: Identifiable,
-                   SomeReference.ID: RawRepresentable,
-                   SomeReference.ID.RawValue == Reference.ID {
-        try remove(reference.id.rawValue)
-    }
-
-    @GitActor
-    public func remove<ID>(
-        _ id: ID
-    ) throws where ID: RawRepresentable, ID.RawValue == Reference.ID {
-        try remove(id.rawValue)
-    }
-
     @GitActor
     public func remove(_ id: Reference.ID) throws {
         try remove(reference(for: id))
