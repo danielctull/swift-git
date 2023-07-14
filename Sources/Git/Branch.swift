@@ -1,6 +1,5 @@
 
 import Clibgit2
-import Tagged
 
 extension Repository {
 
@@ -52,18 +51,19 @@ extension Repository {
 public struct Branch: Equatable, Hashable, Identifiable, Sendable {
 
     let pointer: GitPointer
-    public typealias ID = Tagged<Branch, Reference.ID>
     public let id: ID
     public let target: Object.ID
     public let name: String
+    public let reference: Reference.Name
 
     @GitActor
     init(pointer: GitPointer) throws {
         pointer.assert(git_reference_is_branch, "Expected branch.")
         self.pointer = pointer
-        id = try ID(reference: pointer)
         name = try pointer.get(git_branch_name) |> String.init
         target = try Object.ID(reference: pointer)
+        reference = try Reference.Name(pointer: pointer)
+        id = ID(name: reference)
     }
 }
 
@@ -79,9 +79,24 @@ extension Branch {
     }
 }
 
+// MARK: - Branch.ID
+
+extension Branch {
+
+    public struct ID: Equatable, Hashable, Sendable {
+        fileprivate let name: Reference.Name
+    }
+}
+
+extension Branch.ID: CustomStringConvertible {
+    public var description: String { name.description }
+}
+
+// MARK: - CustomDebugStringConvertible
+
 extension Branch: CustomDebugStringConvertible {
     public var debugDescription: String {
-        "Branch(name: \(name), id: \(id), target: \(target.debugDescription))"
+        "Branch(name: \(name), reference: \(reference), target: \(target.debugDescription))"
     }
 }
 

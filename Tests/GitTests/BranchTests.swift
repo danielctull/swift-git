@@ -14,7 +14,8 @@ final class BranchTests: XCTestCase {
             XCTAssertEqual(branches.count, 1)
             let branch = try XCTUnwrap(branches.first)
             XCTAssertEqual(branch.name, "main")
-            XCTAssertEqual(branch.id, "refs/heads/main")
+            XCTAssertEqual(branch.id.description, "refs/heads/main")
+            XCTAssertEqual(branch.reference, "refs/heads/main")
             XCTAssertEqual(branch.target.description, "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
         }
     }
@@ -28,7 +29,8 @@ final class BranchTests: XCTestCase {
             let commit = try XCTUnwrap(commits.first)
             let main2 = try repo.createBranch(named: "main2", at: commit)
             XCTAssertEqual(main2.name, "main2")
-            XCTAssertEqual(main2.id, "refs/heads/main2")
+            XCTAssertEqual(main2.id.description, "refs/heads/main2")
+            XCTAssertEqual(main2.reference, "refs/heads/main2")
             XCTAssertEqual(main2.target.description, "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
         }
     }
@@ -39,7 +41,8 @@ final class BranchTests: XCTestCase {
             let repo = try Repository(local: local, remote: remote)
             let branch = try repo.branch(named: "main")
             XCTAssertEqual(branch.name, "main")
-            XCTAssertEqual(branch.id, "refs/heads/main")
+            XCTAssertEqual(branch.id.description, "refs/heads/main")
+            XCTAssertEqual(branch.reference, "refs/heads/main")
             XCTAssertEqual(branch.target.description, "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
         }
     }
@@ -52,13 +55,15 @@ final class BranchTests: XCTestCase {
             do {
                 let moved = try branch.move(to: "moved")
                 XCTAssertEqual(moved.name, "moved")
-                XCTAssertEqual(moved.id, "refs/heads/moved")
+                XCTAssertEqual(moved.id.description, "refs/heads/moved")
+                XCTAssertEqual(moved.reference, "refs/heads/moved")
                 XCTAssertEqual(moved.target.description, "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
             }
             do {
                 let moved = try repo.branch(named: "moved")
                 XCTAssertEqual(moved.name, "moved")
-                XCTAssertEqual(moved.id, "refs/heads/moved")
+                XCTAssertEqual(moved.id.description, "refs/heads/moved")
+                XCTAssertEqual(moved.reference, "refs/heads/moved")
                 XCTAssertEqual(moved.target.description, "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
             }
             XCTAssertThrowsError(try repo.branch(named: "main"))
