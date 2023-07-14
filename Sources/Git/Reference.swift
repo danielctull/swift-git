@@ -155,7 +155,7 @@ extension Reference: Identifiable {
         case let .branch(branch): return ID(name: branch.reference)
         case let .note(note): return note.id.rawValue
         case let .remoteBranch(remoteBranch): return remoteBranch.id.rawValue
-        case let .tag(tag): return tag.id.rawValue
+        case let .tag(tag): return ID(name: tag.reference)
         }
     }
 }

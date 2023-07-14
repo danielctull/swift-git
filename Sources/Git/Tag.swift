@@ -23,15 +23,16 @@ extension Repository {
 public struct Tag: Equatable, Hashable, Identifiable, Sendable {
 
     let pointer: GitPointer
-    public typealias ID = Tagged<Tag, Reference.ID>
-    public let id: ID
     let kind: Kind
+    public let id: ID
+    public let reference: Reference.Name
 
     @GitActor
     init(pointer: GitPointer) throws {
         pointer.assert(git_reference_is_tag, "Expected tag.")
         self.pointer = pointer
-        id = try Tag.ID(reference: pointer)
+        reference = try Reference.Name(pointer: pointer)
+        id = ID(name: reference)
 
         let target = try Object.ID(reference: pointer)
 
@@ -58,7 +59,7 @@ extension Tag {
 extension Tag {
 
     public var name: String {
-        String(id.rawValue.name.rawValue.dropFirst(10)) // length of "refs/tags/"
+        String(reference.rawValue.dropFirst(10)) // length of "refs/tags/"
     }
 
     public var target: Object.ID {
@@ -71,8 +72,21 @@ extension Tag {
 
 extension Tag: CustomDebugStringConvertible {
     public var debugDescription: String {
-        "Tag(name: \(name), id: \(id), target: \(target.debugDescription))"
+        "Tag(name: \(name), reference: \(reference), target: \(target.debugDescription))"
     }
+}
+
+// MARK: - Tag.ID
+
+extension Tag {
+
+    public struct ID: Equatable, Hashable, Sendable {
+        fileprivate let name: Reference.Name
+    }
+}
+
+extension Tag.ID: CustomStringConvertible {
+    public var description: String { name.description }
 }
 
 // MARK: - AnnotatedTag

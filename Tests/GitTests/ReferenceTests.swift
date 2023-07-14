@@ -43,10 +43,10 @@ final class ReferenceTests: XCTestCase {
             XCTAssertEqual(try references.value(at: 2).debugDescription, "RemoteBranch(name: origin/main, id: refs/remotes/origin/main, target: b1d2dba)")
             XCTAssertEqual(try references.value(at: 3).id, "refs/tags/1.0")
             XCTAssertEqual(try references.value(at: 3).target.description, "17e26bc76cff375603e7173dac31e5183350e559")
-            XCTAssertEqual(try references.value(at: 3).debugDescription, "Tag(name: 1.0, id: refs/tags/1.0, target: 17e26bc)")
+            XCTAssertEqual(try references.value(at: 3).debugDescription, "Tag(name: 1.0, reference: refs/tags/1.0, target: 17e26bc)")
             XCTAssertEqual(try references.value(at: 4).id, "refs/tags/lightweight-tag")
             XCTAssertEqual(try references.value(at: 4).target.description, "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
-            XCTAssertEqual(try references.value(at: 4).debugDescription, "Tag(name: lightweight-tag, id: refs/tags/lightweight-tag, target: b1d2dba)")
+            XCTAssertEqual(try references.value(at: 4).debugDescription, "Tag(name: lightweight-tag, reference: refs/tags/lightweight-tag, target: b1d2dba)")
         }
     }
 
