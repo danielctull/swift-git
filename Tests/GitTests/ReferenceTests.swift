@@ -22,7 +22,7 @@ final class ReferenceTests: XCTestCase {
             let head = try repository.head
             guard case let .branch(branch) = head else { XCTFail("Expected branch"); return }
             XCTAssertEqual(branch.name, "main")
-            XCTAssertEqual(branch.reference, "refs/heads/main")
+            XCTAssertEqual(branch.reference.description, "refs/heads/main")
         }
     }
 

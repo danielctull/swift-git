@@ -15,7 +15,7 @@ final class TagTests: XCTestCase {
 
             let tag0 = try XCTUnwrap(tags.first)
             XCTAssertEqual(tag0.id.description, "refs/tags/1.0")
-            XCTAssertEqual(tag0.reference, "refs/tags/1.0")
+            XCTAssertEqual(tag0.reference.description, "refs/tags/1.0")
             XCTAssertEqual(tag0.name, "1.0")
             XCTAssertEqual(tag0.target.description, "17e26bc76cff375603e7173dac31e5183350e559")
 //            guard case let .annotated(annotatedID, annotatedTag) = tag0 else { XCTFail("Expected annotated tag"); return }
@@ -31,7 +31,7 @@ final class TagTests: XCTestCase {
 
             let tag1 = try XCTUnwrap(tags.last)
             XCTAssertEqual(tag1.id.description, "refs/tags/lightweight-tag")
-            XCTAssertEqual(tag1.reference, "refs/tags/lightweight-tag")
+            XCTAssertEqual(tag1.reference.description, "refs/tags/lightweight-tag")
             XCTAssertEqual(tag1.name, "lightweight-tag")
             XCTAssertEqual(tag1.target.description, "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
 //            guard case let .lightweight(lightweightID, lightweightTarget) = tag1 else { XCTFail("Expected lightweight tag"); return }

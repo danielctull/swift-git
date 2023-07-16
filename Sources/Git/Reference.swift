@@ -135,7 +135,7 @@ extension Reference {
 extension Reference.ID: ExpressibleByStringLiteral {
 
     public init(stringLiteral value: String) {
-        self.init(name: Reference.Name(stringLiteral: value))
+        self.init(name: Reference.Name(value))
     }
 }
 
@@ -177,13 +177,10 @@ extension Reference {
     /// The full name of a reference.
     public struct Name: Equatable, Hashable, Sendable {
         let rawValue: String
-    }
-}
 
-extension Reference.Name: ExpressibleByStringLiteral {
-
-    public init(stringLiteral value: String) {
-        self.init(rawValue: value)
+        init(_ rawValue: String) {
+            self.rawValue = rawValue
+        }
     }
 }
 
@@ -196,7 +193,7 @@ extension Reference.Name {
 
     @GitActor
     init(pointer: GitPointer) throws {
-        try self.init(rawValue: pointer.get(git_reference_name) |> Unwrap |> String.init(cString:))
+        try self.init(pointer.get(git_reference_name) |> Unwrap |> String.init(cString:))
     }
 }
 
