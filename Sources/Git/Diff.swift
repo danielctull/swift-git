@@ -104,16 +104,38 @@ extension Diff.Delta {
 extension Diff.Delta {
 
     public enum Status: Equatable {
+
+        /// No changes.
         case unmodified
+
+        /// Entry does not exist in old version.
         case added
+
+        /// Entry does not exist in new version.
         case deleted
+
+        /// Entry content changed between old and new.
         case modified
+
+        /// Entry was renamed between old and new.
         case renamed(similarity: Int)
+
+        /// Entry was copied from another old entry.
         case copied(similarity: Int)
+
+        /// Entry is ignored item in workdir.
         case ignored
+
+        /// Entry is untracked item in workdir.
         case untracked
+
+        /// Type of entry changed between old and new.
         case typeChange
+
+        /// Entry is unreadable.
         case unreadable
+
+        /// Entry in the index is conflicted.
         case conflicted
     }
 }
