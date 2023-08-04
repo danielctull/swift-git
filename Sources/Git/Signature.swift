@@ -18,8 +18,8 @@ extension Signature {
     }
 
     init(_ signature: git_signature) throws {
-        name = try Unwrap(String(validatingUTF8: signature.name))
-        email = try Unwrap(String(validatingUTF8: signature.email))
+        name = String(cString: signature.name)
+        email = String(cString: signature.email)
         date = Date(timeIntervalSince1970: TimeInterval(signature.when.time))
         timeZone = try Unwrap(TimeZone(secondsFromGMT: 60 * Int(signature.when.offset)))
     }

@@ -196,7 +196,7 @@ extension Reference.Name {
 
     @GitActor
     init(pointer: GitPointer) throws {
-        try self.init(rawValue: pointer.get(git_reference_name) |> String.init)
+        try self.init(rawValue: pointer.get(git_reference_name) |> Unwrap |> String.init(cString:))
     }
 }
 

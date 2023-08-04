@@ -67,7 +67,7 @@ extension Blame.Hunk {
         lines = ClosedRange(start: hunk.final_start_line_number, count: hunk.lines_in_hunk)
         signature = try Signature(hunk.final_signature.pointee)
         commitID = Commit.ID(hunk.final_commit_id)
-        path = try FilePath(rawValue: Unwrap(String(validatingUTF8: hunk.orig_path)))
+        path = hunk.orig_path |> String.init(cString:) |> FilePath.init(rawValue:)
     }
 }
 

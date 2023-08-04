@@ -63,7 +63,7 @@ extension Tree {
                 |> \.pointee
                 |> Object.ID.init
 
-            name = try pointer.get(git_tree_entry_name) |> String.init
+            name = try pointer.get(git_tree_entry_name) |> Unwrap |> String.init(cString:)
         }
     }
 }

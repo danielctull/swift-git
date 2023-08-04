@@ -55,8 +55,7 @@ extension Repository {
         get throws {
             try pointer.get(git_repository_commondir)
                 |> Unwrap
-                |> String.init(validatingUTF8:)
-                |> Unwrap
+                |> String.init(cString:)
                 |> URL.init(fileURLWithPath:)
         }
     }
@@ -65,8 +64,7 @@ extension Repository {
     public var workingDirectory: URL? {
         try? pointer.get(git_repository_workdir)
             |> Unwrap
-            |> String.init(validatingUTF8:)
-            |> Unwrap
+            |> String.init(cString:)
             |> URL.init(fileURLWithPath:)
     }
 }

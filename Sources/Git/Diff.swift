@@ -93,8 +93,8 @@ extension Diff.Delta {
 
     init(_ delta: git_diff_delta) throws {
         flags = Diff.Flags(rawValue: delta.flags)
-        from = try Diff.File(delta.old_file)
-        to = try Diff.File(delta.new_file)
+        from = Diff.File(delta.old_file)
+        to =  Diff.File(delta.new_file)
         status = try Diff.Delta.Status(status: delta.status, similarity: delta.similarity)
     }
 }
@@ -154,11 +154,11 @@ extension Diff {
 
 extension Diff.File {
 
-    init?(_ file: git_diff_file) throws {
+    init?(_ file: git_diff_file) {
         flags = Diff.Flags(rawValue: file.flags)
         guard flags.contains(.exists) else { return nil }
         id = ID(objectID: Object.ID(oid: file.id))
-        path = try Unwrap(String(validatingUTF8: file.path))
+        path = String(cString: file.path)
         size = file.size
     }
 }
