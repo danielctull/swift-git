@@ -111,55 +111,11 @@ extension GitPointer: Hashable {
 
 extension GitPointer {
 
-    func perform(
-        _ task: @escaping (OpaquePointer) -> Int32
+    func perform<each Parameter>(
+        _ task: @escaping (OpaquePointer?, repeat each Parameter) -> Int32,
+        _ parameter: repeat each Parameter
     ) throws {
-        try GitError.check(task(pointer))
-    }
-
-    func perform<A>(
-        _ task: @escaping (OpaquePointer, A) -> Int32,
-        _ a: A
-    ) throws {
-        try GitError.check(task(pointer, a))
-    }
-
-    func perform<A, B>(
-        _ task: @escaping (OpaquePointer, A, B) -> Int32,
-        _ a: A,
-        _ b: B
-    ) throws {
-        try GitError.check(task(pointer, a, b))
-    }
-
-    func perform<A, B, C>(
-        _ task: @escaping (OpaquePointer, A, B, C) -> Int32,
-        _ a: A,
-        _ b: B,
-        _ c: C
-    ) throws {
-        try GitError.check(task(pointer, a, b, c))
-    }
-
-    func perform<A, B, C, D>(
-        _ task: @escaping (OpaquePointer, A, B, C, D) -> Int32,
-        _ a: A,
-        _ b: B,
-        _ c: C,
-        _ d: D
-    ) throws {
-        try GitError.check(task(pointer, a, b, c, d))
-    }
-
-    func perform<A, B, C, D, E>(
-        _ task: @escaping (OpaquePointer, A, B, C, D, E) -> Int32,
-        _ a: A,
-        _ b: B,
-        _ c: C,
-        _ d: D,
-        _ e: E
-    ) throws {
-        try GitError.check(task(pointer, a, b, c, d, e))
+        try GitError.check(task(pointer, repeat each parameter))
     }
 }
 
