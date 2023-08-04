@@ -17,6 +17,7 @@ public struct Tree: Equatable, Hashable, Identifiable, Sendable {
 
 extension Tree {
 
+    @GitActor
     public var entries: [Entry] {
         get throws {
             try GitCollection(
