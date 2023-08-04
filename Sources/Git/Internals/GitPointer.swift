@@ -123,17 +123,11 @@ extension GitPointer {
 
 extension GitPointer {
 
-    func get<Value>(
-        _ task: (OpaquePointer) -> Value
+    func get<each Parameter, Value>(
+        _ task: (OpaquePointer?, repeat each Parameter) -> Value,
+        _ parameter: repeat each Parameter
     ) -> Value {
-        task(pointer)
-    }
-
-    func get<A, Value>(
-        _ task: (OpaquePointer, A) -> Value,
-        _ a: A
-    ) -> Value {
-        task(pointer, a)
+        task(pointer, repeat each parameter)
     }
 }
 
