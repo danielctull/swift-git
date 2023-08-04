@@ -35,7 +35,10 @@ public struct Tag: Equatable, Hashable, Identifiable, Sendable {
 
         let target = try Object.ID(reference: pointer)
 
-        let repository = try Repository(pointer: GitPointer(Unwrap(pointer.get(git_reference_owner))))
+        let repository = try pointer.get(git_reference_owner)
+            |> Unwrap
+            |> GitPointer.init
+            |> Repository.init
 
         let object = try repository.object(for: target)
         switch object {
