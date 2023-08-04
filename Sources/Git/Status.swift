@@ -15,6 +15,7 @@ extension Repository {
                 pointer: list,
                 count: git_status_list_entrycount,
                 element: git_status_byindex)
+            .map(Unwrap)
             .map(StatusEntry.init)
         }
     }
@@ -30,8 +31,8 @@ public struct StatusEntry {
 
 extension StatusEntry {
 
-    fileprivate init(_ pointer: UnsafePointer<git_status_entry>?) throws {
-        let entry = try Unwrap(pointer).pointee
+    fileprivate init(_ entry: UnsafePointer<git_status_entry>) throws {
+        let entry = entry.pointee
         status = Status(entry.status)
         if let head_to_index = entry.head_to_index {
             headToIndex = try Diff.Delta(head_to_index.pointee)

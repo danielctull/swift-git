@@ -93,13 +93,13 @@ extension Object.ID {
         self.init(oid: oid)
     }
 
-    init(_ git: UnsafePointer<git_oid>?) throws {
-        try self.init(oid: Unwrap(git).pointee)
+    init(_ oid: UnsafePointer<git_oid>) {
+        self.init(oid: oid.pointee)
     }
 
     @GitActor
     init(object: GitPointer) throws {
-        self = try object.get(git_object_id) |> Self.init
+        self = try object.get(git_object_id) |> Unwrap |> Self.init
     }
 
     @GitActor
@@ -108,7 +108,7 @@ extension Object.ID {
             create: reference.create(git_reference_resolve),
             free: git_reference_free)
 
-        self = try resolved.get(git_reference_target) |> Self.init
+        self = try resolved.get(git_reference_target) |> Unwrap |> Self.init
     }
 }
 

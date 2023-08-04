@@ -128,8 +128,8 @@ public struct AnnotatedTag: Equatable, Hashable, Identifiable, Sendable {
         self.pointer = pointer
         id = try ID(objectID: Object.ID(object: pointer))
         name = try pointer.get(git_tag_name) |> Unwrap |> String.init(cString:) |> Tag.Name.init
-        target = try pointer.get(git_tag_target_id) |> Object.ID.init
-        tagger = try pointer.get(git_tag_tagger) |> Signature.init
+        target = try pointer.get(git_tag_target_id) |> Unwrap |> Object.ID.init
+        tagger = try pointer.get(git_tag_tagger) |> Unwrap |> Signature.init
         message = try pointer.get(git_tag_message) |> Unwrap |> String.init(cString:)
     }
 }

@@ -28,6 +28,7 @@ extension Blame {
     @GitActor
     public func hunk(for line: LineNumber) throws -> Hunk {
         try pointer.get(git_blame_get_hunk_byline, line.rawValue)
+            |> Unwrap
             |> Hunk.init
     }
 
@@ -59,8 +60,8 @@ extension Blame {
 
 extension Blame.Hunk {
 
-    init(_ git: UnsafePointer<git_blame_hunk>?) throws {
-        try self.init(Unwrap(git).pointee)
+    init(_ hunk: UnsafePointer<git_blame_hunk>) throws {
+        try self.init(hunk.pointee)
     }
 
     init(_ hunk: git_blame_hunk) throws {
