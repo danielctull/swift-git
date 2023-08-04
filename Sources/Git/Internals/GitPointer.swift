@@ -58,34 +58,11 @@ final class GitPointer {
 
 extension GitPointer {
 
-    func create(
-        _ task: @escaping (UnsafeMutablePointer<OpaquePointer?>, OpaquePointer) -> Int32
+    func create<each Parameter>(
+        _ task: @escaping (UnsafeMutablePointer<OpaquePointer?>?, OpaquePointer?, repeat each Parameter) -> Int32,
+        _ parameter: repeat each Parameter
     ) -> Create {
-        withUnsafeMutablePointer { output in task(output, self.pointer) }
-    }
-
-    func create<A>(
-        _ task: @escaping (UnsafeMutablePointer<OpaquePointer?>, OpaquePointer, A) -> Int32,
-        _ a: A
-    ) -> Create {
-        withUnsafeMutablePointer { output in task(output, self.pointer, a) }
-    }
-
-    func create<A, B>(
-        _ task: @escaping (UnsafeMutablePointer<OpaquePointer?>, OpaquePointer, A, B) -> Int32,
-        _ a: A,
-        _ b: B
-    ) -> Create {
-        withUnsafeMutablePointer { output in task(output, self.pointer, a, b) }
-    }
-
-    func create<A, B, C>(
-        _ task: @escaping (UnsafeMutablePointer<OpaquePointer?>, OpaquePointer, A, B, C) -> Int32,
-        _ a: A,
-        _ b: B,
-        _ c: C
-    ) -> Create {
-        withUnsafeMutablePointer { output in task(output, self.pointer, a, b, c) }
+        withUnsafeMutablePointer { output in task(output, self.pointer, repeat each parameter) }
     }
 }
 
