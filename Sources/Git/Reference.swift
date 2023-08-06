@@ -34,7 +34,7 @@ extension Repository {
     /// Lookup a reference by id in a repository.
     @GitActor
     public func reference(for id: Reference.ID) throws -> Reference {
-        try id.name.rawValue.withCString { id in
+        try id.name.withCString { id in
             try Reference(
                 create: pointer.create(git_reference_lookup, id),
                 free: git_reference_free)
@@ -187,6 +187,15 @@ extension Reference {
 extension Reference.Name: CustomStringConvertible {
 
     public var description: String { rawValue }
+}
+
+extension Reference.Name {
+
+    fileprivate func withCString<Result>(
+        _ body: (UnsafePointer<Int8>) throws -> Result
+    ) rethrows -> Result {
+        try rawValue.withCString(body)
+    }
 }
 
 extension Reference.Name {
