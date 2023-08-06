@@ -38,7 +38,6 @@ public struct RemoteBranch: Equatable, Hashable, Sendable {
     let pointer: GitPointer
     public let id: ID
     public let target: Object.ID
-    public let remote: Remote.Name
     public let name: Name
     public let reference: Reference.Name
 
@@ -49,7 +48,6 @@ public struct RemoteBranch: Equatable, Hashable, Sendable {
         reference = try Reference.Name(pointer: pointer)
         name = try pointer.get(git_branch_name) |> String.init |> Name.init
         target = try Object.ID(reference: pointer)
-        remote = name.remote
         id = ID(name: reference)
     }
 }
@@ -72,22 +70,17 @@ extension RemoteBranch.ID: CustomStringConvertible {
 extension RemoteBranch {
 
     public struct Name: Equatable, Hashable, Sendable {
-        fileprivate let remote: Remote.Name
-        fileprivate let branch: Branch.Name
+        public let remote: Remote.Name
+        public let branch: Branch.Name
     }
 }
 
 extension RemoteBranch.Name {
 
-    struct InitializationError: Error {
-        let name: String
-    }
-
     fileprivate init(_ string: String) throws {
-        let parts = string.split(separator: "/")
-        guard parts.count == 2 else { throw InitializationError(name: string) }
-        remote = Remote.Name(parts[0])
-        branch = Branch.Name(parts[1])
+        let index = string.firstIndex(of: "/")!
+        remote = Remote.Name(string[..<index])
+        branch = Branch.Name(string[string.index(after: index)...])
     }
 }
 
