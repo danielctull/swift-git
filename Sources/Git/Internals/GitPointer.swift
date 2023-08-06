@@ -170,6 +170,6 @@ extension GitPointer {
         file: StaticString = #file,
         line: UInt = #line
     ) {
-        Swift.assert(assertion(pointer) == 1, message())
+        Swift.assert(assertion(pointer) == 1, message(), file: file, line: line)
     }
 }
