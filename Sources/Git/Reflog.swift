@@ -44,13 +44,17 @@ public struct Reflog: Equatable, Hashable, Sendable {
 
 extension Reflog {
 
+    @GitActor
     public var items: [Item] {
         get throws {
             try GitCollection(
                 pointer: pointer,
                 count: git_reflog_entrycount,
-                element: git_reflog_entry_byindex)
-                .map(Reflog.Item.init)
+                element: { pointer, index in (pointer, index) })
+                .map { (pointer, index) in
+                    let item = try git_reflog_entry_byindex(pointer, index) |> Unwrap
+                    return try Item(pointer: GitPointer(item), index: index)
+                }
         }
     }
 
@@ -68,6 +72,14 @@ extension Reflog {
                 }
             }
         }
+    }
+
+    /// Remove an entry from the reflog.
+    ///
+    /// - Parameter item: The item to remove.
+    @GitActor
+    public func remove(_ item: Reflog.Item) throws {
+        try pointer.perform(git_reflog_drop, item.id.rawValue, Int32(true))
     }
 
     /// Write the reflog back to disk using an atomic file lock.
@@ -117,30 +129,23 @@ extension Reflog {
 
     public struct Item: Equatable, Hashable, Identifiable, Sendable {
         public let id: ID
-        public var message: String { id.message }
-        public var committer: Signature { id.committer }
-        public var old: Object.ID { id.old }
-        public var new: Object.ID { id.new }
+        public let message: String
+        public let committer: Signature
+        public let old: Object.ID
+        public let new: Object.ID
     }
 }
 
 extension Reflog.Item {
 
-    fileprivate init(_ pointer: OpaquePointer?) throws {
-        let pointer = try Unwrap(pointer)
-        self.init(
-            message: try Unwrap(String(validatingUTF8: git_reflog_entry_message(pointer))),
-            committer: try Signature(Unwrap(git_reflog_entry_committer(pointer)).pointee),
-            old: try Object.ID(oid: Unwrap(git_reflog_entry_id_old(pointer)).pointee),
-            new: try Object.ID(oid: Unwrap(git_reflog_entry_id_new(pointer)).pointee))
-    }
-}
-
-extension Reflog.Item {
-
-    init(message: String, committer: Signature, old: Object.ID, new: Object.ID) {
-        let id = ID(message: message, committer: committer, old: old, new: new)
-        self.init(id: id)
+    @GitActor
+    fileprivate init(pointer: GitPointer, index: Int) throws {
+        try self.init(
+            id: ID(rawValue: index),
+            message: pointer.get(git_reflog_entry_message) |> Unwrap |> String.init(cString:),
+            committer: pointer.get(git_reflog_entry_committer) |> Unwrap |> Signature.init,
+            old: pointer.get(git_reflog_entry_id_old) |> Unwrap |> \.pointee |> Object.ID.init,
+            new: pointer.get(git_reflog_entry_id_new) |> Unwrap |> \.pointee |> Object.ID.init)
     }
 }
 
@@ -149,10 +154,7 @@ extension Reflog.Item {
 extension Reflog.Item {
 
     public struct ID: Equatable, Hashable, Sendable {
-        let message: String
-        let committer: Signature
-        let old: Object.ID
-        let new: Object.ID
+        let rawValue: Int
     }
 }
 

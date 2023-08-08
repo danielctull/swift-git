@@ -48,6 +48,22 @@ final class ReflogTests: XCTestCase {
         }
     }
 
+    func testRemove() throws {
+        let remote = try Bundle.module.url(forRepository: "Test.git")
+        try FileManager.default.withTemporaryDirectory { local in
+
+            let repo = try Repository(local: local, remote: remote)
+            let reflog = try repo.reflog(named: "CUSTOM")
+            XCTAssertEqual(try reflog.items.count, 0)
+
+            try reflog.append(.testItem(id: repo.head.target))
+            XCTAssertEqual(try reflog.items.count, 1)
+
+            try reflog.remove(XCTUnwrap(reflog.items.first))
+            XCTAssertEqual(try reflog.items.count, 0)
+        }
+    }
+
     func testWrite() throws {
         let remote = try Bundle.module.url(forRepository: "Test.git")
         try FileManager.default.withTemporaryDirectory { local in
