@@ -18,6 +18,15 @@ extension Repository {
                 free: git_reflog_free)
         }
     }
+
+    @GitActor
+    public func renameReflog(from old: String, to new: String) throws {
+        try old.withCString { old in
+            try new.withCString { new in
+                try pointer.perform(git_reflog_rename, old, new)
+            }
+        }
+    }
 }
 
 // MARK: - Reflog
