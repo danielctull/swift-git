@@ -33,6 +33,14 @@ extension Reflog {
         }
     }
 
+    /// Add a new entry to the in-memory reflog.
+    ///
+    /// To save the addition to disk, you should call ``write()``.
+    ///
+    /// - Parameters:
+    ///   - id: The oid the reference is now pointing to.
+    ///   - message: The reflog message.
+    ///   - committer: The signature of the committer.
     @GitActor
     public func addItem(id: Object.ID, message: String, committer: Signature) throws {
         try id.withUnsafePointer { oid in
@@ -42,6 +50,12 @@ extension Reflog {
                 }
             }
         }
+    }
+
+    /// Write the reflog back to disk using an atomic file lock.
+    @GitActor
+    public func write() throws {
+        try pointer.perform(git_reflog_write)
     }
 }
 

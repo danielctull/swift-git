@@ -52,4 +52,41 @@ final class ReflogTests: XCTestCase {
             XCTAssertEqual(item.committer.timeZone, TimeZone(secondsFromGMT: 120))
         }
     }
+
+    func testWrite() throws {
+        let remote = try Bundle.module.url(forRepository: "Test.git")
+        try FileManager.default.withTemporaryDirectory { local in
+
+            let repo = try Repository(local: local, remote: remote)
+            let reflog = try repo.reflog
+
+            try reflog.addItem(
+                id: repo.head.target,
+                message: "Test Message",
+                committer: Signature(
+                    name: "Test Name",
+                    email: "Test Email",
+                    date: Date(timeIntervalSince1970: 1999),
+                    timeZone: XCTUnwrap(TimeZone(secondsFromGMT: 120))))
+
+            do {
+                let item = try XCTUnwrap(repo.reflog.items.first)
+                XCTAssertEqual(item.old.description, "0000000000000000000000000000000000000000")
+                XCTAssertEqual(item.committer.name, "Daniel Tull")
+            }
+
+            try reflog.write()
+
+            do {
+                let item = try XCTUnwrap(repo.reflog.items.first)
+                XCTAssertEqual(item.message, "Test Message")
+                XCTAssertEqual(item.old.description, "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
+                XCTAssertEqual(item.new.description, "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
+                XCTAssertEqual(item.committer.name, "Test Name")
+                XCTAssertEqual(item.committer.email, "Test Email")
+                XCTAssertEqual(item.committer.date, Date(timeIntervalSince1970: 1999))
+                XCTAssertEqual(item.committer.timeZone, TimeZone(secondsFromGMT: 120))
+            }
+        }
+    }
 }
