@@ -58,15 +58,12 @@ extension Reflog {
     ///
     /// To save the addition to disk, you should call ``write()``.
     ///
-    /// - Parameters:
-    ///   - id: The oid the reference is now pointing to.
-    ///   - message: The reflog message.
-    ///   - committer: The signature of the committer.
+    /// - Parameter item: The item to append.
     @GitActor
-    public func addItem(id: Object.ID, message: String, committer: Signature) throws {
-        try id.withUnsafePointer { oid in
-            try message.withCString { message in
-                try committer.withUnsafePointer { committer in
+    public func append(_ item: Reflog.Item.Draft) throws {
+        try item.id.withUnsafePointer { oid in
+            try item.message.withCString { message in
+                try item.committer.withUnsafePointer { committer in
                     try pointer.perform(git_reflog_append, oid, committer, message)
                 }
             }
@@ -156,6 +153,24 @@ extension Reflog.Item {
         let committer: Signature
         let old: Object.ID
         let new: Object.ID
+    }
+}
+
+// MARK: - Reflog.Item.Draft
+
+extension Reflog.Item {
+
+    public struct Draft: Equatable, Hashable, Sendable {
+
+        public let id: Object.ID
+        public let message: String
+        public let committer: Signature
+
+        public init(id: Object.ID, message: String, committer: Signature) {
+            self.id = id
+            self.message = message
+            self.committer = committer
+        }
     }
 }
 

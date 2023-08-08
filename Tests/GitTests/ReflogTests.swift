@@ -26,25 +26,20 @@ final class ReflogTests: XCTestCase {
         }
     }
 
-    func testAddItem() throws {
+    func testAppend() throws {
         let remote = try Bundle.module.url(forRepository: "Test.git")
         try FileManager.default.withTemporaryDirectory { local in
 
             let repo = try Repository(local: local, remote: remote)
-            let reflog = try repo.reflog
+            let reflog = try repo.reflog(named: "CUSTOM")
+            XCTAssertEqual(try reflog.items.count, 0)
 
-            try reflog.addItem(
-                id: repo.head.target,
-                message: "Test Message",
-                committer: Signature(
-                    name: "Test Name",
-                    email: "Test Email",
-                    date: Date(timeIntervalSince1970: 1999),
-                    timeZone: XCTUnwrap(TimeZone(secondsFromGMT: 120))))
+            try reflog.append(.testItem(id: repo.head.target))
+            XCTAssertEqual(try reflog.items.count, 1)
 
             let item = try XCTUnwrap(reflog.items.first)
             XCTAssertEqual(item.message, "Test Message")
-            XCTAssertEqual(item.old.description, "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
+            XCTAssertEqual(item.old.description, "0000000000000000000000000000000000000000")
             XCTAssertEqual(item.new.description, "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
             XCTAssertEqual(item.committer.name, "Test Name")
             XCTAssertEqual(item.committer.email, "Test Email")
@@ -61,24 +56,13 @@ final class ReflogTests: XCTestCase {
 
             do {
                 let reflog = try repo.reflog(named: "CUSTOM")
-
                 XCTAssertEqual(try reflog.items.count, 0)
-
-                try reflog.addItem(
-                    id: repo.head.target,
-                    message: "Test Message",
-                    committer: Signature(
-                        name: "Test Name",
-                        email: "Test Email",
-                        date: Date(timeIntervalSince1970: 1999),
-                        timeZone: XCTUnwrap(TimeZone(secondsFromGMT: 120))))
-
+                try reflog.append(.testItem(id: repo.head.target))
                 try reflog.write()
             }
 
             do {
                 let reflog = try repo.reflog(named: "CUSTOM")
-
                 XCTAssertEqual(try reflog.items.count, 1)
 
                 let item = try XCTUnwrap(reflog.items.first)
@@ -101,26 +85,16 @@ final class ReflogTests: XCTestCase {
 
             do {
                 let reflog = try repo.reflog(named: "OLD")
-
                 XCTAssertEqual(try reflog.items.count, 0)
-
-                try reflog.addItem(
-                    id: repo.head.target,
-                    message: "Test Message",
-                    committer: Signature(
-                        name: "Test Name",
-                        email: "Test Email",
-                        date: Date(timeIntervalSince1970: 1999),
-                        timeZone: XCTUnwrap(TimeZone(secondsFromGMT: 120))))
-
+                try reflog.append(.testItem(id: repo.head.target))
                 try reflog.write()
+                XCTAssertEqual(try reflog.items.count, 1)
             }
 
             try repo.renameReflog(from: "OLD", to: "NEW")
 
             do {
                 let reflog = try repo.reflog(named: "NEW")
-
                 XCTAssertEqual(try reflog.items.count, 1)
 
                 let item = try XCTUnwrap(reflog.items.first)
@@ -144,21 +118,27 @@ final class ReflogTests: XCTestCase {
             XCTAssertEqual(try repo.reflog(named: "REFLOG_TEST").items.count, 0)
 
             let reflog = try repo.reflog(named: "REFLOG_TEST")
-
-            try reflog.addItem(
-                id: repo.head.target,
-                message: "Test Message",
-                committer: Signature(
-                    name: "Test Name",
-                    email: "Test Email",
-                    date: Date(timeIntervalSince1970: 1999),
-                    timeZone: XCTUnwrap(TimeZone(secondsFromGMT: 120))))
-
+            try reflog.append(.testItem(id: repo.head.target))
             try reflog.write()
+
             XCTAssertEqual(try repo.reflog(named: "REFLOG_TEST").items.count, 1)
 
             try repo.deleteReflog(named: "REFLOG_TEST")
             XCTAssertEqual(try repo.reflog(named: "REFLOG_TEST").items.count, 0)
         }
+    }
+}
+
+extension Reflog.Item.Draft {
+
+    fileprivate static func testItem(id: Object.ID) throws -> Self {
+        try Reflog.Item.Draft(
+            id: id,
+            message: "Test Message",
+            committer: Signature(
+                name: "Test Name",
+                email: "Test Email",
+                date: Date(timeIntervalSince1970: 1999),
+                timeZone: XCTUnwrap(TimeZone(secondsFromGMT: 120))))
     }
 }
