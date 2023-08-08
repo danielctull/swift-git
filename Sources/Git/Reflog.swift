@@ -6,11 +6,16 @@ extension Repository {
     @GitActor
     public var reflog: Reflog {
         get throws {
-            try "HEAD".withCString { head in
-                try Reflog(
-                    create: pointer.create(git_reflog_read, head),
-                    free: git_reflog_free)
-            }
+            try reflog(named: "HEAD")
+        }
+    }
+
+    @GitActor
+    public func reflog(named name: String) throws -> Reflog {
+        try name.withCString { name in
+            try Reflog(
+                create: pointer.create(git_reflog_read, name),
+                free: git_reflog_free)
         }
     }
 }
