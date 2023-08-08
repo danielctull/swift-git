@@ -134,4 +134,31 @@ final class ReflogTests: XCTestCase {
             }
         }
     }
+
+    func testDelete() throws {
+        let remote = try Bundle.module.url(forRepository: "Test.git")
+        try FileManager.default.withTemporaryDirectory { local in
+
+            let repo = try Repository(local: local, remote: remote)
+
+            XCTAssertEqual(try repo.reflog(named: "REFLOG_TEST").items.count, 0)
+
+            let reflog = try repo.reflog(named: "REFLOG_TEST")
+
+            try reflog.addItem(
+                id: repo.head.target,
+                message: "Test Message",
+                committer: Signature(
+                    name: "Test Name",
+                    email: "Test Email",
+                    date: Date(timeIntervalSince1970: 1999),
+                    timeZone: XCTUnwrap(TimeZone(secondsFromGMT: 120))))
+
+            try reflog.write()
+            XCTAssertEqual(try repo.reflog(named: "REFLOG_TEST").items.count, 1)
+
+            try repo.deleteReflog(named: "REFLOG_TEST")
+            XCTAssertEqual(try repo.reflog(named: "REFLOG_TEST").items.count, 0)
+        }
+    }
 }

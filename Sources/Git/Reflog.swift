@@ -27,6 +27,13 @@ extension Repository {
             }
         }
     }
+
+    @GitActor
+    public func deleteReflog(named name: Reflog.Name) throws {
+        try name.withCString { name in
+            try pointer.perform(git_reflog_delete, name)
+        }
+    }
 }
 
 // MARK: - Reflog
