@@ -6,7 +6,12 @@ import XCTest
 @GitActor
 final class ReflogTests: XCTestCase {
 
-    func testRepositoryReflog() throws {
+    func testName() throws {
+        let name = Reflog.Name("Custom")
+        XCTAssertEqual(name.description, "Custom")
+    }
+
+    func testReflog() throws {
         let remote = try Bundle.module.url(forRepository: "Test.git")
         try FileManager.default.withTemporaryDirectory { local in
             let cloneDate = Date()
