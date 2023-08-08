@@ -11,7 +11,7 @@ extension Repository {
     }
 
     @GitActor
-    public func reflog(named name: String) throws -> Reflog {
+    public func reflog(named name: Reflog.Name) throws -> Reflog {
         try name.withCString { name in
             try Reflog(
                 create: pointer.create(git_reflog_read, name),
@@ -20,7 +20,7 @@ extension Repository {
     }
 
     @GitActor
-    public func renameReflog(from old: String, to new: String) throws {
+    public func renameReflog(from old: Reflog.Name, to new: Reflog.Name) throws {
         try old.withCString { old in
             try new.withCString { new in
                 try pointer.perform(git_reflog_rename, old, new)
@@ -70,6 +70,40 @@ extension Reflog {
     @GitActor
     public func write() throws {
         try pointer.perform(git_reflog_write)
+    }
+}
+
+// MARK: - Reflog.Name
+
+extension Reflog {
+
+    public struct Name: Equatable, Hashable, Sendable {
+        private let rawValue: String
+
+        public init(_ string: some StringProtocol) {
+            rawValue = String(string)
+        }
+    }
+}
+
+extension Reflog.Name: ExpressibleByStringLiteral {
+
+    public init(stringLiteral value: String) {
+        self.init(value)
+    }
+}
+
+extension Reflog.Name: CustomStringConvertible {
+
+    public var description: String { rawValue }
+}
+
+extension Reflog.Name {
+
+    fileprivate func withCString<Result>(
+        _ body: (UnsafePointer<Int8>) throws -> Result
+    ) rethrows -> Result {
+        try rawValue.withCString(body)
     }
 }
 
