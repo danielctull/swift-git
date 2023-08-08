@@ -112,10 +112,19 @@ extension Object.ID {
     }
 }
 
+extension Object.ID {
+
+    func withUnsafePointer<Result>(
+        _ body: (UnsafePointer<git_oid>) throws -> Result
+    ) rethrows -> Result {
+        try Swift.withUnsafePointer(to: oid, body)
+    }
+}
+
 extension Object.ID: CustomStringConvertible {
 
     public var description: String {
-        withUnsafePointer(to: oid) { oid in
+        withUnsafePointer { oid in
             let length = Int(GIT_OID_HEXSZ)
             let cchar = UnsafeMutablePointer<CChar>.allocate(capacity: length)
             defer { cchar.deallocate() }
@@ -135,8 +144,8 @@ extension Object.ID: CustomDebugStringConvertible {
 extension Object.ID: Equatable {
 
     public static func == (lhs: Self, rhs: Self) -> Bool {
-        withUnsafePointer(to: lhs.oid) { lhs in
-            withUnsafePointer(to: rhs.oid) { rhs in
+        lhs.withUnsafePointer { lhs in
+            rhs.withUnsafePointer { rhs in
                 git_oid_cmp(lhs, rhs) == 0
             }
         }

@@ -32,6 +32,17 @@ extension Reflog {
                 .map(Reflog.Item.init)
         }
     }
+
+    @GitActor
+    public func addItem(id: Object.ID, message: String, committer: Signature) throws {
+        try id.withUnsafePointer { oid in
+            try message.withCString { message in
+                try committer.withUnsafePointer { committer in
+                    try pointer.perform(git_reflog_append, oid, committer, message)
+                }
+            }
+        }
+    }
 }
 
 // MARK: - Reflog.Item
