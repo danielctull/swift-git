@@ -18,8 +18,8 @@ extension GitError: CustomStringConvertible {
 
     public var description: String {
         switch message {
-        case .none: return "[\(domain)] \(code)"
-        case .some(let message): return "[\(domain)] \(code) \(message)"
+        case .none: return "[\(domain)] \(code.detail)"
+        case .some(let message): return "[\(domain)] \(code.detail) \(message)"
         }
     }
 }
@@ -269,6 +269,43 @@ extension GitError.Code {
 extension GitError.Code: CustomStringConvertible {
 
     public var description: String {
+        switch self {
+        case .unknown: return "Unknown"
+        case .notFound: return "Not Found"
+        case .exists: return "Exists"
+        case .ambiguous: return "Ambiguous"
+        case .buffer: return "Buffer"
+        case .bareRepository: return "Bare Repository"
+        case .unbornBranch: return "Unborn Branch"
+        case .unmerged: return "Unmerged"
+        case .nonFastForward: return "Non Fast-Forward"
+        case .invalidSpec: return "Invalid Spec"
+        case .conflict: return "Conflict"
+        case .locked: return "Locked"
+        case .modified: return "Modified"
+        case .auth: return "Auth"
+        case .certificate: return "Certificate"
+        case .applied: return "Applied"
+        case .peel: return "Peel"
+        case .endOfFile: return "End Of File"
+        case .invalid: return "Invalid"
+        case .uncommitted: return "Uncommitted"
+        case .directory: return "Directory"
+        case .mergeConflict: return "Merge Conflict"
+        case .passthrough: return "Passthrough"
+        case .iteratorOver: return "Iterator Over"
+        case .retry: return "Retry"
+        case .mismatch: return "Mismatch"
+        case .indexDirty: return "Index Dirty"
+        case .applyFail: return "Apply Fail"
+        default: return "Who knows?"
+        }
+    }
+}
+
+extension GitError.Code {
+    
+    public var detail: String {
         switch self {
         case .unknown: return "General error."
         case .notFound: return "Requested object could not be found."
