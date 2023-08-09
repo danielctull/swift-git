@@ -55,25 +55,34 @@ extension Config {
     }
 
     @GitActor
-    public func set(_ value: String, for name: Key) throws {
-        try name.withCString { name in
+    public func set(_ value: Value, for key: Key) throws {
+        switch value.kind {
+        case let .string(string): try set(string, for: key)
+        case let .int(int): try set(int, for: key)
+        case let .bool(bool): try set(bool, for: key)
+        }
+    }
+
+    @GitActor
+    private func set(_ value: String, for key: Key) throws {
+        try key.withCString { key in
             try value.withCString { value in
-                try pointer.perform(git_config_set_string, name, value)
+                try pointer.perform(git_config_set_string, key, value)
             }
         }
     }
 
     @GitActor
-    public func set(_ value: Int, for name: Key) throws {
-        try name.withCString { name in
-            try pointer.perform(git_config_set_int64, name, Int64(value))
+    private func set(_ value: Int, for key: Key) throws {
+        try key.withCString { key in
+            try pointer.perform(git_config_set_int64, key, Int64(value))
         }
     }
 
     @GitActor
-    public func set(_ value: Bool, for name: Key) throws {
-        try name.withCString { name in
-            try pointer.perform(git_config_set_bool, name, Int32(value))
+    private func set(_ value: Bool, for key: Key) throws {
+        try key.withCString { key in
+            try pointer.perform(git_config_set_bool, key, Int32(value))
         }
     }
 }
@@ -91,13 +100,13 @@ extension Config {
 
 extension Config.Item {
 
-    init(_ entry: git_config_entry) {
+    fileprivate init(_ entry: git_config_entry) {
         self.level = Config.Level(entry.level)
         self.name = entry.name |> String.init(cString:) |> Config.Key.init
         self.value = entry.value |> String.init(cString:) |> Config.Value.init
     }
 
-    init(_ entry: UnsafePointer<git_config_entry>) {
+    fileprivate init(_ entry: UnsafePointer<git_config_entry>) {
         self.init(entry.pointee)
     }
 }
@@ -136,17 +145,51 @@ extension Config.Key {
 extension Config {
 
     public struct Value: Equatable, Hashable, Sendable {
-        private let rawValue: String
+        fileprivate let kind: Kind
+    }
+}
 
-        public init(_ string: some StringProtocol) {
-            rawValue = String(string)
-        }
+extension Config.Value {
+
+    fileprivate enum Kind: Equatable, Hashable, Sendable {
+        case string(String)
+        case int(Int)
+        case bool(Bool)
+    }
+}
+
+extension Config.Value {
+
+    public init(_ string: some StringProtocol) {
+        kind = .string(String(string))
+    }
+
+    public init(_ int: some BinaryInteger) {
+        kind = .int(Int(int))
+    }
+
+    public init(_ bool: Bool) {
+        kind = .bool(bool)
     }
 }
 
 extension Config.Value: ExpressibleByStringLiteral {
 
     public init(stringLiteral value: String) {
+        self.init(value)
+    }
+}
+
+extension Config.Value: ExpressibleByBooleanLiteral {
+
+    public init(booleanLiteral value: Bool) {
+        self.init(value)
+    }
+}
+
+extension Config.Value: ExpressibleByIntegerLiteral {
+
+    public init(integerLiteral value: Int) {
         self.init(value)
     }
 }
