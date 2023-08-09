@@ -14,6 +14,16 @@ public struct GitError: Error, Equatable {
     }
 }
 
+extension GitError: CustomStringConvertible {
+
+    public var description: String {
+        switch message {
+        case .none: return "[\(domain)] \(code)"
+        case .some(let message): return "[\(domain)] \(code) \(message)"
+        }
+    }
+}
+
 extension GitError {
 
     static func check(_ result: Int32) throws {
