@@ -2,6 +2,16 @@
 import Clibgit2
 import Foundation
 
+extension Repository {
+
+    @GitActor
+    public var defaultSignature: Signature {
+        get throws {
+            try Signature(pointer.get(git_signature_default))
+        }
+    }
+}
+
 // MARK: - Signature
 
 public struct Signature: Equatable, Hashable, Sendable {
