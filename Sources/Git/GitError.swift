@@ -102,7 +102,7 @@ extension GitError.Domain {
     public static let thread = Self(GIT_ERROR_THREAD)
     public static let stash = Self(GIT_ERROR_STASH)
     public static let checkout = Self(GIT_ERROR_CHECKOUT)
-    public static let fetchhead = Self(GIT_ERROR_FETCHHEAD)
+    public static let fetchHead = Self(GIT_ERROR_FETCHHEAD)
     public static let merge = Self(GIT_ERROR_MERGE)
     public static let ssh = Self(GIT_ERROR_SSH)
     public static let filter = Self(GIT_ERROR_FILTER)
@@ -144,7 +144,7 @@ extension GitError.Domain: CustomStringConvertible {
         case .thread: return "Thread"
         case .stash: return "Stash"
         case .checkout: return "Checkout"
-        case .fetchhead: return "Fetch HEAD"
+        case .fetchHead: return "Fetch HEAD"
         case .merge: return "Merge"
         case .ssh: return "SSH"
         case .filter: return "Filter"
