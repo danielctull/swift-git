@@ -94,7 +94,7 @@ extension Config.Item {
     init(_ entry: git_config_entry) {
         self.level = Config.Level(entry.level)
         self.name = entry.name |> String.init(cString:) |> Config.Key.init
-        self.value = entry.value |> String.init(cString:) |> Value.init
+        self.value = entry.value |> String.init(cString:) |> Config.Value.init
     }
 
     init(_ entry: UnsafePointer<git_config_entry>) {
@@ -131,9 +131,9 @@ extension Config.Key {
     }
 }
 
-// MARK: - Config.Item.Value
+// MARK: - Config.Value
 
-extension Config.Item {
+extension Config {
 
     public struct Value: Equatable, Hashable, Sendable {
         private let rawValue: String
@@ -144,7 +144,7 @@ extension Config.Item {
     }
 }
 
-extension Config.Item.Value: ExpressibleByStringLiteral {
+extension Config.Value: ExpressibleByStringLiteral {
 
     public init(stringLiteral value: String) {
         self.init(value)
