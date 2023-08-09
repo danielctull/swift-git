@@ -56,33 +56,20 @@ extension Config {
 
     @GitActor
     public func set(_ value: Value, for key: Key) throws {
-        switch value.kind {
-        case let .string(string): try set(string, for: key)
-        case let .int(int): try set(int, for: key)
-        case let .bool(bool): try set(bool, for: key)
-        }
-    }
-
-    @GitActor
-    private func set(_ value: String, for key: Key) throws {
         try key.withCString { key in
-            try value.withCString { value in
-                try pointer.perform(git_config_set_string, key, value)
+            switch value.kind {
+
+            case let .string(string):
+                try string.withCString { string in
+                    try pointer.perform(git_config_set_string, key, string)
+                }
+
+            case let .int(int):
+                try pointer.perform(git_config_set_int64, key, Int64(int))
+
+            case let .bool(bool):
+                try pointer.perform(git_config_set_bool, key, Int32(bool))
             }
-        }
-    }
-
-    @GitActor
-    private func set(_ value: Int, for key: Key) throws {
-        try key.withCString { key in
-            try pointer.perform(git_config_set_int64, key, Int64(value))
-        }
-    }
-
-    @GitActor
-    private func set(_ value: Bool, for key: Key) throws {
-        try key.withCString { key in
-            try pointer.perform(git_config_set_bool, key, Int32(value))
         }
     }
 }
