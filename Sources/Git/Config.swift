@@ -55,7 +55,7 @@ extension Config {
     }
 
     @GitActor
-    public func set(_ value: String, for name: Item.Key) throws {
+    public func set(_ value: String, for name: Key) throws {
         try name.withCString { name in
             try value.withCString { value in
                 try pointer.perform(git_config_set_string, name, value)
@@ -64,14 +64,14 @@ extension Config {
     }
 
     @GitActor
-    public func set(_ value: Int, for name: Item.Key) throws {
+    public func set(_ value: Int, for name: Key) throws {
         try name.withCString { name in
             try pointer.perform(git_config_set_int64, name, Int64(value))
         }
     }
 
     @GitActor
-    public func set(_ value: Bool, for name: Item.Key) throws {
+    public func set(_ value: Bool, for name: Key) throws {
         try name.withCString { name in
             try pointer.perform(git_config_set_bool, name, Int32(value))
         }
@@ -93,7 +93,7 @@ extension Config.Item {
 
     init(_ entry: git_config_entry) {
         self.level = Config.Level(entry.level)
-        self.name = entry.name |> String.init(cString:) |> Key.init
+        self.name = entry.name |> String.init(cString:) |> Config.Key.init
         self.value = entry.value |> String.init(cString:) |> Value.init
     }
 
@@ -102,9 +102,9 @@ extension Config.Item {
     }
 }
 
-// MARK: - Config.Item.Name
+// MARK: - Config.Key
 
-extension Config.Item {
+extension Config {
     
     public struct Key: Equatable, Hashable, Sendable {
         private let rawValue: String
@@ -115,14 +115,14 @@ extension Config.Item {
     }
 }
 
-extension Config.Item.Key: ExpressibleByStringLiteral {
+extension Config.Key: ExpressibleByStringLiteral {
 
     public init(stringLiteral value: String) {
         self.init(value)
     }
 }
 
-extension Config.Item.Key {
+extension Config.Key {
 
     fileprivate func withCString<Result>(
         _ body: (UnsafePointer<Int8>) throws -> Result
