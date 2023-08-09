@@ -42,6 +42,101 @@ extension GitError {
     }
 }
 
+// MARK: - GitError.Domain
+
+extension GitError {
+    public struct Domain: Equatable {
+        fileprivate let rawValue: git_error_t
+        fileprivate init(_ rawValue: git_error_t) {
+            self.rawValue = rawValue
+        }
+    }
+}
+
+extension GitError.Domain {
+    public static let none = Self(GIT_ERROR_NONE)
+    public static let noMemory = Self(GIT_ERROR_NOMEMORY)
+    public static let os = Self(GIT_ERROR_OS)
+    public static let invalid = Self(GIT_ERROR_INVALID)
+    public static let reference = Self(GIT_ERROR_REFERENCE)
+    public static let zlib = Self(GIT_ERROR_ZLIB)
+    public static let repository = Self(GIT_ERROR_REPOSITORY)
+    public static let config = Self(GIT_ERROR_CONFIG)
+    public static let regex = Self(GIT_ERROR_REGEX)
+    public static let odb = Self(GIT_ERROR_ODB)
+    public static let index = Self(GIT_ERROR_INDEX)
+    public static let object = Self(GIT_ERROR_OBJECT)
+    public static let net = Self(GIT_ERROR_NET)
+    public static let tag = Self(GIT_ERROR_TAG)
+    public static let tree = Self(GIT_ERROR_TREE)
+    public static let indexer = Self(GIT_ERROR_INDEXER)
+    public static let ssl = Self(GIT_ERROR_SSL)
+    public static let submodule = Self(GIT_ERROR_SUBMODULE)
+    public static let thread = Self(GIT_ERROR_THREAD)
+    public static let stash = Self(GIT_ERROR_STASH)
+    public static let checkout = Self(GIT_ERROR_CHECKOUT)
+    public static let fetchhead = Self(GIT_ERROR_FETCHHEAD)
+    public static let merge = Self(GIT_ERROR_MERGE)
+    public static let ssh = Self(GIT_ERROR_SSH)
+    public static let filter = Self(GIT_ERROR_FILTER)
+    public static let revert = Self(GIT_ERROR_REVERT)
+    public static let callback = Self(GIT_ERROR_CALLBACK)
+    public static let cherrypick = Self(GIT_ERROR_CHERRYPICK)
+    public static let describe = Self(GIT_ERROR_DESCRIBE)
+    public static let rebase = Self(GIT_ERROR_REBASE)
+    public static let filesystem = Self(GIT_ERROR_FILESYSTEM)
+    public static let patch = Self(GIT_ERROR_PATCH)
+    public static let worktree = Self(GIT_ERROR_WORKTREE)
+    public static let sha = Self(GIT_ERROR_SHA)
+    public static let http = Self(GIT_ERROR_HTTP)
+    public static let `internal` = Self(GIT_ERROR_INTERNAL)
+}
+
+extension GitError.Domain: CustomStringConvertible {
+
+    public var description: String {
+        switch self {
+        case .none: return "None"
+        case .noMemory: return "No Memory"
+        case .os: return "OS"
+        case .invalid: return "Invalid"
+        case .reference: return "Reference"
+        case .zlib: return "zlib"
+        case .repository: return "Repository"
+        case .config: return "Config"
+        case .regex: return "Regex"
+        case .odb: return "ODB"
+        case .index: return "Index"
+        case .object: return "Object"
+        case .net: return "Net"
+        case .tag: return "Tag"
+        case .tree: return "Tree"
+        case .indexer: return "Indexer"
+        case .ssl: return "SSL"
+        case .submodule: return "Submodule"
+        case .thread: return "Thread"
+        case .stash: return "Stash"
+        case .checkout: return "Checkout"
+        case .fetchhead: return "Fetch HEAD"
+        case .merge: return "Merge"
+        case .ssh: return "SSH"
+        case .filter: return "Filter"
+        case .revert: return "Revert"
+        case .callback: return "Callback"
+        case .cherrypick: return "Cherrypick"
+        case .describe: return "Describe"
+        case .rebase: return "Rebase"
+        case .filesystem: return "File System"
+        case .patch: return "Patch"
+        case .worktree: return "Worktree"
+        case .sha: return "SHA"
+        case .http: return "HTTP"
+        case .internal: return "Internal"
+        default: return "Unknown"
+        }
+    }
+}
+
 // MARK: - GitError.Code
 
 extension GitError {
