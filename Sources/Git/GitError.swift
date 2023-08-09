@@ -5,22 +5,25 @@ public struct GitError: Error, Equatable {
 
     public let domain: Domain
     public let code: Code
-    private let message: String?
+    public let message: String
 
-    init(domain: Domain = .none, code: Code, message: String? = nil) {
+    init(domain: Domain = .none, code: Code, message: String) {
         self.domain = domain
         self.code = code
         self.message = message
+    }
+
+    init(domain: Domain = .none, code: Code) {
+        self.domain = domain
+        self.code = code
+        self.message = code.detail
     }
 }
 
 extension GitError: CustomStringConvertible {
 
     public var description: String {
-        switch message {
-        case .none: return "[\(domain)] \(code.detail)"
-        case .some(let message): return "[\(domain)] \(code.detail) \(message)"
-        }
+        "[\(domain) | \(code)] \(message)"
     }
 }
 
