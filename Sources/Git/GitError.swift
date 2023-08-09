@@ -2,10 +2,15 @@
 import Clibgit2
 
 public struct GitError: Error, Equatable {
-    public let code: Code
 
-    init(_ code: Code) {
+    public let domain: Domain
+    public let code: Code
+    private let message: String?
+
+    init(domain: Domain = .none, code: Code, message: String? = nil) {
+        self.domain = domain
         self.code = code
+        self.message = message
     }
 }
 
@@ -13,7 +18,16 @@ extension GitError {
 
     static func check(_ result: Int32) throws {
         let code = git_error_code(result)
-        if code != GIT_OK { throw Self(Code(code)) }
+        guard code != GIT_OK else { return }
+
+        guard let error = try? git_error_last() |> Unwrap |> \.pointee else {
+            throw GitError(code: Code(code))
+        }
+
+        throw GitError(
+            domain: Domain(git_error_t(UInt32(error.klass))),
+            code: Code(code),
+            message: String(cString: error.message))
     }
 }
 

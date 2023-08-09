@@ -6,7 +6,7 @@ extension Repository {
     @GitActor
     public func tag(named name: Tag.Name) throws -> Tag {
         try tags.first(where: { $0.name == name })
-            ?? { throw GitError(.notFound) }()
+            ?? { throw GitError(domain: .tag, code: .notFound) }()
     }
 
     @GitActor
