@@ -4,19 +4,18 @@ import Clibgit2
 extension Repository {
 
     @GitActor
-    public var status: [StatusEntry] {
+    public var status: some RandomAccessCollection<StatusEntry> {
         get throws {
 
             let list = try GitPointer(
                 create: pointer.create(git_status_list_new, nil),
                 free: git_status_list_free)
 
-            return try GitCollection(
-                pointer: list,
-                count: git_status_list_entrycount,
-                element: git_status_byindex)
-            .map(Unwrap)
-            .map(StatusEntry.init)
+            return GitCollection {
+                list.get(git_status_list_entrycount)
+            } element: { index in
+                list.get(git_status_byindex, index)! |> StatusEntry.init
+            }
         }
     }
 }
