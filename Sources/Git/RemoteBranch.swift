@@ -4,7 +4,7 @@ import Clibgit2
 extension Repository {
 
     @GitActor
-    public var remoteBranches: some Sequence<RemoteBranch> {
+    public var remoteBranches: GitIterator<RemoteBranch> {
         get throws {
             try GitIterator {
 
@@ -12,7 +12,7 @@ extension Repository {
                     create: pointer.create(git_branch_iterator_new, GIT_BRANCH_REMOTE),
                     free: git_branch_iterator_free)
 
-            } nextElement: { iterator in
+            } next: { iterator in
 
                 try RemoteBranch(
                     create: iterator.create(firstOutput(of: git_branch_next)),

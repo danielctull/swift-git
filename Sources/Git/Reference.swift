@@ -14,7 +14,7 @@ extension Repository {
     }
 
     @GitActor
-    public var references: some Sequence<Reference> {
+    public var references: GitIterator<Reference> {
         get throws {
             try GitIterator {
 
@@ -22,7 +22,7 @@ extension Repository {
                     create: pointer.create(git_reference_iterator_new),
                     free: git_reference_iterator_free)
 
-            } nextElement: { iterator in
+            } next: { iterator in
 
                 try Reference(
                     create: iterator.create(git_reference_next),

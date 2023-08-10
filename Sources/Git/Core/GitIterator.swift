@@ -1,27 +1,30 @@
 
-struct GitIterator<Iterator, Element> {
+@GitActor
+public struct GitIterator<Element> {
+    private let nextElement: () -> Element?
+}
 
-    private let iterator: Iterator
-    private let nextElement: (Iterator) throws -> Element?
+extension GitIterator {
 
-    init(
-        iterator: () throws -> Iterator,
-        nextElement: @escaping (Iterator) throws -> Element?
+    init<Iterator>(
+        iterator: @GitActor () throws -> Iterator,
+        next: @escaping @GitActor (Iterator) throws -> Element
     ) throws {
-        self.iterator = try iterator()
-        self.nextElement = nextElement
+        let iterator = try iterator()
+        nextElement = {
+            do {
+                return try next(iterator)
+            } catch let error as GitError where error.code == .iteratorOver {
+                return nil
+            } catch {
+                fatalError("Iterator error: \(error)")
+            }
+        }
     }
 }
 
-extension GitIterator: IteratorProtocol, Sequence {
+// MARK: - Sequence
 
-    mutating func next() -> Element? {
-        do {
-            return try nextElement(iterator)
-        } catch let error as GitError where error.code == .iteratorOver {
-            return nil
-        } catch {
-            fatalError("Iterator error: \(error)")
-        }
-    }
+extension GitIterator: IteratorProtocol, Sequence {
+    public func next() -> Element? { nextElement() }
 }

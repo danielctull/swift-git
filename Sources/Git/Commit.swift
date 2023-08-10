@@ -18,7 +18,7 @@ extension Repository {
     }
 
     @GitActor
-    public var commits: some Sequence<Commit> {
+    public var commits: GitIterator<Commit> {
         get throws {
             try commits(for: [])
         }
@@ -29,7 +29,7 @@ extension Repository {
         for references: Reference...,
         sortedBy sortOptions: SortOptions = SortOptions(),
         includeHead: Bool = true
-    ) throws -> some Sequence<Commit> {
+    ) throws -> GitIterator<Commit> {
         try commits(for: references,
                     sortedBy: sortOptions,
                     includeHead: includeHead)
@@ -40,7 +40,7 @@ extension Repository {
         for references: [Reference] = [],
         sortedBy sortOptions: SortOptions = SortOptions(),
         includeHead: Bool = true
-    ) throws -> some Sequence<Commit> {
+    ) throws -> GitIterator<Commit> {
 
         try GitIterator {
 
@@ -64,7 +64,7 @@ extension Repository {
 
             return iterator
 
-        } nextElement: { iterator in
+        } next: { iterator in
 
             try withUnsafePointer(to: iterator.get(git_revwalk_next)) { oid in
                 try Commit(
