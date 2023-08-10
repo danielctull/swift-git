@@ -17,7 +17,7 @@ final class ReflogTests: XCTestCase {
             let cloneDate = Date()
             let repo = try Repository(local: local, remote: remote)
             let reflog = try repo.reflog
-            XCTAssertEqual(try reflog.items.count, 1)
+            XCTAssertEqual(reflog.items.count, 1)
             let item = try XCTUnwrap(reflog.items.last)
 //            XCTAssertEqual(item.message, "checkout: moving from master to main")
             XCTAssertEqual(item.old.description, "0000000000000000000000000000000000000000")
@@ -37,10 +37,10 @@ final class ReflogTests: XCTestCase {
 
             let repo = try Repository(local: local, remote: remote)
             let reflog = try repo.reflog(named: "CUSTOM")
-            XCTAssertEqual(try reflog.items.count, 0)
+            XCTAssertEqual(reflog.items.count, 0)
 
             try reflog.append(.testItem(id: repo.head.target))
-            XCTAssertEqual(try reflog.items.count, 1)
+            XCTAssertEqual(reflog.items.count, 1)
 
             let item = try XCTUnwrap(reflog.items.first)
             XCTAssertEqual(item.message, "Test Message")
@@ -59,13 +59,13 @@ final class ReflogTests: XCTestCase {
 
             let repo = try Repository(local: local, remote: remote)
             let reflog = try repo.reflog(named: "CUSTOM")
-            XCTAssertEqual(try reflog.items.count, 0)
+            XCTAssertEqual(reflog.items.count, 0)
 
             try reflog.append(.testItem(id: repo.head.target))
-            XCTAssertEqual(try reflog.items.count, 1)
+            XCTAssertEqual(reflog.items.count, 1)
 
             try reflog.remove(XCTUnwrap(reflog.items.first))
-            XCTAssertEqual(try reflog.items.count, 0)
+            XCTAssertEqual(reflog.items.count, 0)
         }
     }
 
@@ -77,14 +77,14 @@ final class ReflogTests: XCTestCase {
 
             do {
                 let reflog = try repo.reflog(named: "CUSTOM")
-                XCTAssertEqual(try reflog.items.count, 0)
+                XCTAssertEqual(reflog.items.count, 0)
                 try reflog.append(.testItem(id: repo.head.target))
                 try reflog.write()
             }
 
             do {
                 let reflog = try repo.reflog(named: "CUSTOM")
-                XCTAssertEqual(try reflog.items.count, 1)
+                XCTAssertEqual(reflog.items.count, 1)
 
                 let item = try XCTUnwrap(reflog.items.first)
                 XCTAssertEqual(item.message, "Test Message")
@@ -106,17 +106,17 @@ final class ReflogTests: XCTestCase {
 
             do {
                 let reflog = try repo.reflog(named: "OLD")
-                XCTAssertEqual(try reflog.items.count, 0)
+                XCTAssertEqual(reflog.items.count, 0)
                 try reflog.append(.testItem(id: repo.head.target))
                 try reflog.write()
-                XCTAssertEqual(try reflog.items.count, 1)
+                XCTAssertEqual(reflog.items.count, 1)
             }
 
             try repo.renameReflog(from: "OLD", to: "NEW")
 
             do {
                 let reflog = try repo.reflog(named: "NEW")
-                XCTAssertEqual(try reflog.items.count, 1)
+                XCTAssertEqual(reflog.items.count, 1)
 
                 let item = try XCTUnwrap(reflog.items.first)
                 XCTAssertEqual(item.message, "Test Message")
