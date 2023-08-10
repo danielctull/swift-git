@@ -33,7 +33,7 @@ extension Blame {
     }
 
     @GitActor
-    public var hunks: some RandomAccessCollection<Hunk> {
+    public var hunks: GitCollection<Blame.Hunk> {
         GitCollection {
             pointer.get(git_blame_get_hunk_count)
         } element: { index in

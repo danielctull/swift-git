@@ -1,26 +1,35 @@
 
 @GitActor
-struct GitCollection<Index: BinaryInteger, Element> {
-    let count: () -> Index
-    let element: (Index) -> Element
-}
-
-extension GitCollection: RandomAccessCollection {
-    public var startIndex: Index { .zero }
-    public var endIndex: Index { count() }
-    public func index(before i: Index) -> Index { i - 1 }
-    public func index(after i: Index) -> Index { i + 1 }
-    public subscript(position: Index) -> Element { element(position) }
+public struct GitCollection<Element> {
+    private let count: () -> Int
+    private let element: (Int) -> Element
 }
 
 extension GitCollection {
 
-    init(
-        pointer: GitPointer,
-        count: @escaping (OpaquePointer) -> Index,
-        element: @escaping (OpaquePointer, Index) -> Element
+    init<I: BinaryInteger>(
+        count: @escaping @GitActor () -> I,
+        element: @escaping @GitActor (I) -> Element
     ) {
-        self.count = { pointer.get(count) }
-        self.element = { index in pointer.get(element, index) }
+        self.count = { Int(count()) }
+        self.element = { element(I($0)) }
     }
+}
+
+// MARK: - Collection
+
+extension GitCollection: RandomAccessCollection {
+
+    public struct Index: Comparable {
+        fileprivate let value: Int
+        public static func < (lhs: Self, rhs: Self) -> Bool { 
+            lhs.value < rhs.value
+        }
+    }
+
+    public var startIndex: Index { Index(value: 0) }
+    public var endIndex: Index { Index(value: count()) }
+    public func index(after i: Index) -> Index { Index(value: i.value + 1) }
+    public func index(before i: Index) -> Index { Index(value: i.value - 1) }
+    public subscript(position: Index) -> Element { element(position.value) }
 }

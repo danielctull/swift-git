@@ -4,7 +4,7 @@ import Clibgit2
 extension Repository {
 
     @GitActor
-    public var status: some RandomAccessCollection<StatusEntry> {
+    public var status: GitCollection<StatusEntry> {
         get throws {
 
             let list = try GitPointer(

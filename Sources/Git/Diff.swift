@@ -25,7 +25,7 @@ public struct Diff: Equatable, Hashable, Sendable {
 extension Diff {
 
     @GitActor
-    public var deltas: some RandomAccessCollection<Delta> {
+    public var deltas: GitCollection<Diff.Delta> {
         GitCollection {
             pointer.get(git_diff_num_deltas)
         } element: { index in

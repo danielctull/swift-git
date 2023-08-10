@@ -24,7 +24,7 @@ extension Index {
     }
 
     @GitActor
-    public var entries: some RandomAccessCollection<Entry> {
+    public var entries: GitCollection<Index.Entry> {
         GitCollection {
             pointer.get(git_index_entrycount)
         } element: { index in

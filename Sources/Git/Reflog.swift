@@ -45,7 +45,7 @@ public struct Reflog: Equatable, Hashable, Sendable {
 extension Reflog {
 
     @GitActor
-    public var items: some RandomAccessCollection<Item> {
+    public var items: GitCollection<Reflog.Item> {
         GitCollection {
             pointer.get(git_reflog_entrycount)
         } element: { index in

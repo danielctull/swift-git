@@ -109,7 +109,7 @@ extension Commit {
     }
 
     @GitActor
-    public var parentIDs: some RandomAccessCollection<ID> {
+    public var parentIDs: GitCollection<Commit.ID> {
         GitCollection {
             pointer.get(git_commit_parentcount)
         } element: { index in
