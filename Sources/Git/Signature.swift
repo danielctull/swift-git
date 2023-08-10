@@ -25,15 +25,15 @@ public struct Signature: Equatable, Hashable, Sendable {
         email: String,
         date: Date = .now,
         timeZone: TimeZone = .autoupdatingCurrent
-    ) throws {
+    ) {
 
         let time = git_time(time: git_time_t(date.timeIntervalSince1970),
                             offset: Int32(timeZone.secondsFromGMT() / 60),
                             sign: 0)
 
-        self = try name.withMutableCString { name in
-            try email.withMutableCString { email in
-                try Signature(git_signature(name: name, email: email, when: time))
+        self = name.withMutableCString { name in
+            email.withMutableCString { email in
+                Signature(git_signature(name: name, email: email, when: time))
             }
         }
     }
@@ -41,15 +41,15 @@ public struct Signature: Equatable, Hashable, Sendable {
 
 extension Signature {
 
-    init(_ signature: UnsafePointer<git_signature>) throws {
-        try self.init(signature.pointee)
+    init(_ signature: UnsafePointer<git_signature>) {
+        self.init(signature.pointee)
     }
 
-    init(_ signature: git_signature) throws {
+    init(_ signature: git_signature) {
         name = String(cString: signature.name)
         email = String(cString: signature.email)
         date = Date(timeIntervalSince1970: TimeInterval(signature.when.time))
-        timeZone = try Unwrap(TimeZone(secondsFromGMT: 60 * Int(signature.when.offset)))
+        timeZone = TimeZone(secondsFromGMT: 60 * Int(signature.when.offset))!
     }
 }
 
