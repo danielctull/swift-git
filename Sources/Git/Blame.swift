@@ -32,6 +32,7 @@ extension Blame {
             |> Hunk.init
     }
 
+    @GitActor
     public var hunks: [Hunk] {
         get throws {
             try GitCollection(

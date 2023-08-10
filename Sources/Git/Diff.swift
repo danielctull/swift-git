@@ -24,6 +24,7 @@ public struct Diff: Equatable, Hashable, Sendable {
 
 extension Diff {
 
+    @GitActor
     public var deltas: [Delta] {
         get throws {
             try GitCollection(

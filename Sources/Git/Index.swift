@@ -23,6 +23,7 @@ extension Index {
         public let objectID: Object.ID
     }
 
+    @GitActor
     public var entries: [Entry] {
         get throws {
             try GitCollection(

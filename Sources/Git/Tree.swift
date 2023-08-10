@@ -18,16 +18,11 @@ public struct Tree: Equatable, Hashable, Identifiable, Sendable {
 extension Tree {
 
     @GitActor
-    public var entries: [Entry] {
-        get throws {
-            try GitCollection(
-                pointer: pointer,
-                count: git_tree_entrycount,
-                element: git_tree_entry_byindex
-            )
-            .map(Unwrap)
-            .map(GitPointer.init)
-            .map(Entry.init)
+    public var entries: some RandomAccessCollection<Entry> {
+        GitCollection {
+            pointer.get(git_tree_entrycount)
+        } element: { index in
+            pointer.get(git_tree_entry_byindex, index)! |> GitPointer.init |> Entry.init
         }
     }
 }
@@ -55,15 +50,11 @@ extension Tree {
         public let name: String
 
         @GitActor
-        init(pointer: GitPointer) throws {
+        init(pointer: GitPointer) {
             self.pointer = pointer
 
-            target = try pointer.get(git_tree_entry_id)
-                |> Unwrap
-                |> \.pointee
-                |> Object.ID.init
-
-            name = try pointer.get(git_tree_entry_name) |> Unwrap |> String.init(cString:)
+            target = pointer.get(git_tree_entry_id)!.pointee |> Object.ID.init
+            name = pointer.get(git_tree_entry_name)! |> String.init(cString:)
         }
     }
 }

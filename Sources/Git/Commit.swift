@@ -108,6 +108,7 @@ extension Commit {
         }
     }
 
+    @GitActor
     public var parentIDs: [ID] {
         get throws {
             try GitCollection(
