@@ -11,9 +11,9 @@ final class BlameTests: XCTestCase {
         try FileManager.default.withTemporaryDirectory { local in
             let repo = try Repository(local: local, remote: remote)
             let blame = try repo.blame(for: "file.txt")
-            let hunks = try blame.hunks
+            let hunks = blame.hunks
             XCTAssertEqual(hunks.count, 1)
-            let hunk = try hunks.value(at: 0)
+            let hunk = try Array(hunks).value(at: 0)
             XCTAssertEqual(hunk.commitID.description, "41c143541c9d917db83ce4e920084edbf2a4177e")
             XCTAssertEqual(hunk.lines.lowerBound, 1)
             XCTAssertEqual(hunk.lines.upperBound, 1)

@@ -33,16 +33,11 @@ extension Blame {
     }
 
     @GitActor
-    public var hunks: [Hunk] {
-        get throws {
-            try GitCollection(
-                pointer: pointer,
-                count: git_blame_get_hunk_count,
-                element: git_blame_get_hunk_byindex
-            )
-            .map(Unwrap)
-            .map(\.pointee)
-            .map(Hunk.init)
+    public var hunks: some RandomAccessCollection<Hunk> {
+        GitCollection {
+            pointer.get(git_blame_get_hunk_count)
+        } element: { index in
+            pointer.get(git_blame_get_hunk_byindex, index)!.pointee |> Hunk.init
         }
     }
 }
