@@ -31,16 +31,16 @@ public struct StatusEntry {
 
 extension StatusEntry {
 
-    fileprivate init(_ entry: UnsafePointer<git_status_entry>) throws {
+    fileprivate init(_ entry: UnsafePointer<git_status_entry>) {
         let entry = entry.pointee
         status = Status(entry.status)
         if let head_to_index = entry.head_to_index {
-            headToIndex = try Diff.Delta(head_to_index.pointee)
+            headToIndex = Diff.Delta(head_to_index.pointee)
         } else {
             headToIndex = nil
         }
         if let index_to_workdir = entry.index_to_workdir {
-            indexToWorkingDirectory = try Diff.Delta(index_to_workdir.pointee)
+            indexToWorkingDirectory = Diff.Delta(index_to_workdir.pointee)
         } else {
             indexToWorkingDirectory = nil
         }
