@@ -14,9 +14,9 @@ extension Repository {
     }
 
     @GitActor
-    public var references: GitIterator<Reference> {
+    public var references: GitSequence<Reference> {
         get throws {
-            try GitIterator {
+            try GitSequence {
 
                 try GitPointer(
                     create: pointer.create(git_reference_iterator_new),

@@ -1,10 +1,10 @@
 
 @GitActor
-public struct GitIterator<Element> {
+public struct GitSequence<Element> {
     private let nextElement: () -> Element?
 }
 
-extension GitIterator {
+extension GitSequence {
 
     init<Iterator>(
         iterator: @GitActor () throws -> Iterator,
@@ -25,6 +25,6 @@ extension GitIterator {
 
 // MARK: - Sequence
 
-extension GitIterator: IteratorProtocol, Sequence {
+extension GitSequence: Sequence, IteratorProtocol {
     public func next() -> Element? { nextElement() }
 }

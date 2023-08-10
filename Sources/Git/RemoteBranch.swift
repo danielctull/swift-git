@@ -4,9 +4,9 @@ import Clibgit2
 extension Repository {
 
     @GitActor
-    public var remoteBranches: GitIterator<RemoteBranch> {
+    public var remoteBranches: GitSequence<RemoteBranch> {
         get throws {
-            try GitIterator {
+            try GitSequence {
 
                 try GitPointer(
                     create: pointer.create(git_branch_iterator_new, GIT_BRANCH_REMOTE),
