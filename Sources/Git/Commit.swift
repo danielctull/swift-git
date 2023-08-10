@@ -108,16 +108,12 @@ extension Commit {
         }
     }
 
-    public var parentIDs: [ID] {
-        get throws {
-            try GitCollection(
-                pointer: pointer,
-                count: git_commit_parentcount,
-                element: git_commit_parent_id
-            )
-            .map(Unwrap)
-            .map(\.pointee)
-            .map(ID.init)
+    @GitActor
+    public var parentIDs: some RandomAccessCollection<ID> {
+        GitCollection {
+            pointer.get(git_commit_parentcount)
+        } element: { index in
+            pointer.get(git_commit_parent_id, index)!.pointee |> ID.init
         }
     }
 

@@ -24,16 +24,12 @@ public struct Diff: Equatable, Hashable, Sendable {
 
 extension Diff {
 
-    public var deltas: [Delta] {
-        get throws {
-            try GitCollection(
-                pointer: pointer,
-                count: git_diff_num_deltas,
-                element: git_diff_get_delta
-            )
-            .map(Unwrap)
-            .map(\.pointee)
-            .map(Delta.init)
+    @GitActor
+    public var deltas: some RandomAccessCollection<Delta> {
+        GitCollection {
+            pointer.get(git_diff_num_deltas)
+        } element: { index in
+            pointer.get(git_diff_get_delta, index)!.pointee |> Delta.init
         }
     }
 }
@@ -91,11 +87,11 @@ extension Diff {
 
 extension Diff.Delta {
 
-    init(_ delta: git_diff_delta) throws {
+    init(_ delta: git_diff_delta) {
         flags = Diff.Flags(rawValue: delta.flags)
         from = Diff.File(delta.old_file)
         to =  Diff.File(delta.new_file)
-        status = try Diff.Delta.Status(status: delta.status, similarity: delta.similarity)
+        status = Diff.Delta.Status(status: delta.status, similarity: delta.similarity)
     }
 }
 
@@ -142,7 +138,7 @@ extension Diff.Delta {
 
 extension Diff.Delta.Status {
 
-    fileprivate init(status: git_delta_t, similarity: UInt16) throws {
+    fileprivate init(status: git_delta_t, similarity: UInt16) {
         switch status {
         case GIT_DELTA_UNMODIFIED: self = .unmodified
         case GIT_DELTA_ADDED: self = .added
@@ -155,9 +151,7 @@ extension Diff.Delta.Status {
         case GIT_DELTA_TYPECHANGE: self = .typeChange
         case GIT_DELTA_UNREADABLE: self = .unreadable
         case GIT_DELTA_CONFLICTED: self = .conflicted
-        default:
-            struct UnknownDeltaStatus: Error {}
-            throw UnknownDeltaStatus()
+        default: fatalError("Unknown delta status: \(status)")
         }
     }
 }

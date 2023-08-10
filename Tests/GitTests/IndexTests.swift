@@ -10,7 +10,7 @@ final class IndexTests: XCTestCase {
         let remote = try Bundle.module.url(forRepository: "Test.git")
         try FileManager.default.withTemporaryDirectory { local in
             let repo = try Repository(local: local, remote: remote)
-            let entries = try repo.index.entries
+            let entries = try Array(repo.index.entries)
             XCTAssertEqual(entries.count, 2)
 
             do {

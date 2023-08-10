@@ -23,16 +23,12 @@ extension Index {
         public let objectID: Object.ID
     }
 
-    public var entries: [Entry] {
-        get throws {
-            try GitCollection(
-                pointer: pointer,
-                count: git_index_entrycount,
-                element: git_index_get_byindex
-            )
-            .map(Unwrap)
-            .map(\.pointee)
-            .map(Entry.init)
+    @GitActor
+    public var entries: some RandomAccessCollection<Entry> {
+        GitCollection {
+            pointer.get(git_index_entrycount)
+        } element: { index in
+            pointer.get(git_index_get_byindex, index)!.pointee |> Entry.init
         }
     }
 }

@@ -45,16 +45,13 @@ public struct Reflog: Equatable, Hashable, Sendable {
 extension Reflog {
 
     @GitActor
-    public var items: [Item] {
-        get throws {
-            try GitCollection(
-                pointer: pointer,
-                count: git_reflog_entrycount,
-                element: { pointer, index in (pointer, index) })
-                .map { (pointer, index) in
-                    let item = try git_reflog_entry_byindex(pointer, index) |> Unwrap
-                    return try Item(pointer: GitPointer(item), index: index)
-                }
+    public var items: some RandomAccessCollection<Item> {
+        GitCollection {
+            pointer.get(git_reflog_entrycount)
+        } element: { index in
+            Item(
+                pointer: GitPointer(pointer.get(git_reflog_entry_byindex, index)!),
+                index: index)
         }
     }
 
@@ -139,13 +136,13 @@ extension Reflog {
 extension Reflog.Item {
 
     @GitActor
-    fileprivate init(pointer: GitPointer, index: Int) throws {
-        try self.init(
+    fileprivate init(pointer: GitPointer, index: Int) {
+        self.init(
             id: ID(rawValue: index),
-            message: pointer.get(git_reflog_entry_message) |> Unwrap |> String.init(cString:),
-            committer: pointer.get(git_reflog_entry_committer) |> Unwrap |> Signature.init,
-            old: pointer.get(git_reflog_entry_id_old) |> Unwrap |> \.pointee |> Object.ID.init,
-            new: pointer.get(git_reflog_entry_id_new) |> Unwrap |> \.pointee |> Object.ID.init)
+            message: pointer.get(git_reflog_entry_message)! |> String.init(cString:),
+            committer: pointer.get(git_reflog_entry_committer)! |> Signature.init,
+            old: pointer.get(git_reflog_entry_id_old)!.pointee |> Object.ID.init,
+            new: pointer.get(git_reflog_entry_id_new)!.pointee |> Object.ID.init)
     }
 }
 

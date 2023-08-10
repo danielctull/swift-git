@@ -32,16 +32,12 @@ extension Blame {
             |> Hunk.init
     }
 
-    public var hunks: [Hunk] {
-        get throws {
-            try GitCollection(
-                pointer: pointer,
-                count: git_blame_get_hunk_count,
-                element: git_blame_get_hunk_byindex
-            )
-            .map(Unwrap)
-            .map(\.pointee)
-            .map(Hunk.init)
+    @GitActor
+    public var hunks: some RandomAccessCollection<Hunk> {
+        GitCollection {
+            pointer.get(git_blame_get_hunk_count)
+        } element: { index in
+            pointer.get(git_blame_get_hunk_byindex, index)!.pointee |> Hunk.init
         }
     }
 }
@@ -60,13 +56,13 @@ extension Blame {
 
 extension Blame.Hunk {
 
-    init(_ hunk: UnsafePointer<git_blame_hunk>) throws {
-        try self.init(hunk.pointee)
+    init(_ hunk: UnsafePointer<git_blame_hunk>) {
+        self.init(hunk.pointee)
     }
 
-    init(_ hunk: git_blame_hunk) throws {
+    init(_ hunk: git_blame_hunk) {
         lines = ClosedRange(start: hunk.final_start_line_number, count: hunk.lines_in_hunk)
-        signature = try Signature(hunk.final_signature.pointee)
+        signature = Signature(hunk.final_signature.pointee)
         commitID = Commit.ID(hunk.final_commit_id)
         path = hunk.orig_path |> String.init(cString:) |> FilePath.init(rawValue:)
     }
