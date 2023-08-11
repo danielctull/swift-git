@@ -55,6 +55,27 @@ extension Config {
     }
 
     @GitActor
+    public func integer(for key: Key) throws -> Int {
+        try key.withCString { key in
+            try Int(pointer.get(git_config_get_int64, key))
+        }
+    }
+
+    @GitActor
+    public func boolean(for key: Key) throws -> Bool {
+        try key.withCString { key in
+            try Bool(pointer.get(git_config_get_bool, key))
+        }
+    }
+
+    @GitActor
+    public func string(for key: Key) throws -> String {
+        try key.withCString { key in
+            try String(cString: pointer.get(git_config_get_string_buf, key).ptr)
+        }
+    }
+
+    @GitActor
     public func set(_ value: Value, for key: Key) throws {
         try key.withCString { key in
             switch value.kind {

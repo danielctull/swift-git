@@ -28,6 +28,16 @@ final class ConfigTests: XCTestCase {
         }
     }
 
+    func testGetString() throws {
+        try FileManager.default.withTemporaryDirectory { local in
+            let config = try Config(url: local.appending(path: "test-config"))
+            XCTAssertEqual(try Array(config.items).count, 0)
+            try config.set("Value", for: "Test.Key")
+            XCTAssertEqual(try Array(config.items).count, 1)
+            XCTAssertEqual(try config.string(for: "Test.Key"), "Value")
+        }
+    }
+
     func testSetInt() throws {
         try FileManager.default.withTemporaryDirectory { local in
             let config = try Config(url: local.appending(path: "test-config"))
@@ -43,6 +53,16 @@ final class ConfigTests: XCTestCase {
         }
     }
 
+    func testGetInt() throws {
+        try FileManager.default.withTemporaryDirectory { local in
+            let config = try Config(url: local.appending(path: "test-config"))
+            XCTAssertEqual(try Array(config.items).count, 0)
+            try config.set(123456, for: "Some.Number")
+            XCTAssertEqual(try Array(config.items).count, 1)
+            XCTAssertEqual(try config.integer(for: "Some.Number"), 123456)
+        }
+    }
+
     func testSetBool() throws {
         try FileManager.default.withTemporaryDirectory { local in
             let config = try Config(url: local.appending(path: "test-config"))
@@ -55,6 +75,16 @@ final class ConfigTests: XCTestCase {
             XCTAssertEqual(item.name, "some.bool")
             XCTAssertEqual(item.value, "true")
             XCTAssertEqual(item.level, .local)
+        }
+    }
+
+    func testGetBool() throws {
+        try FileManager.default.withTemporaryDirectory { local in
+            let config = try Config(url: local.appending(path: "test-config"))
+            XCTAssertEqual(try Array(config.items).count, 0)
+            try config.set(true, for: "Some.Bool")
+            XCTAssertEqual(try Array(config.items).count, 1)
+            XCTAssertEqual(try config.boolean(for: "Some.Bool"), true)
         }
     }
 

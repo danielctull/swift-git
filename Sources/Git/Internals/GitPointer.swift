@@ -154,6 +154,17 @@ extension GitPointer {
         try GitError.check(result)
         return value.pointee
     }
+
+    func get<Parameter, Value>(
+        _ task: @escaping (UnsafeMutablePointer<Value>?, OpaquePointer, Parameter) -> Int32,
+        _ parameter: Parameter
+    ) throws -> Value {
+        let value = UnsafeMutablePointer<Value>.allocate(capacity: 1)
+        defer { value.deallocate() }
+        let result = task(value, pointer, parameter)
+        try GitError.check(result)
+        return value.pointee
+    }
 }
 
 // MARK: - Assert
