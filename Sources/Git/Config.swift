@@ -106,7 +106,7 @@ extension Config {
     public struct Item: Equatable, Hashable {
         public let level: Level
         public let name: Key
-        public let value: Value
+        public let value: String
     }
 }
 
@@ -115,7 +115,7 @@ extension Config.Item {
     fileprivate init(_ entry: git_config_entry) {
         self.level = Config.Level(entry.level)
         self.name = entry.name |> String.init(cString:) |> Config.Key.init
-        self.value = entry.value |> String.init(cString:) |> Config.Value.init
+        self.value = entry.value |> String.init(cString:)
     }
 
     fileprivate init(_ entry: UnsafePointer<git_config_entry>) {
@@ -149,60 +149,6 @@ extension Config.Key {
         _ body: (UnsafePointer<Int8>) throws -> Result
     ) rethrows -> Result {
         try rawValue.withCString(body)
-    }
-}
-
-// MARK: - Config.Value
-
-extension Config {
-
-    public struct Value: Equatable, Hashable, Sendable {
-        fileprivate let kind: Kind
-    }
-}
-
-extension Config.Value {
-
-    fileprivate enum Kind: Equatable, Hashable, Sendable {
-        case string(String)
-        case int(Int)
-        case bool(Bool)
-    }
-}
-
-extension Config.Value {
-
-    public init(_ string: some StringProtocol) {
-        kind = .string(String(string))
-    }
-
-    public init(_ int: some BinaryInteger) {
-        kind = .int(Int(int))
-    }
-
-    public init(_ bool: Bool) {
-        kind = .bool(bool)
-    }
-}
-
-extension Config.Value: ExpressibleByStringLiteral {
-
-    public init(stringLiteral value: String) {
-        self.init(value)
-    }
-}
-
-extension Config.Value: ExpressibleByBooleanLiteral {
-
-    public init(booleanLiteral value: Bool) {
-        self.init(value)
-    }
-}
-
-extension Config.Value: ExpressibleByIntegerLiteral {
-
-    public init(integerLiteral value: Int) {
-        self.init(value)
     }
 }
 
