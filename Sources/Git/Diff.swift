@@ -151,7 +151,7 @@ extension Diff.Delta.Status {
         case GIT_DELTA_TYPECHANGE: self = .typeChange
         case GIT_DELTA_UNREADABLE: self = .unreadable
         case GIT_DELTA_CONFLICTED: self = .conflicted
-        default: fatalError("Unknown delta status: \(status)")
+        default: preconditionFailure("Unexpected delta status: \(status)")
         }
     }
 }

@@ -17,7 +17,7 @@ extension GitSequence {
             } catch let error as GitError where error.code == .iteratorOver {
                 return nil
             } catch {
-                fatalError("Iterator error: \(error)")
+                preconditionFailure("Unexpected iterator error: \(error)")
             }
         }
     }

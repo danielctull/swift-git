@@ -53,7 +53,7 @@ extension Object: Sendable {
             self = try .tree(Tree(pointer: pointer))
 
         default:
-            fatalError()
+            preconditionFailure("Unexpected object type: \(type).")
         }
     }
 }
