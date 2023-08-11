@@ -9,31 +9,31 @@ final class ConfigTests: XCTestCase {
     func testInit() throws {
         try FileManager.default.withTemporaryDirectory { local in
             let config = try Config(url: local.appending(path: "test-config"))
-            XCTAssertEqual(try Array(config.items).count, 0)
+            XCTAssertEqual(try Array(config.entries).count, 0)
         }
     }
 
     func testSetString() throws {
         try FileManager.default.withTemporaryDirectory { local in
             let config = try Config(url: local.appending(path: "test-config"))
-            XCTAssertEqual(try Array(config.items).count, 0)
+            XCTAssertEqual(try Array(config.entries).count, 0)
 
             try config.set("Value", for: "Test.Key")
-            XCTAssertEqual(try Array(config.items).count, 1)
+            XCTAssertEqual(try Array(config.entries).count, 1)
 
-            let item = try XCTUnwrap(Array(config.items).first)
-            XCTAssertEqual(item.name, "test.key")
-            XCTAssertEqual(item.value, "Value")
-            XCTAssertEqual(item.level, .local)
+            let entry = try XCTUnwrap(Array(config.entries).first)
+            XCTAssertEqual(entry.name, "test.key")
+            XCTAssertEqual(entry.value, "Value")
+            XCTAssertEqual(entry.level, .local)
         }
     }
 
     func testGetString() throws {
         try FileManager.default.withTemporaryDirectory { local in
             let config = try Config(url: local.appending(path: "test-config"))
-            XCTAssertEqual(try Array(config.items).count, 0)
+            XCTAssertEqual(try Array(config.entries).count, 0)
             try config.set("Value", for: "Test.Key")
-            XCTAssertEqual(try Array(config.items).count, 1)
+            XCTAssertEqual(try Array(config.entries).count, 1)
             XCTAssertEqual(try config.string(for: "Test.Key"), "Value")
         }
     }
@@ -41,24 +41,24 @@ final class ConfigTests: XCTestCase {
     func testSetInt() throws {
         try FileManager.default.withTemporaryDirectory { local in
             let config = try Config(url: local.appending(path: "test-config"))
-            XCTAssertEqual(try Array(config.items).count, 0)
+            XCTAssertEqual(try Array(config.entries).count, 0)
 
             try config.set(123456, for: "Some.Number")
 
-            XCTAssertEqual(try Array(config.items).count, 1)
-            let item = try XCTUnwrap(Array(config.items).first)
-            XCTAssertEqual(item.name, "some.number")
-            XCTAssertEqual(item.value, "123456")
-            XCTAssertEqual(item.level, .local)
+            XCTAssertEqual(try Array(config.entries).count, 1)
+            let entry = try XCTUnwrap(Array(config.entries).first)
+            XCTAssertEqual(entry.name, "some.number")
+            XCTAssertEqual(entry.value, "123456")
+            XCTAssertEqual(entry.level, .local)
         }
     }
 
     func testGetInt() throws {
         try FileManager.default.withTemporaryDirectory { local in
             let config = try Config(url: local.appending(path: "test-config"))
-            XCTAssertEqual(try Array(config.items).count, 0)
+            XCTAssertEqual(try Array(config.entries).count, 0)
             try config.set(123456, for: "Some.Number")
-            XCTAssertEqual(try Array(config.items).count, 1)
+            XCTAssertEqual(try Array(config.entries).count, 1)
             XCTAssertEqual(try config.integer(for: "Some.Number"), 123456)
         }
     }
@@ -66,24 +66,24 @@ final class ConfigTests: XCTestCase {
     func testSetBool() throws {
         try FileManager.default.withTemporaryDirectory { local in
             let config = try Config(url: local.appending(path: "test-config"))
-            XCTAssertEqual(try Array(config.items).count, 0)
+            XCTAssertEqual(try Array(config.entries).count, 0)
 
             try config.set(true, for: "Some.Bool")
 
-            XCTAssertEqual(try Array(config.items).count, 1)
-            let item = try XCTUnwrap(Array(config.items).first)
-            XCTAssertEqual(item.name, "some.bool")
-            XCTAssertEqual(item.value, "true")
-            XCTAssertEqual(item.level, .local)
+            XCTAssertEqual(try Array(config.entries).count, 1)
+            let entry = try XCTUnwrap(Array(config.entries).first)
+            XCTAssertEqual(entry.name, "some.bool")
+            XCTAssertEqual(entry.value, "true")
+            XCTAssertEqual(entry.level, .local)
         }
     }
 
     func testGetBool() throws {
         try FileManager.default.withTemporaryDirectory { local in
             let config = try Config(url: local.appending(path: "test-config"))
-            XCTAssertEqual(try Array(config.items).count, 0)
+            XCTAssertEqual(try Array(config.entries).count, 0)
             try config.set(true, for: "Some.Bool")
-            XCTAssertEqual(try Array(config.items).count, 1)
+            XCTAssertEqual(try Array(config.entries).count, 1)
             XCTAssertEqual(try config.boolean(for: "Some.Bool"), true)
         }
     }
@@ -95,13 +95,13 @@ final class ConfigTests: XCTestCase {
             let repo = try Repository(local: local, remote: remote)
             let config = try repo.config
 
-            let old = try Set(config.items)
+            let old = try Set(config.entries)
 
             do {
                 let local = try config.level(.local)
-                let old = try Set(local.items)
+                let old = try Set(local.entries)
                 try local.set("Test Value", for: "Test.Key")
-                let new = try Set(local.items).subtracting(old)
+                let new = try Set(local.entries).subtracting(old)
 
                 XCTAssertEqual(new.count, 1)
                 let first = try XCTUnwrap(new.first)
@@ -110,7 +110,7 @@ final class ConfigTests: XCTestCase {
                 XCTAssertEqual(first.level, .local)
             }
 
-            let new = try Set(config.items).subtracting(old)
+            let new = try Set(config.entries).subtracting(old)
 
             XCTAssertEqual(new.count, 1)
             let first = try XCTUnwrap(new.first)

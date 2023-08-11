@@ -39,7 +39,7 @@ extension Config {
     }
 
     @GitActor
-    public var items: GitSequence<Config.Item> {
+    public var entries: GitSequence<Config.Entry> {
         get throws {
             try GitSequence {
 
@@ -49,7 +49,7 @@ extension Config {
 
             } next: { iterator in
 
-                try Item(iterator.get(git_config_next))
+                try Entry(iterator.get(git_config_next))
             }
         }
     }
@@ -99,18 +99,18 @@ extension Config {
     }
 }
 
-// MARK: - Config.Item
+// MARK: - Config.Entry
 
 extension Config {
 
-    public struct Item: Equatable, Hashable {
+    public struct Entry: Equatable, Hashable {
         public let level: Level
         public let name: Key
         public let value: String
     }
 }
 
-extension Config.Item {
+extension Config.Entry {
 
     fileprivate init(_ entry: git_config_entry) {
         self.level = Config.Level(entry.level)
