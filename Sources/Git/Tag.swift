@@ -127,13 +127,13 @@ public struct AnnotatedTag: Equatable, Hashable, Identifiable, Sendable {
     public let message: String
 
     @GitActor
-    init(pointer: GitPointer) throws {
+    init(pointer: GitPointer) {
         self.pointer = pointer
-        id = try ID(objectID: Object.ID(object: pointer))
-        name = try pointer.get(git_tag_name) |> Unwrap |> String.init(cString:) |> Tag.Name.init
-        target = try pointer.get(git_tag_target_id) |> Unwrap |> Object.ID.init
-        tagger = try pointer.get(git_tag_tagger) |> Unwrap |> Signature.init
-        message = try pointer.get(git_tag_message) |> Unwrap |> String.init(cString:)
+        id = ID(objectID: Object.ID(object: pointer))
+        name = pointer.get(git_tag_name) !> String.init(cString:) |> Tag.Name.init
+        target = pointer.get(git_tag_target_id) !> Object.ID.init
+        tagger = pointer.get(git_tag_tagger) !> Signature.init
+        message = pointer.get(git_tag_message) !> String.init(cString:)
     }
 }
 

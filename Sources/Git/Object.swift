@@ -34,23 +34,23 @@ extension Object: Sendable {
     }
 
     @GitActor
-    init(pointer: GitPointer) throws {
+    init(pointer: GitPointer) {
 
         let type = pointer.get(git_object_type)
 
         switch type {
 
         case GIT_OBJECT_BLOB:
-            self = try .blob(Blob(pointer: pointer))
+            self = .blob(Blob(pointer: pointer))
 
         case GIT_OBJECT_COMMIT:
-            self = try .commit(Commit(pointer: pointer))
+            self = .commit(Commit(pointer: pointer))
 
         case GIT_OBJECT_TAG:
-            self = try .tag(AnnotatedTag(pointer: pointer))
+            self = .tag(AnnotatedTag(pointer: pointer))
 
         case GIT_OBJECT_TREE:
-            self = try .tree(Tree(pointer: pointer))
+            self = .tree(Tree(pointer: pointer))
 
         default:
             preconditionFailure("Unexpected object type: \(type).")
@@ -98,8 +98,8 @@ extension Object.ID {
     }
 
     @GitActor
-    init(object: GitPointer) throws {
-        self = try object.get(git_object_id) |> Unwrap |> Self.init
+    init(object: GitPointer) {
+        self = object.get(git_object_id)! |> Self.init
     }
 
     @GitActor

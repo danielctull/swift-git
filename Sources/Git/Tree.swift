@@ -9,9 +9,9 @@ public struct Tree: Equatable, Hashable, Identifiable, Sendable {
     public let id: ID
 
     @GitActor
-    init(pointer: GitPointer) throws {
+    init(pointer: GitPointer) {
         self.pointer = pointer
-        id = try ID(objectID: Object.ID(object: pointer))
+        id = ID(objectID: Object.ID(object: pointer))
     }
 }
 

@@ -87,13 +87,13 @@ public struct Commit: Equatable, Hashable, Identifiable, Sendable {
     public let committer: Signature
 
     @GitActor
-    init(pointer: GitPointer) throws {
+    init(pointer: GitPointer) {
         self.pointer = pointer
-        id = try ID(objectID: Object.ID(object: pointer))
-        summary = try pointer.get(git_commit_summary) |> Unwrap |> String.init(cString:)
-        body = try? pointer.get(git_commit_body) |> Unwrap |> String.init(cString:)
-        author = try pointer.get(git_commit_author) |> Unwrap |> Signature.init
-        committer = try pointer.get(git_commit_committer) |> Unwrap |> Signature.init
+        id = ID(objectID: Object.ID(object: pointer))
+        summary = pointer.get(git_commit_summary) !> String.init(cString:)
+        body = pointer.get(git_commit_body) ?> String.init(cString:)
+        author = pointer.get(git_commit_author) !> Signature.init
+        committer = pointer.get(git_commit_committer) !> Signature.init
     }
 }
 
