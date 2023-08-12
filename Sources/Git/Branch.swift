@@ -82,6 +82,15 @@ extension Branch {
                 free: git_reference_free)
         }
     }
+
+    @GitActor
+    public var upstream: RemoteBranch {
+        get throws {
+            try RemoteBranch(
+                create: pointer.create(git_branch_upstream),
+                free: git_reference_free)
+        }
+    }
 }
 
 // MARK: - Branch.ID
