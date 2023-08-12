@@ -91,6 +91,13 @@ extension Branch {
                 free: git_reference_free)
         }
     }
+
+    @GitActor
+    public func setUpstream(_ remoteBranch: RemoteBranch) throws {
+        try remoteBranch.name.withCString { name in
+            try pointer.perform(git_branch_set_upstream, name)
+        }
+    }
 }
 
 // MARK: - Branch.ID

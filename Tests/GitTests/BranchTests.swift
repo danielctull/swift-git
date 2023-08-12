@@ -98,4 +98,25 @@ final class BranchTests: XCTestCase {
             XCTAssertEqual(remoteBranch.target.description, "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
         }
     }
+
+    func testSetUpstream() throws {
+        let remote = try Bundle.module.url(forRepository: "Test.git")
+        try FileManager.default.withTemporaryDirectory { local in
+            let repo = try Repository(local: local, remote: remote)
+            let main = try repo.branch(named: "main")
+            let commit = try XCTUnwrap(Array(repo.commits(for: .branch(main))).first)
+            
+            let main2 = try repo.createBranch(named: "main2", at: commit)
+            XCTAssertThrowsError(try main2.upstream)
+            
+            try main2.setUpstream(main.upstream)
+            let remoteBranch = try main.upstream
+            XCTAssertEqual(remoteBranch.id.description, "refs/remotes/origin/main")
+            XCTAssertEqual(remoteBranch.reference.description, "refs/remotes/origin/main")
+            XCTAssertEqual(remoteBranch.name.description, "origin/main")
+            XCTAssertEqual(remoteBranch.name.remote, "origin")
+            XCTAssertEqual(remoteBranch.name.branch, "main")
+            XCTAssertEqual(remoteBranch.target.description, "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
+        }
+    }
 }

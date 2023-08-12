@@ -90,7 +90,7 @@ extension RemoteBranch.Name: CustomStringConvertible {
 
 extension RemoteBranch.Name {
 
-    fileprivate func withCString<Result>(
+    func withCString<Result>(
         _ body: (UnsafePointer<Int8>) throws -> Result
     ) rethrows -> Result {
         try description.withCString(body)
