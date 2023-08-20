@@ -26,7 +26,10 @@ public struct Remote: Equatable, Hashable, Identifiable, Sendable {
     @GitActor
     init(pointer: GitPointer) throws {
         self.pointer = pointer
-        name = try Name(pointer.get(git_remote_name) |> Unwrap |> String.init(cString:))
+        name = try pointer.get(git_remote_name)
+            |> Unwrap
+            |> String.init(cString:)
+            |> Name.init
         id = ID(name: name)
         url = try pointer.get(git_remote_url)
             |> Unwrap
