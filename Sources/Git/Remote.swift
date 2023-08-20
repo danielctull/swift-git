@@ -1,5 +1,6 @@
 
 import Clibgit2
+import Foundation
 
 extension Repository {
 
@@ -20,16 +21,17 @@ public struct Remote: Equatable, Hashable, Identifiable, Sendable {
     let pointer: GitPointer
     public let id: ID
     public let name: Name
-//    public let url: URL
+    public let url: URL
 
     @GitActor
     init(pointer: GitPointer) throws {
         self.pointer = pointer
         name = try Name(pointer.get(git_remote_name) |> Unwrap |> String.init(cString:))
         id = ID(name: name)
-
-//        let urlString = try Unwrap(String(remote.get(git_remote_url)))
-//        url = try Unwrap(URL(string: urlString))
+        url = try pointer.get(git_remote_url)
+            |> Unwrap
+            |> String.init(cString:)
+            |> URL.init(fileURLWithPath:)
     }
 }
 

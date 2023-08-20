@@ -7,12 +7,12 @@ import XCTest
 final class RemoteTests: XCTestCase {
 
     func testRepositoryRemote() throws {
-        let remote = try Bundle.module.url(forRepository: "Test.git")
+        let remoteURL = try Bundle.module.url(forRepository: "Test.git")
         try FileManager.default.withTemporaryDirectory { local in
-            let repo = try Repository(local: local, remote: remote)
+            let repo = try Repository(local: local, remote: remoteURL)
             let remote = try repo.remote(named: "origin")
             XCTAssertEqual(remote.name, "origin")
-//            XCTAssertEqual(remote.url, local)
+            XCTAssertEqual(remote.url, remoteURL)
         }
     }
 }
