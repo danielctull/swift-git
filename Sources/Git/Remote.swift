@@ -12,6 +12,16 @@ extension Repository {
                 free: git_remote_free)
         }
     }
+
+    @GitActor
+    public var remotes: [Remote] {
+        get throws {
+            let remoteNames = try remoteBranches.map(\.name.remote) |> Set.init
+            return try remoteNames
+                .sorted(by: { $0.description < $1.description })
+                .map(remote(named:))
+        }
+    }
 }
 
 // MARK: Remote
