@@ -72,7 +72,7 @@ extension GitError {
 // MARK: - GitError.Domain
 
 extension GitError {
-    public struct Domain: Equatable {
+    public struct Domain: Equatable, Sendable {
         fileprivate let rawValue: git_error_t
         fileprivate init(_ rawValue: git_error_t) {
             self.rawValue = rawValue
@@ -168,7 +168,7 @@ extension GitError.Domain: CustomStringConvertible {
 
 extension GitError {
 
-    public struct Code: Equatable {
+    public struct Code: Equatable, Sendable {
         fileprivate let rawValue: git_error_code
         fileprivate init(_ rawValue: git_error_code) {
             self.rawValue = rawValue
