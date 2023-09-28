@@ -1,5 +1,6 @@
 
 protocol GitPointerInitialization {
+    @GitActor
     init(pointer: GitPointer) throws
 }
 
