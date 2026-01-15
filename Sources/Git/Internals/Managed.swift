@@ -111,7 +111,7 @@ extension Managed: Hashable where Pointer: Hashable {
 extension Managed {
 
   func perform<each Parameter>(
-    _ task: @escaping (Pointer?, repeat each Parameter) -> Int32,
+    _ task: @escaping (Pointer, repeat each Parameter) -> Int32,
     _ parameter: repeat each Parameter
   ) throws {
     try GitError.check(task(pointer, repeat each parameter))
@@ -123,7 +123,7 @@ extension Managed {
 extension Managed {
 
   func get<Value, each Parameter>(
-    _ task: (Pointer?, repeat each Parameter) -> Value,
+    _ task: (Pointer, repeat each Parameter) -> Value,
     _ parameter: repeat each Parameter
   ) -> Value {
     task(pointer, repeat each parameter)
