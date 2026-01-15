@@ -56,12 +56,12 @@ final class Managed<Pointer> {
 
 extension Managed {
 
-  func create<New, each Parameter>(
+  func create<Value, each Parameter>(
     _ task:
-      @escaping (UnsafeMutablePointer<New?>?, Pointer?, repeat each Parameter) ->
+      @escaping (UnsafeMutablePointer<Value?>?, Pointer?, repeat each Parameter) ->
       Int32,
     _ parameter: repeat each Parameter
-  ) -> Managed<New>.Create {
+  ) -> Managed<Value>.Create {
     withUnsafeMutablePointer { output in task(output, self.pointer, repeat each parameter) }
   }
 }
@@ -79,7 +79,7 @@ func firstOutput<A, B, C, Value>(
 
 private func withUnsafeMutablePointer<Value>(
   _ task: @escaping (UnsafeMutablePointer<Value?>) -> Int32
-) -> () throws -> Value {
+) -> Managed<Value>.Create {
   {
     var value: Value?
     let result = withUnsafeMutablePointer(to: &value, task)
@@ -122,7 +122,7 @@ extension Managed {
 
 extension Managed {
 
-  func get<each Parameter, Value>(
+  func get<Value, each Parameter>(
     _ task: (Pointer?, repeat each Parameter) -> Value,
     _ parameter: repeat each Parameter
   ) -> Value {
