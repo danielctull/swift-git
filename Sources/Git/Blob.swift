@@ -3,7 +3,7 @@ import Foundation
 
 // MARK: - Blob
 
-public struct Blob: Equatable, Hashable, Identifiable, Sendable {
+public struct Blob: Equatable, Hashable, Identifiable {
 
   let pointer: GitPointer
   public let id: ID

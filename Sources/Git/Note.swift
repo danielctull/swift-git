@@ -2,7 +2,7 @@ import Clibgit2
 
 // MARK: - Note
 
-public struct Note: Equatable, Hashable, Identifiable, Sendable {
+public struct Note: Equatable, Hashable, Identifiable {
 
   let pointer: GitPointer
   public let id: ID

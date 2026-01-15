@@ -72,7 +72,7 @@ extension Repository {
 
 // MARK: - Commit
 
-public struct Commit: Equatable, Hashable, Identifiable, Sendable {
+public struct Commit: Equatable, Hashable, Identifiable {
 
   let pointer: GitPointer
   public let id: ID

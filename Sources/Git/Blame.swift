@@ -13,7 +13,7 @@ extension Repository {
 
 // MARK: - Blame
 
-public struct Blame: Equatable, Hashable, Sendable {
+public struct Blame: Equatable, Hashable {
   let pointer: GitPointer
 }
 

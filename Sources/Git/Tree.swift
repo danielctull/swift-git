@@ -2,7 +2,7 @@ import Clibgit2
 
 // MARK: - Tree
 
-public struct Tree: Equatable, Hashable, Identifiable, Sendable {
+public struct Tree: Equatable, Hashable, Identifiable {
 
   let pointer: GitPointer
   public let id: ID
@@ -41,7 +41,7 @@ extension Tree.ID: CustomStringConvertible {
 
 extension Tree {
 
-  public struct Entry: Equatable, Hashable, Sendable {
+  public struct Entry: Equatable, Hashable {
     let pointer: GitPointer
     public let target: Object.ID
     public let name: String

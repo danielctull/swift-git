@@ -16,7 +16,7 @@ extension Repository {
 
 // MARK: - Tag
 
-public struct Tag: Equatable, Hashable, Identifiable, Sendable {
+public struct Tag: Equatable, Hashable, Identifiable {
 
   let pointer: GitPointer
   let kind: Kind
@@ -49,7 +49,7 @@ public struct Tag: Equatable, Hashable, Identifiable, Sendable {
 
 extension Tag {
 
-  enum Kind: Equatable, Hashable, Sendable {
+  enum Kind: Equatable, Hashable {
     case lightweight(target: Object.ID)
     case annotated(target: AnnotatedTag)
   }
@@ -114,7 +114,7 @@ extension Tag.Name: CustomStringConvertible {
 
 // MARK: - AnnotatedTag
 
-public struct AnnotatedTag: Equatable, Hashable, Identifiable, Sendable {
+public struct AnnotatedTag: Equatable, Hashable, Identifiable {
 
   let pointer: GitPointer
   public let id: ID

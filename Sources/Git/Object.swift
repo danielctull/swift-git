@@ -20,7 +20,7 @@ public enum Object: Equatable, Hashable {
   case tree(Tree)
 }
 
-extension Object: Sendable {
+extension Object {
 
   var pointer: GitPointer {
     switch self {

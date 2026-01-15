@@ -49,7 +49,7 @@ extension Repository {
 
 // MARK: - Branch
 
-public struct Branch: Equatable, Hashable, Identifiable, Sendable {
+public struct Branch: Equatable, Hashable, Identifiable {
 
   let pointer: GitPointer
   public let id: ID

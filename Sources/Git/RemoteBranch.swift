@@ -30,7 +30,7 @@ extension Repository {
 
 // MARK: - RemoteBranch
 
-public struct RemoteBranch: Equatable, Hashable, Sendable {
+public struct RemoteBranch: Equatable, Hashable {
 
   let pointer: GitPointer
   public let id: ID

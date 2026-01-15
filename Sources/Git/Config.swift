@@ -14,7 +14,7 @@ extension Repository {
 
 // MARK: - Config
 
-public struct Config: Equatable, Hashable, Sendable {
+public struct Config: Equatable, Hashable {
   let pointer: GitPointer
 }
 

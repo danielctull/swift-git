@@ -24,7 +24,7 @@ extension Repository {
 
 // MARK: Remote
 
-public struct Remote: Equatable, Hashable, Identifiable, Sendable {
+public struct Remote: Equatable, Hashable, Identifiable {
 
   let pointer: GitPointer
   public let id: ID
