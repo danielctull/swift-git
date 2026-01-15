@@ -146,7 +146,7 @@ extension Config.Key {
 
 extension Config {
 
-  public struct Level: Equatable {
+  public struct Level: Equatable, Sendable {
     fileprivate let rawValue: git_config_level_t
     fileprivate init(_ rawValue: git_config_level_t) {
       self.rawValue = rawValue
