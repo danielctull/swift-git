@@ -1,4 +1,4 @@
-import Clibgit2
+import libgit2
 
 public struct Index: Equatable, Hashable {
   let pointer: Managed<OpaquePointer>
