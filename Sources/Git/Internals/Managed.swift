@@ -90,7 +90,7 @@ private func withUnsafeMutablePointer<Value>(
 
 // MARK: - Equatable
 
-extension Managed<OpaquePointer>: Equatable {
+extension Managed: Equatable where Pointer: Equatable {
 
   static func == (lhs: Managed<Pointer>, rhs: Managed<Pointer>) -> Bool {
     lhs.pointer == rhs.pointer
@@ -99,7 +99,7 @@ extension Managed<OpaquePointer>: Equatable {
 
 // MARK: - Hashable
 
-extension Managed<OpaquePointer>: Hashable {
+extension Managed: Hashable where Pointer: Hashable {
 
   func hash(into hasher: inout Hasher) {
     hasher.combine(pointer)
