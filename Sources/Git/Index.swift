@@ -1,12 +1,11 @@
 import Clibgit2
 
-public struct Index: Equatable, Hashable, Sendable {
+public struct Index: Equatable, Hashable {
   let pointer: GitPointer
 }
 
 extension Repository {
 
-  @GitActor
   public var index: Index {
     get throws {
       try Index(
@@ -22,7 +21,6 @@ extension Index {
     public let objectID: Object.ID
   }
 
-  @GitActor
   public var entries: GitCollection<Index.Entry> {
     GitCollection {
       pointer.get(git_index_entrycount)

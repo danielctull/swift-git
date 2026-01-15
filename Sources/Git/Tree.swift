@@ -2,12 +2,11 @@ import Clibgit2
 
 // MARK: - Tree
 
-public struct Tree: Equatable, Hashable, Identifiable, Sendable {
+public struct Tree: Equatable, Hashable, Identifiable {
 
   let pointer: GitPointer
   public let id: ID
 
-  @GitActor
   init(pointer: GitPointer) throws {
     self.pointer = pointer
     id = try ID(objectID: Object.ID(object: pointer))
@@ -16,7 +15,6 @@ public struct Tree: Equatable, Hashable, Identifiable, Sendable {
 
 extension Tree {
 
-  @GitActor
   public var entries: GitCollection<Tree.Entry> {
     GitCollection {
       pointer.get(git_tree_entrycount)
@@ -43,12 +41,11 @@ extension Tree.ID: CustomStringConvertible {
 
 extension Tree {
 
-  public struct Entry: Equatable, Hashable, Sendable {
+  public struct Entry: Equatable, Hashable {
     let pointer: GitPointer
     public let target: Object.ID
     public let name: String
 
-    @GitActor
     init(pointer: GitPointer) {
       self.pointer = pointer
 

@@ -2,7 +2,6 @@ import Clibgit2
 
 extension Repository {
 
-  @GitActor
   public func diff(from tree1: Tree, to tree2: Tree) throws -> Diff {
     try Diff(
       create: pointer.create(
@@ -10,7 +9,6 @@ extension Repository {
       free: git_diff_free)
   }
 
-  @GitActor
   public func object(for id: Diff.File.ID) throws -> Object {
     try object(for: id.objectID)
   }
@@ -18,13 +16,12 @@ extension Repository {
 
 // MARK: - Diff
 
-public struct Diff: Equatable, Hashable, Sendable {
+public struct Diff: Equatable, Hashable {
   let pointer: GitPointer
 }
 
 extension Diff {
 
-  @GitActor
   public var deltas: GitCollection<Diff.Delta> {
     GitCollection {
       pointer.get(git_diff_num_deltas)
@@ -43,7 +40,6 @@ extension Diff {
     public let file: File
   }
 
-  @GitActor
   public var hunks: [Hunk] {
     get throws {
       var hunks: [Hunk] = []

@@ -2,7 +2,6 @@ import Foundation
 import Git
 import XCTest
 
-@GitActor
 final class CommitTests: XCTestCase {
 
   func testRepositoryCommitForString() throws {

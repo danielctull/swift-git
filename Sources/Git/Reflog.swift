@@ -2,14 +2,12 @@ import Clibgit2
 
 extension Repository {
 
-  @GitActor
   public var reflog: Reflog {
     get throws {
       try reflog(named: "HEAD")
     }
   }
 
-  @GitActor
   public func reflog(named name: Reflog.Name) throws -> Reflog {
     try name.withCString { name in
       try Reflog(
@@ -18,7 +16,6 @@ extension Repository {
     }
   }
 
-  @GitActor
   public func renameReflog(from old: Reflog.Name, to new: Reflog.Name) throws {
     try old.withCString { old in
       try new.withCString { new in
@@ -27,7 +24,6 @@ extension Repository {
     }
   }
 
-  @GitActor
   public func deleteReflog(named name: Reflog.Name) throws {
     try name.withCString { name in
       try pointer.perform(git_reflog_delete, name)
@@ -37,13 +33,12 @@ extension Repository {
 
 // MARK: - Reflog
 
-public struct Reflog: Equatable, Hashable, Sendable {
+public struct Reflog: Equatable, Hashable {
   let pointer: GitPointer
 }
 
 extension Reflog {
 
-  @GitActor
   public var items: GitCollection<Reflog.Item> {
     GitCollection {
       pointer.get(git_reflog_entrycount)
@@ -59,7 +54,6 @@ extension Reflog {
   /// To save the addition to disk, you should call ``write()``.
   ///
   /// - Parameter item: The item to append.
-  @GitActor
   public func append(_ item: Reflog.Item.Draft) throws {
     try item.id.withUnsafePointer { oid in
       try item.message.withCString { message in
@@ -73,13 +67,11 @@ extension Reflog {
   /// Remove an entry from the reflog.
   ///
   /// - Parameter item: The item to remove.
-  @GitActor
   public func remove(_ item: Reflog.Item) throws {
     try pointer.perform(git_reflog_drop, item.id.rawValue, Int32(true))
   }
 
   /// Write the reflog back to disk using an atomic file lock.
-  @GitActor
   public func write() throws {
     try pointer.perform(git_reflog_write)
   }
@@ -134,7 +126,6 @@ extension Reflog {
 
 extension Reflog.Item {
 
-  @GitActor
   fileprivate init(pointer: GitPointer, index: Int) {
     self.init(
       id: ID(rawValue: index),

@@ -3,7 +3,6 @@ import Foundation
 
 extension Repository {
 
-  @GitActor
   public func remote(named name: Remote.Name) throws -> Remote {
     try name.withCString { name in
       try Remote(
@@ -12,7 +11,6 @@ extension Repository {
     }
   }
 
-  @GitActor
   public var remotes: [Remote] {
     get throws {
       let remoteNames = try remoteBranches.map(\.name.remote) |> Set.init
@@ -26,14 +24,13 @@ extension Repository {
 
 // MARK: Remote
 
-public struct Remote: Equatable, Hashable, Identifiable, Sendable {
+public struct Remote: Equatable, Hashable, Identifiable {
 
   let pointer: GitPointer
   public let id: ID
   public let name: Name
   public let url: URL
 
-  @GitActor
   init(pointer: GitPointer) throws {
     self.pointer = pointer
     name = try pointer.get(git_remote_name)

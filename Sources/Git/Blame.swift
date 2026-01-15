@@ -2,7 +2,6 @@ import Clibgit2
 
 extension Repository {
 
-  @GitActor
   public func blame(for path: FilePath) throws -> Blame {
     try path.rawValue.withCString { path in
       try Blame(
@@ -14,7 +13,7 @@ extension Repository {
 
 // MARK: - Blame
 
-public struct Blame: Equatable, Hashable, Sendable {
+public struct Blame: Equatable, Hashable {
   let pointer: GitPointer
 }
 
@@ -24,14 +23,12 @@ extension Blame: CustomStringConvertible {
 
 extension Blame {
 
-  @GitActor
   public func hunk(for line: LineNumber) throws -> Hunk {
     try pointer.get(git_blame_get_hunk_byline, line.rawValue)
       |> Unwrap
       |> Hunk.init
   }
 
-  @GitActor
   public var hunks: GitCollection<Blame.Hunk> {
     GitCollection {
       pointer.get(git_blame_get_hunk_count)

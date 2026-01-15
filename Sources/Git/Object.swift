@@ -2,7 +2,6 @@ import Clibgit2
 
 extension Repository {
 
-  @GitActor
   public func object(for id: Object.ID) throws -> Object {
     try withUnsafePointer(to: id.oid) { oid in
       try Object(
@@ -21,7 +20,7 @@ public enum Object: Equatable, Hashable {
   case tree(Tree)
 }
 
-extension Object: Sendable {
+extension Object {
 
   var pointer: GitPointer {
     switch self {
@@ -32,7 +31,6 @@ extension Object: Sendable {
     }
   }
 
-  @GitActor
   init(pointer: GitPointer) throws {
 
     let type = pointer.get(git_object_type)
@@ -80,7 +78,6 @@ extension Object {
 
 extension Object.ID {
 
-  @GitActor
   init(_ string: String) throws {
     let oid = try string.withCString { string in
       var oid: git_oid = git_oid()
@@ -96,12 +93,10 @@ extension Object.ID {
     self.init(oid: oid.pointee)
   }
 
-  @GitActor
   init(object: GitPointer) throws {
     self = try object.get(git_object_id) |> Unwrap |> Self.init
   }
 
-  @GitActor
   init(reference: GitPointer) throws {
     let resolved = try GitPointer(
       create: reference.create(git_reference_resolve),

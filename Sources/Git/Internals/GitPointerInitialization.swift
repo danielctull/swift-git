@@ -4,7 +4,6 @@ protocol GitPointerInitialization {
 
 extension GitPointerInitialization {
 
-  @GitActor
   init(
     create: @escaping GitPointer.Create,
     free: @escaping GitPointer.Free

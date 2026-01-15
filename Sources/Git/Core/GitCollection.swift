@@ -1,4 +1,3 @@
-@GitActor
 public struct GitCollection<Element> {
   private let count: () -> Int
   private let element: (Int) -> Element
@@ -7,8 +6,8 @@ public struct GitCollection<Element> {
 extension GitCollection {
 
   init<I: BinaryInteger>(
-    count: @escaping @GitActor () -> I,
-    element: @escaping @GitActor (I) -> Element
+    count: @escaping () -> I,
+    element: @escaping (I) -> Element
   ) {
     self.count = { Int(count()) }
     self.element = { element(I($0)) }

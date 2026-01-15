@@ -3,14 +3,13 @@ import Foundation
 
 // MARK: - Blob
 
-public struct Blob: Equatable, Hashable, Identifiable, Sendable {
+public struct Blob: Equatable, Hashable, Identifiable {
 
   let pointer: GitPointer
   public let id: ID
   public let data: Data
   public let isBinary: Bool
 
-  @GitActor
   init(pointer: GitPointer) throws {
     self.pointer = pointer
     id = try ID(objectID: Object.ID(object: pointer))

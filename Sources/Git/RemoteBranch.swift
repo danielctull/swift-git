@@ -2,7 +2,6 @@ import Clibgit2
 
 extension Repository {
 
-  @GitActor
   public var remoteBranches: GitSequence<RemoteBranch> {
     get throws {
       try GitSequence {
@@ -20,7 +19,6 @@ extension Repository {
     }
   }
 
-  @GitActor
   public func branch(on remote: Remote.Name, named branch: Branch.Name) throws -> RemoteBranch {
     try RemoteBranch.Name(remote: remote, branch: branch).withCString { name in
       try RemoteBranch(
@@ -32,7 +30,7 @@ extension Repository {
 
 // MARK: - RemoteBranch
 
-public struct RemoteBranch: Equatable, Hashable, Sendable {
+public struct RemoteBranch: Equatable, Hashable {
 
   let pointer: GitPointer
   public let id: ID
@@ -40,7 +38,6 @@ public struct RemoteBranch: Equatable, Hashable, Sendable {
   public let name: Name
   public let reference: Reference.Name
 
-  @GitActor
   init(pointer: GitPointer) throws {
     pointer.assert(git_reference_is_remote, "Expected remote branch.")
     self.pointer = pointer

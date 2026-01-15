@@ -3,7 +3,6 @@ import Foundation
 
 extension Repository {
 
-  @GitActor
   public var config: Config {
     get throws {
       try Config(
@@ -15,13 +14,12 @@ extension Repository {
 
 // MARK: - Config
 
-public struct Config: Equatable, Hashable, Sendable {
+public struct Config: Equatable, Hashable {
   let pointer: GitPointer
 }
 
 extension Config {
 
-  @GitActor
   public init(url: URL) throws {
     self = try url.withUnsafeFileSystemRepresentation { path in
       try Config(
@@ -31,14 +29,12 @@ extension Config {
     }
   }
 
-  @GitActor
   public func level(_ level: Level) throws -> Config {
     try Config(
       create: pointer.create(git_config_open_level, level.rawValue),
       free: git_config_free)
   }
 
-  @GitActor
   public var entries: GitSequence<Config.Entry> {
     get throws {
       try GitSequence {
@@ -54,42 +50,36 @@ extension Config {
     }
   }
 
-  @GitActor
   public func integer(for key: Key) throws -> Int {
     try key.withCString { key in
       try Int(pointer.get(git_config_get_int64, key))
     }
   }
 
-  @GitActor
   public func set(_ integer: Int, for key: Key) throws {
     try key.withCString { key in
       try pointer.perform(git_config_set_int64, key, Int64(integer))
     }
   }
 
-  @GitActor
   public func boolean(for key: Key) throws -> Bool {
     try key.withCString { key in
       try Bool(pointer.get(git_config_get_bool, key))
     }
   }
 
-  @GitActor
   public func set(_ boolean: Bool, for key: Key) throws {
     try key.withCString { key in
       try pointer.perform(git_config_set_bool, key, Int32(boolean))
     }
   }
 
-  @GitActor
   public func string(for key: Key) throws -> String {
     try key.withCString { key in
       try String(cString: pointer.get(git_config_get_string_buf, key).ptr)
     }
   }
 
-  @GitActor
   public func set(_ string: String, for key: Key) throws {
     try key.withCString { key in
       try string.withCString { string in
@@ -156,7 +146,7 @@ extension Config.Key {
 
 extension Config {
 
-  public struct Level: Equatable {
+  public struct Level: Equatable, Sendable {
     fileprivate let rawValue: git_config_level_t
     fileprivate init(_ rawValue: git_config_level_t) {
       self.rawValue = rawValue

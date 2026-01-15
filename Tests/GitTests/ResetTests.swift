@@ -2,7 +2,6 @@ import Foundation
 import Git
 import XCTest
 
-@GitActor
 final class ResetTests: XCTestCase {
 
   func testResetSoft() throws {
@@ -86,14 +85,12 @@ final class ResetTests: XCTestCase {
 
 extension Repository {
 
-  @GitActor
   fileprivate var current: Commit {
     get throws {
       try Array(XCTUnwrap(commits)).value(at: 0)
     }
   }
 
-  @GitActor
   fileprivate var previous: Commit {
     get throws {
       try Array(XCTUnwrap(commits)).value(at: 1)

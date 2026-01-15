@@ -18,7 +18,6 @@ extension Repository {
   ///     * ``Reset/Operation/hard``: Mixed, plus the working directory will
   ///       be replaced with the content of the index. (Untracked and ignored
   ///       files will be left alone, however.)
-  @GitActor
   public func reset(
     to commitish: Commitish,
     operation: Reset.Operation

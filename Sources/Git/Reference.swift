@@ -3,7 +3,6 @@ import Clibgit2
 extension Repository {
 
   /// Retrieve and resolve the reference pointed at by HEAD.
-  @GitActor
   public var head: Reference {
     get throws {
       try Reference(
@@ -12,7 +11,6 @@ extension Repository {
     }
   }
 
-  @GitActor
   public var references: GitSequence<Reference> {
     get throws {
       try GitSequence {
@@ -31,7 +29,6 @@ extension Repository {
   }
 
   /// Lookup a reference by id in a repository.
-  @GitActor
   public func reference(for id: Reference.ID) throws -> Reference {
     try id.name.withCString { id in
       try Reference(
@@ -44,7 +41,6 @@ extension Repository {
   ///
   /// This method removes the reference from the repository without looking at
   /// its old value.
-  @GitActor
   public func remove(_ id: Reference.ID) throws {
     try remove(reference(for: id))
   }
@@ -53,14 +49,12 @@ extension Repository {
   ///
   /// This method removes the reference from the repository without looking at
   /// its old value.
-  @GitActor
   public func remove(_ reference: Reference) throws {
     try reference.id.name.rawValue.withCString { id in
       try pointer.perform(git_reference_remove, id)
     }
   }
 
-  @GitActor
   public func delete(_ reference: Reference) throws {
     try reference.pointer.perform(git_reference_delete)
   }
@@ -75,7 +69,7 @@ public enum Reference: Equatable, Hashable {
   case tag(Tag)
 }
 
-extension Reference: Sendable {
+extension Reference {
 
   var pointer: GitPointer {
     switch self {
@@ -86,7 +80,6 @@ extension Reference: Sendable {
     }
   }
 
-  @GitActor
   init(pointer: GitPointer) throws {
 
     switch pointer {
@@ -199,7 +192,6 @@ extension Reference.Name {
 
 extension Reference.Name {
 
-  @GitActor
   init(pointer: GitPointer) throws {
     try self.init(pointer.get(git_reference_name) |> Unwrap |> String.init(cString:))
   }
