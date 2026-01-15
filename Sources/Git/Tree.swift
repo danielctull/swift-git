@@ -1,4 +1,4 @@
-import Clibgit2
+import libgit2
 
 // MARK: - Tree
 
