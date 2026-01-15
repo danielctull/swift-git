@@ -92,9 +92,7 @@ private func withUnsafeMutablePointer<Value>(
 
 extension GitPointer: Equatable {
 
-  nonisolated
-    static func == (lhs: GitPointer, rhs: GitPointer) -> Bool
-  {
+  static func == (lhs: GitPointer, rhs: GitPointer) -> Bool {
     lhs.pointer == rhs.pointer
   }
 }
