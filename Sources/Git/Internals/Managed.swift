@@ -128,39 +128,14 @@ extension Managed {
   ) -> Value {
     task(pointer, repeat each parameter)
   }
-}
 
-extension Managed {
-
-  func get<Value>(
-    _ task: @escaping (UnsafeMutablePointer<Value?>, Pointer) -> Int32
-  ) throws -> Value {
-    var value: Value?
-    let result = withUnsafeMutablePointer(to: &value) { task($0, pointer) }
-    try GitError.check(result)
-    return try Unwrap(value)
-  }
-}
-
-extension Managed {
-
-  func get<Value>(
-    _ task: @escaping (UnsafeMutablePointer<Value>, Pointer) -> Int32
+  func get<Value, each Parameter>(
+    _ task: @escaping (UnsafeMutablePointer<Value>, Pointer, repeat each Parameter) -> Int32,
+    _ parameter: repeat each Parameter
   ) throws -> Value {
     let value = UnsafeMutablePointer<Value>.allocate(capacity: 1)
     defer { value.deallocate() }
-    let result = task(value, pointer)
-    try GitError.check(result)
-    return value.pointee
-  }
-
-  func get<Parameter, Value>(
-    _ task: @escaping (UnsafeMutablePointer<Value>?, Pointer, Parameter) -> Int32,
-    _ parameter: Parameter
-  ) throws -> Value {
-    let value = UnsafeMutablePointer<Value>.allocate(capacity: 1)
-    defer { value.deallocate() }
-    let result = task(value, pointer, parameter)
+    let result = task(value, pointer, repeat each parameter)
     try GitError.check(result)
     return value.pointee
   }

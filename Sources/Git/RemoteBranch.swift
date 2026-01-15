@@ -48,7 +48,7 @@ public struct RemoteBranch: Equatable, Hashable {
     pointer.assert(git_reference_is_remote, "Expected remote branch.")
     self.pointer = pointer
     reference = try Reference.Name(pointer: pointer)
-    name = try pointer.get(git_branch_name) |> String.init |> Name.init
+    name = try pointer.get(git_branch_name) |> Unwrap |> String.init |> Name.init
     target = try Object.ID(reference: pointer)
     id = ID(name: reference)
   }

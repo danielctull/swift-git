@@ -52,7 +52,7 @@ extension Config {
 
       } next: { iterator in
 
-        try Entry(iterator.get(git_config_next))
+        try Entry(iterator.get(git_config_next) |> Unwrap)
       }
     }
   }
