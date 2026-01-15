@@ -13,8 +13,11 @@ extension Repository {
       } next: { iterator in
 
         try RemoteBranch(
-          create: iterator.create(firstOutput(of: git_branch_next)),
-          free: git_reference_free)
+          pointer: Managed(
+            create: iterator.create(firstOutput(of: git_branch_next)),
+            free: git_reference_free
+          )
+        )
       }
     }
   }
@@ -22,8 +25,11 @@ extension Repository {
   public func branch(on remote: Remote.Name, named branch: Branch.Name) throws -> RemoteBranch {
     try RemoteBranch.Name(remote: remote, branch: branch).withCString { name in
       try RemoteBranch(
-        create: pointer.create(git_branch_lookup, name, GIT_BRANCH_REMOTE),
-        free: git_reference_free)
+        pointer: Managed(
+          create: pointer.create(git_branch_lookup, name, GIT_BRANCH_REMOTE),
+          free: git_reference_free
+        )
+      )
     }
   }
 }
@@ -100,7 +106,3 @@ extension RemoteBranch: CustomDebugStringConvertible {
     "RemoteBranch(name: \(name), reference: \(reference), target: \(target.debugDescription))"
   }
 }
-
-// MARK: - GitPointerInitialization
-
-extension RemoteBranch: GitPointerInitialization {}

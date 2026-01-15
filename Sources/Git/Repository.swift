@@ -63,7 +63,3 @@ extension Repository {
       |> URL.init(fileURLWithPath:)
   }
 }
-
-// MARK: - GitPointerInitialization
-
-extension Repository: GitPointerInitialization {}

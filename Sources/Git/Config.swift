@@ -6,8 +6,11 @@ extension Repository {
   public var config: Config {
     get throws {
       try Config(
-        create: pointer.create(git_repository_config),
-        free: git_config_free)
+        pointer: Managed(
+          create: pointer.create(git_repository_config),
+          free: git_config_free
+        )
+      )
     }
   }
 }
@@ -31,8 +34,11 @@ extension Config {
 
   public func level(_ level: Level) throws -> Config {
     try Config(
-      create: pointer.create(git_config_open_level, level.rawValue),
-      free: git_config_free)
+      pointer: Managed(
+        create: pointer.create(git_config_open_level, level.rawValue),
+        free: git_config_free
+      )
+    )
   }
 
   public var entries: GitSequence<Config.Entry> {
@@ -216,7 +222,3 @@ extension Config.Level: CustomStringConvertible {
     }
   }
 }
-
-// MARK: - GitPointerInitialization
-
-extension Config: GitPointerInitialization {}

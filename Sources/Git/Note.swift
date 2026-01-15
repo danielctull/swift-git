@@ -38,7 +38,3 @@ extension Note: CustomDebugStringConvertible {
     "Note(reference: \(reference), target: \(target.debugDescription))"
   }
 }
-
-// MARK: - GitPointerInitialization
-
-extension Note: GitPointerInitialization {}

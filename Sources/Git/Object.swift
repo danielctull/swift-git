@@ -5,8 +5,11 @@ extension Repository {
   public func object(for id: Object.ID) throws -> Object {
     try withUnsafePointer(to: id.oid) { oid in
       try Object(
-        create: pointer.create(git_object_lookup, oid, GIT_OBJECT_ANY),
-        free: git_object_free)
+        pointer: Managed(
+          create: pointer.create(git_object_lookup, oid, GIT_OBJECT_ANY),
+          free: git_object_free
+        )
+      )
     }
   }
 }
@@ -154,7 +157,3 @@ extension Object.ID: Hashable {
     }
   }
 }
-
-// MARK: - GitPointerInitialization
-
-extension Object: GitPointerInitialization {}

@@ -54,8 +54,3 @@ extension Tree {
     }
   }
 }
-
-// MARK: - GitPointerInitialization
-
-extension Tree: GitPointerInitialization {}
-extension Tree.Entry: GitPointerInitialization {}

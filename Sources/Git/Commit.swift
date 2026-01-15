@@ -9,8 +9,11 @@ extension Repository {
   public func commit(for id: Commit.ID) throws -> Commit {
     try withUnsafePointer(to: id.objectID.oid) { oid in
       try Commit(
-        create: pointer.create(git_commit_lookup, oid),
-        free: git_commit_free)
+        pointer: Managed(
+          create: pointer.create(git_commit_lookup, oid),
+          free: git_commit_free
+        )
+      )
     }
   }
 
@@ -63,8 +66,11 @@ extension Repository {
 
       try withUnsafePointer(to: iterator.get(git_revwalk_next)) { oid in
         try Commit(
-          create: pointer.create(git_commit_lookup, oid),
-          free: git_commit_free)
+          pointer: Managed(
+            create: pointer.create(git_commit_lookup, oid),
+            free: git_commit_free
+          )
+        )
       }
     }
   }
@@ -96,8 +102,11 @@ extension Commit {
   public var tree: Tree {
     get throws {
       try Tree(
-        create: pointer.create(git_commit_tree),
-        free: git_tree_free)
+        pointer: Managed(
+          create: pointer.create(git_commit_tree),
+          free: git_tree_free
+        )
+      )
     }
   }
 
@@ -114,8 +123,11 @@ extension Commit {
       let count = pointer.get(git_commit_parentcount)
       return try (0..<count).map { index in
         try Commit(
-          create: pointer.create(git_commit_parent, index),
-          free: git_commit_free)
+          pointer: Managed(
+            create: pointer.create(git_commit_parent, index),
+            free: git_commit_free
+          )
+        )
       }
     }
   }
@@ -189,7 +201,3 @@ extension SortOptions: GitOptionSet {
   /// any of the above.
   public static let reverse = Self(GIT_SORT_REVERSE)
 }
-
-// MARK: - GitPointerInitialization
-
-extension Commit: GitPointerInitialization {}

@@ -11,8 +11,11 @@ extension Repository {
   public func reflog(named name: Reflog.Name) throws -> Reflog {
     try name.withCString { name in
       try Reflog(
-        create: pointer.create(git_reflog_read, name),
-        free: git_reflog_free)
+        pointer: Managed(
+          create: pointer.create(git_reflog_read, name),
+          free: git_reflog_free
+        )
+      )
     }
   }
 
@@ -162,7 +165,3 @@ extension Reflog.Item {
     }
   }
 }
-
-// MARK: - GitPointerInitialization
-
-extension Reflog: GitPointerInitialization {}

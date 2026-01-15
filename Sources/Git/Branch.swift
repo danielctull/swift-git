@@ -13,8 +13,11 @@ extension Repository {
       } next: { iterator in
 
         try Branch(
-          create: iterator.create(firstOutput(of: git_branch_next)),
-          free: git_reference_free)
+          pointer: Managed(
+            create: iterator.create(firstOutput(of: git_branch_next)),
+            free: git_reference_free
+          )
+        )
       }
     }
   }
@@ -32,8 +35,10 @@ extension Repository {
   public func createBranch(named name: Branch.Name, at commit: Commit) throws -> Branch {
     try name.withCString { name in
       try Branch(
-        create: pointer.create(git_branch_create, name, commit.pointer.pointer, 0),
-        free: git_reference_free
+        pointer: Managed(
+          create: pointer.create(git_branch_create, name, commit.pointer.pointer, 0),
+          free: git_reference_free
+        )
       )
     }
   }
@@ -41,8 +46,11 @@ extension Repository {
   public func branch(named name: Branch.Name) throws -> Branch {
     try name.withCString { name in
       try Branch(
-        create: pointer.create(git_branch_lookup, name, GIT_BRANCH_LOCAL),
-        free: git_reference_free)
+        pointer: Managed(
+          create: pointer.create(git_branch_lookup, name, GIT_BRANCH_LOCAL),
+          free: git_reference_free
+        )
+      )
     }
   }
 }
@@ -72,16 +80,22 @@ extension Branch {
   public func move(to name: String, force: Bool = false) throws -> Branch {
     try name.withCString { name in
       try Branch(
-        create: pointer.create(git_branch_move, name, Int32(force)),
-        free: git_reference_free)
+        pointer: Managed(
+          create: pointer.create(git_branch_move, name, Int32(force)),
+          free: git_reference_free
+        )
+      )
     }
   }
 
   public var upstream: RemoteBranch {
     get throws {
       try RemoteBranch(
-        create: pointer.create(git_branch_upstream),
-        free: git_reference_free)
+        pointer: Managed(
+          create: pointer.create(git_branch_upstream),
+          free: git_reference_free
+        )
+      )
     }
   }
 
@@ -146,7 +160,3 @@ extension Branch: CustomDebugStringConvertible {
     "Branch(name: \(name), reference: \(reference), target: \(target.debugDescription))"
   }
 }
-
-// MARK: - GitPointerInitialization
-
-extension Branch: GitPointerInitialization {}

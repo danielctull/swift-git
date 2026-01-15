@@ -6,8 +6,11 @@ extension Repository {
   public func remote(named name: Remote.Name) throws -> Remote {
     try name.withCString { name in
       try Remote(
-        create: pointer.create(git_remote_lookup, name),
-        free: git_remote_free)
+        pointer: Managed(
+          create: pointer.create(git_remote_lookup, name),
+          free: git_remote_free
+        )
+      )
     }
   }
 
@@ -87,7 +90,3 @@ extension Remote.Name {
     try rawValue.withCString(body)
   }
 }
-
-// MARK: - GitPointerInitialization
-
-extension Remote: GitPointerInitialization {}

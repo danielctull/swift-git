@@ -34,7 +34,3 @@ extension Blob {
 extension Blob.ID: CustomStringConvertible {
   public var description: String { objectID.description }
 }
-
-// MARK: - GitPointerInitialization
-
-extension Blob: GitPointerInitialization {}

@@ -155,8 +155,3 @@ extension Reference {
     return tag
   }
 }
-
-// MARK: - GitPointerInitialization
-
-extension Tag: GitPointerInitialization {}
-extension AnnotatedTag: GitPointerInitialization {}

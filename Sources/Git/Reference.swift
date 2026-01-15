@@ -6,8 +6,11 @@ extension Repository {
   public var head: Reference {
     get throws {
       try Reference(
-        create: pointer.create(git_repository_head),
-        free: git_reference_free)
+        pointer: Managed(
+          create: pointer.create(git_repository_head),
+          free: git_reference_free
+        )
+      )
     }
   }
 
@@ -23,8 +26,11 @@ extension Repository {
       } next: { iterator in
 
         try Reference(
-          create: iterator.create(git_reference_next),
-          free: git_reference_free)
+          pointer: Managed(
+            create: iterator.create(git_reference_next),
+            free: git_reference_free
+          )
+        )
       }
     }
   }
@@ -33,8 +39,11 @@ extension Repository {
   public func reference(for id: Reference.ID) throws -> Reference {
     try id.name.withCString { id in
       try Reference(
-        create: pointer.create(git_reference_lookup, id),
-        free: git_reference_free)
+        pointer: Managed(
+          create: pointer.create(git_reference_lookup, id),
+          free: git_reference_free
+        )
+      )
     }
   }
 
@@ -197,7 +206,3 @@ extension Reference.Name {
     try self.init(pointer.get(git_reference_name) |> Unwrap |> String.init(cString:))
   }
 }
-
-// MARK: - GitPointerInitialization
-
-extension Reference: GitPointerInitialization {}
