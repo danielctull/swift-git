@@ -1,15 +1,15 @@
 protocol GitPointerInitialization {
-  init(pointer: GitPointer) throws
+  init(pointer: Managed<OpaquePointer>) throws
 }
 
 extension GitPointerInitialization {
 
   init(
-    create: @escaping GitPointer.Create,
-    free: @escaping GitPointer.Free
+    create: @escaping Managed<OpaquePointer>.Create,
+    free: @escaping Managed<OpaquePointer>.Free
   ) throws {
     try self.init(
-      pointer: GitPointer(
+      pointer: Managed<OpaquePointer>(
         create: create,
         free: free)
     )

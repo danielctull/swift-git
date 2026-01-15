@@ -22,7 +22,7 @@ public enum Object: Equatable, Hashable {
 
 extension Object {
 
-  var pointer: GitPointer {
+  var pointer: Managed<OpaquePointer> {
     switch self {
     case .blob(let blob): return blob.pointer
     case .commit(let commit): return commit.pointer
@@ -31,7 +31,7 @@ extension Object {
     }
   }
 
-  init(pointer: GitPointer) throws {
+  init(pointer: Managed<OpaquePointer>) throws {
 
     let type = pointer.get(git_object_type)
 
@@ -93,12 +93,12 @@ extension Object.ID {
     self.init(oid: oid.pointee)
   }
 
-  init(object: GitPointer) throws {
+  init(object: Managed<OpaquePointer>) throws {
     self = try object.get(git_object_id) |> Unwrap |> Self.init
   }
 
-  init(reference: GitPointer) throws {
-    let resolved = try GitPointer(
+  init(reference: Managed<OpaquePointer>) throws {
+    let resolved = try Managed<OpaquePointer>(
       create: reference.create(git_reference_resolve),
       free: git_reference_free)
 

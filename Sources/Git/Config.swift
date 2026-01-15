@@ -15,7 +15,7 @@ extension Repository {
 // MARK: - Config
 
 public struct Config: Equatable, Hashable {
-  let pointer: GitPointer
+  let pointer: Managed<OpaquePointer>
 }
 
 extension Config {
@@ -23,7 +23,7 @@ extension Config {
   public init(url: URL) throws {
     self = try url.withUnsafeFileSystemRepresentation { path in
       try Config(
-        pointer: GitPointer(
+        pointer: Managed<OpaquePointer>(
           create: { git_config_open_ondisk($0, path) },
           free: git_config_free))
     }
@@ -39,9 +39,10 @@ extension Config {
     get throws {
       try GitSequence {
 
-        try GitPointer(
+        try Managed(
           create: pointer.create(git_config_iterator_new),
-          free: git_branch_iterator_free)
+          free: git_config_iterator_free
+        )
 
       } next: { iterator in
 

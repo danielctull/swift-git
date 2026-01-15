@@ -6,7 +6,7 @@ extension Repository {
     get throws {
       try GitSequence {
 
-        try GitPointer(
+        try Managed<OpaquePointer>(
           create: pointer.create(git_branch_iterator_new, GIT_BRANCH_REMOTE),
           free: git_branch_iterator_free)
 
@@ -32,13 +32,13 @@ extension Repository {
 
 public struct RemoteBranch: Equatable, Hashable {
 
-  let pointer: GitPointer
+  let pointer: Managed<OpaquePointer>
   public let id: ID
   public let target: Object.ID
   public let name: Name
   public let reference: Reference.Name
 
-  init(pointer: GitPointer) throws {
+  init(pointer: Managed<OpaquePointer>) throws {
     pointer.assert(git_reference_is_remote, "Expected remote branch.")
     self.pointer = pointer
     reference = try Reference.Name(pointer: pointer)

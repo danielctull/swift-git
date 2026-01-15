@@ -4,7 +4,7 @@ import Foundation
 // MARK: - Repository
 
 public struct Repository: Equatable, Hashable {
-  let pointer: GitPointer
+  let pointer: Managed<OpaquePointer>
 }
 
 extension Repository {
@@ -17,7 +17,7 @@ extension Repository {
   }
 
   public init(url: URL, options: Options = .create) throws {
-    pointer = try GitPointer { pointer in
+    pointer = try Managed<OpaquePointer> { pointer in
       url.withUnsafeFileSystemRepresentation { path in
         switch options {
         case .open: return git_repository_open(pointer, path)
@@ -31,7 +31,7 @@ extension Repository {
 
   public init(local: URL, remote: URL) throws {
     let remoteString = remote.isFileURL ? remote.path : remote.absoluteString
-    pointer = try GitPointer { pointer in
+    pointer = try Managed<OpaquePointer> { pointer in
       local.withUnsafeFileSystemRepresentation { path in
         git_clone(pointer, remoteString, path, nil)
       }

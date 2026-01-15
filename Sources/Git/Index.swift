@@ -1,7 +1,7 @@
 import Clibgit2
 
 public struct Index: Equatable, Hashable {
-  let pointer: GitPointer
+  let pointer: Managed<OpaquePointer>
 }
 
 extension Repository {

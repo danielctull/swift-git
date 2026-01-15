@@ -5,7 +5,7 @@ extension Repository {
   public var status: GitCollection<StatusEntry> {
     get throws {
 
-      let list = try GitPointer(
+      let list = try Managed<OpaquePointer>(
         create: pointer.create(git_status_list_new, nil),
         free: git_status_list_free)
 

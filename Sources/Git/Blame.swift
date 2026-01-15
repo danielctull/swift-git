@@ -14,7 +14,7 @@ extension Repository {
 // MARK: - Blame
 
 public struct Blame: Equatable, Hashable {
-  let pointer: GitPointer
+  let pointer: Managed<OpaquePointer>
 }
 
 extension Blame: CustomStringConvertible {
