@@ -1,8 +1,7 @@
-
 precedencegroup ForwardApplication {
-    associativity: left
-    higherThan: AssignmentPrecedence
+  associativity: left
+  higherThan: AssignmentPrecedence
 }
 
-infix operator |>: ForwardApplication
+infix operator |> : ForwardApplication
 func |> <A, B>(x: A, f: (A) throws -> B) rethrows -> B { try f(x) }

@@ -1,5 +1,4 @@
-
 @globalActor
 public actor GitActor {
-    public static let shared = GitActor()
+  public static let shared = GitActor()
 }

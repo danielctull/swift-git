@@ -1,17 +1,16 @@
-
 // MARK: - FilePath
 
 public struct FilePath: Equatable, Hashable, Sendable {
-    let rawValue: String
+  let rawValue: String
 }
 
 extension FilePath: ExpressibleByStringLiteral {
 
-    public init(stringLiteral value: String) {
-        self.rawValue = value
-    }
+  public init(stringLiteral value: String) {
+    self.rawValue = value
+  }
 }
 
 extension FilePath: CustomStringConvertible {
-    public var description: String { rawValue }
+  public var description: String { rawValue }
 }
