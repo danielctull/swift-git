@@ -10,7 +10,6 @@ public struct Blob: Equatable, Hashable, Identifiable, Sendable {
   public let data: Data
   public let isBinary: Bool
 
-  @GitActor
   init(pointer: GitPointer) throws {
     self.pointer = pointer
     id = try ID(objectID: Object.ID(object: pointer))

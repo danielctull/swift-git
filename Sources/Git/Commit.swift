@@ -2,12 +2,10 @@ import Clibgit2
 
 extension Repository {
 
-  @GitActor
   public func commit(for string: String) throws -> Commit {
     try commit(for: Commit.ID(string))
   }
 
-  @GitActor
   public func commit(for id: Commit.ID) throws -> Commit {
     try withUnsafePointer(to: id.objectID.oid) { oid in
       try Commit(
@@ -16,14 +14,12 @@ extension Repository {
     }
   }
 
-  @GitActor
   public var commits: GitSequence<Commit> {
     get throws {
       try commits(for: [])
     }
   }
 
-  @GitActor
   public func commits(
     for references: Reference...,
     sortedBy sortOptions: SortOptions = SortOptions(),
@@ -35,7 +31,6 @@ extension Repository {
       includeHead: includeHead)
   }
 
-  @GitActor
   public func commits(
     for references: [Reference] = [],
     sortedBy sortOptions: SortOptions = SortOptions(),
@@ -86,7 +81,6 @@ public struct Commit: Equatable, Hashable, Identifiable, Sendable {
   public let author: Signature
   public let committer: Signature
 
-  @GitActor
   init(pointer: GitPointer) throws {
     self.pointer = pointer
     id = try ID(objectID: Object.ID(object: pointer))
@@ -99,7 +93,6 @@ public struct Commit: Equatable, Hashable, Identifiable, Sendable {
 
 extension Commit {
 
-  @GitActor
   public var tree: Tree {
     get throws {
       try Tree(
@@ -108,7 +101,6 @@ extension Commit {
     }
   }
 
-  @GitActor
   public var parentIDs: GitCollection<Commit.ID> {
     GitCollection {
       pointer.get(git_commit_parentcount)
@@ -117,7 +109,6 @@ extension Commit {
     }
   }
 
-  @GitActor
   public var parents: [Commit] {
     get throws {
       let count = pointer.get(git_commit_parentcount)
@@ -152,7 +143,6 @@ extension Commit.ID {
     self.init(objectID: Object.ID(oid: oid))
   }
 
-  @GitActor
   init(_ string: String) throws {
     try self.init(objectID: Object.ID(string))
   }

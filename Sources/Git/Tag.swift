@@ -2,13 +2,11 @@ import Clibgit2
 
 extension Repository {
 
-  @GitActor
   public func tag(named name: Tag.Name) throws -> Tag {
     try tags.first(where: { $0.name == name })
       ?? { throw GitError(domain: .tag, code: .notFound) }()
   }
 
-  @GitActor
   public var tags: [Tag] {
     get throws {
       try references.compactMap(\.tag)
@@ -25,7 +23,6 @@ public struct Tag: Equatable, Hashable, Identifiable, Sendable {
   public let id: ID
   public let reference: Reference.Name
 
-  @GitActor
   init(pointer: GitPointer) throws {
     pointer.assert(git_reference_is_tag, "Expected tag.")
     self.pointer = pointer
@@ -126,7 +123,6 @@ public struct AnnotatedTag: Equatable, Hashable, Identifiable, Sendable {
   public let tagger: Signature
   public let message: String
 
-  @GitActor
   init(pointer: GitPointer) throws {
     self.pointer = pointer
     id = try ID(objectID: Object.ID(object: pointer))

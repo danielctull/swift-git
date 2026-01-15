@@ -2,7 +2,6 @@ import Clibgit2
 
 extension Repository {
 
-  @GitActor
   public func checkoutHead(options: Checkout.Options = .init()) throws {
     try withUnsafePointer(to: options.rawValue) { options in
       try pointer.perform(git_checkout_head, nil)

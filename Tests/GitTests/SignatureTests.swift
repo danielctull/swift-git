@@ -2,7 +2,6 @@ import Foundation
 import Git
 import XCTest
 
-@GitActor
 final class SignatureTests: XCTestCase {
 
   func testDefaultSignature() throws {

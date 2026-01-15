@@ -7,7 +7,6 @@ public struct Tree: Equatable, Hashable, Identifiable, Sendable {
   let pointer: GitPointer
   public let id: ID
 
-  @GitActor
   init(pointer: GitPointer) throws {
     self.pointer = pointer
     id = try ID(objectID: Object.ID(object: pointer))
@@ -16,7 +15,6 @@ public struct Tree: Equatable, Hashable, Identifiable, Sendable {
 
 extension Tree {
 
-  @GitActor
   public var entries: GitCollection<Tree.Entry> {
     GitCollection {
       pointer.get(git_tree_entrycount)
@@ -48,7 +46,6 @@ extension Tree {
     public let target: Object.ID
     public let name: String
 
-    @GitActor
     init(pointer: GitPointer) {
       self.pointer = pointer
 

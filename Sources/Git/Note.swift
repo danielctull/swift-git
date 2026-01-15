@@ -9,7 +9,6 @@ public struct Note: Equatable, Hashable, Identifiable, Sendable {
   public let reference: Reference.Name
   public let target: Object.ID
 
-  @GitActor
   init(pointer: GitPointer) throws {
     pointer.assert(git_reference_is_note, "Expected note.")
     self.pointer = pointer

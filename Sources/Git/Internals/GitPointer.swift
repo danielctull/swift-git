@@ -1,6 +1,5 @@
 import Clibgit2
 
-@GitActor
 final class GitPointer {
 
   typealias Create = () throws -> OpaquePointer

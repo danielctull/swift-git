@@ -2,7 +2,6 @@ import Clibgit2
 
 extension Repository {
 
-  @GitActor
   public var branches: GitSequence<Branch> {
     get throws {
       try GitSequence {
@@ -30,7 +29,6 @@ extension Repository {
   ///   - commit: Commit to which this branch should point. This object
   ///     must belong to the receiving ``Repository``.
   /// - Returns: The created branch.
-  @GitActor
   public func createBranch(named name: Branch.Name, at commit: Commit) throws -> Branch {
     try name.withCString { name in
       try Branch(
@@ -40,7 +38,6 @@ extension Repository {
     }
   }
 
-  @GitActor
   public func branch(named name: Branch.Name) throws -> Branch {
     try name.withCString { name in
       try Branch(
@@ -60,7 +57,6 @@ public struct Branch: Equatable, Hashable, Identifiable, Sendable {
   public let name: Name
   public let reference: Reference.Name
 
-  @GitActor
   init(pointer: GitPointer) throws {
     pointer.assert(git_reference_is_branch, "Expected branch.")
     self.pointer = pointer
@@ -73,7 +69,6 @@ public struct Branch: Equatable, Hashable, Identifiable, Sendable {
 
 extension Branch {
 
-  @GitActor
   public func move(to name: String, force: Bool = false) throws -> Branch {
     try name.withCString { name in
       try Branch(
@@ -82,7 +77,6 @@ extension Branch {
     }
   }
 
-  @GitActor
   public var upstream: RemoteBranch {
     get throws {
       try RemoteBranch(
@@ -91,7 +85,6 @@ extension Branch {
     }
   }
 
-  @GitActor
   public func setUpstream(_ remoteBranch: RemoteBranch) throws {
     try remoteBranch.name.withCString { name in
       try pointer.perform(git_branch_set_upstream, name)
