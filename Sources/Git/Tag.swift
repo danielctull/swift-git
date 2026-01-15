@@ -18,12 +18,12 @@ extension Repository {
 
 public struct Tag: Equatable, Hashable, Identifiable {
 
-  let pointer: GitPointer
+  let pointer: Managed<OpaquePointer>
   let kind: Kind
   public let id: ID
   public let reference: Reference.Name
 
-  init(pointer: GitPointer) throws {
+  init(pointer: Managed<OpaquePointer>) throws {
     pointer.assert(git_reference_is_tag, "Expected tag.")
     self.pointer = pointer
     reference = try Reference.Name(pointer: pointer)
@@ -34,7 +34,7 @@ public struct Tag: Equatable, Hashable, Identifiable {
     let repository =
       try pointer.get(git_reference_owner)
       |> Unwrap
-      |> GitPointer.init
+      |> Managed<OpaquePointer>.init
       |> Repository.init
 
     let object = try repository.object(for: target)
@@ -116,14 +116,14 @@ extension Tag.Name: CustomStringConvertible {
 
 public struct AnnotatedTag: Equatable, Hashable, Identifiable {
 
-  let pointer: GitPointer
+  let pointer: Managed<OpaquePointer>
   public let id: ID
   public let name: Tag.Name
   public let target: Object.ID
   public let tagger: Signature
   public let message: String
 
-  init(pointer: GitPointer) throws {
+  init(pointer: Managed<OpaquePointer>) throws {
     self.pointer = pointer
     id = try ID(objectID: Object.ID(object: pointer))
     name = try pointer.get(git_tag_name) |> Unwrap |> String.init(cString:) |> Tag.Name.init
@@ -155,8 +155,3 @@ extension Reference {
     return tag
   }
 }
-
-// MARK: - GitPointerInitialization
-
-extension Tag: GitPointerInitialization {}
-extension AnnotatedTag: GitPointerInitialization {}

@@ -4,9 +4,16 @@ extension Repository {
 
   public func diff(from tree1: Tree, to tree2: Tree) throws -> Diff {
     try Diff(
-      create: pointer.create(
-        git_diff_tree_to_tree, tree1.pointer.pointer, tree2.pointer.pointer, nil),
-      free: git_diff_free)
+      pointer: Managed(
+        create: pointer.create(
+          git_diff_tree_to_tree,
+          tree1.pointer.pointer,
+          tree2.pointer.pointer,
+          nil
+        ),
+        free: git_diff_free
+      )
+    )
   }
 
   public func object(for id: Diff.File.ID) throws -> Object {
@@ -17,7 +24,7 @@ extension Repository {
 // MARK: - Diff
 
 public struct Diff: Equatable, Hashable {
-  let pointer: GitPointer
+  let pointer: Managed<OpaquePointer>
 }
 
 extension Diff {
@@ -249,7 +256,3 @@ extension Diff.Flags: GitOptionSet {
 //            public static let commit = Self(GIT_FILEMODE_COMMIT)
 //        }
 //    }
-
-// MARK: - GitPointerInitialization
-
-extension Diff: GitPointerInitialization {}

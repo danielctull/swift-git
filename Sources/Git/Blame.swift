@@ -5,8 +5,11 @@ extension Repository {
   public func blame(for path: FilePath) throws -> Blame {
     try path.rawValue.withCString { path in
       try Blame(
-        create: pointer.create(git_blame_file, path, nil),
-        free: git_blame_free)
+        pointer: Managed(
+          create: pointer.create(git_blame_file, path, nil),
+          free: git_blame_free
+        )
+      )
     }
   }
 }
@@ -14,7 +17,7 @@ extension Repository {
 // MARK: - Blame
 
 public struct Blame: Equatable, Hashable {
-  let pointer: GitPointer
+  let pointer: Managed<OpaquePointer>
 }
 
 extension Blame: CustomStringConvertible {
@@ -70,7 +73,3 @@ extension Blame.Hunk: CustomStringConvertible {
     "Blame.Hunk(path: \(self.path), lines: \(lines.shortDescription), commit: \(self.commitID.shortDescription))"
   }
 }
-
-// MARK: - GitPointerInitialization
-
-extension Blame: GitPointerInitialization {}

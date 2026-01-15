@@ -6,8 +6,11 @@ extension Repository {
   public var config: Config {
     get throws {
       try Config(
-        create: pointer.create(git_repository_config),
-        free: git_config_free)
+        pointer: Managed(
+          create: pointer.create(git_repository_config),
+          free: git_config_free
+        )
+      )
     }
   }
 }
@@ -15,7 +18,7 @@ extension Repository {
 // MARK: - Config
 
 public struct Config: Equatable, Hashable {
-  let pointer: GitPointer
+  let pointer: Managed<OpaquePointer>
 }
 
 extension Config {
@@ -23,7 +26,7 @@ extension Config {
   public init(url: URL) throws {
     self = try url.withUnsafeFileSystemRepresentation { path in
       try Config(
-        pointer: GitPointer(
+        pointer: Managed<OpaquePointer>(
           create: { git_config_open_ondisk($0, path) },
           free: git_config_free))
     }
@@ -31,17 +34,21 @@ extension Config {
 
   public func level(_ level: Level) throws -> Config {
     try Config(
-      create: pointer.create(git_config_open_level, level.rawValue),
-      free: git_config_free)
+      pointer: Managed(
+        create: pointer.create(git_config_open_level, level.rawValue),
+        free: git_config_free
+      )
+    )
   }
 
   public var entries: GitSequence<Config.Entry> {
     get throws {
       try GitSequence {
 
-        try GitPointer(
+        try Managed(
           create: pointer.create(git_config_iterator_new),
-          free: git_branch_iterator_free)
+          free: git_config_iterator_free
+        )
 
       } next: { iterator in
 
@@ -215,7 +222,3 @@ extension Config.Level: CustomStringConvertible {
     }
   }
 }
-
-// MARK: - GitPointerInitialization
-
-extension Config: GitPointerInitialization {}

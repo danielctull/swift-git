@@ -4,12 +4,12 @@ import Clibgit2
 
 public struct Note: Equatable, Hashable, Identifiable {
 
-  let pointer: GitPointer
+  let pointer: Managed<OpaquePointer>
   public let id: ID
   public let reference: Reference.Name
   public let target: Object.ID
 
-  init(pointer: GitPointer) throws {
+  init(pointer: Managed<OpaquePointer>) throws {
     pointer.assert(git_reference_is_note, "Expected note.")
     self.pointer = pointer
     reference = try Reference.Name(pointer: pointer)
@@ -38,7 +38,3 @@ extension Note: CustomDebugStringConvertible {
     "Note(reference: \(reference), target: \(target.debugDescription))"
   }
 }
-
-// MARK: - GitPointerInitialization
-
-extension Note: GitPointerInitialization {}

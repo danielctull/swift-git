@@ -4,10 +4,10 @@ import Clibgit2
 
 public struct Tree: Equatable, Hashable, Identifiable {
 
-  let pointer: GitPointer
+  let pointer: Managed<OpaquePointer>
   public let id: ID
 
-  init(pointer: GitPointer) throws {
+  init(pointer: Managed<OpaquePointer>) throws {
     self.pointer = pointer
     id = try ID(objectID: Object.ID(object: pointer))
   }
@@ -19,7 +19,7 @@ extension Tree {
     GitCollection {
       pointer.get(git_tree_entrycount)
     } element: { index in
-      pointer.get(git_tree_entry_byindex, index)! |> GitPointer.init |> Entry.init
+      pointer.get(git_tree_entry_byindex, index)! |> Managed<OpaquePointer>.init |> Entry.init
     }
   }
 }
@@ -42,11 +42,11 @@ extension Tree.ID: CustomStringConvertible {
 extension Tree {
 
   public struct Entry: Equatable, Hashable {
-    let pointer: GitPointer
+    let pointer: Managed<OpaquePointer>
     public let target: Object.ID
     public let name: String
 
-    init(pointer: GitPointer) {
+    init(pointer: Managed<OpaquePointer>) {
       self.pointer = pointer
 
       target = pointer.get(git_tree_entry_id)!.pointee |> Object.ID.init
@@ -54,8 +54,3 @@ extension Tree {
     }
   }
 }
-
-// MARK: - GitPointerInitialization
-
-extension Tree: GitPointerInitialization {}
-extension Tree.Entry: GitPointerInitialization {}

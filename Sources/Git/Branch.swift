@@ -6,15 +6,18 @@ extension Repository {
     get throws {
       try GitSequence {
 
-        try GitPointer(
+        try Managed<OpaquePointer>(
           create: pointer.create(git_branch_iterator_new, GIT_BRANCH_LOCAL),
           free: git_branch_iterator_free)
 
       } next: { iterator in
 
         try Branch(
-          create: iterator.create(firstOutput(of: git_branch_next)),
-          free: git_reference_free)
+          pointer: Managed(
+            create: iterator.create(firstOutput(of: git_branch_next)),
+            free: git_reference_free
+          )
+        )
       }
     }
   }
@@ -32,8 +35,10 @@ extension Repository {
   public func createBranch(named name: Branch.Name, at commit: Commit) throws -> Branch {
     try name.withCString { name in
       try Branch(
-        create: pointer.create(git_branch_create, name, commit.pointer.pointer, 0),
-        free: git_reference_free
+        pointer: Managed(
+          create: pointer.create(git_branch_create, name, commit.pointer.pointer, 0),
+          free: git_reference_free
+        )
       )
     }
   }
@@ -41,8 +46,11 @@ extension Repository {
   public func branch(named name: Branch.Name) throws -> Branch {
     try name.withCString { name in
       try Branch(
-        create: pointer.create(git_branch_lookup, name, GIT_BRANCH_LOCAL),
-        free: git_reference_free)
+        pointer: Managed(
+          create: pointer.create(git_branch_lookup, name, GIT_BRANCH_LOCAL),
+          free: git_reference_free
+        )
+      )
     }
   }
 }
@@ -51,13 +59,13 @@ extension Repository {
 
 public struct Branch: Equatable, Hashable, Identifiable {
 
-  let pointer: GitPointer
+  let pointer: Managed<OpaquePointer>
   public let id: ID
   public let target: Object.ID
   public let name: Name
   public let reference: Reference.Name
 
-  init(pointer: GitPointer) throws {
+  init(pointer: Managed<OpaquePointer>) throws {
     pointer.assert(git_reference_is_branch, "Expected branch.")
     self.pointer = pointer
     name = try pointer.get(git_branch_name) |> String.init |> Name.init
@@ -72,16 +80,22 @@ extension Branch {
   public func move(to name: String, force: Bool = false) throws -> Branch {
     try name.withCString { name in
       try Branch(
-        create: pointer.create(git_branch_move, name, Int32(force)),
-        free: git_reference_free)
+        pointer: Managed(
+          create: pointer.create(git_branch_move, name, Int32(force)),
+          free: git_reference_free
+        )
+      )
     }
   }
 
   public var upstream: RemoteBranch {
     get throws {
       try RemoteBranch(
-        create: pointer.create(git_branch_upstream),
-        free: git_reference_free)
+        pointer: Managed(
+          create: pointer.create(git_branch_upstream),
+          free: git_reference_free
+        )
+      )
     }
   }
 
@@ -146,7 +160,3 @@ extension Branch: CustomDebugStringConvertible {
     "Branch(name: \(name), reference: \(reference), target: \(target.debugDescription))"
   }
 }
-
-// MARK: - GitPointerInitialization
-
-extension Branch: GitPointerInitialization {}

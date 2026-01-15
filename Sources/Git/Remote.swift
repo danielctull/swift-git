@@ -6,8 +6,11 @@ extension Repository {
   public func remote(named name: Remote.Name) throws -> Remote {
     try name.withCString { name in
       try Remote(
-        create: pointer.create(git_remote_lookup, name),
-        free: git_remote_free)
+        pointer: Managed(
+          create: pointer.create(git_remote_lookup, name),
+          free: git_remote_free
+        )
+      )
     }
   }
 
@@ -26,12 +29,12 @@ extension Repository {
 
 public struct Remote: Equatable, Hashable, Identifiable {
 
-  let pointer: GitPointer
+  let pointer: Managed<OpaquePointer>
   public let id: ID
   public let name: Name
   public let url: URL
 
-  init(pointer: GitPointer) throws {
+  init(pointer: Managed<OpaquePointer>) throws {
     self.pointer = pointer
     name = try pointer.get(git_remote_name)
       |> Unwrap
@@ -87,7 +90,3 @@ extension Remote.Name {
     try rawValue.withCString(body)
   }
 }
-
-// MARK: - GitPointerInitialization
-
-extension Remote: GitPointerInitialization {}

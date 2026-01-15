@@ -6,8 +6,11 @@ extension Repository {
   public var head: Reference {
     get throws {
       try Reference(
-        create: pointer.create(git_repository_head),
-        free: git_reference_free)
+        pointer: Managed(
+          create: pointer.create(git_repository_head),
+          free: git_reference_free
+        )
+      )
     }
   }
 
@@ -15,15 +18,19 @@ extension Repository {
     get throws {
       try GitSequence {
 
-        try GitPointer(
+        try Managed(
           create: pointer.create(git_reference_iterator_new),
-          free: git_reference_iterator_free)
+          free: git_reference_iterator_free
+        )
 
       } next: { iterator in
 
         try Reference(
-          create: iterator.create(git_reference_next),
-          free: git_reference_free)
+          pointer: Managed(
+            create: iterator.create(git_reference_next),
+            free: git_reference_free
+          )
+        )
       }
     }
   }
@@ -32,8 +39,11 @@ extension Repository {
   public func reference(for id: Reference.ID) throws -> Reference {
     try id.name.withCString { id in
       try Reference(
-        create: pointer.create(git_reference_lookup, id),
-        free: git_reference_free)
+        pointer: Managed(
+          create: pointer.create(git_reference_lookup, id),
+          free: git_reference_free
+        )
+      )
     }
   }
 
@@ -71,7 +81,7 @@ public enum Reference: Equatable, Hashable {
 
 extension Reference {
 
-  var pointer: GitPointer {
+  var pointer: Managed<OpaquePointer> {
     switch self {
     case .branch(let branch): return branch.pointer
     case .note(let note): return note.pointer
@@ -80,7 +90,7 @@ extension Reference {
     }
   }
 
-  init(pointer: GitPointer) throws {
+  init(pointer: Managed<OpaquePointer>) throws {
 
     switch pointer {
 
@@ -192,11 +202,7 @@ extension Reference.Name {
 
 extension Reference.Name {
 
-  init(pointer: GitPointer) throws {
+  init(pointer: Managed<OpaquePointer>) throws {
     try self.init(pointer.get(git_reference_name) |> Unwrap |> String.init(cString:))
   }
 }
-
-// MARK: - GitPointerInitialization
-
-extension Reference: GitPointerInitialization {}

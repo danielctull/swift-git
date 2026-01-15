@@ -5,12 +5,12 @@ import Foundation
 
 public struct Blob: Equatable, Hashable, Identifiable {
 
-  let pointer: GitPointer
+  let pointer: Managed<OpaquePointer>
   public let id: ID
   public let data: Data
   public let isBinary: Bool
 
-  init(pointer: GitPointer) throws {
+  init(pointer: Managed<OpaquePointer>) throws {
     self.pointer = pointer
     id = try ID(objectID: Object.ID(object: pointer))
 
@@ -34,7 +34,3 @@ extension Blob {
 extension Blob.ID: CustomStringConvertible {
   public var description: String { objectID.description }
 }
-
-// MARK: - GitPointerInitialization
-
-extension Blob: GitPointerInitialization {}
