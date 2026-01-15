@@ -31,11 +31,10 @@ extension Bundle {
   }
 }
 
-struct IndexOutOfBounds<C: Collection>: Error, CustomStringConvertible {
-  let collection: C
-  let index: C.Index
-  var description: String {
-    "Attempted to access index \(index) in \(collection)"
+struct IndexOutOfBounds: Error, CustomStringConvertible {
+  let description: String
+  init<C: Collection>(collection: C, index: C.Index) {
+    description = "Attempted to access index \(index) in \(collection)"
   }
 }
 
