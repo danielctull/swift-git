@@ -29,7 +29,7 @@ public struct Diff: Equatable, Hashable {
 
 extension Diff {
 
-  public var deltas: GitCollection<Diff.Delta> {
+  public var deltas: GitCollection<Delta, Int> {
     GitCollection {
       pointer.get(git_diff_num_deltas)
     } element: { index in

@@ -2,7 +2,7 @@ import Clibgit2
 
 extension Repository {
 
-  public var status: GitCollection<StatusEntry> {
+  public var status: GitCollection<StatusEntry, Int> {
     get throws {
 
       let list = try Managed<OpaquePointer>(

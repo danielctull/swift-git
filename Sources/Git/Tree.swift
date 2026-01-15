@@ -15,7 +15,7 @@ public struct Tree: Equatable, Hashable, Identifiable {
 
 extension Tree {
 
-  public var entries: GitCollection<Tree.Entry> {
+  public var entries: GitCollection<Entry, Int> {
     GitCollection {
       pointer.get(git_tree_entrycount)
     } element: { index in

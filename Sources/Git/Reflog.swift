@@ -42,7 +42,7 @@ public struct Reflog: Equatable, Hashable {
 
 extension Reflog {
 
-  public var items: GitCollection<Reflog.Item> {
+  public var items: GitCollection<Item, Int> {
     GitCollection {
       pointer.get(git_reflog_entrycount)
     } element: { index in

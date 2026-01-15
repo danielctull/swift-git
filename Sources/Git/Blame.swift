@@ -32,7 +32,7 @@ extension Blame {
       |> Hunk.init
   }
 
-  public var hunks: GitCollection<Blame.Hunk> {
+  public var hunks: GitCollection<Hunk, UInt32> {
     GitCollection {
       pointer.get(git_blame_get_hunk_count)
     } element: { index in
