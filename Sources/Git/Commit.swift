@@ -39,7 +39,7 @@ extension Repository {
 
     try GitSequence {
 
-      let iterator = try GitPointer(
+      let iterator = try Managed<OpaquePointer>(
         create: pointer.create(git_revwalk_new),
         free: git_revwalk_free)
 
@@ -74,14 +74,14 @@ extension Repository {
 
 public struct Commit: Equatable, Hashable, Identifiable {
 
-  let pointer: GitPointer
+  let pointer: Managed<OpaquePointer>
   public let id: ID
   public let summary: String
   public let body: String?
   public let author: Signature
   public let committer: Signature
 
-  init(pointer: GitPointer) throws {
+  init(pointer: Managed<OpaquePointer>) throws {
     self.pointer = pointer
     id = try ID(objectID: Object.ID(object: pointer))
     summary = try pointer.get(git_commit_summary) |> Unwrap |> String.init(cString:)

@@ -1,11 +1,11 @@
 import Clibgit2
 
-final class GitPointer {
+final class Managed<Pointer> {
 
-  typealias Create = () throws -> OpaquePointer
-  typealias Free = (OpaquePointer) -> Void
+  typealias Create = () throws -> Pointer
+  typealias Free = (Pointer) -> Void
 
-  let pointer: OpaquePointer
+  let pointer: Pointer
   private let free: Free
 
   deinit { free(pointer) }
@@ -32,18 +32,18 @@ final class GitPointer {
     self.free = free
   }
 
-  /// Creates a GitPointer using an OpaquePointer.
+  /// Creates a ``Managed`` object.
   ///
   /// The provided pointer **will not be freed** when deinit is called.
   ///
   /// - Parameter pointer: The pointer to wrap.
-  init(_ pointer: OpaquePointer) {
+  init(_ pointer: Pointer) {
     self.pointer = pointer
     self.free = { _ in }
   }
 
   convenience init(
-    create: @escaping (UnsafeMutablePointer<OpaquePointer?>) -> Int32,
+    create: @escaping (UnsafeMutablePointer<Pointer?>) -> Int32,
     free: @escaping Free
   ) throws {
     try self.init(
@@ -52,16 +52,16 @@ final class GitPointer {
   }
 }
 
-// MARK: - GitPointer.Create
+// MARK: - Managed.Create
 
-extension GitPointer {
+extension Managed {
 
-  func create<each Parameter>(
+  func create<New, each Parameter>(
     _ task:
-      @escaping (UnsafeMutablePointer<OpaquePointer?>?, OpaquePointer?, repeat each Parameter) ->
+      @escaping (UnsafeMutablePointer<New?>?, Pointer?, repeat each Parameter) ->
       Int32,
     _ parameter: repeat each Parameter
-  ) -> Create {
+  ) -> Managed<New>.Create {
     withUnsafeMutablePointer { output in task(output, self.pointer, repeat each parameter) }
   }
 }
@@ -90,16 +90,16 @@ private func withUnsafeMutablePointer<Value>(
 
 // MARK: - Equatable
 
-extension GitPointer: Equatable {
+extension Managed<OpaquePointer>: Equatable {
 
-  static func == (lhs: GitPointer, rhs: GitPointer) -> Bool {
+  static func == (lhs: Managed<Pointer>, rhs: Managed<Pointer>) -> Bool {
     lhs.pointer == rhs.pointer
   }
 }
 
 // MARK: - Hashable
 
-extension GitPointer: Hashable {
+extension Managed<OpaquePointer>: Hashable {
 
   func hash(into hasher: inout Hasher) {
     hasher.combine(pointer)
@@ -108,10 +108,10 @@ extension GitPointer: Hashable {
 
 // MARK: - Perform a task
 
-extension GitPointer {
+extension Managed {
 
   func perform<each Parameter>(
-    _ task: @escaping (OpaquePointer?, repeat each Parameter) -> Int32,
+    _ task: @escaping (Pointer?, repeat each Parameter) -> Int32,
     _ parameter: repeat each Parameter
   ) throws {
     try GitError.check(task(pointer, repeat each parameter))
@@ -120,20 +120,20 @@ extension GitPointer {
 
 // MARK: - Get a Value
 
-extension GitPointer {
+extension Managed {
 
   func get<each Parameter, Value>(
-    _ task: (OpaquePointer?, repeat each Parameter) -> Value,
+    _ task: (Pointer?, repeat each Parameter) -> Value,
     _ parameter: repeat each Parameter
   ) -> Value {
     task(pointer, repeat each parameter)
   }
 }
 
-extension GitPointer {
+extension Managed {
 
   func get<Value>(
-    _ task: @escaping (UnsafeMutablePointer<Value?>, OpaquePointer) -> Int32
+    _ task: @escaping (UnsafeMutablePointer<Value?>, Pointer) -> Int32
   ) throws -> Value {
     var value: Value?
     let result = withUnsafeMutablePointer(to: &value) { task($0, pointer) }
@@ -142,10 +142,10 @@ extension GitPointer {
   }
 }
 
-extension GitPointer {
+extension Managed {
 
   func get<Value>(
-    _ task: @escaping (UnsafeMutablePointer<Value>, OpaquePointer) -> Int32
+    _ task: @escaping (UnsafeMutablePointer<Value>, Pointer) -> Int32
   ) throws -> Value {
     let value = UnsafeMutablePointer<Value>.allocate(capacity: 1)
     defer { value.deallocate() }
@@ -155,7 +155,7 @@ extension GitPointer {
   }
 
   func get<Parameter, Value>(
-    _ task: @escaping (UnsafeMutablePointer<Value>?, OpaquePointer, Parameter) -> Int32,
+    _ task: @escaping (UnsafeMutablePointer<Value>?, Pointer, Parameter) -> Int32,
     _ parameter: Parameter
   ) throws -> Value {
     let value = UnsafeMutablePointer<Value>.allocate(capacity: 1)
@@ -168,14 +168,14 @@ extension GitPointer {
 
 // MARK: - Assert
 
-extension GitPointer {
+extension Managed {
 
   /// Performs a traditional C-style assert with a message.
   ///
   /// Use this function for internal sanity checks that are active during
   /// testing but do not impact performance of shipping code.
   func assert(
-    _ assertion: @escaping (OpaquePointer) -> Int32,
+    _ assertion: @escaping (Pointer) -> Int32,
     _ message: @autoclosure () -> String,
     file: StaticString = #file,
     line: UInt = #line

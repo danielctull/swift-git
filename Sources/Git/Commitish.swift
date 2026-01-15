@@ -1,6 +1,6 @@
 public struct Commitish {
-  let pointer: GitPointer
-  private init(_ pointer: GitPointer) {
+  let pointer: Managed<OpaquePointer>
+  private init(_ pointer: Managed<OpaquePointer>) {
     self.pointer = pointer
   }
 }

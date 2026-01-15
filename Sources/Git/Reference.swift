@@ -15,7 +15,7 @@ extension Repository {
     get throws {
       try GitSequence {
 
-        try GitPointer(
+        try Managed<OpaquePointer>(
           create: pointer.create(git_reference_iterator_new),
           free: git_reference_iterator_free)
 
@@ -71,7 +71,7 @@ public enum Reference: Equatable, Hashable {
 
 extension Reference {
 
-  var pointer: GitPointer {
+  var pointer: Managed<OpaquePointer> {
     switch self {
     case .branch(let branch): return branch.pointer
     case .note(let note): return note.pointer
@@ -80,7 +80,7 @@ extension Reference {
     }
   }
 
-  init(pointer: GitPointer) throws {
+  init(pointer: Managed<OpaquePointer>) throws {
 
     switch pointer {
 
@@ -192,7 +192,7 @@ extension Reference.Name {
 
 extension Reference.Name {
 
-  init(pointer: GitPointer) throws {
+  init(pointer: Managed<OpaquePointer>) throws {
     try self.init(pointer.get(git_reference_name) |> Unwrap |> String.init(cString:))
   }
 }

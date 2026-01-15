@@ -34,7 +34,7 @@ extension Repository {
 // MARK: - Reflog
 
 public struct Reflog: Equatable, Hashable {
-  let pointer: GitPointer
+  let pointer: Managed<OpaquePointer>
 }
 
 extension Reflog {
@@ -44,7 +44,7 @@ extension Reflog {
       pointer.get(git_reflog_entrycount)
     } element: { index in
       Item(
-        pointer: GitPointer(pointer.get(git_reflog_entry_byindex, index)!),
+        pointer: Managed<OpaquePointer>(pointer.get(git_reflog_entry_byindex, index)!),
         index: index)
     }
   }
@@ -126,7 +126,7 @@ extension Reflog {
 
 extension Reflog.Item {
 
-  fileprivate init(pointer: GitPointer, index: Int) {
+  fileprivate init(pointer: Managed<OpaquePointer>, index: Int) {
     self.init(
       id: ID(rawValue: index),
       message: pointer.get(git_reflog_entry_message)! |> String.init(cString:),

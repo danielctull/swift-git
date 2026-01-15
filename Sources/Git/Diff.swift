@@ -17,7 +17,7 @@ extension Repository {
 // MARK: - Diff
 
 public struct Diff: Equatable, Hashable {
-  let pointer: GitPointer
+  let pointer: Managed<OpaquePointer>
 }
 
 extension Diff {
