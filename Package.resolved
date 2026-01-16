@@ -1,0 +1,15 @@
+{
+  "originHash" : "4b0c8e2e04dabcece550ed7f3806bbf8039229a67195ad53757c66f99cacdd0c",
+  "pins" : [
+    {
+      "identity" : "libgit2",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/danielctull-forks/libgit2.git",
+      "state" : {
+        "branch" : "swift",
+        "revision" : "46524090060e2ea3d7fb7b428ce0a0cc3ac40506"
+      }
+    }
+  ],
+  "version" : 3
+}

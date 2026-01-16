@@ -1,4 +1,4 @@
-import Clibgit2
+import libgit2
 import Foundation
 
 extension Repository {

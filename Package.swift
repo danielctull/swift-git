@@ -11,29 +11,25 @@ let package = Package(
   products: [
     .library(name: "Git", targets: ["Git"])
   ],
-  dependencies: [],
+  dependencies: [
+    .package(url: "https://github.com/danielctull-forks/libgit2.git", branch: "swift")
+  ],
   targets: [
 
     .target(
       name: "Git",
       dependencies: [
-        "Clibgit2"
+        .product(name: "libgit2", package: "libgit2"),
       ]),
 
     .testTarget(
       name: "GitTests",
-      dependencies: ["Git"],
+      dependencies: [
+        "Git",
+        .product(name: "libgit2", package: "libgit2"),
+      ],
       resources: [
         .copy("Repositories")
       ]),
-
-    .systemLibrary(
-      name: "Clibgit2",
-      pkgConfig: "libgit2",
-      providers: [
-        .brew(["libgit2"]),
-        .apt(["libgit2-dev"]),
-      ]
-    ),
   ]
 )
