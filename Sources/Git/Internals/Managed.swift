@@ -113,11 +113,10 @@ extension Managed {
     _ task: @escaping (UnsafeMutablePointer<Value>, Pointer, repeat each Parameter) -> Int32,
     _ parameter: repeat each Parameter
   ) throws -> Value {
-    let value = UnsafeMutablePointer<Value>.allocate(capacity: 1)
-    defer { value.deallocate() }
-    let result = task(value, pointer, repeat each parameter)
-    try GitError.check(result)
-    return value.pointee
+    let create = Managed<Value>.Create { output in
+      task(output, self.pointer, repeat each parameter)
+    }
+    return try create()
   }
 }
 
