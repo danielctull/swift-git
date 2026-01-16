@@ -144,7 +144,10 @@ extension Managed {
 extension Managed {
 
   struct Create {
-    fileprivate let action: () throws -> Pointer
+    private let action: () throws -> Pointer
+    fileprivate init(action: @escaping () throws -> Pointer) {
+      self.action = action
+    }
     fileprivate func callAsFunction() throws -> Pointer {
       try action()
     }
