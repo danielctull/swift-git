@@ -31,6 +31,16 @@ final class Managed<Pointer> {
     self.free = free
   }
 
+  convenience init(
+    create: Managed<Pointer?>.Create,
+    free: @escaping Free
+  ) throws {
+    try self.init(
+      create: Create { try Unwrap(create()) },
+      free: free
+    )
+  }
+
   /// Creates a ``Managed`` object.
   ///
   /// The provided pointer **will not be freed** when deinit is called.
@@ -39,15 +49,6 @@ final class Managed<Pointer> {
   init(_ pointer: Pointer) {
     self.pointer = pointer
     self.free = { _ in }
-  }
-
-  convenience init(
-    create: @escaping (UnsafeMutablePointer<Pointer?>) -> Int32,
-    free: @escaping Free
-  ) throws {
-    try self.init(
-      create: Create(create),
-      free: free)
   }
 }
 
@@ -75,7 +76,7 @@ extension Managed {
 
   func create<Value, each Parameter>(
     _ task:
-      @escaping (UnsafeMutablePointer<Value?>, Pointer, repeat each Parameter) ->
+      @escaping (UnsafeMutablePointer<Value>, Pointer, repeat each Parameter) ->
       Int32,
     _ parameter: repeat each Parameter
   ) -> Managed<Value>.Create {
@@ -153,13 +154,14 @@ extension Managed {
 extension Managed.Create {
 
   init(
-    _ task: @escaping (UnsafeMutablePointer<Pointer?>) -> Int32
+    _ task: @escaping (UnsafeMutablePointer<Pointer>) -> Int32
   ) {
     self.init {
-      var pointer: Pointer?
-      let result = withUnsafeMutablePointer(to: &pointer, task)
+      let pointer = UnsafeMutablePointer<Pointer>.allocate(capacity: 1)
+      defer { pointer.deallocate() }
+      let result = task(pointer)
       try GitError.check(result)
-      return try Unwrap(pointer)
+      return pointer.pointee
     }
   }
 }

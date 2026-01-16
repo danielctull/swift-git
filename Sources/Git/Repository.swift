@@ -17,27 +17,30 @@ extension Repository {
   }
 
   public init(url: URL, options: Options = .create) throws {
-    pointer = try Managed<OpaquePointer> { pointer in
-      url.withUnsafeFileSystemRepresentation { path in
-        switch options {
-        case .open: return git_repository_open(pointer, path)
-        case .create(let isBare): return git_repository_init(pointer, path, UInt32(isBare))
+    pointer = try Managed(
+      create: .init { pointer in
+        url.withUnsafeFileSystemRepresentation { path in
+          switch options {
+          case .open: return git_repository_open(pointer, path)
+          case .create(let isBare): return git_repository_init(pointer, path, UInt32(isBare))
+          }
         }
-      }
-    } free: {
-      git_repository_free($0)
-    }
+
+      },
+      free: git_repository_free
+    )
   }
 
   public init(local: URL, remote: URL) throws {
     let remoteString = remote.isFileURL ? remote.path : remote.absoluteString
-    pointer = try Managed<OpaquePointer> { pointer in
-      local.withUnsafeFileSystemRepresentation { path in
-        git_clone(pointer, remoteString, path, nil)
-      }
-    } free: {
-      git_repository_free($0)
-    }
+    pointer = try Managed(
+      create: .init { pointer in
+        local.withUnsafeFileSystemRepresentation { path in
+          git_clone(pointer, remoteString, path, nil)
+        }
+      },
+      free: git_repository_free
+    )
   }
 
   /// Get the `URL` of the shared common directory for this repository.
