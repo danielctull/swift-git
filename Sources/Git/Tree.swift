@@ -19,7 +19,7 @@ extension Tree {
     GitCollection {
       pointer.get(git_tree_entrycount)
     } element: { index in
-      pointer.get(git_tree_entry_byindex, index)! |> Managed<OpaquePointer>.init |> Entry.init
+      pointer.get(git_tree_entry_byindex, index)! |> Managed.init |> Entry.init
     }
   }
 }

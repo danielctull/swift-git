@@ -101,7 +101,7 @@ extension Object.ID {
   }
 
   init(reference: Managed<OpaquePointer>) throws {
-    let resolved = try Managed<OpaquePointer>(
+    let resolved = try Managed(
       create: reference.create(git_reference_resolve),
       free: git_reference_free)
 

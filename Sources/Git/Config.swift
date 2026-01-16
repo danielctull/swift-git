@@ -26,7 +26,7 @@ extension Config {
   public init(url: URL) throws {
     self = try url.withUnsafeFileSystemRepresentation { path in
       try Config(
-        pointer: Managed<OpaquePointer>(
+        pointer: Managed(
           create: .init { git_config_open_ondisk($0, path) },
           free: git_config_free))
     }

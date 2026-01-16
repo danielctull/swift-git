@@ -6,7 +6,7 @@ extension Repository {
     get throws {
       try GitSequence {
 
-        try Managed<OpaquePointer>(
+        try Managed(
           create: pointer.create(git_branch_iterator_new, GIT_BRANCH_LOCAL),
           free: git_branch_iterator_free)
 

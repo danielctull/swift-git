@@ -47,7 +47,7 @@ extension Reflog {
       pointer.get(git_reflog_entrycount)
     } element: { index in
       Item(
-        pointer: Managed<OpaquePointer>(pointer.get(git_reflog_entry_byindex, index)!),
+        pointer: Managed(pointer.get(git_reflog_entry_byindex, index)!),
         index: index)
     }
   }

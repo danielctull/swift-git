@@ -34,7 +34,7 @@ public struct Tag: Equatable, Hashable, Identifiable {
     let repository =
       try pointer.get(git_reference_owner)
       |> Unwrap
-      |> Managed<OpaquePointer>.init
+      |> Managed.init
       |> Repository.init
 
     let object = try repository.object(for: target)

@@ -42,7 +42,7 @@ extension Repository {
 
     try GitSequence {
 
-      let iterator = try Managed<OpaquePointer>(
+      let iterator = try Managed(
         create: pointer.create(git_revwalk_new),
         free: git_revwalk_free)
 
