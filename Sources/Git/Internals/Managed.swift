@@ -2,7 +2,6 @@ import Clibgit2
 
 final class Managed<Pointer> {
 
-  typealias Create = () throws -> Pointer
   typealias Free = (Pointer) -> Void
 
   let pointer: Pointer
@@ -18,7 +17,7 @@ final class Managed<Pointer> {
   ///   - free: The function to free the pointer.
   /// - Throws: A ``GitError`` if the results of the functions are not GIT_OK.
   init(
-    create: @escaping Create,
+    create: Create,
     free: @escaping Free
   ) throws {
 
@@ -47,33 +46,8 @@ final class Managed<Pointer> {
     free: @escaping Free
   ) throws {
     try self.init(
-      create: withUnsafeMutablePointer(create),
+      create: Create(create),
       free: free)
-  }
-}
-
-// MARK: - Managed.Create
-
-extension Managed {
-
-  func create<Value, each Parameter>(
-    _ task:
-      @escaping (UnsafeMutablePointer<Value?>?, Pointer?, repeat each Parameter) ->
-      Int32,
-    _ parameter: repeat each Parameter
-  ) -> Managed<Value>.Create {
-    withUnsafeMutablePointer { output in task(output, self.pointer, repeat each parameter) }
-  }
-}
-
-private func withUnsafeMutablePointer<Value>(
-  _ task: @escaping (UnsafeMutablePointer<Value?>) -> Int32
-) -> Managed<Value>.Create {
-  {
-    var value: Value?
-    let result = withUnsafeMutablePointer(to: &value, task)
-    try GitError.check(result)
-    return try Unwrap(value)
   }
 }
 
@@ -92,6 +66,22 @@ extension Managed: Hashable where Pointer: Hashable {
 
   func hash(into hasher: inout Hasher) {
     hasher.combine(pointer)
+  }
+}
+
+// MARK: - Create a new Managed pointer
+
+extension Managed {
+
+  func create<Value, each Parameter>(
+    _ task:
+      @escaping (UnsafeMutablePointer<Value?>, Pointer, repeat each Parameter) ->
+      Int32,
+    _ parameter: repeat each Parameter
+  ) -> Managed<Value>.Create {
+    Managed<Value>.Create { output in
+      task(output, self.pointer, repeat each parameter)
+    }
   }
 }
 
@@ -145,5 +135,31 @@ extension Managed {
     line: UInt = #line
   ) {
     Swift.assert(assertion(pointer) == 1, message(), file: file, line: line)
+  }
+}
+
+// MARK: - Managed.Create
+
+extension Managed {
+
+  struct Create {
+    fileprivate let action: () throws -> Pointer
+    fileprivate func callAsFunction() throws -> Pointer {
+      try action()
+    }
+  }
+}
+
+extension Managed.Create {
+
+  init(
+    _ task: @escaping (UnsafeMutablePointer<Pointer?>) -> Int32
+  ) {
+    self.init {
+      var pointer: Pointer?
+      let result = withUnsafeMutablePointer(to: &pointer, task)
+      try GitError.check(result)
+      return try Unwrap(pointer)
+    }
   }
 }
