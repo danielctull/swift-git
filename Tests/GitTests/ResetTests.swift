@@ -2,7 +2,8 @@ import Foundation
 import Git
 import Testing
 
-final class ResetTests: XCTestCase {
+@Suite("Reset")
+struct ResetTests {
 
   func testResetSoft() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")

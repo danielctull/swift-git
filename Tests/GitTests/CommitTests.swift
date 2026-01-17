@@ -2,7 +2,8 @@ import Foundation
 import Git
 import Testing
 
-final class CommitTests: XCTestCase {
+@Suite("Commit")
+struct CommitTests {
 
   func testRepositoryCommitForString() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")

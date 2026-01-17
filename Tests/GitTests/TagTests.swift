@@ -2,7 +2,8 @@ import Foundation
 import Git
 import Testing
 
-final class TagTests: XCTestCase {
+@Suite("Tag")
+struct TagTests {
 
   func testRepositoryTags() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")

@@ -2,7 +2,8 @@ import Foundation
 import Git
 import Testing
 
-final class IndexTests: XCTestCase {
+@Suite("Index")
+struct IndexTests {
 
   func testIndex() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")

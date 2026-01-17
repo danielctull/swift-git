@@ -2,7 +2,8 @@ import Foundation
 import Git
 import Testing
 
-final class SignatureTests: XCTestCase {
+@Suite("Signature")
+struct SignatureTests {
 
   func testDefaultSignature() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")

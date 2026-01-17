@@ -2,7 +2,8 @@ import Foundation
 import Git
 import Testing
 
-final class CheckoutTests: XCTestCase {
+@Suite("Checkout")
+struct CheckoutTests {
 
   func testCheckoutHead() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")

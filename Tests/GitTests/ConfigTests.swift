@@ -2,7 +2,8 @@ import Foundation
 import Git
 import Testing
 
-final class ConfigTests: XCTestCase {
+@Suite("Config")
+struct ConfigTests {
 
   func testInit() throws {
     try FileManager.default.withTemporaryDirectory { local in

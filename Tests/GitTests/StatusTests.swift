@@ -2,7 +2,8 @@ import Foundation
 import Git
 import Testing
 
-final class StatusTests: XCTestCase {
+@Suite("Status")
+struct StatusTests {
 
   func testAddFileToWorkingDirectory() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")

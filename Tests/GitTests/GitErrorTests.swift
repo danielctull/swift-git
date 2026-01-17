@@ -3,7 +3,8 @@ import libgit2
 
 @testable import Git
 
-final class GitErrorTests: XCTestCase {
+@Suite("GitError")
+struct GitErrorTests {
 
   func testCatching() {
     XCTAssertEqual(

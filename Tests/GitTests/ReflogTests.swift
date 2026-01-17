@@ -2,7 +2,8 @@ import Foundation
 import Git
 import Testing
 
-final class ReflogTests: XCTestCase {
+@Suite("Reflog")
+struct ReflogTests {
 
   func testName() throws {
     let name = Reflog.Name("Custom")
