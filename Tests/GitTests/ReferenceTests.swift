@@ -15,10 +15,9 @@ struct ReferenceTests {
     #expect(error.code == .unbornBranch)
   }
 
-  @Test(.scratchDirectory(.random))
+  @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func head() throws {
-    let remote = try Bundle.module.url(forRepository: "Test.git")
-    let repository = try Repository.clone(remote, to: .scratchDirectory)
+    let repository = try Repository.clone(.repository, to: .scratchDirectory)
     let head = try repository.head
     guard case .branch(let branch) = head else {
       Issue.record("Expected branch")
@@ -28,10 +27,9 @@ struct ReferenceTests {
     #expect(branch.reference.description == "refs/heads/main")
   }
 
-  @Test(.scratchDirectory(.random))
+  @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func repositoryReferences() throws {
-    let remote = try Bundle.module.url(forRepository: "Test.git")
-    let repo = try Repository.clone(remote, to: .scratchDirectory)
+    let repo = try Repository.clone(.repository, to: .scratchDirectory)
     let references = try Array(repo.references)
     #expect(references.count == 5)
     #expect(try references.value(at: 0).id == "refs/heads/main")
@@ -81,10 +79,9 @@ struct ReferenceTests {
     )
   }
 
-  @Test(.scratchDirectory(.random))
+  @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func delete() throws {
-    let remote = try Bundle.module.url(forRepository: "Test.git")
-    let repo = try Repository.clone(remote, to: .scratchDirectory)
+    let repo = try Repository.clone(.repository, to: .scratchDirectory)
 
     do {
       let references = try Array(repo.references)
@@ -131,10 +128,9 @@ struct ReferenceTests {
     }
   }
 
-  @Test(.scratchDirectory(.random))
+  @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func removeReferenceByID() throws {
-    let remote = try Bundle.module.url(forRepository: "Test.git")
-    let repo = try Repository.clone(remote, to: .scratchDirectory)
+    let repo = try Repository.clone(.repository, to: .scratchDirectory)
 
     do {
       let references = try Array(repo.references)
@@ -185,10 +181,9 @@ struct ReferenceTests {
     }
   }
 
-  @Test(.scratchDirectory(.random))
+  @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func removeReference() throws {
-    let remote = try Bundle.module.url(forRepository: "Test.git")
-    let repo = try Repository.clone(remote, to: .scratchDirectory)
+    let repo = try Repository.clone(.repository, to: .scratchDirectory)
 
     do {
       let references = try Array(repo.references)

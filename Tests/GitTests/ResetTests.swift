@@ -5,10 +5,9 @@ import Testing
 @Suite("Reset")
 struct ResetTests {
 
-  @Test(.scratchDirectory(.random))
+  @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func resetSoft() throws {
-    let remote = try Bundle.module.url(forRepository: "Test.git")
-    let repo = try Repository.clone(remote, to: .scratchDirectory)
+    let repo = try Repository.clone(.repository, to: .scratchDirectory)
 
     #expect(
       try repo.current.id.description
@@ -48,10 +47,9 @@ struct ResetTests {
     #expect(deletion.headToIndex?.from?.path == "file.text")
   }
 
-  @Test(.scratchDirectory(.random))
+  @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func resetMixed() throws {
-    let remote = try Bundle.module.url(forRepository: "Test.git")
-    let repo = try Repository.clone(remote, to: .scratchDirectory)
+    let repo = try Repository.clone(.repository, to: .scratchDirectory)
 
     #expect(
       try repo.current.id.description
@@ -91,10 +89,9 @@ struct ResetTests {
     #expect(deletion.indexToWorkingDirectory?.from?.path == "file.text")
   }
 
-  @Test(.scratchDirectory(.random))
+  @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func resetHard() throws {
-    let remote = try Bundle.module.url(forRepository: "Test.git")
-    let repo = try Repository.clone(remote, to: .scratchDirectory)
+    let repo = try Repository.clone(.repository, to: .scratchDirectory)
 
     #expect(
       try repo.current.id.description

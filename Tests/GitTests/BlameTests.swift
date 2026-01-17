@@ -5,10 +5,9 @@ import Testing
 @Suite("Blame")
 struct BlameTests {
 
-  @Test(.scratchDirectory(.random))
+  @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func blame() throws {
-    let remote = try Bundle.module.url(forRepository: "Test.git")
-    let repo = try Repository.clone(remote, to: .scratchDirectory)
+    let repo = try Repository.clone(.repository, to: .scratchDirectory)
     let blame = try repo.blame(for: "file.txt")
     let hunks = blame.hunks
     #expect(hunks.count == 1)

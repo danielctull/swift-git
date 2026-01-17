@@ -5,10 +5,9 @@ import Testing
 @Suite("Status")
 struct StatusTests {
 
-  @Test(.scratchDirectory(.random))
+  @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func addFileToWorkingDirectory() throws {
-    let remote = try Bundle.module.url(forRepository: "Test.git")
-    let repo = try Repository.clone(remote, to: .scratchDirectory)
+    let repo = try Repository.clone(.repository, to: .scratchDirectory)
     #expect(try repo.status.count == 0)
 
     let path = UUID().uuidString

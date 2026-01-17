@@ -5,10 +5,9 @@ import Testing
 @Suite("RemoteBranch")
 struct RemoteBranchTests {
 
-  @Test(.scratchDirectory(.random))
+  @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func repositoryRemoteBranches() throws {
-    let remote = try Bundle.module.url(forRepository: "Test.git")
-    let repo = try Repository.clone(remote, to: .scratchDirectory)
+    let repo = try Repository.clone(.repository, to: .scratchDirectory)
     let remoteBranches = try Array(repo.remoteBranches)
     #expect(remoteBranches.count == 2)
     #expect(
@@ -43,10 +42,9 @@ struct RemoteBranchTests {
     )
   }
 
-  @Test(.scratchDirectory(.random))
+  @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func repositoryRemoteBranchNamed() throws {
-    let remote = try Bundle.module.url(forRepository: "Test.git")
-    let repo = try Repository.clone(remote, to: .scratchDirectory)
+    let repo = try Repository.clone(.repository, to: .scratchDirectory)
     let remoteBranch = try repo.branch(on: "origin", named: "main")
     #expect(remoteBranch.name.description == "origin/main")
     #expect(remoteBranch.id.description == "refs/remotes/origin/main")
@@ -59,10 +57,9 @@ struct RemoteBranchTests {
     )
   }
 
-  @Test(.scratchDirectory(.random))
+  @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func delete() throws {
-    let remote = try Bundle.module.url(forRepository: "Test.git")
-    let repo = try Repository.clone(remote, to: .scratchDirectory)
+    let repo = try Repository.clone(.repository, to: .scratchDirectory)
     let remoteBranch = try repo.branch(on: "origin", named: "main")
     try repo.delete(.remoteBranch(remoteBranch))
     #expect(throws: (any Error).self) {
@@ -71,7 +68,7 @@ struct RemoteBranchTests {
 
     // Does not delete it on remote
     try ScratchDirectory(.random) {
-      let repo = try Repository.clone(remote, to: .scratchDirectory)
+      let repo = try Repository.clone(.repository, to: .scratchDirectory)
       #expect(throws: Never.self) {
         try repo.branch(on: "origin", named: "main")
       }

@@ -5,10 +5,9 @@ import Testing
 @Suite("Tag")
 struct TagTests {
 
-  @Test(.scratchDirectory(.random))
+  @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func repositoryTags() throws {
-    let remote = try Bundle.module.url(forRepository: "Test.git")
-    let repo = try Repository.clone(remote, to: .scratchDirectory)
+    let repo = try Repository.clone(.repository, to: .scratchDirectory)
     let tags = try repo.tags
     #expect(tags.count == 2)
 
@@ -42,10 +41,9 @@ struct TagTests {
     //            #expect(lightweightTarget.description == "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
   }
 
-  @Test(.scratchDirectory(.random))
+  @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func delete() throws {
-    let remote = try Bundle.module.url(forRepository: "Test.git")
-    let repo = try Repository.clone(remote, to: .scratchDirectory)
+    let repo = try Repository.clone(.repository, to: .scratchDirectory)
     let tags = try repo.tags
     #expect(tags.count == 2)
     let tag0 = try #require(tags.first)

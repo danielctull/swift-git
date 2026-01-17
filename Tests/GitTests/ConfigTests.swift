@@ -95,11 +95,9 @@ struct ConfigTests {
     #expect(try config.boolean(for: "Some.Bool") == true)
   }
 
-  @Test(.scratchDirectory(.random))
+  @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func level() throws {
-    let remote = try Bundle.module.url(forRepository: "Test.git")
-
-    let repo = try Repository.clone(remote, to: .scratchDirectory)
+    let repo = try Repository.clone(.repository, to: .scratchDirectory)
     let config = try repo.config
 
     let old = try Set(config.entries)

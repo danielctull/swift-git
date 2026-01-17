@@ -10,11 +10,10 @@ struct ReflogTests {
     #expect(name.description == "Custom")
   }
 
-  @Test(.scratchDirectory(.random))
+  @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func reflog() throws {
-    let remote = try Bundle.module.url(forRepository: "Test.git")
     let cloneDate = Date()
-    let repo = try Repository.clone(remote, to: .scratchDirectory)
+    let repo = try Repository.clone(.repository, to: .scratchDirectory)
     let reflog = try repo.reflog
     #expect(reflog.items.count == 1)
     let item = try #require(reflog.items.last)
@@ -39,11 +38,9 @@ struct ReflogTests {
 
   }
 
-  @Test(.scratchDirectory(.random))
+  @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func append() throws {
-    let remote = try Bundle.module.url(forRepository: "Test.git")
-
-    let repo = try Repository.clone(remote, to: .scratchDirectory)
+    let repo = try Repository.clone(.repository, to: .scratchDirectory)
     let reflog = try repo.reflog(named: "CUSTOM")
     #expect(reflog.items.count == 0)
 
@@ -64,11 +61,9 @@ struct ReflogTests {
     #expect(item.committer.timeZone == TimeZone(secondsFromGMT: 120))
   }
 
-  @Test(.scratchDirectory(.random))
+  @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func remove() throws {
-    let remote = try Bundle.module.url(forRepository: "Test.git")
-
-    let repo = try Repository.clone(remote, to: .scratchDirectory)
+    let repo = try Repository.clone(.repository, to: .scratchDirectory)
     let reflog = try repo.reflog(named: "CUSTOM")
     #expect(reflog.items.count == 0)
 
@@ -79,11 +74,9 @@ struct ReflogTests {
     #expect(reflog.items.count == 0)
   }
 
-  @Test(.scratchDirectory(.random))
+  @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func write() throws {
-    let remote = try Bundle.module.url(forRepository: "Test.git")
-
-    let repo = try Repository.clone(remote, to: .scratchDirectory)
+    let repo = try Repository.clone(.repository, to: .scratchDirectory)
 
     do {
       let reflog = try repo.reflog(named: "CUSTOM")
@@ -111,11 +104,9 @@ struct ReflogTests {
     }
   }
 
-  @Test(.scratchDirectory(.random))
+  @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func rename() throws {
-    let remote = try Bundle.module.url(forRepository: "Test.git")
-
-    let repo = try Repository.clone(remote, to: .scratchDirectory)
+    let repo = try Repository.clone(.repository, to: .scratchDirectory)
 
     do {
       let reflog = try repo.reflog(named: "OLD")
@@ -146,11 +137,9 @@ struct ReflogTests {
     }
   }
 
-  @Test(.scratchDirectory(.random))
+  @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func delete() throws {
-    let remote = try Bundle.module.url(forRepository: "Test.git")
-
-    let repo = try Repository.clone(remote, to: .scratchDirectory)
+    let repo = try Repository.clone(.repository, to: .scratchDirectory)
 
     #expect(try repo.reflog(named: "REFLOG_TEST").items.count == 0)
 

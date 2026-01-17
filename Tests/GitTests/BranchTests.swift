@@ -5,10 +5,9 @@ import Testing
 @Suite("Branch")
 struct BranchTests {
 
-  @Test(.scratchDirectory(.random))
+  @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func repositoryBranches() throws {
-    let remote = try Bundle.module.url(forRepository: "Test.git")
-    let repo = try Repository.clone(remote, to: .scratchDirectory)
+    let repo = try Repository.clone(.repository, to: .scratchDirectory)
     let branches = try Array(repo.branches)
     #expect(branches.count == 1)
     let branch = try #require(branches.first)
@@ -20,10 +19,9 @@ struct BranchTests {
     )
   }
 
-  @Test(.scratchDirectory(.random))
+  @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func repositoryCreateBranchNamed() throws {
-    let remote = try Bundle.module.url(forRepository: "Test.git")
-    let repo = try Repository.clone(remote, to: .scratchDirectory)
+    let repo = try Repository.clone(.repository, to: .scratchDirectory)
     let main = try repo.branch(named: "main")
     let commits = try Array(repo.commits(for: .branch(main)))
     let commit = try #require(commits.first)
@@ -36,10 +34,9 @@ struct BranchTests {
     )
   }
 
-  @Test(.scratchDirectory(.random))
+  @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func repositoryBranchNamed() throws {
-    let remote = try Bundle.module.url(forRepository: "Test.git")
-    let repo = try Repository.clone(remote, to: .scratchDirectory)
+    let repo = try Repository.clone(.repository, to: .scratchDirectory)
     let branch = try repo.branch(named: "main")
     #expect(branch.name == "main")
     #expect(branch.id.description == "refs/heads/main")
@@ -49,10 +46,9 @@ struct BranchTests {
     )
   }
 
-  @Test(.scratchDirectory(.random))
+  @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func branchMove() throws {
-    let remote = try Bundle.module.url(forRepository: "Test.git")
-    let repo = try Repository.clone(remote, to: .scratchDirectory)
+    let repo = try Repository.clone(.repository, to: .scratchDirectory)
     let branch = try repo.branch(named: "main")
     do {
       let moved = try branch.move(to: "moved")
@@ -75,10 +71,9 @@ struct BranchTests {
     #expect(throws: (any Error).self) { try repo.branch(named: "main") }
   }
 
-  @Test(.scratchDirectory(.random))
+  @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func delete() throws {
-    let remote = try Bundle.module.url(forRepository: "Test.git")
-    let repo = try Repository.clone(remote, to: .scratchDirectory)
+    let repo = try Repository.clone(.repository, to: .scratchDirectory)
     let main = try repo.branch(named: "main")
     let commits = try Array(repo.commits(for: .branch(main)))
     let commit = try #require(commits.first)
@@ -88,10 +83,9 @@ struct BranchTests {
     #expect(throws: (any Error).self) { try repo.branch(named: "main2") }
   }
 
-  @Test(.scratchDirectory(.random))
+  @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func upstream() throws {
-    let remote = try Bundle.module.url(forRepository: "Test.git")
-    let repo = try Repository.clone(remote, to: .scratchDirectory)
+    let repo = try Repository.clone(.repository, to: .scratchDirectory)
     let main = try repo.branch(named: "main")
     let remoteBranch = try main.upstream
     #expect(remoteBranch.id.description == "refs/remotes/origin/main")
@@ -105,10 +99,9 @@ struct BranchTests {
     )
   }
 
-  @Test(.scratchDirectory(.random))
+  @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func setUpstream() throws {
-    let remote = try Bundle.module.url(forRepository: "Test.git")
-    let repo = try Repository.clone(remote, to: .scratchDirectory)
+    let repo = try Repository.clone(.repository, to: .scratchDirectory)
     let main = try repo.branch(named: "main")
     let commit = try #require(Array(repo.commits(for: .branch(main))).first)
 

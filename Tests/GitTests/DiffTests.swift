@@ -5,10 +5,9 @@ import Testing
 @Suite("Diff")
 struct DiffTests {
 
-  @Test(.scratchDirectory(.random))
+  @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func addedFile() throws {
-    let remote = try Bundle.module.url(forRepository: "Test.git")
-    let repo = try Repository.clone(remote, to: .scratchDirectory)
+    let repo = try Repository.clone(.repository, to: .scratchDirectory)
     let commits = try Array(repo.commits(sortedBy: .reverse))
     #expect(commits.count == 4)
     let first = try commits.value(at: 0)
@@ -39,10 +38,9 @@ struct DiffTests {
     )
   }
 
-  @Test(.scratchDirectory(.random))
+  @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func addedFileHunk() throws {
-    let remote = try Bundle.module.url(forRepository: "Test.git")
-    let repo = try Repository.clone(remote, to: .scratchDirectory)
+    let repo = try Repository.clone(.repository, to: .scratchDirectory)
     let commits = try Array(repo.commits(sortedBy: .reverse))
     #expect(commits.count == 4)
     let first = try commits.value(at: 0)

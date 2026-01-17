@@ -5,10 +5,9 @@ import Testing
 @Suite("Commit")
 struct CommitTests {
 
-  @Test(.scratchDirectory(.random))
+  @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func repositoryCommitForString() throws {
-    let remote = try Bundle.module.url(forRepository: "Test.git")
-    let repo = try Repository.clone(remote, to: .scratchDirectory)
+    let repo = try Repository.clone(.repository, to: .scratchDirectory)
     let commit = try repo.commit(
       for: "41c143541c9d917db83ce4e920084edbf2a4177e"
     )
@@ -32,10 +31,9 @@ struct CommitTests {
     )
   }
 
-  @Test(.scratchDirectory(.random))
+  @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func repositoryCommits() throws {
-    let remote = try Bundle.module.url(forRepository: "Test.git")
-    let repo = try Repository.clone(remote, to: .scratchDirectory)
+    let repo = try Repository.clone(.repository, to: .scratchDirectory)
     let branches = try Array(repo.branches)
     let main = try #require(branches.first(where: { $0.name == "main" }))
     let commits = try Array(repo.commits)
@@ -71,18 +69,16 @@ struct CommitTests {
     )
   }
 
-  @Test(.scratchDirectory(.random))
+  @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func repositoryCommitsZeroSearch() throws {
-    let remote = try Bundle.module.url(forRepository: "Test.git")
-    let repo = try Repository.clone(remote, to: .scratchDirectory)
+    let repo = try Repository.clone(.repository, to: .scratchDirectory)
     let commits = try Array(repo.commits(for: [], includeHead: false))
     #expect(commits.count == 0)
   }
 
-  @Test(.scratchDirectory(.random))
+  @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func commitTree() throws {
-    let remote = try Bundle.module.url(forRepository: "Test.git")
-    let repo = try Repository.clone(remote, to: .scratchDirectory)
+    let repo = try Repository.clone(.repository, to: .scratchDirectory)
     let commits = try Array(repo.commits)
     let last = try #require(commits.last)
     let tree = try last.tree

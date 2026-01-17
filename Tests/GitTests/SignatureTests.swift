@@ -5,10 +5,9 @@ import Testing
 @Suite("Signature")
 struct SignatureTests {
 
-  @Test(.scratchDirectory(.random))
+  @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func defaultSignature() throws {
-    let remote = try Bundle.module.url(forRepository: "Test.git")
-    let repo = try Repository.clone(remote, to: .scratchDirectory)
+    let repo = try Repository.clone(.repository, to: .scratchDirectory)
 
     let config = try repo.config.level(.local)
     try config.set("Tester Nameson", for: "user.name")

@@ -44,11 +44,10 @@ struct RepositoryTests {
     )
   }
 
-  @Test(.scratchDirectory(.random))
+  @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func open() throws {
-    let remote = try Bundle.module.url(forRepository: "Test.git")
     #expect(throws: Never.self) {
-      try Repository.clone(remote, to: .scratchDirectory)
+      try Repository.clone(.repository, to: .scratchDirectory)
     }
     let repo = try Repository.open(URL.scratchDirectory)
     AssertEqualResolvingSymlinks(repo.workingDirectory, .scratchDirectory)

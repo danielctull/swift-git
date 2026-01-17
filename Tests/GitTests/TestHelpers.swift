@@ -1,14 +1,6 @@
 import Foundation
 import Testing
 
-extension Bundle {
-
-  func url(forRepository repository: String) throws -> URL {
-    try #require(url(forResource: "Repositories", withExtension: nil))
-      .appendingPathComponent(repository)
-  }
-}
-
 struct IndexOutOfBounds: Error, CustomStringConvertible {
   let description: String
   init<C: Collection>(collection: C, index: C.Index) {

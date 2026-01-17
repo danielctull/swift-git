@@ -5,10 +5,9 @@ import Testing
 @Suite("Index")
 struct IndexTests {
 
-  @Test(.scratchDirectory(.random))
+  @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func index() throws {
-    let remote = try Bundle.module.url(forRepository: "Test.git")
-    let repo = try Repository.clone(remote, to: .scratchDirectory)
+    let repo = try Repository.clone(.repository, to: .scratchDirectory)
     let entries = try Array(repo.index.entries)
     #expect(entries.count == 2)
 
