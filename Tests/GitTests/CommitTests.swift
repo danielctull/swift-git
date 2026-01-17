@@ -82,7 +82,7 @@ struct CommitTests {
       let object = try repo.object(for: entry.target)
       #expect(object.id.description == "e5c0a8638a0d8dfa0c733f9d666c511f7e1f9a96")
       guard case .blob(let blob) = object else {
-        XCTFail("Expected blob")
+        Issue.record("Expected blob")
         return
       }
       #expect(blob.id.description == "e5c0a8638a0d8dfa0c733f9d666c511f7e1f9a96")

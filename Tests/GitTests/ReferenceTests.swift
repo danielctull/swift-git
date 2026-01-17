@@ -21,7 +21,7 @@ struct ReferenceTests {
       let repository = try Repository(local: local, remote: remote)
       let head = try repository.head
       guard case .branch(let branch) = head else {
-        XCTFail("Expected branch")
+        Issue.record("Expected branch")
         return
       }
       #expect(branch.name == "main")

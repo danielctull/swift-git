@@ -29,7 +29,7 @@ struct DiffTests {
 
       let object = try repo.object(for: file.id)
       guard case .blob(let blob) = object else {
-        XCTFail("Expected blob")
+        Issue.record("Expected blob")
         return
       }
       #expect(blob.id.description == "96c36b4c2da3a3b8472d437cea0497d38f125b04")
