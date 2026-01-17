@@ -17,7 +17,7 @@ struct TagTests {
       #expect(tag0.reference.description == "refs/tags/1.0")
       #expect(tag0.name == "1.0")
       #expect(tag0.target.description == "17e26bc76cff375603e7173dac31e5183350e559")
-      //            guard case let .annotated(annotatedID, annotatedTag) = tag0 else { XCTFail("Expected annotated tag"); return }
+      //            guard case let .annotated(annotatedID, annotatedTag) = tag0 else { Issue.record("Expected annotated tag"); return }
       //            #expect(annotatedID == "refs/tags/1.0")
       //            #expect(annotatedTag.id.description == "b1c37c042a0c7d5ba7252719850c15355ebdf7c6")
       //            #expect(annotatedTag.name.description == "1.0")
@@ -33,7 +33,7 @@ struct TagTests {
       #expect(tag1.reference.description == "refs/tags/lightweight-tag")
       #expect(tag1.name == "lightweight-tag")
       #expect(tag1.target.description == "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
-      //            guard case let .lightweight(lightweightID, lightweightTarget) = tag1 else { XCTFail("Expected lightweight tag"); return }
+      //            guard case let .lightweight(lightweightID, lightweightTarget) = tag1 else { Issue.record("Expected lightweight tag"); return }
       //            #expect(lightweightID == "refs/tags/lightweight-tag")
       //            #expect(lightweightTarget.description == "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
     }
