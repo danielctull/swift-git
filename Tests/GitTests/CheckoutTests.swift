@@ -12,7 +12,7 @@ struct CheckoutTests {
       let file = local.appending(path: UUID().uuidString)
       let content = UUID().uuidString
       try Data(content.utf8).write(to: file)
-      XCTAssertEqual(try String(contentsOf: file), content)
+      #expect(try String(contentsOf: file) == content)
       try repo.checkoutHead()
       //            XCTAssertThrowsError(try String(contentsOf: file))
     }

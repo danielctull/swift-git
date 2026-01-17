@@ -17,17 +17,14 @@ struct SignatureTests {
       let date = Date()
       let signature = try repo.defaultSignature
 
-      XCTAssertEqual(signature.name, "Tester Nameson")
-      XCTAssertEqual(signature.email, "some_address@example.com")
+      #expect(signature.name == "Tester Nameson")
+      #expect(signature.email == "some_address@example.com")
       XCTAssertEqual(
         signature.date.timeIntervalSince1970,
         date.timeIntervalSince1970,
         accuracy: 1
       )
-      XCTAssertEqual(
-        signature.timeZone,
-        TimeZone(secondsFromGMT: TimeZone.current.secondsFromGMT())
-      )
+      #expect(signature.timeZone == TimeZone(secondsFromGMT: TimeZone.current.secondsFromGMT()))
     }
   }
 }

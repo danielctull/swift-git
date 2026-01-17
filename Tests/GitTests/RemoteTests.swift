@@ -10,9 +10,9 @@ struct RemoteTests {
     try FileManager.default.withTemporaryDirectory { local in
       let repo = try Repository(local: local, remote: remoteURL)
       let remotes = try repo.remotes
-      XCTAssertEqual(remotes.count, 1)
-      XCTAssertEqual(remotes.first?.name, "origin")
-      XCTAssertEqual(remotes.first?.url, remoteURL)
+      #expect(remotes.count == 1)
+      #expect(remotes.first?.name == "origin")
+      #expect(remotes.first?.url == remoteURL)
     }
   }
 
@@ -21,8 +21,8 @@ struct RemoteTests {
     try FileManager.default.withTemporaryDirectory { local in
       let repo = try Repository(local: local, remote: remoteURL)
       let remote = try repo.remote(named: "origin")
-      XCTAssertEqual(remote.name, "origin")
-      XCTAssertEqual(remote.url, remoteURL)
+      #expect(remote.name == "origin")
+      #expect(remote.url == remoteURL)
     }
   }
 }
