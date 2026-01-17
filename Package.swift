@@ -12,14 +12,17 @@ let package = Package(
     .library(name: "Git", targets: ["Git"])
   ],
   dependencies: [
-    .package(url: "https://github.com/danielctull-forks/swift-libgit2.git", from: "1.9.2"),
+    .package(
+      url: "https://github.com/danielctull-forks/swift-libgit2.git",
+      from: "1.9.2"
+    )
   ],
   targets: [
 
     .target(
       name: "Git",
       dependencies: [
-        .product(name: "libgit2", package: "swift-libgit2"),
+        .product(name: "libgit2", package: "swift-libgit2")
       ]
     ),
 

@@ -31,7 +31,8 @@ extension Repository {
     try commits(
       for: references,
       sortedBy: sortOptions,
-      includeHead: includeHead)
+      includeHead: includeHead
+    )
   }
 
   public func commits(
@@ -44,7 +45,8 @@ extension Repository {
 
       let iterator = try Managed(
         create: pointer.create(git_revwalk_new),
-        free: git_revwalk_free)
+        free: git_revwalk_free
+      )
 
       for reference in references {
         try withUnsafePointer(to: reference.target.oid) { oid in
@@ -90,10 +92,18 @@ public struct Commit: Equatable, Hashable, Identifiable {
   init(pointer: Managed<OpaquePointer>) throws {
     self.pointer = pointer
     id = try ID(objectID: Object.ID(object: pointer))
-    summary = try pointer.get(git_commit_summary) |> Unwrap |> String.init(cString:)
-    body = try? pointer.get(git_commit_body) |> Unwrap |> String.init(cString:)
-    author = try pointer.get(git_commit_author) |> Unwrap |> Signature.init
-    committer = try pointer.get(git_commit_committer) |> Unwrap |> Signature.init
+    summary = try pointer.get(git_commit_summary)
+      |> Unwrap
+      |> String.init(cString:)
+    body = try? pointer.get(git_commit_body)
+      |> Unwrap
+      |> String.init(cString:)
+    author = try pointer.get(git_commit_author)
+      |> Unwrap
+      |> Signature.init
+    committer = try pointer.get(git_commit_committer)
+      |> Unwrap
+      |> Signature.init
   }
 }
 
@@ -166,7 +176,9 @@ extension Commit.ID: CustomStringConvertible {
 
 extension Commit.ID {
 
-  public var shortDescription: String { String(objectID.description.dropLast(33)) }
+  public var shortDescription: String {
+    String(objectID.description.dropLast(33))
+  }
 }
 
 // MARK: - SortOptions

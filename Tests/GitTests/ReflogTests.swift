@@ -18,16 +18,27 @@ final class ReflogTests: XCTestCase {
       XCTAssertEqual(reflog.items.count, 1)
       let item = try XCTUnwrap(reflog.items.last)
       //            XCTAssertEqual(item.message, "checkout: moving from master to main")
-      XCTAssertEqual(item.old.description, "0000000000000000000000000000000000000000")
-      XCTAssertEqual(item.new.description, "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
+      XCTAssertEqual(
+        item.old.description,
+        "0000000000000000000000000000000000000000"
+      )
+      XCTAssertEqual(
+        item.new.description,
+        "b1d2dbab22a62771db0c040ccf396dbbfdcef052"
+      )
       XCTAssertEqual(item.committer.name, "Daniel Tull")
       XCTAssertEqual(item.committer.email, "dt@danieltull.co.uk")
       // The date for a reflog item is when it occurred, in this case when
       // the repo was cloned at the start of this test.
       XCTAssertEqual(
-        item.committer.date.timeIntervalSince1970, cloneDate.timeIntervalSince1970, accuracy: 1)
+        item.committer.date.timeIntervalSince1970,
+        cloneDate.timeIntervalSince1970,
+        accuracy: 1
+      )
       XCTAssertEqual(
-        item.committer.timeZone, TimeZone(secondsFromGMT: TimeZone.current.secondsFromGMT()))
+        item.committer.timeZone,
+        TimeZone(secondsFromGMT: TimeZone.current.secondsFromGMT())
+      )
     }
   }
 
@@ -44,8 +55,14 @@ final class ReflogTests: XCTestCase {
 
       let item = try XCTUnwrap(reflog.items.first)
       XCTAssertEqual(item.message, "Test Message")
-      XCTAssertEqual(item.old.description, "0000000000000000000000000000000000000000")
-      XCTAssertEqual(item.new.description, "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
+      XCTAssertEqual(
+        item.old.description,
+        "0000000000000000000000000000000000000000"
+      )
+      XCTAssertEqual(
+        item.new.description,
+        "b1d2dbab22a62771db0c040ccf396dbbfdcef052"
+      )
       XCTAssertEqual(item.committer.name, "Test Name")
       XCTAssertEqual(item.committer.email, "Test Email")
       XCTAssertEqual(item.committer.date, Date(timeIntervalSince1970: 1999))
@@ -88,8 +105,14 @@ final class ReflogTests: XCTestCase {
 
         let item = try XCTUnwrap(reflog.items.first)
         XCTAssertEqual(item.message, "Test Message")
-        XCTAssertEqual(item.old.description, "0000000000000000000000000000000000000000")
-        XCTAssertEqual(item.new.description, "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
+        XCTAssertEqual(
+          item.old.description,
+          "0000000000000000000000000000000000000000"
+        )
+        XCTAssertEqual(
+          item.new.description,
+          "b1d2dbab22a62771db0c040ccf396dbbfdcef052"
+        )
         XCTAssertEqual(item.committer.name, "Test Name")
         XCTAssertEqual(item.committer.email, "Test Email")
         XCTAssertEqual(item.committer.date, Date(timeIntervalSince1970: 1999))
@@ -120,8 +143,14 @@ final class ReflogTests: XCTestCase {
 
         let item = try XCTUnwrap(reflog.items.first)
         XCTAssertEqual(item.message, "Test Message")
-        XCTAssertEqual(item.old.description, "0000000000000000000000000000000000000000")
-        XCTAssertEqual(item.new.description, "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
+        XCTAssertEqual(
+          item.old.description,
+          "0000000000000000000000000000000000000000"
+        )
+        XCTAssertEqual(
+          item.new.description,
+          "b1d2dbab22a62771db0c040ccf396dbbfdcef052"
+        )
         XCTAssertEqual(item.committer.name, "Test Name")
         XCTAssertEqual(item.committer.email, "Test Email")
         XCTAssertEqual(item.committer.date, Date(timeIntervalSince1970: 1999))
@@ -160,6 +189,8 @@ extension Reflog.Item.Draft {
         name: "Test Name",
         email: "Test Email",
         date: Date(timeIntervalSince1970: 1999),
-        timeZone: XCTUnwrap(TimeZone(secondsFromGMT: 120))))
+        timeZone: XCTUnwrap(TimeZone(secondsFromGMT: 120))
+      )
+    )
   }
 }

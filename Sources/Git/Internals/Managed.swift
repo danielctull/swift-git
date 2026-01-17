@@ -110,7 +110,9 @@ extension Managed {
   }
 
   func get<Value, each Parameter>(
-    _ task: @escaping (UnsafeMutablePointer<Value>, Pointer, repeat each Parameter) -> Int32,
+    _ task:
+      @escaping (UnsafeMutablePointer<Value>, Pointer, repeat each Parameter) ->
+      Int32,
     _ parameter: repeat each Parameter
   ) throws -> Value {
     let create = Managed<Value>.Create { output in

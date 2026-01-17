@@ -30,7 +30,10 @@ final class StatusTests: XCTestCase {
       XCTAssertEqual(file.path, path)
       XCTAssertEqual(file.flags, [.exists, .validSize])
       XCTAssertEqual(file.size, UInt64(content.count))
-      XCTAssertEqual(file.id.description, "0000000000000000000000000000000000000000")
+      XCTAssertEqual(
+        file.id.description,
+        "0000000000000000000000000000000000000000"
+      )
     }
   }
 }

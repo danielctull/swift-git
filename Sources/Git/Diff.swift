@@ -53,7 +53,9 @@ extension Diff {
 
       try withUnsafeMutablePointer(to: &hunks) {
         try pointer.perform(
-          git_diff_foreach, nil, nil,
+          git_diff_foreach,
+          nil,
+          nil,
           { delta, hunk, hunks in
             GitError.catching {
               let hunks = try Unwrap(hunks).assumingMemoryBound(to: [Hunk].self)
@@ -61,7 +63,10 @@ extension Diff {
               let hunk = try Unwrap(hunk?.pointee)
               hunks.pointee.append(try Hunk(delta: delta, hunk: hunk))
             }
-          }, nil, $0)
+          },
+          nil,
+          $0
+        )
       }
 
       return hunks
@@ -96,7 +101,10 @@ extension Diff.Delta {
     flags = Diff.Flags(rawValue: delta.flags)
     from = Diff.File(delta.old_file)
     to = Diff.File(delta.new_file)
-    status = Diff.Delta.Status(status: delta.status, similarity: delta.similarity)
+    status = Diff.Delta.Status(
+      status: delta.status,
+      similarity: delta.similarity
+    )
   }
 }
 

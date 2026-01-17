@@ -39,7 +39,8 @@ extension GitError {
     throw GitError(
       domain: Domain(git_error_t(UInt32(error.klass))),
       code: Code(code),
-      message: String(cString: error.message))
+      message: String(cString: error.message)
+    )
   }
 }
 
@@ -328,14 +329,16 @@ extension GitError.Code {
     case .peel: return "The requested peel operation is not possible."
     case .endOfFile: return "Unexpected end of file."
     case .invalid: return "Invalid operation or input."
-    case .uncommitted: return "Uncommitted changes in index prevented operation."
+    case .uncommitted:
+      return "Uncommitted changes in index prevented operation."
     case .directory: return "The operation is not valid for a directory."
     case .mergeConflict: return "A merge conflict exists and cannot continue."
     case .passthrough: return "A user-configured callback refused to act."
     case .iteratorOver: return "Signals end of iteration with iterator."
     case .retry: return "Internal only."
     case .mismatch: return "Hashsum mismatch in object."
-    case .indexDirty: return "Unsaved changes in the index would be overwritten."
+    case .indexDirty:
+      return "Unsaved changes in the index would be overwritten."
     case .applyFail: return "Patch application failed."
     default: return "Who knows?"
     }

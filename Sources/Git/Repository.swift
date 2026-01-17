@@ -1,5 +1,5 @@
-import libgit2
 import Foundation
+import libgit2
 
 // MARK: - Repository
 
@@ -22,7 +22,8 @@ extension Repository {
         url.withUnsafeFileSystemRepresentation { path in
           switch options {
           case .open: return git_repository_open(pointer, path)
-          case .create(let isBare): return git_repository_init(pointer, path, UInt32(isBare))
+          case .create(let isBare):
+            return git_repository_init(pointer, path, UInt32(isBare))
           }
         }
 

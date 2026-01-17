@@ -1,5 +1,5 @@
-import libgit2
 import Foundation
+import libgit2
 
 extension Repository {
 

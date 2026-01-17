@@ -12,7 +12,8 @@ private func AssertEqualResolvingSymlinks(
     try expression1()?.resolvingSymlinksInPath(),
     try expression2()?.resolvingSymlinksInPath(),
     file: file,
-    line: line)
+    line: line
+  )
 }
 
 final class RepositoryTests: XCTestCase {
@@ -22,7 +23,10 @@ final class RepositoryTests: XCTestCase {
     try FileManager.default.withTemporaryDirectory { local in
       let repo = try Repository(local: local, remote: remote)
       AssertEqualResolvingSymlinks(repo.workingDirectory, local)
-      try AssertEqualResolvingSymlinks(repo.gitDirectory, local.appending(path: ".git"))
+      try AssertEqualResolvingSymlinks(
+        repo.gitDirectory,
+        local.appending(path: ".git")
+      )
     }
   }
 
@@ -30,7 +34,10 @@ final class RepositoryTests: XCTestCase {
     try FileManager.default.withTemporaryDirectory { url in
       let repo = try Repository(url: url)
       AssertEqualResolvingSymlinks(repo.workingDirectory, url)
-      try AssertEqualResolvingSymlinks(repo.gitDirectory, url.appending(path: ".git"))
+      try AssertEqualResolvingSymlinks(
+        repo.gitDirectory,
+        url.appending(path: ".git")
+      )
     }
   }
 
@@ -46,7 +53,10 @@ final class RepositoryTests: XCTestCase {
     try FileManager.default.withTemporaryDirectory { url in
       let repo = try Repository(url: url, options: .create(isBare: false))
       AssertEqualResolvingSymlinks(repo.workingDirectory, url)
-      try AssertEqualResolvingSymlinks(repo.gitDirectory, url.appending(path: ".git"))
+      try AssertEqualResolvingSymlinks(
+        repo.gitDirectory,
+        url.appending(path: ".git")
+      )
     }
   }
 
@@ -56,7 +66,10 @@ final class RepositoryTests: XCTestCase {
       XCTAssertNoThrow(try Repository(local: local, remote: remote))
       let repo = try Repository(url: local, options: .open)
       AssertEqualResolvingSymlinks(repo.workingDirectory, local)
-      try AssertEqualResolvingSymlinks(repo.gitDirectory, local.appending(path: ".git"))
+      try AssertEqualResolvingSymlinks(
+        repo.gitDirectory,
+        local.appending(path: ".git")
+      )
     }
   }
 }

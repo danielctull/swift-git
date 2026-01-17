@@ -18,9 +18,15 @@ final class SignatureTests: XCTestCase {
 
       XCTAssertEqual(signature.name, "Tester Nameson")
       XCTAssertEqual(signature.email, "some_address@example.com")
-      XCTAssertEqual(signature.date.timeIntervalSince1970, date.timeIntervalSince1970, accuracy: 1)
       XCTAssertEqual(
-        signature.timeZone, TimeZone(secondsFromGMT: TimeZone.current.secondsFromGMT()))
+        signature.date.timeIntervalSince1970,
+        date.timeIntervalSince1970,
+        accuracy: 1
+      )
+      XCTAssertEqual(
+        signature.timeZone,
+        TimeZone(secondsFromGMT: TimeZone.current.secondsFromGMT())
+      )
     }
   }
 }

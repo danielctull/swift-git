@@ -48,7 +48,8 @@ extension Reflog {
     } element: { index in
       Item(
         pointer: Managed(pointer.get(git_reflog_entry_byindex, index)!),
-        index: index)
+        index: index
+      )
     }
   }
 
@@ -135,7 +136,8 @@ extension Reflog.Item {
       message: pointer.get(git_reflog_entry_message)! |> String.init(cString:),
       committer: pointer.get(git_reflog_entry_committer)! |> Signature.init,
       old: pointer.get(git_reflog_entry_id_old)!.pointee |> Object.ID.init,
-      new: pointer.get(git_reflog_entry_id_new)!.pointee |> Object.ID.init)
+      new: pointer.get(git_reflog_entry_id_new)!.pointee |> Object.ID.init
+    )
   }
 }
 

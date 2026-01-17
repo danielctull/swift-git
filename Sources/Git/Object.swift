@@ -103,7 +103,8 @@ extension Object.ID {
   init(reference: Managed<OpaquePointer>) throws {
     let resolved = try Managed(
       create: reference.create(git_reference_resolve),
-      free: git_reference_free)
+      free: git_reference_free
+    )
 
     self = try resolved.get(git_reference_target) |> Unwrap |> Self.init
   }

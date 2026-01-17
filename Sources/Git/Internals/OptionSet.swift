@@ -16,15 +16,21 @@ extension OptionSet where RawValue == Option {
   }
 
   public mutating func formUnion(_ other: Self) {
-    self = Self(rawValue: Option(rawValue: rawValue.rawValue | other.rawValue.rawValue))
+    self = Self(
+      rawValue: Option(rawValue: rawValue.rawValue | other.rawValue.rawValue)
+    )
   }
 
   public mutating func formIntersection(_ other: Self) {
-    self = Self(rawValue: Option(rawValue: rawValue.rawValue & other.rawValue.rawValue))
+    self = Self(
+      rawValue: Option(rawValue: rawValue.rawValue & other.rawValue.rawValue)
+    )
   }
 
   public mutating func formSymmetricDifference(_ other: Self) {
-    self = Self(rawValue: Option(rawValue: rawValue.rawValue ^ other.rawValue.rawValue))
+    self = Self(
+      rawValue: Option(rawValue: rawValue.rawValue ^ other.rawValue.rawValue)
+    )
   }
 }
 
@@ -38,7 +44,8 @@ extension OptionSet where RawValue == Option {
 // MARK: - GitOptionSet
 
 protocol GitOptionSet: OptionSet {
-  associatedtype OptionType: RawRepresentable where OptionType.RawValue == UInt32
+  associatedtype OptionType: RawRepresentable
+  where OptionType.RawValue == UInt32
 }
 
 extension GitOptionSet where RawValue == Option {
