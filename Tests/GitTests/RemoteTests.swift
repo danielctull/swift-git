@@ -5,7 +5,7 @@ import Testing
 @Suite("Remote")
 struct RemoteTests {
 
-  func testRepositoryRemotes() throws {
+  @Test func repositoryRemotes() throws {
     let remoteURL = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
       let repo = try Repository(local: local, remote: remoteURL)
@@ -16,7 +16,7 @@ struct RemoteTests {
     }
   }
 
-  func testRepositoryRemoteNamed() throws {
+  @Test func repositoryRemoteNamed() throws {
     let remoteURL = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
       let repo = try Repository(local: local, remote: remoteURL)

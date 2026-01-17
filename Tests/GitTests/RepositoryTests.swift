@@ -19,7 +19,7 @@ private func AssertEqualResolvingSymlinks(
 @Suite("Repository")
 struct RepositoryTests {
 
-  func testClone() throws {
+  @Test func clone() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
       let repo = try Repository(local: local, remote: remote)
@@ -31,7 +31,7 @@ struct RepositoryTests {
     }
   }
 
-  func testCreate() throws {
+  @Test func create() throws {
     try FileManager.default.withTemporaryDirectory { url in
       let repo = try Repository(url: url)
       AssertEqualResolvingSymlinks(repo.workingDirectory, url)
@@ -42,7 +42,7 @@ struct RepositoryTests {
     }
   }
 
-  func testCreateBare() throws {
+  @Test func createBare() throws {
     try FileManager.default.withTemporaryDirectory { url in
       let bare = try Repository(url: url, options: .create(isBare: true))
       XCTAssertNil(bare.workingDirectory)
@@ -50,7 +50,7 @@ struct RepositoryTests {
     }
   }
 
-  func testCreateNotBare() throws {
+  @Test func createNotBare() throws {
     try FileManager.default.withTemporaryDirectory { url in
       let repo = try Repository(url: url, options: .create(isBare: false))
       AssertEqualResolvingSymlinks(repo.workingDirectory, url)
@@ -61,7 +61,7 @@ struct RepositoryTests {
     }
   }
 
-  func testOpen() throws {
+  @Test func open() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
       XCTAssertNoThrow(try Repository(local: local, remote: remote))

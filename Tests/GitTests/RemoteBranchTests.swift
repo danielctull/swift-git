@@ -5,7 +5,7 @@ import Testing
 @Suite("RemoteBranch")
 struct RemoteBranchTests {
 
-  func testRepositoryRemoteBranches() throws {
+  @Test func repositoryRemoteBranches() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
       let repo = try Repository(local: local, remote: remote)
@@ -50,7 +50,7 @@ struct RemoteBranchTests {
     }
   }
 
-  func testRepositoryRemoteBranchNamed() throws {
+  @Test func repositoryRemoteBranchNamed() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
       let repo = try Repository(local: local, remote: remote)
@@ -70,7 +70,7 @@ struct RemoteBranchTests {
     }
   }
 
-  func testDelete() throws {
+  @Test func delete() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
       let repo = try Repository(local: local, remote: remote)

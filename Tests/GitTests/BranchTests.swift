@@ -5,7 +5,7 @@ import Testing
 @Suite("Branch")
 struct BranchTests {
 
-  func testRepositoryBranches() throws {
+  @Test func repositoryBranches() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
       let repo = try Repository(local: local, remote: remote)
@@ -22,7 +22,7 @@ struct BranchTests {
     }
   }
 
-  func testRepositoryCreateBranchNamed() throws {
+  @Test func repositoryCreateBranchNamed() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
       let repo = try Repository(local: local, remote: remote)
@@ -40,7 +40,7 @@ struct BranchTests {
     }
   }
 
-  func testRepositoryBranchNamed() throws {
+  @Test func repositoryBranchNamed() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
       let repo = try Repository(local: local, remote: remote)
@@ -55,7 +55,7 @@ struct BranchTests {
     }
   }
 
-  func testBranchMove() throws {
+  @Test func branchMove() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
       let repo = try Repository(local: local, remote: remote)
@@ -84,7 +84,7 @@ struct BranchTests {
     }
   }
 
-  func testDelete() throws {
+  @Test func delete() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
       let repo = try Repository(local: local, remote: remote)
@@ -98,7 +98,7 @@ struct BranchTests {
     }
   }
 
-  func testUpstream() throws {
+  @Test func upstream() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
       let repo = try Repository(local: local, remote: remote)
@@ -119,7 +119,7 @@ struct BranchTests {
     }
   }
 
-  func testSetUpstream() throws {
+  @Test func setUpstream() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
       let repo = try Repository(local: local, remote: remote)

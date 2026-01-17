@@ -5,14 +5,14 @@ import Testing
 @Suite("Config")
 struct ConfigTests {
 
-  func testInit() throws {
+  @Test func initURL() throws {
     try FileManager.default.withTemporaryDirectory { local in
       let config = try Config(url: local.appending(path: "test-config"))
       XCTAssertEqual(try Array(config.entries).count, 0)
     }
   }
 
-  func testSetString() throws {
+  @Test func setString() throws {
     try FileManager.default.withTemporaryDirectory { local in
       let config = try Config(url: local.appending(path: "test-config"))
       XCTAssertEqual(try Array(config.entries).count, 0)
@@ -27,7 +27,7 @@ struct ConfigTests {
     }
   }
 
-  func testGetString() throws {
+  @Test func getString() throws {
     try FileManager.default.withTemporaryDirectory { local in
       let config = try Config(url: local.appending(path: "test-config"))
       XCTAssertEqual(try Array(config.entries).count, 0)
@@ -37,7 +37,7 @@ struct ConfigTests {
     }
   }
 
-  func testSetInt() throws {
+  @Test func setInt() throws {
     try FileManager.default.withTemporaryDirectory { local in
       let config = try Config(url: local.appending(path: "test-config"))
       XCTAssertEqual(try Array(config.entries).count, 0)
@@ -52,7 +52,7 @@ struct ConfigTests {
     }
   }
 
-  func testGetInt() throws {
+  @Test func getInt() throws {
     try FileManager.default.withTemporaryDirectory { local in
       let config = try Config(url: local.appending(path: "test-config"))
       XCTAssertEqual(try Array(config.entries).count, 0)
@@ -62,7 +62,7 @@ struct ConfigTests {
     }
   }
 
-  func testSetBool() throws {
+  @Test func setBool() throws {
     try FileManager.default.withTemporaryDirectory { local in
       let config = try Config(url: local.appending(path: "test-config"))
       XCTAssertEqual(try Array(config.entries).count, 0)
@@ -77,7 +77,7 @@ struct ConfigTests {
     }
   }
 
-  func testGetBool() throws {
+  @Test func getBool() throws {
     try FileManager.default.withTemporaryDirectory { local in
       let config = try Config(url: local.appending(path: "test-config"))
       XCTAssertEqual(try Array(config.entries).count, 0)
@@ -87,7 +87,7 @@ struct ConfigTests {
     }
   }
 
-  func testLevel() throws {
+  @Test func level() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
 
@@ -119,7 +119,7 @@ struct ConfigTests {
     }
   }
 
-  func testLevelDescription() {
+  @Test func levelDescription() {
     XCTAssertEqual(Config.Level.programData.description, "ProgramData")
     XCTAssertEqual(Config.Level.system.description, "System")
     XCTAssertEqual(Config.Level.xdg.description, "XDG")

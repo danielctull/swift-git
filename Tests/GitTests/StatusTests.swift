@@ -5,7 +5,7 @@ import Testing
 @Suite("Status")
 struct StatusTests {
 
-  func testAddFileToWorkingDirectory() throws {
+  @Test func addFileToWorkingDirectory() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
       let repo = try Repository(local: local, remote: remote)

@@ -5,7 +5,7 @@ import Testing
 @Suite("Signature")
 struct SignatureTests {
 
-  func testDefaultSignature() throws {
+  @Test func defaultSignature() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
       let repo = try Repository(local: local, remote: remote)

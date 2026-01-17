@@ -5,7 +5,7 @@ import Testing
 @Suite("Reference")
 struct ReferenceTests {
 
-  func testThrowsUnbornBranchError() throws {
+  @Test func throwsUnbornBranchError() throws {
     try FileManager.default.withTemporaryDirectory { url in
       let repository = try Repository(url: url)
       XCTAssertThrowsError(try repository.head) { error in
@@ -14,7 +14,7 @@ struct ReferenceTests {
     }
   }
 
-  func testHead() throws {
+  @Test func head() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
       let repository = try Repository(local: local, remote: remote)
@@ -28,7 +28,7 @@ struct ReferenceTests {
     }
   }
 
-  func testRepositoryReferences() throws {
+  @Test func repositoryReferences() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
       let repo = try Repository(local: local, remote: remote)
@@ -85,7 +85,7 @@ struct ReferenceTests {
     }
   }
 
-  func testDelete() throws {
+  @Test func delete() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
       let repo = try Repository(local: local, remote: remote)
@@ -169,7 +169,7 @@ struct ReferenceTests {
     }
   }
 
-  func testRemoveReferenceByID() throws {
+  @Test func removeReferenceByID() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
       let repo = try Repository(local: local, remote: remote)
@@ -255,7 +255,7 @@ struct ReferenceTests {
     }
   }
 
-  func testRemoveReference() throws {
+  @Test func removeReference() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
       let repo = try Repository(local: local, remote: remote)

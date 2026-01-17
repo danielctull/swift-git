@@ -5,7 +5,7 @@ import Testing
 @Suite("Reset")
 struct ResetTests {
 
-  func testResetSoft() throws {
+  @Test func resetSoft() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
       let repo = try Repository(local: local, remote: remote)
@@ -49,7 +49,7 @@ struct ResetTests {
     }
   }
 
-  func testResetMixed() throws {
+  @Test func resetMixed() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
       let repo = try Repository(local: local, remote: remote)
@@ -93,7 +93,7 @@ struct ResetTests {
     }
   }
 
-  func testResetHard() throws {
+  @Test func resetHard() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
       let repo = try Repository(local: local, remote: remote)

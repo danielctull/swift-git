@@ -5,7 +5,7 @@ import Testing
 @Suite("Commit")
 struct CommitTests {
 
-  func testRepositoryCommitForString() throws {
+  @Test func repositoryCommitForString() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
       let repo = try Repository(local: local, remote: remote)
@@ -39,7 +39,7 @@ struct CommitTests {
     }
   }
 
-  func testRepositoryCommits() throws {
+  @Test func repositoryCommits() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
       let repo = try Repository(local: local, remote: remote)
@@ -89,7 +89,7 @@ struct CommitTests {
     }
   }
 
-  func testRepositoryCommitsZeroSearch() throws {
+  @Test func repositoryCommitsZeroSearch() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
       let repo = try Repository(local: local, remote: remote)
@@ -98,7 +98,7 @@ struct CommitTests {
     }
   }
 
-  func testCommitTree() throws {
+  @Test func commitTree() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
       let repo = try Repository(local: local, remote: remote)

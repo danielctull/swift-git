@@ -6,7 +6,7 @@ import libgit2
 @Suite("GitError")
 struct GitErrorTests {
 
-  func testCatching() {
+  @Test func catching() {
     XCTAssertEqual(
       GitError.catching { throw GitError(code: .unknown) },
       GIT_ERROR.rawValue
@@ -128,7 +128,7 @@ struct GitErrorTests {
     XCTAssertEqual(GitError.catching { throw Failure() }, GIT_EUSER.rawValue)
   }
 
-  func testDescription() {
+  @Test func description() {
     XCTAssertEqual(
       GitError(domain: .none, code: .unknown, message: "message").description,
       "[None | Unknown] message"
@@ -294,7 +294,7 @@ struct GitErrorTests {
     )
   }
 
-  func testDomain() {
+  @Test func domain() {
     XCTAssertEqual(GitError.Domain.none.description, "None")
     XCTAssertEqual(GitError.Domain.noMemory.description, "No Memory")
     XCTAssertEqual(GitError.Domain.os.description, "OS")
@@ -333,7 +333,7 @@ struct GitErrorTests {
     XCTAssertEqual(GitError.Domain.internal.description, "Internal")
   }
 
-  func testCodeDescription() {
+  @Test func codeDescription() {
     XCTAssertEqual(GitError.Code.unknown.description, "Unknown")
     XCTAssertEqual(GitError.Code.notFound.description, "Not Found")
     XCTAssertEqual(GitError.Code.exists.description, "Exists")
@@ -364,7 +364,7 @@ struct GitErrorTests {
     XCTAssertEqual(GitError.Code.applyFail.description, "Apply Fail")
   }
 
-  func testCodeDetail() {
+  @Test func codeDetail() {
     XCTAssertEqual(GitError.Code.unknown.detail, "General error.")
     XCTAssertEqual(
       GitError.Code.notFound.detail,
