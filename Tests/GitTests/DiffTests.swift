@@ -19,7 +19,7 @@ struct DiffTests {
       #expect(delta.status == .added)
       #expect(delta.flags == [])
 
-      XCTAssertNil(delta.from)
+      #expect(delta.from == nil)
 
       let file = try #require(delta.to)
       #expect(file.flags == [.validID, .exists])

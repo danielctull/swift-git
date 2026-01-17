@@ -40,7 +40,7 @@ struct RepositoryTests {
   @Test func createBare() throws {
     try FileManager.default.withTemporaryDirectory { url in
       let bare = try Repository(url: url, options: .create(isBare: true))
-      XCTAssertNil(bare.workingDirectory)
+      #expect(bare.workingDirectory == nil)
       try AssertEqualResolvingSymlinks(bare.gitDirectory, url)
     }
   }
