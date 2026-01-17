@@ -86,7 +86,7 @@ struct CommitTests {
         return
       }
       #expect(blob.id.description == "e5c0a8638a0d8dfa0c733f9d666c511f7e1f9a96")
-      XCTAssertFalse(blob.isBinary)
+      #expect(!blob.isBinary)
       #expect(String(data: blob.data, encoding: .utf8) == "This is a test repository.")
     }
   }
