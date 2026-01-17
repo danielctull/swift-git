@@ -65,7 +65,7 @@ struct BranchTests {
         #expect(moved.reference.description == "refs/heads/moved")
         #expect(moved.target.description == "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
       }
-      XCTAssertThrowsError(try repo.branch(named: "main"))
+      #expect(throws: (any Error).self) { try repo.branch(named: "main") }
     }
   }
 
@@ -79,7 +79,7 @@ struct BranchTests {
       let main2 = try repo.createBranch(named: "main2", at: commit)
       XCTAssertNoThrow(try repo.branch(named: "main2"))
       try repo.delete(.branch(main2))
-      XCTAssertThrowsError(try repo.branch(named: "main2"))
+      #expect(throws: (any Error).self) { try repo.branch(named: "main2") }
     }
   }
 
@@ -106,7 +106,7 @@ struct BranchTests {
       let commit = try #require(Array(repo.commits(for: .branch(main))).first)
 
       let main2 = try repo.createBranch(named: "main2", at: commit)
-      XCTAssertThrowsError(try main2.upstream)
+      #expect(throws: (any Error).self) { try main2.upstream }
 
       try main2.setUpstream(main.upstream)
       let remoteBranch = try main.upstream

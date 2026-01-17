@@ -8,9 +8,10 @@ struct ReferenceTests {
   @Test func throwsUnbornBranchError() throws {
     try FileManager.default.withTemporaryDirectory { url in
       let repository = try Repository(url: url)
-      XCTAssertThrowsError(try repository.head) { error in
-        #expect((error as? GitError)?.code == .unbornBranch)
-      }
+      let error = try #require(
+        #expect(throws: GitError.self) { try repository.head }
+      )
+      #expect(error.code == .unbornBranch)
     }
   }
 
@@ -118,7 +119,9 @@ struct ReferenceTests {
         #expect(try references.value(at: 4).id == "refs/tags/lightweight-tag")
       }
 
-      XCTAssertThrowsError(try repo.remove("refs/heads/not-here"))
+      #expect(throws: (any Error).self) {
+        try repo.remove("refs/heads/not-here")
+      }
 
       do {
         try repo.remove("refs/heads/main")

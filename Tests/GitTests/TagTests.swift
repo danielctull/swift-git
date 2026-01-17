@@ -48,7 +48,7 @@ struct TagTests {
       let tag0 = try #require(tags.first)
       try repo.delete(.tag(tag0))
       #expect(try repo.tags.count == 1)
-      XCTAssertThrowsError(try repo.tag(named: tag0.name))
+      #expect(throws: (any Error).self) { try repo.tag(named: tag0.name) }
     }
   }
 }
