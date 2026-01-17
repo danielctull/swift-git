@@ -13,7 +13,7 @@ struct CommitTests {
         for: "41c143541c9d917db83ce4e920084edbf2a4177e"
       )
       #expect(commit.summary == "Add a file")
-      XCTAssertNil(commit.body)
+      #expect(commit.body == nil)
       #expect(commit.id.description == "41c143541c9d917db83ce4e920084edbf2a4177e")
       #expect(commit.author.name == "Daniel Tull")
       #expect(commit.author.email == "dt@danieltull.co.uk")
@@ -37,7 +37,7 @@ struct CommitTests {
       #expect(commits.count == 4)
       let last = try #require(commits.last)
       #expect(last.summary == "Add readme")
-      XCTAssertNil(last.body)
+      #expect(last.body == nil)
       #expect(last.id.description == "17e26bc76cff375603e7173dac31e5183350e559")
       #expect(last.author.name == "Daniel Tull")
       #expect(last.author.email == "dt@danieltull.co.uk")

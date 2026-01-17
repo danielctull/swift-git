@@ -20,11 +20,11 @@ struct StatusTests {
 
       let entry = try #require(entries.first)
       #expect(entry.status == .workingTreeNew)
-      XCTAssertNil(entry.headToIndex)
+      #expect(entry.headToIndex == nil)
 
       let delta = try #require(entry.indexToWorkingDirectory)
       #expect(delta.status == .untracked)
-      XCTAssertNil(delta.from)
+      #expect(delta.from == nil)
       #expect(delta.flags == [])
 
       let file = try #require(delta.to)
