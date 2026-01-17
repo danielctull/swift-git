@@ -1,6 +1,6 @@
 import Foundation
 import Git
-import XCTest
+import Testing
 
 private func AssertEqualResolvingSymlinks(
   _ expression1: @autoclosure () throws -> URL?,

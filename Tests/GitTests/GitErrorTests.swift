@@ -1,4 +1,4 @@
-import XCTest
+import Testing
 import libgit2
 
 @testable import Git
