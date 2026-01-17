@@ -25,11 +25,9 @@ struct ReflogTests {
       #expect(item.committer.email == "dt@danieltull.co.uk")
       // The date for a reflog item is when it occurred, in this case when
       // the repo was cloned at the start of this test.
-      XCTAssertEqual(
-        item.committer.date.timeIntervalSince1970,
-        cloneDate.timeIntervalSince1970,
-        accuracy: 1
-      )
+      let timeInterval = item.committer.date.timeIntervalSince(cloneDate)
+      #expect(timeInterval < 1)
+      #expect(timeInterval > -1)
       #expect(item.committer.timeZone == TimeZone(secondsFromGMT: TimeZone.current.secondsFromGMT()))
     }
   }

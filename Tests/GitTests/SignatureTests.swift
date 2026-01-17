@@ -19,11 +19,9 @@ struct SignatureTests {
 
       #expect(signature.name == "Tester Nameson")
       #expect(signature.email == "some_address@example.com")
-      XCTAssertEqual(
-        signature.date.timeIntervalSince1970,
-        date.timeIntervalSince1970,
-        accuracy: 1
-      )
+      let timeInterval = signature.date.timeIntervalSince(date)
+      #expect(timeInterval < 1)
+      #expect(timeInterval > -1)
       #expect(signature.timeZone == TimeZone(secondsFromGMT: TimeZone.current.secondsFromGMT()))
     }
   }
