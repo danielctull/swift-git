@@ -4,22 +4,10 @@ import XCTest
 extension FileManager {
 
   func withTemporaryDirectory(_ perform: (URL) throws -> Void) throws {
-    let url = try Bundle.module.bundleURL
-      .parent(where: { $0.lastPathComponent == "Debug" })
-      .appendingPathComponent(UUID().uuidString)
+    let url = temporaryDirectory.appendingPathComponent(UUID().uuidString)
     try createDirectory(at: url, withIntermediateDirectories: true)
+    defer { try? removeItem(at: url) }
     try perform(url)
-    try removeItem(at: url)
-  }
-}
-
-extension URL {
-
-  func parent(where predicate: (URL) -> Bool) throws -> URL {
-    if predicate(self) { return self }
-    struct URLNotFound: Error {}
-    guard !pathComponents.isEmpty else { throw URLNotFound() }
-    return try deletingLastPathComponent().parent(where: predicate)
   }
 }
 
