@@ -8,9 +8,11 @@ private func AssertEqualResolvingSymlinks(
   file: StaticString = #filePath,
   line: UInt = #line
 ) rethrows {
+  // Use standardized + resolvingSymlinksInPath to normalize URLs across platforms.
+  // Linux Foundation may add trailing slashes to directory URLs.
   XCTAssertEqual(
-    try expression1()?.resolvingSymlinksInPath(),
-    try expression2()?.resolvingSymlinksInPath(),
+    try expression1()?.standardized.resolvingSymlinksInPath(),
+    try expression2()?.standardized.resolvingSymlinksInPath(),
     file: file,
     line: line)
 }
