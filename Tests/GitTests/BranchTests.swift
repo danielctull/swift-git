@@ -77,7 +77,7 @@ struct BranchTests {
       let commits = try Array(repo.commits(for: .branch(main)))
       let commit = try #require(commits.first)
       let main2 = try repo.createBranch(named: "main2", at: commit)
-      XCTAssertNoThrow(try repo.branch(named: "main2"))
+      #expect(throws: Never.self) { try repo.branch(named: "main2") }
       try repo.delete(.branch(main2))
       #expect(throws: (any Error).self) { try repo.branch(named: "main2") }
     }
