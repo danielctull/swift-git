@@ -96,13 +96,13 @@ extension Repository {
 
   fileprivate var current: Commit {
     get throws {
-      try Array(#require(commits)).value(at: 0)
+      try Array(commits).value(at: 0)
     }
   }
 
   fileprivate var previous: Commit {
     get throws {
-      try Array(#require(commits)).value(at: 1)
+      try Array(commits).value(at: 1)
     }
   }
 }

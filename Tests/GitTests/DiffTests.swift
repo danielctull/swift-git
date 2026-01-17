@@ -51,7 +51,7 @@ struct DiffTests {
       #expect(hunks.count == 1)
       let hunk = try hunks.value(at: 0)
 
-      let file = try #require(hunk.file)
+      let file = hunk.file
       #expect(file.flags == [.notBinary, .validID, .exists, .validSize])
       #expect(file.size == 20)
       #expect(file.path == "file.text")
