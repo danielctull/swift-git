@@ -17,7 +17,7 @@ struct ReflogTests {
       let repo = try Repository(local: local, remote: remote)
       let reflog = try repo.reflog
       #expect(reflog.items.count == 1)
-      let item = try XCTUnwrap(reflog.items.last)
+      let item = try #require(reflog.items.last)
       //            #expect(item.message == "checkout: moving from master to main")
       #expect(item.old.description == "0000000000000000000000000000000000000000")
       #expect(item.new.description == "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
@@ -45,7 +45,7 @@ struct ReflogTests {
       try reflog.append(.testItem(id: repo.head.target))
       #expect(reflog.items.count == 1)
 
-      let item = try XCTUnwrap(reflog.items.first)
+      let item = try #require(reflog.items.first)
       #expect(item.message == "Test Message")
       #expect(item.old.description == "0000000000000000000000000000000000000000")
       #expect(item.new.description == "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
@@ -67,7 +67,7 @@ struct ReflogTests {
       try reflog.append(.testItem(id: repo.head.target))
       #expect(reflog.items.count == 1)
 
-      try reflog.remove(XCTUnwrap(reflog.items.first))
+      try reflog.remove(#require(reflog.items.first))
       #expect(reflog.items.count == 0)
     }
   }
@@ -89,7 +89,7 @@ struct ReflogTests {
         let reflog = try repo.reflog(named: "CUSTOM")
         #expect(reflog.items.count == 1)
 
-        let item = try XCTUnwrap(reflog.items.first)
+        let item = try #require(reflog.items.first)
         #expect(item.message == "Test Message")
         #expect(item.old.description == "0000000000000000000000000000000000000000")
         #expect(item.new.description == "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
@@ -121,7 +121,7 @@ struct ReflogTests {
         let reflog = try repo.reflog(named: "NEW")
         #expect(reflog.items.count == 1)
 
-        let item = try XCTUnwrap(reflog.items.first)
+        let item = try #require(reflog.items.first)
         #expect(item.message == "Test Message")
         #expect(item.old.description == "0000000000000000000000000000000000000000")
         #expect(item.new.description == "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
@@ -163,7 +163,7 @@ extension Reflog.Item.Draft {
         name: "Test Name",
         email: "Test Email",
         date: Date(timeIntervalSince1970: 1999),
-        timeZone: XCTUnwrap(TimeZone(secondsFromGMT: 120))
+        timeZone: #require(TimeZone(secondsFromGMT: 120))
       )
     )
   }
