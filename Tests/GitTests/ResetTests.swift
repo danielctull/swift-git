@@ -25,12 +25,12 @@ struct ResetTests {
       #expect(try repo.current.id.description == "41c143541c9d917db83ce4e920084edbf2a4177e")
       #expect(try repo.status.count == 2)
 
-      let addition = try XCTUnwrap(
+      let addition = try #require(
         repo.status.first(where: { $0.status == .indexNew })
       )
       #expect(addition.headToIndex?.to?.path == "file.txt")
 
-      let deletion = try XCTUnwrap(
+      let deletion = try #require(
         repo.status.first(where: { $0.status == .indexDeleted })
       )
       #expect(deletion.headToIndex?.from?.path == "file.text")
@@ -57,12 +57,12 @@ struct ResetTests {
       #expect(try repo.current.id.description == "41c143541c9d917db83ce4e920084edbf2a4177e")
       #expect(try repo.status.count == 2)
 
-      let addition = try XCTUnwrap(
+      let addition = try #require(
         repo.status.first(where: { $0.status == .workingTreeNew })
       )
       #expect(addition.indexToWorkingDirectory?.to?.path == "file.txt")
 
-      let deletion = try XCTUnwrap(
+      let deletion = try #require(
         repo.status.first(where: { $0.status == .workingTreeDeleted })
       )
       #expect(deletion.indexToWorkingDirectory?.from?.path == "file.text")
@@ -96,13 +96,13 @@ extension Repository {
 
   fileprivate var current: Commit {
     get throws {
-      try Array(XCTUnwrap(commits)).value(at: 0)
+      try Array(#require(commits)).value(at: 0)
     }
   }
 
   fileprivate var previous: Commit {
     get throws {
-      try Array(XCTUnwrap(commits)).value(at: 1)
+      try Array(#require(commits)).value(at: 1)
     }
   }
 }

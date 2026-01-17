@@ -12,7 +12,7 @@ struct TagTests {
       let tags = try repo.tags
       #expect(tags.count == 2)
 
-      let tag0 = try XCTUnwrap(tags.first)
+      let tag0 = try #require(tags.first)
       #expect(tag0.id.description == "refs/tags/1.0")
       #expect(tag0.reference.description == "refs/tags/1.0")
       #expect(tag0.name == "1.0")
@@ -28,7 +28,7 @@ struct TagTests {
       //            #expect(annotatedTag.tagger.name == "Daniel Tull")
       //            #expect(annotatedTag.tagger.timeZone == TimeZone(secondsFromGMT: 3600))
 
-      let tag1 = try XCTUnwrap(tags.last)
+      let tag1 = try #require(tags.last)
       #expect(tag1.id.description == "refs/tags/lightweight-tag")
       #expect(tag1.reference.description == "refs/tags/lightweight-tag")
       #expect(tag1.name == "lightweight-tag")
@@ -45,7 +45,7 @@ struct TagTests {
       let repo = try Repository(local: local, remote: remote)
       let tags = try repo.tags
       #expect(tags.count == 2)
-      let tag0 = try XCTUnwrap(tags.first)
+      let tag0 = try #require(tags.first)
       try repo.delete(.tag(tag0))
       #expect(try repo.tags.count == 1)
       XCTAssertThrowsError(try repo.tag(named: tag0.name))

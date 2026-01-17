@@ -20,7 +20,7 @@ struct ConfigTests {
       try config.set("Value", for: "Test.Key")
       #expect(try Array(config.entries).count == 1)
 
-      let entry = try XCTUnwrap(Array(config.entries).first)
+      let entry = try #require(Array(config.entries).first)
       #expect(entry.name == "test.key")
       #expect(entry.value == "Value")
       #expect(entry.level == .local)
@@ -45,7 +45,7 @@ struct ConfigTests {
       try config.set(123456, for: "Some.Number")
 
       #expect(try Array(config.entries).count == 1)
-      let entry = try XCTUnwrap(Array(config.entries).first)
+      let entry = try #require(Array(config.entries).first)
       #expect(entry.name == "some.number")
       #expect(entry.value == "123456")
       #expect(entry.level == .local)
@@ -70,7 +70,7 @@ struct ConfigTests {
       try config.set(true, for: "Some.Bool")
 
       #expect(try Array(config.entries).count == 1)
-      let entry = try XCTUnwrap(Array(config.entries).first)
+      let entry = try #require(Array(config.entries).first)
       #expect(entry.name == "some.bool")
       #expect(entry.value == "true")
       #expect(entry.level == .local)
@@ -103,7 +103,7 @@ struct ConfigTests {
         let new = try Set(local.entries).subtracting(old)
 
         #expect(new.count == 1)
-        let first = try XCTUnwrap(new.first)
+        let first = try #require(new.first)
         #expect(first.name == "test.key")
         #expect(first.value == "Test Value")
         #expect(first.level == .local)
@@ -112,7 +112,7 @@ struct ConfigTests {
       let new = try Set(config.entries).subtracting(old)
 
       #expect(new.count == 1)
-      let first = try XCTUnwrap(new.first)
+      let first = try #require(new.first)
       #expect(first.name == "test.key")
       #expect(first.value == "Test Value")
       #expect(first.level == .local)

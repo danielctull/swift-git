@@ -32,10 +32,10 @@ struct CommitTests {
     try FileManager.default.withTemporaryDirectory { local in
       let repo = try Repository(local: local, remote: remote)
       let branches = try Array(repo.branches)
-      let main = try XCTUnwrap(branches.first(where: { $0.name == "main" }))
+      let main = try #require(branches.first(where: { $0.name == "main" }))
       let commits = try Array(repo.commits)
       #expect(commits.count == 4)
-      let last = try XCTUnwrap(commits.last)
+      let last = try #require(commits.last)
       #expect(last.summary == "Add readme")
       XCTAssertNil(last.body)
       #expect(last.id.description == "17e26bc76cff375603e7173dac31e5183350e559")
@@ -50,7 +50,7 @@ struct CommitTests {
       #expect(last.debugDescription == "Commit(id: 17e26bc, summary: Add readme)")
       #expect(try last.parents.count == 0)
       #expect(last.parentIDs.count == 0)
-      let first = try XCTUnwrap(commits.first)
+      let first = try #require(commits.first)
       #expect(main.target == first.id.objectID)
       let parentIDs = Array(first.parentIDs)
       #expect(parentIDs.count == 2)
@@ -73,7 +73,7 @@ struct CommitTests {
     try FileManager.default.withTemporaryDirectory { local in
       let repo = try Repository(local: local, remote: remote)
       let commits = try Array(repo.commits)
-      let last = try XCTUnwrap(commits.last)
+      let last = try #require(commits.last)
       let tree = try last.tree
       #expect(tree.id.description == "017acad83ffb24d951581417f150bf31673e45b6")
       #expect(tree.entries.count == 1)

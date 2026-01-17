@@ -21,7 +21,7 @@ struct DiffTests {
 
       XCTAssertNil(delta.from)
 
-      let file = try XCTUnwrap(delta.to)
+      let file = try #require(delta.to)
       #expect(file.flags == [.validID, .exists])
       #expect(file.size == 0)
       #expect(file.path == "file.text")
@@ -51,7 +51,7 @@ struct DiffTests {
       #expect(hunks.count == 1)
       let hunk = try hunks.value(at: 0)
 
-      let file = try XCTUnwrap(hunk.file)
+      let file = try #require(hunk.file)
       #expect(file.flags == [.notBinary, .validID, .exists, .validSize])
       #expect(file.size == 20)
       #expect(file.path == "file.text")
