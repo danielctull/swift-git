@@ -4,10 +4,10 @@ import XCTest
 extension FileManager {
 
   func withTemporaryDirectory(_ perform: (URL) throws -> Void) throws {
-    let url = temporaryDirectory.appendingPathComponent(UUID().uuidString)
-    try createDirectory(at: url, withIntermediateDirectories: true)
-    defer { try? removeItem(at: url) }
-    try perform(url)
+    let scratchDirectory = temporaryDirectory.appendingPathComponent(UUID().uuidString)
+    try createDirectory(at: scratchDirectory, withIntermediateDirectories: true)
+    defer { try? removeItem(at: scratchDirectory) }
+    try perform(scratchDirectory)
   }
 }
 
