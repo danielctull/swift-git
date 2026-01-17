@@ -5,78 +5,75 @@ import Testing
 @Suite("RemoteBranch")
 struct RemoteBranchTests {
 
-  @Test func repositoryRemoteBranches() throws {
+  @Test(.scratchDirectory)
+  func repositoryRemoteBranches() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
-    try FileManager.default.withTemporaryDirectory { local in
-      let repo = try Repository.clone(remote, to: local)
-      let remoteBranches = try Array(repo.remoteBranches)
-      #expect(remoteBranches.count == 2)
-      #expect(
-        try remoteBranches.value(at: 0).id.description
-          == "refs/remotes/origin/HEAD"
-      )
-      #expect(
-        try remoteBranches.value(at: 0).reference.description
-          == "refs/remotes/origin/HEAD"
-      )
-      #expect(try remoteBranches.value(at: 0).name.description == "origin/HEAD")
-      #expect(try remoteBranches.value(at: 0).name.remote == "origin")
-      #expect(try remoteBranches.value(at: 0).name.branch == "HEAD")
-      #expect(
-        try remoteBranches.value(at: 0).target.description
-          == "b1d2dbab22a62771db0c040ccf396dbbfdcef052"
-      )
-      #expect(
-        try remoteBranches.value(at: 1).id.description
-          == "refs/remotes/origin/main"
-      )
-      #expect(
-        try remoteBranches.value(at: 1).reference.description
-          == "refs/remotes/origin/main"
-      )
-      #expect(try remoteBranches.value(at: 1).name.description == "origin/main")
-      #expect(try remoteBranches.value(at: 1).name.remote == "origin")
-      #expect(try remoteBranches.value(at: 1).name.branch == "main")
-      #expect(
-        try remoteBranches.value(at: 1).target.description
-          == "b1d2dbab22a62771db0c040ccf396dbbfdcef052"
-      )
-    }
+    let repo = try Repository.clone(remote, to: .scratchDirectory)
+    let remoteBranches = try Array(repo.remoteBranches)
+    #expect(remoteBranches.count == 2)
+    #expect(
+      try remoteBranches.value(at: 0).id.description
+        == "refs/remotes/origin/HEAD"
+    )
+    #expect(
+      try remoteBranches.value(at: 0).reference.description
+        == "refs/remotes/origin/HEAD"
+    )
+    #expect(try remoteBranches.value(at: 0).name.description == "origin/HEAD")
+    #expect(try remoteBranches.value(at: 0).name.remote == "origin")
+    #expect(try remoteBranches.value(at: 0).name.branch == "HEAD")
+    #expect(
+      try remoteBranches.value(at: 0).target.description
+        == "b1d2dbab22a62771db0c040ccf396dbbfdcef052"
+    )
+    #expect(
+      try remoteBranches.value(at: 1).id.description
+        == "refs/remotes/origin/main"
+    )
+    #expect(
+      try remoteBranches.value(at: 1).reference.description
+        == "refs/remotes/origin/main"
+    )
+    #expect(try remoteBranches.value(at: 1).name.description == "origin/main")
+    #expect(try remoteBranches.value(at: 1).name.remote == "origin")
+    #expect(try remoteBranches.value(at: 1).name.branch == "main")
+    #expect(
+      try remoteBranches.value(at: 1).target.description
+        == "b1d2dbab22a62771db0c040ccf396dbbfdcef052"
+    )
   }
 
-  @Test func repositoryRemoteBranchNamed() throws {
+  @Test(.scratchDirectory)
+  func repositoryRemoteBranchNamed() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
-    try FileManager.default.withTemporaryDirectory { local in
-      let repo = try Repository.clone(remote, to: local)
-      let remoteBranch = try repo.branch(on: "origin", named: "main")
-      #expect(remoteBranch.name.description == "origin/main")
-      #expect(remoteBranch.id.description == "refs/remotes/origin/main")
-      #expect(remoteBranch.reference.description == "refs/remotes/origin/main")
-      #expect(remoteBranch.name.remote == "origin")
-      #expect(remoteBranch.name.branch == "main")
-      #expect(
-        remoteBranch.target.description
-          == "b1d2dbab22a62771db0c040ccf396dbbfdcef052"
-      )
-    }
+    let repo = try Repository.clone(remote, to: .scratchDirectory)
+    let remoteBranch = try repo.branch(on: "origin", named: "main")
+    #expect(remoteBranch.name.description == "origin/main")
+    #expect(remoteBranch.id.description == "refs/remotes/origin/main")
+    #expect(remoteBranch.reference.description == "refs/remotes/origin/main")
+    #expect(remoteBranch.name.remote == "origin")
+    #expect(remoteBranch.name.branch == "main")
+    #expect(
+      remoteBranch.target.description
+        == "b1d2dbab22a62771db0c040ccf396dbbfdcef052"
+    )
   }
 
-  @Test func delete() throws {
+  @Test(.scratchDirectory)
+  func delete() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
-    try FileManager.default.withTemporaryDirectory { local in
-      let repo = try Repository.clone(remote, to: local)
-      let remoteBranch = try repo.branch(on: "origin", named: "main")
-      try repo.delete(.remoteBranch(remoteBranch))
-      #expect(throws: (any Error).self) {
+    let repo = try Repository.clone(remote, to: .scratchDirectory)
+    let remoteBranch = try repo.branch(on: "origin", named: "main")
+    try repo.delete(.remoteBranch(remoteBranch))
+    #expect(throws: (any Error).self) {
+      try repo.branch(on: "origin", named: "main")
+    }
+
+    // Does not delete it on remote
+    try ScratchDirectory {
+      let repo = try Repository.clone(remote, to: .scratchDirectory)
+      #expect(throws: Never.self) {
         try repo.branch(on: "origin", named: "main")
-      }
-
-      // Does not delete it on remote
-      try FileManager.default.withTemporaryDirectory { local in
-        let repo = try Repository.clone(remote, to: local)
-        #expect(throws: Never.self) {
-          try repo.branch(on: "origin", named: "main")
-        }
       }
     }
   }

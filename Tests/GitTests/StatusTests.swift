@@ -5,33 +5,32 @@ import Testing
 @Suite("Status")
 struct StatusTests {
 
-  @Test func addFileToWorkingDirectory() throws {
+  @Test(.scratchDirectory)
+  func addFileToWorkingDirectory() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
-    try FileManager.default.withTemporaryDirectory { local in
-      let repo = try Repository.clone(remote, to: local)
-      #expect(try repo.status.count == 0)
+    let repo = try Repository.clone(remote, to: .scratchDirectory)
+    #expect(try repo.status.count == 0)
 
-      let path = UUID().uuidString
-      let content = UUID().uuidString
-      try Data(content.utf8).write(to: local.appending(path: path))
+    let path = UUID().uuidString
+    let content = UUID().uuidString
+    try Data(content.utf8).write(to: URL.scratchDirectory.appending(path: path))
 
-      let entries = try repo.status
-      #expect(entries.count == 1)
+    let entries = try repo.status
+    #expect(entries.count == 1)
 
-      let entry = try #require(entries.first)
-      #expect(entry.status == .workingTreeNew)
-      #expect(entry.headToIndex == nil)
+    let entry = try #require(entries.first)
+    #expect(entry.status == .workingTreeNew)
+    #expect(entry.headToIndex == nil)
 
-      let delta = try #require(entry.indexToWorkingDirectory)
-      #expect(delta.status == .untracked)
-      #expect(delta.from == nil)
-      #expect(delta.flags == [])
+    let delta = try #require(entry.indexToWorkingDirectory)
+    #expect(delta.status == .untracked)
+    #expect(delta.from == nil)
+    #expect(delta.flags == [])
 
-      let file = try #require(delta.to)
-      #expect(file.path == path)
-      #expect(file.flags == [.exists, .validSize])
-      #expect(file.size == UInt64(content.count))
-      #expect(file.id.description == "0000000000000000000000000000000000000000")
-    }
+    let file = try #require(delta.to)
+    #expect(file.path == path)
+    #expect(file.flags == [.exists, .validSize])
+    #expect(file.size == UInt64(content.count))
+    #expect(file.id.description == "0000000000000000000000000000000000000000")
   }
 }

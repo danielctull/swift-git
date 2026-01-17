@@ -17,15 +17,14 @@ private func AssertEqualResolvingSymlinks(
 @Suite("Clone")
 struct CloneTests {
 
-  @Test func clone() throws {
+  @Test(.scratchDirectory)
+  func clone() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
-    try FileManager.default.withTemporaryDirectory { local in
-      let repo = try Repository.clone(remote, to: local)
-      AssertEqualResolvingSymlinks(repo.workingDirectory, local)
-      try AssertEqualResolvingSymlinks(
-        repo.gitDirectory,
-        local.appending(path: ".git")
-      )
-    }
+    let repo = try Repository.clone(remote, to: .scratchDirectory)
+    AssertEqualResolvingSymlinks(repo.workingDirectory, URL.scratchDirectory)
+    try AssertEqualResolvingSymlinks(
+      repo.gitDirectory,
+      URL.scratchDirectory.appending(path: ".git")
+    )
   }
 }

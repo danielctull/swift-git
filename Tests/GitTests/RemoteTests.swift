@@ -5,24 +5,22 @@ import Testing
 @Suite("Remote")
 struct RemoteTests {
 
-  @Test func repositoryRemotes() throws {
+  @Test(.scratchDirectory)
+  func repositoryRemotes() throws {
     let remoteURL = try Bundle.module.url(forRepository: "Test.git")
-    try FileManager.default.withTemporaryDirectory { local in
-      let repo = try Repository.clone(remoteURL, to: local)
-      let remotes = try repo.remotes
-      #expect(remotes.count == 1)
-      #expect(remotes.first?.name == "origin")
-      #expect(remotes.first?.url == remoteURL)
-    }
+    let repo = try Repository.clone(remoteURL, to: .scratchDirectory)
+    let remotes = try repo.remotes
+    #expect(remotes.count == 1)
+    #expect(remotes.first?.name == "origin")
+    #expect(remotes.first?.url == remoteURL)
   }
 
-  @Test func repositoryRemoteNamed() throws {
+  @Test(.scratchDirectory)
+  func repositoryRemoteNamed() throws {
     let remoteURL = try Bundle.module.url(forRepository: "Test.git")
-    try FileManager.default.withTemporaryDirectory { local in
-      let repo = try Repository.clone(remoteURL, to: local)
-      let remote = try repo.remote(named: "origin")
-      #expect(remote.name == "origin")
-      #expect(remote.url == remoteURL)
-    }
+    let repo = try Repository.clone(remoteURL, to: .scratchDirectory)
+    let remote = try repo.remote(named: "origin")
+    #expect(remote.name == "origin")
+    #expect(remote.url == remoteURL)
   }
 }

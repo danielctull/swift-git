@@ -5,111 +5,110 @@ import Testing
 @Suite("Config")
 struct ConfigTests {
 
-  @Test func initURL() throws {
-    try FileManager.default.withTemporaryDirectory { local in
-      let config = try Config(url: local.appending(path: "test-config"))
-      #expect(try Array(config.entries).count == 0)
-    }
+  @Test(.scratchDirectory)
+  func initURL() throws {
+    let config = try Config(
+      url: URL.scratchDirectory.appending(path: "test-config")
+    )
+    #expect(try Array(config.entries).count == 0)
   }
 
-  @Test func setString() throws {
-    try FileManager.default.withTemporaryDirectory { local in
-      let config = try Config(url: local.appending(path: "test-config"))
-      #expect(try Array(config.entries).count == 0)
+  @Test(.scratchDirectory)
+  func setString() throws {
+    let config = try Config(
+      url: URL.scratchDirectory.appending(path: "test-config")
+    )
+    #expect(try Array(config.entries).count == 0)
 
-      try config.set("Value", for: "Test.Key")
-      #expect(try Array(config.entries).count == 1)
+    try config.set("Value", for: "Test.Key")
+    #expect(try Array(config.entries).count == 1)
 
-      let entry = try #require(Array(config.entries).first)
-      #expect(entry.name == "test.key")
-      #expect(entry.value == "Value")
-      #expect(entry.level == .local)
-    }
+    let entry = try #require(Array(config.entries).first)
+    #expect(entry.name == "test.key")
+    #expect(entry.value == "Value")
+    #expect(entry.level == .local)
+
   }
 
-  @Test func getString() throws {
-    try FileManager.default.withTemporaryDirectory { local in
-      let config = try Config(url: local.appending(path: "test-config"))
-      #expect(try Array(config.entries).count == 0)
-      try config.set("Value", for: "Test.Key")
-      #expect(try Array(config.entries).count == 1)
-      #expect(try config.string(for: "Test.Key") == "Value")
-    }
+  @Test(.scratchDirectory)
+  func getString() throws {
+    let config = try Config(
+      url: URL.scratchDirectory.appending(path: "test-config")
+    )
+    #expect(try Array(config.entries).count == 0)
+    try config.set("Value", for: "Test.Key")
+    #expect(try Array(config.entries).count == 1)
+    #expect(try config.string(for: "Test.Key") == "Value")
   }
 
-  @Test func setInt() throws {
-    try FileManager.default.withTemporaryDirectory { local in
-      let config = try Config(url: local.appending(path: "test-config"))
-      #expect(try Array(config.entries).count == 0)
+  @Test(.scratchDirectory)
+  func setInt() throws {
+    let config = try Config(
+      url: URL.scratchDirectory.appending(path: "test-config")
+    )
+    #expect(try Array(config.entries).count == 0)
 
-      try config.set(123456, for: "Some.Number")
+    try config.set(123456, for: "Some.Number")
 
-      #expect(try Array(config.entries).count == 1)
-      let entry = try #require(Array(config.entries).first)
-      #expect(entry.name == "some.number")
-      #expect(entry.value == "123456")
-      #expect(entry.level == .local)
-    }
+    #expect(try Array(config.entries).count == 1)
+    let entry = try #require(Array(config.entries).first)
+    #expect(entry.name == "some.number")
+    #expect(entry.value == "123456")
+    #expect(entry.level == .local)
   }
 
-  @Test func getInt() throws {
-    try FileManager.default.withTemporaryDirectory { local in
-      let config = try Config(url: local.appending(path: "test-config"))
-      #expect(try Array(config.entries).count == 0)
-      try config.set(123456, for: "Some.Number")
-      #expect(try Array(config.entries).count == 1)
-      #expect(try config.integer(for: "Some.Number") == 123456)
-    }
+  @Test(.scratchDirectory)
+  func getInt() throws {
+    let config = try Config(
+      url: URL.scratchDirectory.appending(path: "test-config")
+    )
+    #expect(try Array(config.entries).count == 0)
+    try config.set(123456, for: "Some.Number")
+    #expect(try Array(config.entries).count == 1)
+    #expect(try config.integer(for: "Some.Number") == 123456)
   }
 
-  @Test func setBool() throws {
-    try FileManager.default.withTemporaryDirectory { local in
-      let config = try Config(url: local.appending(path: "test-config"))
-      #expect(try Array(config.entries).count == 0)
+  @Test(.scratchDirectory)
+  func setBool() throws {
+    let config = try Config(
+      url: URL.scratchDirectory.appending(path: "test-config")
+    )
+    #expect(try Array(config.entries).count == 0)
 
-      try config.set(true, for: "Some.Bool")
+    try config.set(true, for: "Some.Bool")
 
-      #expect(try Array(config.entries).count == 1)
-      let entry = try #require(Array(config.entries).first)
-      #expect(entry.name == "some.bool")
-      #expect(entry.value == "true")
-      #expect(entry.level == .local)
-    }
+    #expect(try Array(config.entries).count == 1)
+    let entry = try #require(Array(config.entries).first)
+    #expect(entry.name == "some.bool")
+    #expect(entry.value == "true")
+    #expect(entry.level == .local)
   }
 
-  @Test func getBool() throws {
-    try FileManager.default.withTemporaryDirectory { local in
-      let config = try Config(url: local.appending(path: "test-config"))
-      #expect(try Array(config.entries).count == 0)
-      try config.set(true, for: "Some.Bool")
-      #expect(try Array(config.entries).count == 1)
-      #expect(try config.boolean(for: "Some.Bool") == true)
-    }
+  @Test(.scratchDirectory)
+  func getBool() throws {
+    let config = try Config(
+      url: URL.scratchDirectory.appending(path: "test-config")
+    )
+    #expect(try Array(config.entries).count == 0)
+    try config.set(true, for: "Some.Bool")
+    #expect(try Array(config.entries).count == 1)
+    #expect(try config.boolean(for: "Some.Bool") == true)
   }
 
-  @Test func level() throws {
+  @Test(.scratchDirectory)
+  func level() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
-    try FileManager.default.withTemporaryDirectory { local in
 
-      let repo = try Repository.clone(remote, to: local)
-      let config = try repo.config
+    let repo = try Repository.clone(remote, to: .scratchDirectory)
+    let config = try repo.config
 
-      let old = try Set(config.entries)
+    let old = try Set(config.entries)
 
-      do {
-        let local = try config.level(.local)
-        let old = try Set(local.entries)
-        try local.set("Test Value", for: "Test.Key")
-        let new = try Set(local.entries).subtracting(old)
-
-        #expect(new.count == 1)
-        let first = try #require(new.first)
-        #expect(first.name == "test.key")
-        #expect(first.value == "Test Value")
-        #expect(first.level == .local)
-      }
-
-      let new = try Set(config.entries).subtracting(old)
+    do {
+      let local = try config.level(.local)
+      let old = try Set(local.entries)
+      try local.set("Test Value", for: "Test.Key")
+      let new = try Set(local.entries).subtracting(old)
 
       #expect(new.count == 1)
       let first = try #require(new.first)
@@ -117,6 +116,14 @@ struct ConfigTests {
       #expect(first.value == "Test Value")
       #expect(first.level == .local)
     }
+
+    let new = try Set(config.entries).subtracting(old)
+
+    #expect(new.count == 1)
+    let first = try #require(new.first)
+    #expect(first.name == "test.key")
+    #expect(first.value == "Test Value")
+    #expect(first.level == .local)
   }
 
   @Test func levelDescription() {
