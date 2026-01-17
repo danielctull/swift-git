@@ -22,6 +22,7 @@ extension Index {
 
   public struct Entry {
     public let objectID: Object.ID
+    public let path: String
   }
 
   public var entries: GitCollection<Entry, Int> {
@@ -37,5 +38,6 @@ extension Index.Entry {
 
   fileprivate init(_ entry: git_index_entry) {
     objectID = Object.ID(oid: entry.id)
+    path = String(cString: entry.path)
   }
 }
