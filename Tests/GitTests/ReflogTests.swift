@@ -1,6 +1,6 @@
 import Foundation
 import Git
-import XCTest
+import Testing
 
 final class ReflogTests: XCTestCase {
 
