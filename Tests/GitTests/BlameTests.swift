@@ -5,7 +5,7 @@ import Testing
 @Suite("Blame")
 struct BlameTests {
 
-  @Test(.scratchDirectory)
+  @Test(.scratchDirectory(.random))
   func blame() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     let repo = try Repository.clone(remote, to: .scratchDirectory)

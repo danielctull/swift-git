@@ -5,7 +5,7 @@ import Testing
 @Suite("Branch")
 struct BranchTests {
 
-  @Test(.scratchDirectory)
+  @Test(.scratchDirectory(.random))
   func repositoryBranches() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     let repo = try Repository.clone(remote, to: .scratchDirectory)
@@ -20,7 +20,7 @@ struct BranchTests {
     )
   }
 
-  @Test(.scratchDirectory)
+  @Test(.scratchDirectory(.random))
   func repositoryCreateBranchNamed() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     let repo = try Repository.clone(remote, to: .scratchDirectory)
@@ -36,7 +36,7 @@ struct BranchTests {
     )
   }
 
-  @Test(.scratchDirectory)
+  @Test(.scratchDirectory(.random))
   func repositoryBranchNamed() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     let repo = try Repository.clone(remote, to: .scratchDirectory)
@@ -49,7 +49,7 @@ struct BranchTests {
     )
   }
 
-  @Test(.scratchDirectory)
+  @Test(.scratchDirectory(.random))
   func branchMove() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     let repo = try Repository.clone(remote, to: .scratchDirectory)
@@ -75,7 +75,7 @@ struct BranchTests {
     #expect(throws: (any Error).self) { try repo.branch(named: "main") }
   }
 
-  @Test(.scratchDirectory)
+  @Test(.scratchDirectory(.random))
   func delete() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     let repo = try Repository.clone(remote, to: .scratchDirectory)
@@ -88,7 +88,7 @@ struct BranchTests {
     #expect(throws: (any Error).self) { try repo.branch(named: "main2") }
   }
 
-  @Test(.scratchDirectory)
+  @Test(.scratchDirectory(.random))
   func upstream() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     let repo = try Repository.clone(remote, to: .scratchDirectory)
@@ -105,7 +105,7 @@ struct BranchTests {
     )
   }
 
-  @Test(.scratchDirectory)
+  @Test(.scratchDirectory(.random))
   func setUpstream() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     let repo = try Repository.clone(remote, to: .scratchDirectory)

@@ -5,7 +5,7 @@ import Testing
 @Suite("Status")
 struct StatusTests {
 
-  @Test(.scratchDirectory)
+  @Test(.scratchDirectory(.random))
   func addFileToWorkingDirectory() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     let repo = try Repository.clone(remote, to: .scratchDirectory)

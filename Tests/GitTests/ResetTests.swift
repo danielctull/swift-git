@@ -5,7 +5,7 @@ import Testing
 @Suite("Reset")
 struct ResetTests {
 
-  @Test(.scratchDirectory)
+  @Test(.scratchDirectory(.random))
   func resetSoft() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     let repo = try Repository.clone(remote, to: .scratchDirectory)
@@ -48,7 +48,7 @@ struct ResetTests {
     #expect(deletion.headToIndex?.from?.path == "file.text")
   }
 
-  @Test(.scratchDirectory)
+  @Test(.scratchDirectory(.random))
   func resetMixed() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     let repo = try Repository.clone(remote, to: .scratchDirectory)
@@ -91,7 +91,7 @@ struct ResetTests {
     #expect(deletion.indexToWorkingDirectory?.from?.path == "file.text")
   }
 
-  @Test(.scratchDirectory)
+  @Test(.scratchDirectory(.random))
   func resetHard() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     let repo = try Repository.clone(remote, to: .scratchDirectory)

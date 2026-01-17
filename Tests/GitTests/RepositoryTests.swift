@@ -17,7 +17,7 @@ private func AssertEqualResolvingSymlinks(
 @Suite("Repository")
 struct RepositoryTests {
 
-  @Test(.scratchDirectory)
+  @Test(.scratchDirectory(.random))
   func create() throws {
     let repo = try Repository.create(.scratchDirectory)
     AssertEqualResolvingSymlinks(repo.workingDirectory, .scratchDirectory)
@@ -27,14 +27,14 @@ struct RepositoryTests {
     )
   }
 
-  @Test(.scratchDirectory)
+  @Test(.scratchDirectory(.random))
   func createBare() throws {
     let bare = try Repository.create(.scratchDirectory, isBare: true)
     #expect(bare.workingDirectory == nil)
     try AssertEqualResolvingSymlinks(bare.gitDirectory, .scratchDirectory)
   }
 
-  @Test(.scratchDirectory)
+  @Test(.scratchDirectory(.random))
   func createNotBare() throws {
     let repo = try Repository.create(.scratchDirectory, isBare: false)
     AssertEqualResolvingSymlinks(repo.workingDirectory, .scratchDirectory)
@@ -44,7 +44,7 @@ struct RepositoryTests {
     )
   }
 
-  @Test(.scratchDirectory)
+  @Test(.scratchDirectory(.random))
   func open() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     #expect(throws: Never.self) {

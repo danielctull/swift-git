@@ -17,7 +17,7 @@ private func AssertEqualResolvingSymlinks(
 @Suite("Clone")
 struct CloneTests {
 
-  @Test(.scratchDirectory)
+  @Test(.scratchDirectory(.random))
   func clone() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     let repo = try Repository.clone(remote, to: .scratchDirectory)

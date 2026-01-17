@@ -5,7 +5,7 @@ import Testing
 @Suite("Config")
 struct ConfigTests {
 
-  @Test(.scratchDirectory)
+  @Test(.scratchDirectory(.random))
   func initURL() throws {
     let config = try Config(
       url: URL.scratchDirectory.appending(path: "test-config")
@@ -13,7 +13,7 @@ struct ConfigTests {
     #expect(try Array(config.entries).count == 0)
   }
 
-  @Test(.scratchDirectory)
+  @Test(.scratchDirectory(.random))
   func setString() throws {
     let config = try Config(
       url: URL.scratchDirectory.appending(path: "test-config")
@@ -30,7 +30,7 @@ struct ConfigTests {
 
   }
 
-  @Test(.scratchDirectory)
+  @Test(.scratchDirectory(.random))
   func getString() throws {
     let config = try Config(
       url: URL.scratchDirectory.appending(path: "test-config")
@@ -41,7 +41,7 @@ struct ConfigTests {
     #expect(try config.string(for: "Test.Key") == "Value")
   }
 
-  @Test(.scratchDirectory)
+  @Test(.scratchDirectory(.random))
   func setInt() throws {
     let config = try Config(
       url: URL.scratchDirectory.appending(path: "test-config")
@@ -57,7 +57,7 @@ struct ConfigTests {
     #expect(entry.level == .local)
   }
 
-  @Test(.scratchDirectory)
+  @Test(.scratchDirectory(.random))
   func getInt() throws {
     let config = try Config(
       url: URL.scratchDirectory.appending(path: "test-config")
@@ -68,7 +68,7 @@ struct ConfigTests {
     #expect(try config.integer(for: "Some.Number") == 123456)
   }
 
-  @Test(.scratchDirectory)
+  @Test(.scratchDirectory(.random))
   func setBool() throws {
     let config = try Config(
       url: URL.scratchDirectory.appending(path: "test-config")
@@ -84,7 +84,7 @@ struct ConfigTests {
     #expect(entry.level == .local)
   }
 
-  @Test(.scratchDirectory)
+  @Test(.scratchDirectory(.random))
   func getBool() throws {
     let config = try Config(
       url: URL.scratchDirectory.appending(path: "test-config")
@@ -95,7 +95,7 @@ struct ConfigTests {
     #expect(try config.boolean(for: "Some.Bool") == true)
   }
 
-  @Test(.scratchDirectory)
+  @Test(.scratchDirectory(.random))
   func level() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
 

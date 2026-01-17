@@ -5,7 +5,7 @@ import Testing
 @Suite("Reference")
 struct ReferenceTests {
 
-  @Test(.scratchDirectory)
+  @Test(.scratchDirectory(.random))
   func throwsUnbornBranchError() throws {
 
     let repository = try Repository.create(.scratchDirectory)
@@ -15,7 +15,7 @@ struct ReferenceTests {
     #expect(error.code == .unbornBranch)
   }
 
-  @Test(.scratchDirectory)
+  @Test(.scratchDirectory(.random))
   func head() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     let repository = try Repository.clone(remote, to: .scratchDirectory)
@@ -28,7 +28,7 @@ struct ReferenceTests {
     #expect(branch.reference.description == "refs/heads/main")
   }
 
-  @Test(.scratchDirectory)
+  @Test(.scratchDirectory(.random))
   func repositoryReferences() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     let repo = try Repository.clone(remote, to: .scratchDirectory)
@@ -81,7 +81,7 @@ struct ReferenceTests {
     )
   }
 
-  @Test(.scratchDirectory)
+  @Test(.scratchDirectory(.random))
   func delete() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     let repo = try Repository.clone(remote, to: .scratchDirectory)
@@ -131,7 +131,7 @@ struct ReferenceTests {
     }
   }
 
-  @Test(.scratchDirectory)
+  @Test(.scratchDirectory(.random))
   func removeReferenceByID() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     let repo = try Repository.clone(remote, to: .scratchDirectory)
@@ -185,7 +185,7 @@ struct ReferenceTests {
     }
   }
 
-  @Test(.scratchDirectory)
+  @Test(.scratchDirectory(.random))
   func removeReference() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     let repo = try Repository.clone(remote, to: .scratchDirectory)

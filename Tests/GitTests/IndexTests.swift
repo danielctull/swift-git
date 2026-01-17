@@ -5,7 +5,7 @@ import Testing
 @Suite("Index")
 struct IndexTests {
 
-  @Test(.scratchDirectory)
+  @Test(.scratchDirectory(.random))
   func index() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     let repo = try Repository.clone(remote, to: .scratchDirectory)

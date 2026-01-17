@@ -5,7 +5,7 @@ import Testing
 @Suite("RemoteBranch")
 struct RemoteBranchTests {
 
-  @Test(.scratchDirectory)
+  @Test(.scratchDirectory(.random))
   func repositoryRemoteBranches() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     let repo = try Repository.clone(remote, to: .scratchDirectory)
@@ -43,7 +43,7 @@ struct RemoteBranchTests {
     )
   }
 
-  @Test(.scratchDirectory)
+  @Test(.scratchDirectory(.random))
   func repositoryRemoteBranchNamed() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     let repo = try Repository.clone(remote, to: .scratchDirectory)
@@ -59,7 +59,7 @@ struct RemoteBranchTests {
     )
   }
 
-  @Test(.scratchDirectory)
+  @Test(.scratchDirectory(.random))
   func delete() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     let repo = try Repository.clone(remote, to: .scratchDirectory)
@@ -70,7 +70,7 @@ struct RemoteBranchTests {
     }
 
     // Does not delete it on remote
-    try ScratchDirectory {
+    try ScratchDirectory(.random) {
       let repo = try Repository.clone(remote, to: .scratchDirectory)
       #expect(throws: Never.self) {
         try repo.branch(on: "origin", named: "main")

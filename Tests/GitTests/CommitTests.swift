@@ -5,7 +5,7 @@ import Testing
 @Suite("Commit")
 struct CommitTests {
 
-  @Test(.scratchDirectory)
+  @Test(.scratchDirectory(.random))
   func repositoryCommitForString() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     let repo = try Repository.clone(remote, to: .scratchDirectory)
@@ -32,7 +32,7 @@ struct CommitTests {
     )
   }
 
-  @Test(.scratchDirectory)
+  @Test(.scratchDirectory(.random))
   func repositoryCommits() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     let repo = try Repository.clone(remote, to: .scratchDirectory)
@@ -71,7 +71,7 @@ struct CommitTests {
     )
   }
 
-  @Test(.scratchDirectory)
+  @Test(.scratchDirectory(.random))
   func repositoryCommitsZeroSearch() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     let repo = try Repository.clone(remote, to: .scratchDirectory)
@@ -79,7 +79,7 @@ struct CommitTests {
     #expect(commits.count == 0)
   }
 
-  @Test(.scratchDirectory)
+  @Test(.scratchDirectory(.random))
   func commitTree() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     let repo = try Repository.clone(remote, to: .scratchDirectory)

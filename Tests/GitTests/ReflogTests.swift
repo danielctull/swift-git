@@ -10,7 +10,7 @@ struct ReflogTests {
     #expect(name.description == "Custom")
   }
 
-  @Test(.scratchDirectory)
+  @Test(.scratchDirectory(.random))
   func reflog() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     let cloneDate = Date()
@@ -39,7 +39,7 @@ struct ReflogTests {
 
   }
 
-  @Test(.scratchDirectory)
+  @Test(.scratchDirectory(.random))
   func append() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
 
@@ -64,7 +64,7 @@ struct ReflogTests {
     #expect(item.committer.timeZone == TimeZone(secondsFromGMT: 120))
   }
 
-  @Test(.scratchDirectory)
+  @Test(.scratchDirectory(.random))
   func remove() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
 
@@ -79,7 +79,7 @@ struct ReflogTests {
     #expect(reflog.items.count == 0)
   }
 
-  @Test(.scratchDirectory)
+  @Test(.scratchDirectory(.random))
   func write() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
 
@@ -111,7 +111,7 @@ struct ReflogTests {
     }
   }
 
-  @Test(.scratchDirectory)
+  @Test(.scratchDirectory(.random))
   func rename() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
 
@@ -146,7 +146,7 @@ struct ReflogTests {
     }
   }
 
-  @Test(.scratchDirectory)
+  @Test(.scratchDirectory(.random))
   func delete() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
 

@@ -8,10 +8,18 @@ extension URL {
 }
 
 extension Trait where Self == ScratchDirectory {
-  static var scratchDirectory: Self { Self() }
+  static func scratchDirectory(_ name: ScratchDirectory.Name) -> Self {
+    ScratchDirectory(name)
+  }
 }
 
 struct ScratchDirectory: TestTrait, TestScoping {
+
+  fileprivate let name: Name
+
+  init(_ name: Name) {
+    self.name = name
+  }
 
   func provideScope(
     for test: Test,
@@ -22,7 +30,7 @@ struct ScratchDirectory: TestTrait, TestScoping {
     let fileManager = FileManager()
     let url = fileManager
       .temporaryDirectory
-      .appending(path: UUID().uuidString, directoryHint: .isDirectory)
+      .appending(path: name.value, directoryHint: .isDirectory)
 
     try fileManager.createDirectory(at: url, withIntermediateDirectories: true)
     defer { try? fileManager.removeItem(at: url) }
@@ -45,5 +53,25 @@ struct ScratchDirectory: TestTrait, TestScoping {
     try URL.$scratchDirectory.withValue(url) {
       try function()
     }
+  }
+}
+
+// MARK: - ScratchDirectory.Name
+
+extension ScratchDirectory {
+  struct Name {
+    fileprivate let value: String
+  }
+}
+
+extension ScratchDirectory.Name {
+  static var random: ScratchDirectory.Name {
+    ScratchDirectory.Name(value: UUID().uuidString)
+  }
+}
+
+extension ScratchDirectory.Name: ExpressibleByStringLiteral {
+  init(stringLiteral value: String) {
+    self.init(value: value)
   }
 }
