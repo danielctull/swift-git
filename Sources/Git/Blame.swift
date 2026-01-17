@@ -60,7 +60,10 @@ extension Blame.Hunk {
   }
 
   init(_ hunk: git_blame_hunk) {
-    lines = ClosedRange(start: hunk.final_start_line_number, count: hunk.lines_in_hunk)
+    lines = ClosedRange(
+      start: hunk.final_start_line_number,
+      count: hunk.lines_in_hunk
+    )
     signature = Signature(hunk.final_signature.pointee)
     commitID = Commit.ID(hunk.final_commit_id)
     path = hunk.orig_path |> String.init(cString:) |> FilePath.init(rawValue:)

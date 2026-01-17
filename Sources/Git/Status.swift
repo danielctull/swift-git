@@ -7,7 +7,8 @@ extension Repository {
 
       let list = try Managed(
         create: pointer.create(git_status_list_new, nil),
-        free: git_status_list_free)
+        free: git_status_list_free
+      )
 
       return GitCollection {
         list.get(git_status_list_entrycount)

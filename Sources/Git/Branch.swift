@@ -8,7 +8,8 @@ extension Repository {
 
         try Managed(
           create: pointer.create(git_branch_iterator_new, GIT_BRANCH_LOCAL),
-          free: git_branch_iterator_free)
+          free: git_branch_iterator_free
+        )
 
       } next: { iterator in
 
@@ -32,11 +33,19 @@ extension Repository {
   ///   - commit: Commit to which this branch should point. This object
   ///     must belong to the receiving ``Repository``.
   /// - Returns: The created branch.
-  public func createBranch(named name: Branch.Name, at commit: Commit) throws -> Branch {
+  public func createBranch(
+    named name: Branch.Name,
+    at commit: Commit
+  ) throws -> Branch {
     try name.withCString { name in
       try Branch(
         pointer: Managed(
-          create: pointer.create(git_branch_create, name, commit.pointer.pointer, 0),
+          create: pointer.create(
+            git_branch_create,
+            name,
+            commit.pointer.pointer,
+            0
+          ),
           free: git_reference_free
         )
       )
@@ -68,7 +77,8 @@ public struct Branch: Equatable, Hashable, Identifiable {
   init(pointer: Managed<OpaquePointer>) throws {
     pointer.assert(git_reference_is_branch, "Expected branch.")
     self.pointer = pointer
-    name = try pointer.get(git_branch_name) |> Unwrap |> String.init |> Name.init
+    name = try pointer.get(git_branch_name) |> Unwrap |> String.init
+      |> Name.init
     target = try Object.ID(reference: pointer)
     reference = try Reference.Name(pointer: pointer)
     id = ID(name: reference)

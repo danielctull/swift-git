@@ -24,16 +24,25 @@ final class DiffTests: XCTestCase {
       XCTAssertEqual(file.flags, [.validID, .exists])
       XCTAssertEqual(file.size, 0)
       XCTAssertEqual(file.path, "file.text")
-      XCTAssertEqual(file.id.description, "96c36b4c2da3a3b8472d437cea0497d38f125b04")
+      XCTAssertEqual(
+        file.id.description,
+        "96c36b4c2da3a3b8472d437cea0497d38f125b04"
+      )
 
       let object = try repo.object(for: file.id)
       guard case .blob(let blob) = object else {
         XCTFail("Expected blob")
         return
       }
-      XCTAssertEqual(blob.id.description, "96c36b4c2da3a3b8472d437cea0497d38f125b04")
+      XCTAssertEqual(
+        blob.id.description,
+        "96c36b4c2da3a3b8472d437cea0497d38f125b04"
+      )
       XCTAssertFalse(blob.isBinary)
-      XCTAssertEqual(String(data: blob.data, encoding: .utf8), "A test file is made!")
+      XCTAssertEqual(
+        String(data: blob.data, encoding: .utf8),
+        "A test file is made!"
+      )
     }
   }
 
@@ -54,7 +63,10 @@ final class DiffTests: XCTestCase {
       XCTAssertEqual(file.flags, [.notBinary, .validID, .exists, .validSize])
       XCTAssertEqual(file.size, 20)
       XCTAssertEqual(file.path, "file.text")
-      XCTAssertEqual(file.id.description, "96c36b4c2da3a3b8472d437cea0497d38f125b04")
+      XCTAssertEqual(
+        file.id.description,
+        "96c36b4c2da3a3b8472d437cea0497d38f125b04"
+      )
       XCTAssertEqual(hunk.lines, 1...1)
     }
   }

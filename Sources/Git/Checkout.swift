@@ -171,13 +171,19 @@ extension Checkout.Strategy: GitOptionSet {
   public static let useTheirs = Self(GIT_CHECKOUT_USE_THEIRS)
 
   /// Treat pathspec as simple list of exact match file paths
-  public static let disablePathspecMatch = Self(GIT_CHECKOUT_DISABLE_PATHSPEC_MATCH)
+  public static let disablePathspecMatch = Self(
+    GIT_CHECKOUT_DISABLE_PATHSPEC_MATCH
+  )
 
   /// Ignore directories in use, they will be left empty
-  public static let skipLockedDirectories = Self(GIT_CHECKOUT_SKIP_LOCKED_DIRECTORIES)
+  public static let skipLockedDirectories = Self(
+    GIT_CHECKOUT_SKIP_LOCKED_DIRECTORIES
+  )
 
   /// Don't overwrite ignored files that exist in the checkout target
-  public static let dontOverwriteIgnored = Self(GIT_CHECKOUT_DONT_OVERWRITE_IGNORED)
+  public static let dontOverwriteIgnored = Self(
+    GIT_CHECKOUT_DONT_OVERWRITE_IGNORED
+  )
 
   /// Write normal merge files for conflicts
   public static let conflictStyleMerge = Self(GIT_CHECKOUT_CONFLICT_STYLE_MERGE)
@@ -198,7 +204,9 @@ extension Checkout.Strategy: GitOptionSet {
   public static let dryRun = Self(GIT_CHECKOUT_DRY_RUN)
 
   /// Include common ancestor data in zdiff3 format for conflicts
-  public static let conflictStyleZdiff3 = Self(GIT_CHECKOUT_CONFLICT_STYLE_ZDIFF3)
+  public static let conflictStyleZdiff3 = Self(
+    GIT_CHECKOUT_CONFLICT_STYLE_ZDIFF3
+  )
 
   // THE FOLLOWING OPTIONS ARE NOT YET IMPLEMENTED
 

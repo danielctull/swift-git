@@ -1,5 +1,5 @@
-import libgit2
 import Foundation
+import libgit2
 
 extension Repository {
 
@@ -28,7 +28,9 @@ extension Config {
       try Config(
         pointer: Managed(
           create: .init { git_config_open_ondisk($0, path) },
-          free: git_config_free))
+          free: git_config_free
+        )
+      )
     }
   }
 

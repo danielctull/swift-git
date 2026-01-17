@@ -1,5 +1,5 @@
-import libgit2
 import Foundation
+import libgit2
 
 extension Repository {
 
@@ -28,7 +28,8 @@ public struct Signature: Equatable, Hashable, Sendable {
     let time = git_time(
       time: git_time_t(date.timeIntervalSince1970),
       offset: Int32(timeZone.secondsFromGMT() / 60),
-      sign: 0)
+      sign: 0
+    )
 
     self = name.withMutableCString { name in
       email.withMutableCString { email in
@@ -63,7 +64,8 @@ extension Signature {
         let time = git_time(
           time: git_time_t(date.timeIntervalSince1970),
           offset: Int32(timeZone.secondsFromGMT() / 60),
-          sign: 0)
+          sign: 0
+        )
         let signature = git_signature(name: name, email: email, when: time)
         return try Swift.withUnsafePointer(to: signature, body)
       }

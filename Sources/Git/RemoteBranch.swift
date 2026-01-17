@@ -8,7 +8,8 @@ extension Repository {
 
         try Managed(
           create: pointer.create(git_branch_iterator_new, GIT_BRANCH_REMOTE),
-          free: git_branch_iterator_free)
+          free: git_branch_iterator_free
+        )
 
       } next: { iterator in
 
@@ -22,7 +23,10 @@ extension Repository {
     }
   }
 
-  public func branch(on remote: Remote.Name, named branch: Branch.Name) throws -> RemoteBranch {
+  public func branch(
+    on remote: Remote.Name,
+    named branch: Branch.Name
+  ) throws -> RemoteBranch {
     try RemoteBranch.Name(remote: remote, branch: branch).withCString { name in
       try RemoteBranch(
         pointer: Managed(
@@ -48,7 +52,10 @@ public struct RemoteBranch: Equatable, Hashable {
     pointer.assert(git_reference_is_remote, "Expected remote branch.")
     self.pointer = pointer
     reference = try Reference.Name(pointer: pointer)
-    name = try pointer.get(git_branch_name) |> Unwrap |> String.init |> Name.init
+    name = try pointer.get(git_branch_name)
+      |> Unwrap
+      |> String.init
+      |> Name.init
     target = try Object.ID(reference: pointer)
     id = ID(name: reference)
   }

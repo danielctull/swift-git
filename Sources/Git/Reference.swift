@@ -152,7 +152,8 @@ extension Reference: Identifiable {
     switch self {
     case .branch(let branch): return ID(name: branch.reference)
     case .note(let note): return ID(name: note.reference)
-    case .remoteBranch(let remoteBranch): return ID(name: remoteBranch.reference)
+    case .remoteBranch(let remoteBranch):
+      return ID(name: remoteBranch.reference)
     case .tag(let tag): return ID(name: tag.reference)
     }
   }
@@ -203,6 +204,8 @@ extension Reference.Name {
 extension Reference.Name {
 
   init(pointer: Managed<OpaquePointer>) throws {
-    try self.init(pointer.get(git_reference_name) |> Unwrap |> String.init(cString:))
+    try self.init(
+      pointer.get(git_reference_name) |> Unwrap |> String.init(cString:)
+    )
   }
 }
