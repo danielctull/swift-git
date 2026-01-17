@@ -8,12 +8,7 @@ private func AssertEqualResolvingSymlinks(
   file: StaticString = #filePath,
   line: UInt = #line
 ) rethrows {
-  XCTAssertEqual(
-    try expression1()?.resolvingSymlinksInPath(),
-    try expression2()?.resolvingSymlinksInPath(),
-    file: file,
-    line: line
-  )
+  #expect(try expression1()?.resolvingSymlinksInPath() == expression2()?.resolvingSymlinksInPath())
 }
 
 @Suite("Repository")

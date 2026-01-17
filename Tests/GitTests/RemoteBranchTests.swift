@@ -10,43 +10,19 @@ struct RemoteBranchTests {
     try FileManager.default.withTemporaryDirectory { local in
       let repo = try Repository(local: local, remote: remote)
       let remoteBranches = try Array(repo.remoteBranches)
-      XCTAssertEqual(remoteBranches.count, 2)
-      XCTAssertEqual(
-        try remoteBranches.value(at: 0).id.description,
-        "refs/remotes/origin/HEAD"
-      )
-      XCTAssertEqual(
-        try remoteBranches.value(at: 0).reference.description,
-        "refs/remotes/origin/HEAD"
-      )
-      XCTAssertEqual(
-        try remoteBranches.value(at: 0).name.description,
-        "origin/HEAD"
-      )
-      XCTAssertEqual(try remoteBranches.value(at: 0).name.remote, "origin")
-      XCTAssertEqual(try remoteBranches.value(at: 0).name.branch, "HEAD")
-      XCTAssertEqual(
-        try remoteBranches.value(at: 0).target.description,
-        "b1d2dbab22a62771db0c040ccf396dbbfdcef052"
-      )
-      XCTAssertEqual(
-        try remoteBranches.value(at: 1).id.description,
-        "refs/remotes/origin/main"
-      )
-      XCTAssertEqual(
-        try remoteBranches.value(at: 1).reference.description,
-        "refs/remotes/origin/main"
-      )
-      XCTAssertEqual(
-        try remoteBranches.value(at: 1).name.description,
-        "origin/main"
-      )
-      XCTAssertEqual(try remoteBranches.value(at: 1).name.remote, "origin")
-      XCTAssertEqual(try remoteBranches.value(at: 1).name.branch, "main")
-      XCTAssertEqual(
-        try remoteBranches.value(at: 1).target.description,
-        "b1d2dbab22a62771db0c040ccf396dbbfdcef052"
-      )
+      #expect(remoteBranches.count == 2)
+      #expect(try remoteBranches.value(at: 0).id.description == "refs/remotes/origin/HEAD")
+      #expect(try remoteBranches.value(at: 0).reference.description == "refs/remotes/origin/HEAD")
+      #expect(try remoteBranches.value(at: 0).name.description == "origin/HEAD")
+      #expect(try remoteBranches.value(at: 0).name.remote == "origin")
+      #expect(try remoteBranches.value(at: 0).name.branch == "HEAD")
+      #expect(try remoteBranches.value(at: 0).target.description == "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
+      #expect(try remoteBranches.value(at: 1).id.description == "refs/remotes/origin/main")
+      #expect(try remoteBranches.value(at: 1).reference.description == "refs/remotes/origin/main")
+      #expect(try remoteBranches.value(at: 1).name.description == "origin/main")
+      #expect(try remoteBranches.value(at: 1).name.remote == "origin")
+      #expect(try remoteBranches.value(at: 1).name.branch == "main")
+      #expect(try remoteBranches.value(at: 1).target.description == "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
     }
   }
 
@@ -55,18 +31,12 @@ struct RemoteBranchTests {
     try FileManager.default.withTemporaryDirectory { local in
       let repo = try Repository(local: local, remote: remote)
       let remoteBranch = try repo.branch(on: "origin", named: "main")
-      XCTAssertEqual(remoteBranch.name.description, "origin/main")
-      XCTAssertEqual(remoteBranch.id.description, "refs/remotes/origin/main")
-      XCTAssertEqual(
-        remoteBranch.reference.description,
-        "refs/remotes/origin/main"
-      )
-      XCTAssertEqual(remoteBranch.name.remote, "origin")
-      XCTAssertEqual(remoteBranch.name.branch, "main")
-      XCTAssertEqual(
-        remoteBranch.target.description,
-        "b1d2dbab22a62771db0c040ccf396dbbfdcef052"
-      )
+      #expect(remoteBranch.name.description == "origin/main")
+      #expect(remoteBranch.id.description == "refs/remotes/origin/main")
+      #expect(remoteBranch.reference.description == "refs/remotes/origin/main")
+      #expect(remoteBranch.name.remote == "origin")
+      #expect(remoteBranch.name.branch == "main")
+      #expect(remoteBranch.target.description == "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
     }
   }
 
