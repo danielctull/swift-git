@@ -59,7 +59,9 @@ struct RepositoryTests {
   @Test func open() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
-      XCTAssertNoThrow(try Repository(local: local, remote: remote))
+      #expect(throws: Never.self) {
+        try Repository(local: local, remote: remote)
+      }
       let repo = try Repository(url: local, options: .open)
       AssertEqualResolvingSymlinks(repo.workingDirectory, local)
       try AssertEqualResolvingSymlinks(
