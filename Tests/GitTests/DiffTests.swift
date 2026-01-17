@@ -2,7 +2,8 @@ import Foundation
 import Git
 import Testing
 
-final class DiffTests: XCTestCase {
+@Suite("Diff")
+struct DiffTests {
 
   func testAddedFile() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")

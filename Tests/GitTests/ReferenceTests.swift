@@ -2,7 +2,8 @@ import Foundation
 import Git
 import Testing
 
-final class ReferenceTests: XCTestCase {
+@Suite("Reference")
+struct ReferenceTests {
 
   func testThrowsUnbornBranchError() throws {
     try FileManager.default.withTemporaryDirectory { url in

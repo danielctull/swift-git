@@ -2,7 +2,8 @@ import Foundation
 import Git
 import Testing
 
-final class BlameTests: XCTestCase {
+@Suite("Blame")
+struct BlameTests {
 
   func testBlame() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")

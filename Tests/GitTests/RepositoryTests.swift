@@ -16,7 +16,8 @@ private func AssertEqualResolvingSymlinks(
   )
 }
 
-final class RepositoryTests: XCTestCase {
+@Suite("Repository")
+struct RepositoryTests {
 
   func testClone() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
