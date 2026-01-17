@@ -5,7 +5,7 @@ import Testing
 @Suite("Tag")
 struct TagTests {
 
-  func testRepositoryTags() throws {
+  @Test func repositoryTags() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
       let repo = try Repository(local: local, remote: remote)
@@ -45,7 +45,7 @@ struct TagTests {
     }
   }
 
-  func testDelete() throws {
+  @Test func delete() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
       let repo = try Repository(local: local, remote: remote)

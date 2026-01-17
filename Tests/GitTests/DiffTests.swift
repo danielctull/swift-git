@@ -5,7 +5,7 @@ import Testing
 @Suite("Diff")
 struct DiffTests {
 
-  func testAddedFile() throws {
+  @Test func addedFile() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
       let repo = try Repository(local: local, remote: remote)
@@ -47,7 +47,7 @@ struct DiffTests {
     }
   }
 
-  func testAddedFileHunk() throws {
+  @Test func addedFileHunk() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
       let repo = try Repository(local: local, remote: remote)

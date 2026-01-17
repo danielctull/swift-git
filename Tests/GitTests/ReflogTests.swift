@@ -5,12 +5,12 @@ import Testing
 @Suite("Reflog")
 struct ReflogTests {
 
-  func testName() throws {
+  @Test func name() throws {
     let name = Reflog.Name("Custom")
     XCTAssertEqual(name.description, "Custom")
   }
 
-  func testReflog() throws {
+  @Test func reflog() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
       let cloneDate = Date()
@@ -43,7 +43,7 @@ struct ReflogTests {
     }
   }
 
-  func testAppend() throws {
+  @Test func append() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
 
@@ -71,7 +71,7 @@ struct ReflogTests {
     }
   }
 
-  func testRemove() throws {
+  @Test func remove() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
 
@@ -87,7 +87,7 @@ struct ReflogTests {
     }
   }
 
-  func testWrite() throws {
+  @Test func write() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
 
@@ -122,7 +122,7 @@ struct ReflogTests {
     }
   }
 
-  func testRename() throws {
+  @Test func rename() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
 
@@ -160,7 +160,7 @@ struct ReflogTests {
     }
   }
 
-  func testDelete() throws {
+  @Test func delete() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
 

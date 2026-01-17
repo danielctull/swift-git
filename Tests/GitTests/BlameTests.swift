@@ -5,7 +5,7 @@ import Testing
 @Suite("Blame")
 struct BlameTests {
 
-  func testBlame() throws {
+  @Test func blame() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
       let repo = try Repository(local: local, remote: remote)
