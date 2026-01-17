@@ -46,7 +46,9 @@ struct RemoteBranchTests {
       let repo = try Repository(local: local, remote: remote)
       let remoteBranch = try repo.branch(on: "origin", named: "main")
       try repo.delete(.remoteBranch(remoteBranch))
-      XCTAssertThrowsError(try repo.branch(on: "origin", named: "main"))
+      #expect(throws: (any Error).self) {
+        try repo.branch(on: "origin", named: "main")
+      }
 
       // Does not delete it on remote
       try FileManager.default.withTemporaryDirectory { local in

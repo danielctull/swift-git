@@ -14,7 +14,7 @@ struct CheckoutTests {
       try Data(content.utf8).write(to: file)
       #expect(try String(contentsOf: file) == content)
       try repo.checkoutHead()
-      //            XCTAssertThrowsError(try String(contentsOf: file))
+      //            #expect(throws: (any Error).self) { try String(contentsOf: file })
     }
   }
 }
