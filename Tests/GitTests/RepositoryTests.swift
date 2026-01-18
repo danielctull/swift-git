@@ -8,7 +8,10 @@ private func AssertEqualResolvingSymlinks(
   file: StaticString = #filePath,
   line: UInt = #line
 ) rethrows {
-  #expect(try expression1()?.resolvingSymlinksInPath() == expression2()?.resolvingSymlinksInPath())
+  #expect(
+    try expression1()?.resolvingSymlinksInPath()
+      == expression2()?.resolvingSymlinksInPath()
+  )
 }
 
 @Suite("Repository")

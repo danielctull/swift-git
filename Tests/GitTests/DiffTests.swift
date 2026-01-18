@@ -34,7 +34,9 @@ struct DiffTests {
       }
       #expect(blob.id.description == "96c36b4c2da3a3b8472d437cea0497d38f125b04")
       #expect(!blob.isBinary)
-      #expect(String(data: blob.data, encoding: .utf8) == "A test file is made!")
+      #expect(
+        String(data: blob.data, encoding: .utf8) == "A test file is made!"
+      )
     }
   }
 

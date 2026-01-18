@@ -10,19 +10,31 @@ struct ResetTests {
     try FileManager.default.withTemporaryDirectory { local in
       let repo = try Repository(local: local, remote: remote)
 
-      #expect(try repo.current.id.description == "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
+      #expect(
+        try repo.current.id.description
+          == "b1d2dbab22a62771db0c040ccf396dbbfdcef052"
+      )
       #expect(try repo.status.count == 0)
 
       try repo.reset(to: .commit(repo.current), operation: .soft)
-      #expect(try repo.current.id.description == "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
+      #expect(
+        try repo.current.id.description
+          == "b1d2dbab22a62771db0c040ccf396dbbfdcef052"
+      )
       #expect(try repo.status.count == 0)
 
       try repo.reset(to: .commit(repo.previous), operation: .soft)
-      #expect(try repo.current.id.description == "c8b08c2ed176eaaf7cea877f774319a27684870a")
+      #expect(
+        try repo.current.id.description
+          == "c8b08c2ed176eaaf7cea877f774319a27684870a"
+      )
       #expect(try repo.status.count == 0)
 
       try repo.reset(to: .commit(repo.previous), operation: .soft)
-      #expect(try repo.current.id.description == "41c143541c9d917db83ce4e920084edbf2a4177e")
+      #expect(
+        try repo.current.id.description
+          == "41c143541c9d917db83ce4e920084edbf2a4177e"
+      )
       #expect(try repo.status.count == 2)
 
       let addition = try #require(
@@ -42,19 +54,31 @@ struct ResetTests {
     try FileManager.default.withTemporaryDirectory { local in
       let repo = try Repository(local: local, remote: remote)
 
-      #expect(try repo.current.id.description == "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
+      #expect(
+        try repo.current.id.description
+          == "b1d2dbab22a62771db0c040ccf396dbbfdcef052"
+      )
       #expect(try repo.status.count == 0)
 
       try repo.reset(to: .commit(repo.current), operation: .mixed)
-      #expect(try repo.current.id.description == "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
+      #expect(
+        try repo.current.id.description
+          == "b1d2dbab22a62771db0c040ccf396dbbfdcef052"
+      )
       #expect(try repo.status.count == 0)
 
       try repo.reset(to: .commit(repo.previous), operation: .mixed)
-      #expect(try repo.current.id.description == "c8b08c2ed176eaaf7cea877f774319a27684870a")
+      #expect(
+        try repo.current.id.description
+          == "c8b08c2ed176eaaf7cea877f774319a27684870a"
+      )
       #expect(try repo.status.count == 0)
 
       try repo.reset(to: .commit(repo.previous), operation: .mixed)
-      #expect(try repo.current.id.description == "41c143541c9d917db83ce4e920084edbf2a4177e")
+      #expect(
+        try repo.current.id.description
+          == "41c143541c9d917db83ce4e920084edbf2a4177e"
+      )
       #expect(try repo.status.count == 2)
 
       let addition = try #require(
@@ -74,19 +98,31 @@ struct ResetTests {
     try FileManager.default.withTemporaryDirectory { local in
       let repo = try Repository(local: local, remote: remote)
 
-      #expect(try repo.current.id.description == "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
+      #expect(
+        try repo.current.id.description
+          == "b1d2dbab22a62771db0c040ccf396dbbfdcef052"
+      )
       #expect(try repo.status.count == 0)
 
       try repo.reset(to: .commit(repo.current), operation: .hard)
-      #expect(try repo.current.id.description == "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
+      #expect(
+        try repo.current.id.description
+          == "b1d2dbab22a62771db0c040ccf396dbbfdcef052"
+      )
       #expect(try repo.status.count == 0)
 
       try repo.reset(to: .commit(repo.previous), operation: .hard)
-      #expect(try repo.current.id.description == "c8b08c2ed176eaaf7cea877f774319a27684870a")
+      #expect(
+        try repo.current.id.description
+          == "c8b08c2ed176eaaf7cea877f774319a27684870a"
+      )
       #expect(try repo.status.count == 0)
 
       try repo.reset(to: .commit(repo.previous), operation: .hard)
-      #expect(try repo.current.id.description == "41c143541c9d917db83ce4e920084edbf2a4177e")
+      #expect(
+        try repo.current.id.description
+          == "41c143541c9d917db83ce4e920084edbf2a4177e"
+      )
       #expect(try repo.status.count == 0)
     }
   }

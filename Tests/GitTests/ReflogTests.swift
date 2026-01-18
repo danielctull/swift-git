@@ -19,8 +19,12 @@ struct ReflogTests {
       #expect(reflog.items.count == 1)
       let item = try #require(reflog.items.last)
       //            #expect(item.message == "checkout: moving from master to main")
-      #expect(item.old.description == "0000000000000000000000000000000000000000")
-      #expect(item.new.description == "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
+      #expect(
+        item.old.description == "0000000000000000000000000000000000000000"
+      )
+      #expect(
+        item.new.description == "b1d2dbab22a62771db0c040ccf396dbbfdcef052"
+      )
       #expect(item.committer.name == "Daniel Tull")
       #expect(item.committer.email == "dt@danieltull.co.uk")
       // The date for a reflog item is when it occurred, in this case when
@@ -28,7 +32,10 @@ struct ReflogTests {
       let timeInterval = item.committer.date.timeIntervalSince(cloneDate)
       #expect(timeInterval < 1)
       #expect(timeInterval > -1)
-      #expect(item.committer.timeZone == TimeZone(secondsFromGMT: TimeZone.current.secondsFromGMT()))
+      #expect(
+        item.committer.timeZone
+          == TimeZone(secondsFromGMT: TimeZone.current.secondsFromGMT())
+      )
     }
   }
 
@@ -45,8 +52,12 @@ struct ReflogTests {
 
       let item = try #require(reflog.items.first)
       #expect(item.message == "Test Message")
-      #expect(item.old.description == "0000000000000000000000000000000000000000")
-      #expect(item.new.description == "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
+      #expect(
+        item.old.description == "0000000000000000000000000000000000000000"
+      )
+      #expect(
+        item.new.description == "b1d2dbab22a62771db0c040ccf396dbbfdcef052"
+      )
       #expect(item.committer.name == "Test Name")
       #expect(item.committer.email == "Test Email")
       #expect(item.committer.date == Date(timeIntervalSince1970: 1999))
@@ -89,8 +100,12 @@ struct ReflogTests {
 
         let item = try #require(reflog.items.first)
         #expect(item.message == "Test Message")
-        #expect(item.old.description == "0000000000000000000000000000000000000000")
-        #expect(item.new.description == "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
+        #expect(
+          item.old.description == "0000000000000000000000000000000000000000"
+        )
+        #expect(
+          item.new.description == "b1d2dbab22a62771db0c040ccf396dbbfdcef052"
+        )
         #expect(item.committer.name == "Test Name")
         #expect(item.committer.email == "Test Email")
         #expect(item.committer.date == Date(timeIntervalSince1970: 1999))
@@ -121,8 +136,12 @@ struct ReflogTests {
 
         let item = try #require(reflog.items.first)
         #expect(item.message == "Test Message")
-        #expect(item.old.description == "0000000000000000000000000000000000000000")
-        #expect(item.new.description == "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
+        #expect(
+          item.old.description == "0000000000000000000000000000000000000000"
+        )
+        #expect(
+          item.new.description == "b1d2dbab22a62771db0c040ccf396dbbfdcef052"
+        )
         #expect(item.committer.name == "Test Name")
         #expect(item.committer.email == "Test Email")
         #expect(item.committer.date == Date(timeIntervalSince1970: 1999))

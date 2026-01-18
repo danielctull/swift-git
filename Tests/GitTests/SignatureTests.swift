@@ -22,7 +22,10 @@ struct SignatureTests {
       let timeInterval = signature.date.timeIntervalSince(date)
       #expect(timeInterval < 1)
       #expect(timeInterval > -1)
-      #expect(signature.timeZone == TimeZone(secondsFromGMT: TimeZone.current.secondsFromGMT()))
+      #expect(
+        signature.timeZone
+          == TimeZone(secondsFromGMT: TimeZone.current.secondsFromGMT())
+      )
     }
   }
 }

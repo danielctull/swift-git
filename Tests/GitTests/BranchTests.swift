@@ -15,7 +15,9 @@ struct BranchTests {
       #expect(branch.name == "main")
       #expect(branch.id.description == "refs/heads/main")
       #expect(branch.reference.description == "refs/heads/main")
-      #expect(branch.target.description == "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
+      #expect(
+        branch.target.description == "b1d2dbab22a62771db0c040ccf396dbbfdcef052"
+      )
     }
   }
 
@@ -30,7 +32,9 @@ struct BranchTests {
       #expect(main2.name == "main2")
       #expect(main2.id.description == "refs/heads/main2")
       #expect(main2.reference.description == "refs/heads/main2")
-      #expect(main2.target.description == "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
+      #expect(
+        main2.target.description == "b1d2dbab22a62771db0c040ccf396dbbfdcef052"
+      )
     }
   }
 
@@ -42,7 +46,9 @@ struct BranchTests {
       #expect(branch.name == "main")
       #expect(branch.id.description == "refs/heads/main")
       #expect(branch.reference.description == "refs/heads/main")
-      #expect(branch.target.description == "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
+      #expect(
+        branch.target.description == "b1d2dbab22a62771db0c040ccf396dbbfdcef052"
+      )
     }
   }
 
@@ -56,14 +62,18 @@ struct BranchTests {
         #expect(moved.name == "moved")
         #expect(moved.id.description == "refs/heads/moved")
         #expect(moved.reference.description == "refs/heads/moved")
-        #expect(moved.target.description == "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
+        #expect(
+          moved.target.description == "b1d2dbab22a62771db0c040ccf396dbbfdcef052"
+        )
       }
       do {
         let moved = try repo.branch(named: "moved")
         #expect(moved.name == "moved")
         #expect(moved.id.description == "refs/heads/moved")
         #expect(moved.reference.description == "refs/heads/moved")
-        #expect(moved.target.description == "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
+        #expect(
+          moved.target.description == "b1d2dbab22a62771db0c040ccf396dbbfdcef052"
+        )
       }
       #expect(throws: (any Error).self) { try repo.branch(named: "main") }
     }
@@ -94,7 +104,10 @@ struct BranchTests {
       #expect(remoteBranch.name.description == "origin/main")
       #expect(remoteBranch.name.remote == "origin")
       #expect(remoteBranch.name.branch == "main")
-      #expect(remoteBranch.target.description == "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
+      #expect(
+        remoteBranch.target.description
+          == "b1d2dbab22a62771db0c040ccf396dbbfdcef052"
+      )
     }
   }
 
@@ -115,7 +128,10 @@ struct BranchTests {
       #expect(remoteBranch.name.description == "origin/main")
       #expect(remoteBranch.name.remote == "origin")
       #expect(remoteBranch.name.branch == "main")
-      #expect(remoteBranch.target.description == "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
+      #expect(
+        remoteBranch.target.description
+          == "b1d2dbab22a62771db0c040ccf396dbbfdcef052"
+      )
     }
   }
 }

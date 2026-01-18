@@ -36,20 +36,50 @@ struct ReferenceTests {
       let references = try Array(repo.references)
       #expect(references.count == 5)
       #expect(try references.value(at: 0).id == "refs/heads/main")
-      #expect(try references.value(at: 0).target.description == "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
-      #expect(try references.value(at: 0).debugDescription == "Branch(name: main, reference: refs/heads/main, target: b1d2dba)")
+      #expect(
+        try references.value(at: 0).target.description
+          == "b1d2dbab22a62771db0c040ccf396dbbfdcef052"
+      )
+      #expect(
+        try references.value(at: 0).debugDescription
+          == "Branch(name: main, reference: refs/heads/main, target: b1d2dba)"
+      )
       #expect(try references.value(at: 1).id == "refs/remotes/origin/HEAD")
-      #expect(try references.value(at: 1).target.description == "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
-      #expect(try references.value(at: 1).debugDescription == "RemoteBranch(name: origin/HEAD, reference: refs/remotes/origin/HEAD, target: b1d2dba)")
+      #expect(
+        try references.value(at: 1).target.description
+          == "b1d2dbab22a62771db0c040ccf396dbbfdcef052"
+      )
+      #expect(
+        try references.value(at: 1).debugDescription
+          == "RemoteBranch(name: origin/HEAD, reference: refs/remotes/origin/HEAD, target: b1d2dba)"
+      )
       #expect(try references.value(at: 2).id == "refs/remotes/origin/main")
-      #expect(try references.value(at: 2).target.description == "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
-      #expect(try references.value(at: 2).debugDescription == "RemoteBranch(name: origin/main, reference: refs/remotes/origin/main, target: b1d2dba)")
+      #expect(
+        try references.value(at: 2).target.description
+          == "b1d2dbab22a62771db0c040ccf396dbbfdcef052"
+      )
+      #expect(
+        try references.value(at: 2).debugDescription
+          == "RemoteBranch(name: origin/main, reference: refs/remotes/origin/main, target: b1d2dba)"
+      )
       #expect(try references.value(at: 3).id == "refs/tags/1.0")
-      #expect(try references.value(at: 3).target.description == "17e26bc76cff375603e7173dac31e5183350e559")
-      #expect(try references.value(at: 3).debugDescription == "Tag(name: 1.0, reference: refs/tags/1.0, target: 17e26bc)")
+      #expect(
+        try references.value(at: 3).target.description
+          == "17e26bc76cff375603e7173dac31e5183350e559"
+      )
+      #expect(
+        try references.value(at: 3).debugDescription
+          == "Tag(name: 1.0, reference: refs/tags/1.0, target: 17e26bc)"
+      )
       #expect(try references.value(at: 4).id == "refs/tags/lightweight-tag")
-      #expect(try references.value(at: 4).target.description == "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
-      #expect(try references.value(at: 4).debugDescription == "Tag(name: lightweight-tag, reference: refs/tags/lightweight-tag, target: b1d2dba)")
+      #expect(
+        try references.value(at: 4).target.description
+          == "b1d2dbab22a62771db0c040ccf396dbbfdcef052"
+      )
+      #expect(
+        try references.value(at: 4).debugDescription
+          == "Tag(name: lightweight-tag, reference: refs/tags/lightweight-tag, target: b1d2dba)"
+      )
     }
   }
 

@@ -11,18 +11,36 @@ struct RemoteBranchTests {
       let repo = try Repository(local: local, remote: remote)
       let remoteBranches = try Array(repo.remoteBranches)
       #expect(remoteBranches.count == 2)
-      #expect(try remoteBranches.value(at: 0).id.description == "refs/remotes/origin/HEAD")
-      #expect(try remoteBranches.value(at: 0).reference.description == "refs/remotes/origin/HEAD")
+      #expect(
+        try remoteBranches.value(at: 0).id.description
+          == "refs/remotes/origin/HEAD"
+      )
+      #expect(
+        try remoteBranches.value(at: 0).reference.description
+          == "refs/remotes/origin/HEAD"
+      )
       #expect(try remoteBranches.value(at: 0).name.description == "origin/HEAD")
       #expect(try remoteBranches.value(at: 0).name.remote == "origin")
       #expect(try remoteBranches.value(at: 0).name.branch == "HEAD")
-      #expect(try remoteBranches.value(at: 0).target.description == "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
-      #expect(try remoteBranches.value(at: 1).id.description == "refs/remotes/origin/main")
-      #expect(try remoteBranches.value(at: 1).reference.description == "refs/remotes/origin/main")
+      #expect(
+        try remoteBranches.value(at: 0).target.description
+          == "b1d2dbab22a62771db0c040ccf396dbbfdcef052"
+      )
+      #expect(
+        try remoteBranches.value(at: 1).id.description
+          == "refs/remotes/origin/main"
+      )
+      #expect(
+        try remoteBranches.value(at: 1).reference.description
+          == "refs/remotes/origin/main"
+      )
       #expect(try remoteBranches.value(at: 1).name.description == "origin/main")
       #expect(try remoteBranches.value(at: 1).name.remote == "origin")
       #expect(try remoteBranches.value(at: 1).name.branch == "main")
-      #expect(try remoteBranches.value(at: 1).target.description == "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
+      #expect(
+        try remoteBranches.value(at: 1).target.description
+          == "b1d2dbab22a62771db0c040ccf396dbbfdcef052"
+      )
     }
   }
 
@@ -36,7 +54,10 @@ struct RemoteBranchTests {
       #expect(remoteBranch.reference.description == "refs/remotes/origin/main")
       #expect(remoteBranch.name.remote == "origin")
       #expect(remoteBranch.name.branch == "main")
-      #expect(remoteBranch.target.description == "b1d2dbab22a62771db0c040ccf396dbbfdcef052")
+      #expect(
+        remoteBranch.target.description
+          == "b1d2dbab22a62771db0c040ccf396dbbfdcef052"
+      )
     }
   }
 
