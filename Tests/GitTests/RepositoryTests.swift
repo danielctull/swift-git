@@ -53,7 +53,7 @@ struct RepositoryTests {
       #expect(throws: Never.self) {
         try Repository.clone(remote, to: local)
       }
-      let repo = try Repository(url: local, options: .open)
+      let repo = try Repository.open(local)
       AssertEqualResolvingSymlinks(repo.workingDirectory, local)
       try AssertEqualResolvingSymlinks(
         repo.gitDirectory,

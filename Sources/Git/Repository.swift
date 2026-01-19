@@ -10,7 +10,6 @@ public struct Repository: Equatable, Hashable {
 extension Repository {
 
   public enum Options: Sendable {
-    case open
     case create(isBare: Bool)
 
     public static let create = Self.create(isBare: false)
@@ -21,7 +20,6 @@ extension Repository {
       create: .init { pointer in
         url.withUnsafeFileSystemRepresentation { path in
           switch options {
-          case .open: return git_repository_open(pointer, path)
           case .create(let isBare):
             return git_repository_init(pointer, path, UInt32(isBare))
           }
@@ -31,6 +29,22 @@ extension Repository {
       free: git_repository_free
     )
   }
+
+  public static func open(_ url: URL) throws -> Repository {
+    try Repository(
+      pointer: Managed(
+        create: Managed.Create { pointer in
+          url.withUnsafeFileSystemRepresentation { path in
+            git_repository_open(pointer, path)
+          }
+        },
+        free: git_repository_free
+      )
+    )
+  }
+}
+
+extension Repository {
 
   /// Get the `URL` of the shared common directory for this repository.
   ///
