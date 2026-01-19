@@ -19,7 +19,7 @@ struct RepositoryTests {
 
   @Test func create() throws {
     try FileManager.default.withTemporaryDirectory { url in
-      let repo = try Repository(url: url)
+      let repo = try Repository.create(url)
       AssertEqualResolvingSymlinks(repo.workingDirectory, url)
       try AssertEqualResolvingSymlinks(
         repo.gitDirectory,
@@ -30,7 +30,7 @@ struct RepositoryTests {
 
   @Test func createBare() throws {
     try FileManager.default.withTemporaryDirectory { url in
-      let bare = try Repository(url: url, options: .create(isBare: true))
+      let bare = try Repository.create(url, isBare: true)
       #expect(bare.workingDirectory == nil)
       try AssertEqualResolvingSymlinks(bare.gitDirectory, url)
     }
@@ -38,7 +38,7 @@ struct RepositoryTests {
 
   @Test func createNotBare() throws {
     try FileManager.default.withTemporaryDirectory { url in
-      let repo = try Repository(url: url, options: .create(isBare: false))
+      let repo = try Repository.create(url, isBare: false)
       AssertEqualResolvingSymlinks(repo.workingDirectory, url)
       try AssertEqualResolvingSymlinks(
         repo.gitDirectory,

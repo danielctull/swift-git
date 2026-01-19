@@ -9,24 +9,19 @@ public struct Repository: Equatable, Hashable {
 
 extension Repository {
 
-  public enum Options: Sendable {
-    case create(isBare: Bool)
-
-    public static let create = Self.create(isBare: false)
-  }
-
-  public init(url: URL, options: Options = .create) throws {
-    pointer = try Managed(
-      create: .init { pointer in
-        url.withUnsafeFileSystemRepresentation { path in
-          switch options {
-          case .create(let isBare):
-            return git_repository_init(pointer, path, UInt32(isBare))
+  public static func create(
+    _ url: URL,
+    isBare: Bool = false
+  ) throws -> Repository {
+    try Repository(
+      pointer: Managed(
+        create: Managed.Create { pointer in
+          url.withUnsafeFileSystemRepresentation { path in
+            git_repository_init(pointer, path, UInt32(isBare))
           }
-        }
-
-      },
-      free: git_repository_free
+        },
+        free: git_repository_free
+      )
     )
   }
 

@@ -7,7 +7,7 @@ struct ReferenceTests {
 
   @Test func throwsUnbornBranchError() throws {
     try FileManager.default.withTemporaryDirectory { url in
-      let repository = try Repository(url: url)
+      let repository = try Repository.create(url)
       let error = try #require(
         #expect(throws: GitError.self) { try repository.head }
       )
