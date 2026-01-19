@@ -20,7 +20,7 @@ struct CloneTests {
   @Test func clone() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
-      let repo = try Repository(local: local, remote: remote)
+      let repo = try Repository.clone(remote, to: local)
       AssertEqualResolvingSymlinks(repo.workingDirectory, local)
       try AssertEqualResolvingSymlinks(
         repo.gitDirectory,

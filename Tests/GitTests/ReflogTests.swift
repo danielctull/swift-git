@@ -14,7 +14,7 @@ struct ReflogTests {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
       let cloneDate = Date()
-      let repo = try Repository(local: local, remote: remote)
+      let repo = try Repository.clone(remote, to: local)
       let reflog = try repo.reflog
       #expect(reflog.items.count == 1)
       let item = try #require(reflog.items.last)
@@ -43,7 +43,7 @@ struct ReflogTests {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
 
-      let repo = try Repository(local: local, remote: remote)
+      let repo = try Repository.clone(remote, to: local)
       let reflog = try repo.reflog(named: "CUSTOM")
       #expect(reflog.items.count == 0)
 
@@ -69,7 +69,7 @@ struct ReflogTests {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
 
-      let repo = try Repository(local: local, remote: remote)
+      let repo = try Repository.clone(remote, to: local)
       let reflog = try repo.reflog(named: "CUSTOM")
       #expect(reflog.items.count == 0)
 
@@ -85,7 +85,7 @@ struct ReflogTests {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
 
-      let repo = try Repository(local: local, remote: remote)
+      let repo = try Repository.clone(remote, to: local)
 
       do {
         let reflog = try repo.reflog(named: "CUSTOM")
@@ -118,7 +118,7 @@ struct ReflogTests {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
 
-      let repo = try Repository(local: local, remote: remote)
+      let repo = try Repository.clone(remote, to: local)
 
       do {
         let reflog = try repo.reflog(named: "OLD")
@@ -154,7 +154,7 @@ struct ReflogTests {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
 
-      let repo = try Repository(local: local, remote: remote)
+      let repo = try Repository.clone(remote, to: local)
 
       #expect(try repo.reflog(named: "REFLOG_TEST").items.count == 0)
 

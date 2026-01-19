@@ -8,7 +8,7 @@ struct BranchTests {
   @Test func repositoryBranches() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
-      let repo = try Repository(local: local, remote: remote)
+      let repo = try Repository.clone(remote, to: local)
       let branches = try Array(repo.branches)
       #expect(branches.count == 1)
       let branch = try #require(branches.first)
@@ -24,7 +24,7 @@ struct BranchTests {
   @Test func repositoryCreateBranchNamed() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
-      let repo = try Repository(local: local, remote: remote)
+      let repo = try Repository.clone(remote, to: local)
       let main = try repo.branch(named: "main")
       let commits = try Array(repo.commits(for: .branch(main)))
       let commit = try #require(commits.first)
@@ -41,7 +41,7 @@ struct BranchTests {
   @Test func repositoryBranchNamed() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
-      let repo = try Repository(local: local, remote: remote)
+      let repo = try Repository.clone(remote, to: local)
       let branch = try repo.branch(named: "main")
       #expect(branch.name == "main")
       #expect(branch.id.description == "refs/heads/main")
@@ -55,7 +55,7 @@ struct BranchTests {
   @Test func branchMove() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
-      let repo = try Repository(local: local, remote: remote)
+      let repo = try Repository.clone(remote, to: local)
       let branch = try repo.branch(named: "main")
       do {
         let moved = try branch.move(to: "moved")
@@ -82,7 +82,7 @@ struct BranchTests {
   @Test func delete() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
-      let repo = try Repository(local: local, remote: remote)
+      let repo = try Repository.clone(remote, to: local)
       let main = try repo.branch(named: "main")
       let commits = try Array(repo.commits(for: .branch(main)))
       let commit = try #require(commits.first)
@@ -96,7 +96,7 @@ struct BranchTests {
   @Test func upstream() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
-      let repo = try Repository(local: local, remote: remote)
+      let repo = try Repository.clone(remote, to: local)
       let main = try repo.branch(named: "main")
       let remoteBranch = try main.upstream
       #expect(remoteBranch.id.description == "refs/remotes/origin/main")
@@ -114,7 +114,7 @@ struct BranchTests {
   @Test func setUpstream() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
-      let repo = try Repository(local: local, remote: remote)
+      let repo = try Repository.clone(remote, to: local)
       let main = try repo.branch(named: "main")
       let commit = try #require(Array(repo.commits(for: .branch(main))).first)
 

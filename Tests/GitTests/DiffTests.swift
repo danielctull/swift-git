@@ -8,7 +8,7 @@ struct DiffTests {
   @Test func addedFile() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
-      let repo = try Repository(local: local, remote: remote)
+      let repo = try Repository.clone(remote, to: local)
       let commits = try Array(repo.commits(sortedBy: .reverse))
       #expect(commits.count == 4)
       let first = try commits.value(at: 0)
@@ -43,7 +43,7 @@ struct DiffTests {
   @Test func addedFileHunk() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
-      let repo = try Repository(local: local, remote: remote)
+      let repo = try Repository.clone(remote, to: local)
       let commits = try Array(repo.commits(sortedBy: .reverse))
       #expect(commits.count == 4)
       let first = try commits.value(at: 0)

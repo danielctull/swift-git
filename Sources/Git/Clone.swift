@@ -3,15 +3,18 @@ import libgit2
 
 extension Repository {
 
-  public init(local: URL, remote: URL) throws {
+  /// Clone a remote repository.
+  public static func clone(_ remote: URL, to local: URL) throws -> Repository {
     let remoteString = remote.isFileURL ? remote.path : remote.absoluteString
-    pointer = try Managed(
-      create: .init { pointer in
-        local.withUnsafeFileSystemRepresentation { path in
-          git_clone(pointer, remoteString, path, nil)
-        }
-      },
-      free: git_repository_free
+    return Repository(
+      pointer: try Managed(
+        create: Managed.Create { pointer in
+          local.withUnsafeFileSystemRepresentation { path in
+            git_clone(pointer, remoteString, path, nil)
+          }
+        },
+        free: git_repository_free
+      )
     )
   }
 }

@@ -18,7 +18,7 @@ struct ReferenceTests {
   @Test func head() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
-      let repository = try Repository(local: local, remote: remote)
+      let repository = try Repository.clone(remote, to: local)
       let head = try repository.head
       guard case .branch(let branch) = head else {
         Issue.record("Expected branch")
@@ -32,7 +32,7 @@ struct ReferenceTests {
   @Test func repositoryReferences() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
-      let repo = try Repository(local: local, remote: remote)
+      let repo = try Repository.clone(remote, to: local)
       let references = try Array(repo.references)
       #expect(references.count == 5)
       #expect(try references.value(at: 0).id == "refs/heads/main")
@@ -86,7 +86,7 @@ struct ReferenceTests {
   @Test func delete() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
-      let repo = try Repository(local: local, remote: remote)
+      let repo = try Repository.clone(remote, to: local)
 
       do {
         let references = try Array(repo.references)
@@ -137,7 +137,7 @@ struct ReferenceTests {
   @Test func removeReferenceByID() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
-      let repo = try Repository(local: local, remote: remote)
+      let repo = try Repository.clone(remote, to: local)
 
       do {
         let references = try Array(repo.references)
@@ -192,7 +192,7 @@ struct ReferenceTests {
   @Test func removeReference() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
-      let repo = try Repository(local: local, remote: remote)
+      let repo = try Repository.clone(remote, to: local)
 
       do {
         let references = try Array(repo.references)

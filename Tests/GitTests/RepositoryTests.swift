@@ -51,7 +51,7 @@ struct RepositoryTests {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
       #expect(throws: Never.self) {
-        try Repository(local: local, remote: remote)
+        try Repository.clone(remote, to: local)
       }
       let repo = try Repository(url: local, options: .open)
       AssertEqualResolvingSymlinks(repo.workingDirectory, local)
