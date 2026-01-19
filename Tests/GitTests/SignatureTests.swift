@@ -1,10 +1,11 @@
 import Foundation
 import Git
-import XCTest
+import Testing
 
-final class SignatureTests: XCTestCase {
+@Suite("Signature")
+struct SignatureTests {
 
-  func testDefaultSignature() throws {
+  @Test func defaultSignature() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
       let repo = try Repository(local: local, remote: remote)
@@ -16,16 +17,14 @@ final class SignatureTests: XCTestCase {
       let date = Date()
       let signature = try repo.defaultSignature
 
-      XCTAssertEqual(signature.name, "Tester Nameson")
-      XCTAssertEqual(signature.email, "some_address@example.com")
-      XCTAssertEqual(
-        signature.date.timeIntervalSince1970,
-        date.timeIntervalSince1970,
-        accuracy: 1
-      )
-      XCTAssertEqual(
-        signature.timeZone,
-        TimeZone(secondsFromGMT: TimeZone.current.secondsFromGMT())
+      #expect(signature.name == "Tester Nameson")
+      #expect(signature.email == "some_address@example.com")
+      let timeInterval = signature.date.timeIntervalSince(date)
+      #expect(timeInterval < 1)
+      #expect(timeInterval > -1)
+      #expect(
+        signature.timeZone
+          == TimeZone(secondsFromGMT: TimeZone.current.secondsFromGMT())
       )
     }
   }

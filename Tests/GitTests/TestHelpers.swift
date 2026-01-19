@@ -1,5 +1,5 @@
 import Foundation
-import XCTest
+import Testing
 
 extension FileManager {
 
@@ -26,7 +26,7 @@ extension URL {
 extension Bundle {
 
   func url(forRepository repository: String) throws -> URL {
-    try XCTUnwrap(url(forResource: "Repositories", withExtension: nil))
+    try #require(url(forResource: "Repositories", withExtension: nil))
       .appendingPathComponent(repository)
   }
 }

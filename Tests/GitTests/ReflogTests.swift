@@ -1,92 +1,87 @@
 import Foundation
 import Git
-import XCTest
+import Testing
 
-final class ReflogTests: XCTestCase {
+@Suite("Reflog")
+struct ReflogTests {
 
-  func testName() throws {
+  @Test func name() throws {
     let name = Reflog.Name("Custom")
-    XCTAssertEqual(name.description, "Custom")
+    #expect(name.description == "Custom")
   }
 
-  func testReflog() throws {
+  @Test func reflog() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
       let cloneDate = Date()
       let repo = try Repository(local: local, remote: remote)
       let reflog = try repo.reflog
-      XCTAssertEqual(reflog.items.count, 1)
-      let item = try XCTUnwrap(reflog.items.last)
-      //            XCTAssertEqual(item.message, "checkout: moving from master to main")
-      XCTAssertEqual(
-        item.old.description,
-        "0000000000000000000000000000000000000000"
+      #expect(reflog.items.count == 1)
+      let item = try #require(reflog.items.last)
+      //            #expect(item.message == "checkout: moving from master to main")
+      #expect(
+        item.old.description == "0000000000000000000000000000000000000000"
       )
-      XCTAssertEqual(
-        item.new.description,
-        "b1d2dbab22a62771db0c040ccf396dbbfdcef052"
+      #expect(
+        item.new.description == "b1d2dbab22a62771db0c040ccf396dbbfdcef052"
       )
-      XCTAssertEqual(item.committer.name, "Daniel Tull")
-      XCTAssertEqual(item.committer.email, "dt@danieltull.co.uk")
+      #expect(item.committer.name == "Daniel Tull")
+      #expect(item.committer.email == "dt@danieltull.co.uk")
       // The date for a reflog item is when it occurred, in this case when
       // the repo was cloned at the start of this test.
-      XCTAssertEqual(
-        item.committer.date.timeIntervalSince1970,
-        cloneDate.timeIntervalSince1970,
-        accuracy: 1
-      )
-      XCTAssertEqual(
-        item.committer.timeZone,
-        TimeZone(secondsFromGMT: TimeZone.current.secondsFromGMT())
+      let timeInterval = item.committer.date.timeIntervalSince(cloneDate)
+      #expect(timeInterval < 1)
+      #expect(timeInterval > -1)
+      #expect(
+        item.committer.timeZone
+          == TimeZone(secondsFromGMT: TimeZone.current.secondsFromGMT())
       )
     }
   }
 
-  func testAppend() throws {
+  @Test func append() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
 
       let repo = try Repository(local: local, remote: remote)
       let reflog = try repo.reflog(named: "CUSTOM")
-      XCTAssertEqual(reflog.items.count, 0)
+      #expect(reflog.items.count == 0)
 
       try reflog.append(.testItem(id: repo.head.target))
-      XCTAssertEqual(reflog.items.count, 1)
+      #expect(reflog.items.count == 1)
 
-      let item = try XCTUnwrap(reflog.items.first)
-      XCTAssertEqual(item.message, "Test Message")
-      XCTAssertEqual(
-        item.old.description,
-        "0000000000000000000000000000000000000000"
+      let item = try #require(reflog.items.first)
+      #expect(item.message == "Test Message")
+      #expect(
+        item.old.description == "0000000000000000000000000000000000000000"
       )
-      XCTAssertEqual(
-        item.new.description,
-        "b1d2dbab22a62771db0c040ccf396dbbfdcef052"
+      #expect(
+        item.new.description == "b1d2dbab22a62771db0c040ccf396dbbfdcef052"
       )
-      XCTAssertEqual(item.committer.name, "Test Name")
-      XCTAssertEqual(item.committer.email, "Test Email")
-      XCTAssertEqual(item.committer.date, Date(timeIntervalSince1970: 1999))
-      XCTAssertEqual(item.committer.timeZone, TimeZone(secondsFromGMT: 120))
+      #expect(item.committer.name == "Test Name")
+      #expect(item.committer.email == "Test Email")
+      #expect(item.committer.date == Date(timeIntervalSince1970: 1999))
+      #expect(item.committer.timeZone == TimeZone(secondsFromGMT: 120))
     }
   }
 
-  func testRemove() throws {
+  @Test func remove() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
 
       let repo = try Repository(local: local, remote: remote)
       let reflog = try repo.reflog(named: "CUSTOM")
-      XCTAssertEqual(reflog.items.count, 0)
+      #expect(reflog.items.count == 0)
 
       try reflog.append(.testItem(id: repo.head.target))
-      XCTAssertEqual(reflog.items.count, 1)
+      #expect(reflog.items.count == 1)
 
-      try reflog.remove(XCTUnwrap(reflog.items.first))
-      XCTAssertEqual(reflog.items.count, 0)
+      try reflog.remove(#require(reflog.items.first))
+      #expect(reflog.items.count == 0)
     }
   }
 
-  func testWrite() throws {
+  @Test func write() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
 
@@ -94,34 +89,32 @@ final class ReflogTests: XCTestCase {
 
       do {
         let reflog = try repo.reflog(named: "CUSTOM")
-        XCTAssertEqual(reflog.items.count, 0)
+        #expect(reflog.items.count == 0)
         try reflog.append(.testItem(id: repo.head.target))
         try reflog.write()
       }
 
       do {
         let reflog = try repo.reflog(named: "CUSTOM")
-        XCTAssertEqual(reflog.items.count, 1)
+        #expect(reflog.items.count == 1)
 
-        let item = try XCTUnwrap(reflog.items.first)
-        XCTAssertEqual(item.message, "Test Message")
-        XCTAssertEqual(
-          item.old.description,
-          "0000000000000000000000000000000000000000"
+        let item = try #require(reflog.items.first)
+        #expect(item.message == "Test Message")
+        #expect(
+          item.old.description == "0000000000000000000000000000000000000000"
         )
-        XCTAssertEqual(
-          item.new.description,
-          "b1d2dbab22a62771db0c040ccf396dbbfdcef052"
+        #expect(
+          item.new.description == "b1d2dbab22a62771db0c040ccf396dbbfdcef052"
         )
-        XCTAssertEqual(item.committer.name, "Test Name")
-        XCTAssertEqual(item.committer.email, "Test Email")
-        XCTAssertEqual(item.committer.date, Date(timeIntervalSince1970: 1999))
-        XCTAssertEqual(item.committer.timeZone, TimeZone(secondsFromGMT: 120))
+        #expect(item.committer.name == "Test Name")
+        #expect(item.committer.email == "Test Email")
+        #expect(item.committer.date == Date(timeIntervalSince1970: 1999))
+        #expect(item.committer.timeZone == TimeZone(secondsFromGMT: 120))
       }
     }
   }
 
-  func testRename() throws {
+  @Test func rename() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
 
@@ -129,52 +122,50 @@ final class ReflogTests: XCTestCase {
 
       do {
         let reflog = try repo.reflog(named: "OLD")
-        XCTAssertEqual(reflog.items.count, 0)
+        #expect(reflog.items.count == 0)
         try reflog.append(.testItem(id: repo.head.target))
         try reflog.write()
-        XCTAssertEqual(reflog.items.count, 1)
+        #expect(reflog.items.count == 1)
       }
 
       try repo.renameReflog(from: "OLD", to: "NEW")
 
       do {
         let reflog = try repo.reflog(named: "NEW")
-        XCTAssertEqual(reflog.items.count, 1)
+        #expect(reflog.items.count == 1)
 
-        let item = try XCTUnwrap(reflog.items.first)
-        XCTAssertEqual(item.message, "Test Message")
-        XCTAssertEqual(
-          item.old.description,
-          "0000000000000000000000000000000000000000"
+        let item = try #require(reflog.items.first)
+        #expect(item.message == "Test Message")
+        #expect(
+          item.old.description == "0000000000000000000000000000000000000000"
         )
-        XCTAssertEqual(
-          item.new.description,
-          "b1d2dbab22a62771db0c040ccf396dbbfdcef052"
+        #expect(
+          item.new.description == "b1d2dbab22a62771db0c040ccf396dbbfdcef052"
         )
-        XCTAssertEqual(item.committer.name, "Test Name")
-        XCTAssertEqual(item.committer.email, "Test Email")
-        XCTAssertEqual(item.committer.date, Date(timeIntervalSince1970: 1999))
-        XCTAssertEqual(item.committer.timeZone, TimeZone(secondsFromGMT: 120))
+        #expect(item.committer.name == "Test Name")
+        #expect(item.committer.email == "Test Email")
+        #expect(item.committer.date == Date(timeIntervalSince1970: 1999))
+        #expect(item.committer.timeZone == TimeZone(secondsFromGMT: 120))
       }
     }
   }
 
-  func testDelete() throws {
+  @Test func delete() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
 
       let repo = try Repository(local: local, remote: remote)
 
-      XCTAssertEqual(try repo.reflog(named: "REFLOG_TEST").items.count, 0)
+      #expect(try repo.reflog(named: "REFLOG_TEST").items.count == 0)
 
       let reflog = try repo.reflog(named: "REFLOG_TEST")
       try reflog.append(.testItem(id: repo.head.target))
       try reflog.write()
 
-      XCTAssertEqual(try repo.reflog(named: "REFLOG_TEST").items.count, 1)
+      #expect(try repo.reflog(named: "REFLOG_TEST").items.count == 1)
 
       try repo.deleteReflog(named: "REFLOG_TEST")
-      XCTAssertEqual(try repo.reflog(named: "REFLOG_TEST").items.count, 0)
+      #expect(try repo.reflog(named: "REFLOG_TEST").items.count == 0)
     }
   }
 }
@@ -189,7 +180,7 @@ extension Reflog.Item.Draft {
         name: "Test Name",
         email: "Test Email",
         date: Date(timeIntervalSince1970: 1999),
-        timeZone: XCTUnwrap(TimeZone(secondsFromGMT: 120))
+        timeZone: #require(TimeZone(secondsFromGMT: 120))
       )
     )
   }

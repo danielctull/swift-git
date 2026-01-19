@@ -1,31 +1,28 @@
 import Foundation
 import Git
-import XCTest
+import Testing
 
-final class BlameTests: XCTestCase {
+@Suite("Blame")
+struct BlameTests {
 
-  func testBlame() throws {
+  @Test func blame() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
       let repo = try Repository(local: local, remote: remote)
       let blame = try repo.blame(for: "file.txt")
       let hunks = blame.hunks
-      XCTAssertEqual(hunks.count, 1)
+      #expect(hunks.count == 1)
       let hunk = try Array(hunks).value(at: 0)
-      XCTAssertEqual(
-        hunk.commitID.description,
-        "41c143541c9d917db83ce4e920084edbf2a4177e"
+      #expect(
+        hunk.commitID.description == "41c143541c9d917db83ce4e920084edbf2a4177e"
       )
-      XCTAssertEqual(hunk.lines.lowerBound, 1)
-      XCTAssertEqual(hunk.lines.upperBound, 1)
-      XCTAssertEqual(
-        hunk.signature.date,
-        Date(timeIntervalSince1970: 1_595_676_911)
-      )
-      XCTAssertEqual(hunk.signature.email, "dt@danieltull.co.uk")
-      XCTAssertEqual(hunk.signature.name, "Daniel Tull")
-      XCTAssertEqual(hunk.path, "file.text")
-      XCTAssertEqual(try blame.hunk(for: 1), hunk)
+      #expect(hunk.lines.lowerBound == 1)
+      #expect(hunk.lines.upperBound == 1)
+      #expect(hunk.signature.date == Date(timeIntervalSince1970: 1_595_676_911))
+      #expect(hunk.signature.email == "dt@danieltull.co.uk")
+      #expect(hunk.signature.name == "Daniel Tull")
+      #expect(hunk.path == "file.text")
+      #expect(try blame.hunk(for: 1) == hunk)
     }
   }
 }
