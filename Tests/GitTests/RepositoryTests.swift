@@ -17,18 +17,6 @@ private func AssertEqualResolvingSymlinks(
 @Suite("Repository")
 struct RepositoryTests {
 
-  @Test func clone() throws {
-    let remote = try Bundle.module.url(forRepository: "Test.git")
-    try FileManager.default.withTemporaryDirectory { local in
-      let repo = try Repository(local: local, remote: remote)
-      AssertEqualResolvingSymlinks(repo.workingDirectory, local)
-      try AssertEqualResolvingSymlinks(
-        repo.gitDirectory,
-        local.appending(path: ".git")
-      )
-    }
-  }
-
   @Test func create() throws {
     try FileManager.default.withTemporaryDirectory { url in
       let repo = try Repository(url: url)

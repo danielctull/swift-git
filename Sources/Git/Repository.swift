@@ -32,18 +32,6 @@ extension Repository {
     )
   }
 
-  public init(local: URL, remote: URL) throws {
-    let remoteString = remote.isFileURL ? remote.path : remote.absoluteString
-    pointer = try Managed(
-      create: .init { pointer in
-        local.withUnsafeFileSystemRepresentation { path in
-          git_clone(pointer, remoteString, path, nil)
-        }
-      },
-      free: git_repository_free
-    )
-  }
-
   /// Get the `URL` of the shared common directory for this repository.
   ///
   /// If the repository is bare, it is the root directory for the repository.
