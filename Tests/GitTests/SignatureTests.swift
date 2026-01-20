@@ -8,7 +8,7 @@ struct SignatureTests {
   @Test func defaultSignature() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
-      let repo = try Repository(local: local, remote: remote)
+      let repo = try Repository.clone(remote, to: local)
 
       let config = try repo.config.level(.local)
       try config.set("Tester Nameson", for: "user.name")

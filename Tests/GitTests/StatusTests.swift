@@ -8,7 +8,7 @@ struct StatusTests {
   @Test func addFileToWorkingDirectory() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
-      let repo = try Repository(local: local, remote: remote)
+      let repo = try Repository.clone(remote, to: local)
       #expect(try repo.status.count == 0)
 
       let path = UUID().uuidString

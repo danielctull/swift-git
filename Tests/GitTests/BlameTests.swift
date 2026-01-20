@@ -8,7 +8,7 @@ struct BlameTests {
   @Test func blame() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
-      let repo = try Repository(local: local, remote: remote)
+      let repo = try Repository.clone(remote, to: local)
       let blame = try repo.blame(for: "file.txt")
       let hunks = blame.hunks
       #expect(hunks.count == 1)

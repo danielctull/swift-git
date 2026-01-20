@@ -8,7 +8,7 @@ struct RemoteBranchTests {
   @Test func repositoryRemoteBranches() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
-      let repo = try Repository(local: local, remote: remote)
+      let repo = try Repository.clone(remote, to: local)
       let remoteBranches = try Array(repo.remoteBranches)
       #expect(remoteBranches.count == 2)
       #expect(
@@ -47,7 +47,7 @@ struct RemoteBranchTests {
   @Test func repositoryRemoteBranchNamed() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
-      let repo = try Repository(local: local, remote: remote)
+      let repo = try Repository.clone(remote, to: local)
       let remoteBranch = try repo.branch(on: "origin", named: "main")
       #expect(remoteBranch.name.description == "origin/main")
       #expect(remoteBranch.id.description == "refs/remotes/origin/main")
@@ -64,7 +64,7 @@ struct RemoteBranchTests {
   @Test func delete() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
-      let repo = try Repository(local: local, remote: remote)
+      let repo = try Repository.clone(remote, to: local)
       let remoteBranch = try repo.branch(on: "origin", named: "main")
       try repo.delete(.remoteBranch(remoteBranch))
       #expect(throws: (any Error).self) {
@@ -73,7 +73,7 @@ struct RemoteBranchTests {
 
       // Does not delete it on remote
       try FileManager.default.withTemporaryDirectory { local in
-        let repo = try Repository(local: local, remote: remote)
+        let repo = try Repository.clone(remote, to: local)
         #expect(throws: Never.self) {
           try repo.branch(on: "origin", named: "main")
         }

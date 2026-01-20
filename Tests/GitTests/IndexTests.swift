@@ -8,7 +8,7 @@ struct IndexTests {
   @Test func index() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
-      let repo = try Repository(local: local, remote: remote)
+      let repo = try Repository.clone(remote, to: local)
       let entries = try Array(repo.index.entries)
       #expect(entries.count == 2)
 

@@ -8,7 +8,7 @@ struct ResetTests {
   @Test func resetSoft() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
-      let repo = try Repository(local: local, remote: remote)
+      let repo = try Repository.clone(remote, to: local)
 
       #expect(
         try repo.current.id.description
@@ -52,7 +52,7 @@ struct ResetTests {
   @Test func resetMixed() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
-      let repo = try Repository(local: local, remote: remote)
+      let repo = try Repository.clone(remote, to: local)
 
       #expect(
         try repo.current.id.description
@@ -96,7 +96,7 @@ struct ResetTests {
   @Test func resetHard() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
-      let repo = try Repository(local: local, remote: remote)
+      let repo = try Repository.clone(remote, to: local)
 
       #expect(
         try repo.current.id.description

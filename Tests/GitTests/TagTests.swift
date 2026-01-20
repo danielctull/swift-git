@@ -8,7 +8,7 @@ struct TagTests {
   @Test func repositoryTags() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
-      let repo = try Repository(local: local, remote: remote)
+      let repo = try Repository.clone(remote, to: local)
       let tags = try repo.tags
       #expect(tags.count == 2)
 
@@ -46,7 +46,7 @@ struct TagTests {
   @Test func delete() throws {
     let remote = try Bundle.module.url(forRepository: "Test.git")
     try FileManager.default.withTemporaryDirectory { local in
-      let repo = try Repository(local: local, remote: remote)
+      let repo = try Repository.clone(remote, to: local)
       let tags = try repo.tags
       #expect(tags.count == 2)
       let tag0 = try #require(tags.first)
