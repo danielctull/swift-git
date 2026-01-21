@@ -17,48 +17,43 @@ private func AssertEqualResolvingSymlinks(
 @Suite("Repository")
 struct RepositoryTests {
 
-  @Test func create() throws {
-    try FileManager.default.withTemporaryDirectory { url in
-      let repo = try Repository.create(url)
-      AssertEqualResolvingSymlinks(repo.workingDirectory, url)
-      try AssertEqualResolvingSymlinks(
-        repo.gitDirectory,
-        url.appending(path: ".git")
-      )
-    }
+  @Test(.scratchDirectory(.random))
+  func create() throws {
+    let repository = try Repository.create(.scratchDirectory)
+    AssertEqualResolvingSymlinks(repository.workingDirectory, .scratchDirectory)
+    try AssertEqualResolvingSymlinks(
+      repository.gitDirectory,
+      URL.scratchDirectory.appending(path: ".git")
+    )
   }
 
-  @Test func createBare() throws {
-    try FileManager.default.withTemporaryDirectory { url in
-      let bare = try Repository.create(url, isBare: true)
-      #expect(bare.workingDirectory == nil)
-      try AssertEqualResolvingSymlinks(bare.gitDirectory, url)
-    }
+  @Test(.scratchDirectory(.random))
+  func createBare() throws {
+    let bare = try Repository.create(.scratchDirectory, isBare: true)
+    #expect(bare.workingDirectory == nil)
+    try AssertEqualResolvingSymlinks(bare.gitDirectory, .scratchDirectory)
   }
 
-  @Test func createNotBare() throws {
-    try FileManager.default.withTemporaryDirectory { url in
-      let repo = try Repository.create(url, isBare: false)
-      AssertEqualResolvingSymlinks(repo.workingDirectory, url)
-      try AssertEqualResolvingSymlinks(
-        repo.gitDirectory,
-        url.appending(path: ".git")
-      )
-    }
+  @Test(.scratchDirectory(.random))
+  func createNotBare() throws {
+    let repository = try Repository.create(.scratchDirectory, isBare: false)
+    AssertEqualResolvingSymlinks(repository.workingDirectory, .scratchDirectory)
+    try AssertEqualResolvingSymlinks(
+      repository.gitDirectory,
+      URL.scratchDirectory.appending(path: ".git")
+    )
   }
 
-  @Test func open() throws {
-    let remote = try Bundle.module.url(forRepository: "Test.git")
-    try FileManager.default.withTemporaryDirectory { local in
-      #expect(throws: Never.self) {
-        try Repository.clone(remote, to: local)
-      }
-      let repo = try Repository.open(local)
-      AssertEqualResolvingSymlinks(repo.workingDirectory, local)
-      try AssertEqualResolvingSymlinks(
-        repo.gitDirectory,
-        local.appending(path: ".git")
-      )
+  @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
+  func open() throws {
+    #expect(throws: Never.self) {
+      try Repository.clone(.repository, to: .scratchDirectory)
     }
+    let repository = try Repository.open(URL.scratchDirectory)
+    AssertEqualResolvingSymlinks(repository.workingDirectory, .scratchDirectory)
+    try AssertEqualResolvingSymlinks(
+      repository.gitDirectory,
+      URL.scratchDirectory.appending(path: ".git")
+    )
   }
 }

@@ -1,6 +1,7 @@
 import Foundation
 import Git
 import Testing
+import XCTest
 
 private func AssertEqualResolvingSymlinks(
   _ expression1: @autoclosure () throws -> URL?,
@@ -17,15 +18,16 @@ private func AssertEqualResolvingSymlinks(
 @Suite("Clone")
 struct CloneTests {
 
-  @Test func clone() throws {
-    let remote = try Bundle.module.url(forRepository: "Test.git")
-    try FileManager.default.withTemporaryDirectory { local in
-      let repo = try Repository.clone(remote, to: local)
-      AssertEqualResolvingSymlinks(repo.workingDirectory, local)
-      try AssertEqualResolvingSymlinks(
-        repo.gitDirectory,
-        local.appending(path: ".git")
-      )
-    }
+  @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
+  func clone() throws {
+    let repository = try Repository.clone(.repository, to: .scratchDirectory)
+    AssertEqualResolvingSymlinks(
+      repository.workingDirectory,
+      URL.scratchDirectory
+    )
+    try AssertEqualResolvingSymlinks(
+      repository.gitDirectory,
+      URL.scratchDirectory.appending(path: ".git")
+    )
   }
 }
