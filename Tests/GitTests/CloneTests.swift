@@ -20,10 +20,13 @@ struct CloneTests {
 
   @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func clone() throws {
-    let repo = try Repository.clone(.repository, to: .scratchDirectory)
-    AssertEqualResolvingSymlinks(repo.workingDirectory, URL.scratchDirectory)
+    let repository = try Repository.clone(.repository, to: .scratchDirectory)
+    AssertEqualResolvingSymlinks(
+      repository.workingDirectory,
+      URL.scratchDirectory
+    )
     try AssertEqualResolvingSymlinks(
-      repo.gitDirectory,
+      repository.gitDirectory,
       URL.scratchDirectory.appending(path: ".git")
     )
   }

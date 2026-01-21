@@ -7,8 +7,8 @@ struct TagTests {
 
   @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func repositoryTags() throws {
-    let repo = try Repository.clone(.repository, to: .scratchDirectory)
-    let tags = try repo.tags
+    let repository = try Repository.clone(.repository, to: .scratchDirectory)
+    let tags = try repository.tags
     #expect(tags.count == 2)
 
     let tag0 = try #require(tags.first)
@@ -43,12 +43,12 @@ struct TagTests {
 
   @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func delete() throws {
-    let repo = try Repository.clone(.repository, to: .scratchDirectory)
-    let tags = try repo.tags
+    let repository = try Repository.clone(.repository, to: .scratchDirectory)
+    let tags = try repository.tags
     #expect(tags.count == 2)
     let tag0 = try #require(tags.first)
-    try repo.delete(.tag(tag0))
-    #expect(try repo.tags.count == 1)
-    #expect(throws: (any Error).self) { try repo.tag(named: tag0.name) }
+    try repository.delete(.tag(tag0))
+    #expect(try repository.tags.count == 1)
+    #expect(throws: (any Error).self) { try repository.tag(named: tag0.name) }
   }
 }

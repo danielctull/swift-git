@@ -19,10 +19,10 @@ struct RepositoryTests {
 
   @Test(.scratchDirectory(.random))
   func create() throws {
-    let repo = try Repository.create(.scratchDirectory)
-    AssertEqualResolvingSymlinks(repo.workingDirectory, .scratchDirectory)
+    let repository = try Repository.create(.scratchDirectory)
+    AssertEqualResolvingSymlinks(repository.workingDirectory, .scratchDirectory)
     try AssertEqualResolvingSymlinks(
-      repo.gitDirectory,
+      repository.gitDirectory,
       URL.scratchDirectory.appending(path: ".git")
     )
   }
@@ -36,10 +36,10 @@ struct RepositoryTests {
 
   @Test(.scratchDirectory(.random))
   func createNotBare() throws {
-    let repo = try Repository.create(.scratchDirectory, isBare: false)
-    AssertEqualResolvingSymlinks(repo.workingDirectory, .scratchDirectory)
+    let repository = try Repository.create(.scratchDirectory, isBare: false)
+    AssertEqualResolvingSymlinks(repository.workingDirectory, .scratchDirectory)
     try AssertEqualResolvingSymlinks(
-      repo.gitDirectory,
+      repository.gitDirectory,
       URL.scratchDirectory.appending(path: ".git")
     )
   }
@@ -49,10 +49,10 @@ struct RepositoryTests {
     #expect(throws: Never.self) {
       try Repository.clone(.repository, to: .scratchDirectory)
     }
-    let repo = try Repository.open(URL.scratchDirectory)
-    AssertEqualResolvingSymlinks(repo.workingDirectory, .scratchDirectory)
+    let repository = try Repository.open(URL.scratchDirectory)
+    AssertEqualResolvingSymlinks(repository.workingDirectory, .scratchDirectory)
     try AssertEqualResolvingSymlinks(
-      repo.gitDirectory,
+      repository.gitDirectory,
       URL.scratchDirectory.appending(path: ".git")
     )
   }

@@ -7,8 +7,8 @@ struct CommitTests {
 
   @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func repositoryCommitForString() throws {
-    let repo = try Repository.clone(.repository, to: .scratchDirectory)
-    let commit = try repo.commit(
+    let repository = try Repository.clone(.repository, to: .scratchDirectory)
+    let commit = try repository.commit(
       for: "41c143541c9d917db83ce4e920084edbf2a4177e"
     )
     #expect(commit.summary == "Add a file")
@@ -33,10 +33,10 @@ struct CommitTests {
 
   @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func repositoryCommits() throws {
-    let repo = try Repository.clone(.repository, to: .scratchDirectory)
-    let branches = try Array(repo.branches)
+    let repository = try Repository.clone(.repository, to: .scratchDirectory)
+    let branches = try Array(repository.branches)
     let main = try #require(branches.first(where: { $0.name == "main" }))
-    let commits = try Array(repo.commits)
+    let commits = try Array(repository.commits)
     #expect(commits.count == 4)
     let last = try #require(commits.last)
     #expect(last.summary == "Add readme")
@@ -71,22 +71,22 @@ struct CommitTests {
 
   @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func repositoryCommitsZeroSearch() throws {
-    let repo = try Repository.clone(.repository, to: .scratchDirectory)
-    let commits = try Array(repo.commits(for: [], includeHead: false))
+    let repository = try Repository.clone(.repository, to: .scratchDirectory)
+    let commits = try Array(repository.commits(for: [], includeHead: false))
     #expect(commits.count == 0)
   }
 
   @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func commitTree() throws {
-    let repo = try Repository.clone(.repository, to: .scratchDirectory)
-    let commits = try Array(repo.commits)
+    let repository = try Repository.clone(.repository, to: .scratchDirectory)
+    let commits = try Array(repository.commits)
     let last = try #require(commits.last)
     let tree = try last.tree
     #expect(tree.id.description == "017acad83ffb24d951581417f150bf31673e45b6")
     #expect(tree.entries.count == 1)
     let entry = try Array(tree.entries).value(at: 0)
     #expect(entry.name == "README.md")
-    let object = try repo.object(for: entry.target)
+    let object = try repository.object(for: entry.target)
     #expect(
       object.id.description == "e5c0a8638a0d8dfa0c733f9d666c511f7e1f9a96"
     )

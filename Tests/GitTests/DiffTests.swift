@@ -7,12 +7,12 @@ struct DiffTests {
 
   @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func addedFile() throws {
-    let repo = try Repository.clone(.repository, to: .scratchDirectory)
-    let commits = try Array(repo.commits(sortedBy: .reverse))
+    let repository = try Repository.clone(.repository, to: .scratchDirectory)
+    let commits = try Array(repository.commits(sortedBy: .reverse))
     #expect(commits.count == 4)
     let first = try commits.value(at: 0)
     let second = try commits.value(at: 1)
-    let diff = try repo.diff(from: first.tree, to: second.tree)
+    let diff = try repository.diff(from: first.tree, to: second.tree)
     #expect(diff.deltas.count == 1)
     let delta = try Array(diff.deltas).value(at: 0)
     #expect(delta.status == .added)
@@ -26,7 +26,7 @@ struct DiffTests {
     #expect(file.path == "file.text")
     #expect(file.id.description == "96c36b4c2da3a3b8472d437cea0497d38f125b04")
 
-    let object = try repo.object(for: file.id)
+    let object = try repository.object(for: file.id)
     guard case .blob(let blob) = object else {
       Issue.record("Expected blob")
       return
@@ -40,12 +40,12 @@ struct DiffTests {
 
   @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func addedFileHunk() throws {
-    let repo = try Repository.clone(.repository, to: .scratchDirectory)
-    let commits = try Array(repo.commits(sortedBy: .reverse))
+    let repository = try Repository.clone(.repository, to: .scratchDirectory)
+    let commits = try Array(repository.commits(sortedBy: .reverse))
     #expect(commits.count == 4)
     let first = try commits.value(at: 0)
     let second = try commits.value(at: 1)
-    let diff = try repo.diff(from: first.tree, to: second.tree)
+    let diff = try repository.diff(from: first.tree, to: second.tree)
     let hunks = try diff.hunks
     #expect(hunks.count == 1)
     let hunk = try hunks.value(at: 0)

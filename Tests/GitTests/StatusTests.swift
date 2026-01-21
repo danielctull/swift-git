@@ -7,14 +7,14 @@ struct StatusTests {
 
   @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func addFileToWorkingDirectory() throws {
-    let repo = try Repository.clone(.repository, to: .scratchDirectory)
-    #expect(try repo.status.count == 0)
+    let repository = try Repository.clone(.repository, to: .scratchDirectory)
+    #expect(try repository.status.count == 0)
 
     let path = UUID().uuidString
     let content = UUID().uuidString
     try Data(content.utf8).write(to: URL.scratchDirectory.appending(path: path))
 
-    let entries = try repo.status
+    let entries = try repository.status
     #expect(entries.count == 1)
 
     let entry = try #require(entries.first)

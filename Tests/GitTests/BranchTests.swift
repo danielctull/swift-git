@@ -7,8 +7,8 @@ struct BranchTests {
 
   @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func repositoryBranches() throws {
-    let repo = try Repository.clone(.repository, to: .scratchDirectory)
-    let branches = try Array(repo.branches)
+    let repository = try Repository.clone(.repository, to: .scratchDirectory)
+    let branches = try Array(repository.branches)
     #expect(branches.count == 1)
     let branch = try #require(branches.first)
     #expect(branch.name == "main")
@@ -21,11 +21,11 @@ struct BranchTests {
 
   @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func repositoryCreateBranchNamed() throws {
-    let repo = try Repository.clone(.repository, to: .scratchDirectory)
-    let main = try repo.branch(named: "main")
-    let commits = try Array(repo.commits(for: .branch(main)))
+    let repository = try Repository.clone(.repository, to: .scratchDirectory)
+    let main = try repository.branch(named: "main")
+    let commits = try Array(repository.commits(for: .branch(main)))
     let commit = try #require(commits.first)
-    let main2 = try repo.createBranch(named: "main2", at: commit)
+    let main2 = try repository.createBranch(named: "main2", at: commit)
     #expect(main2.name == "main2")
     #expect(main2.id.description == "refs/heads/main2")
     #expect(main2.reference.description == "refs/heads/main2")
@@ -36,8 +36,8 @@ struct BranchTests {
 
   @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func repositoryBranchNamed() throws {
-    let repo = try Repository.clone(.repository, to: .scratchDirectory)
-    let branch = try repo.branch(named: "main")
+    let repository = try Repository.clone(.repository, to: .scratchDirectory)
+    let branch = try repository.branch(named: "main")
     #expect(branch.name == "main")
     #expect(branch.id.description == "refs/heads/main")
     #expect(branch.reference.description == "refs/heads/main")
@@ -48,8 +48,8 @@ struct BranchTests {
 
   @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func branchMove() throws {
-    let repo = try Repository.clone(.repository, to: .scratchDirectory)
-    let branch = try repo.branch(named: "main")
+    let repository = try Repository.clone(.repository, to: .scratchDirectory)
+    let branch = try repository.branch(named: "main")
     do {
       let moved = try branch.move(to: "moved")
       #expect(moved.name == "moved")
@@ -60,7 +60,7 @@ struct BranchTests {
       )
     }
     do {
-      let moved = try repo.branch(named: "moved")
+      let moved = try repository.branch(named: "moved")
       #expect(moved.name == "moved")
       #expect(moved.id.description == "refs/heads/moved")
       #expect(moved.reference.description == "refs/heads/moved")
@@ -68,25 +68,25 @@ struct BranchTests {
         moved.target.description == "b1d2dbab22a62771db0c040ccf396dbbfdcef052"
       )
     }
-    #expect(throws: (any Error).self) { try repo.branch(named: "main") }
+    #expect(throws: (any Error).self) { try repository.branch(named: "main") }
   }
 
   @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func delete() throws {
-    let repo = try Repository.clone(.repository, to: .scratchDirectory)
-    let main = try repo.branch(named: "main")
-    let commits = try Array(repo.commits(for: .branch(main)))
+    let repository = try Repository.clone(.repository, to: .scratchDirectory)
+    let main = try repository.branch(named: "main")
+    let commits = try Array(repository.commits(for: .branch(main)))
     let commit = try #require(commits.first)
-    let main2 = try repo.createBranch(named: "main2", at: commit)
-    #expect(throws: Never.self) { try repo.branch(named: "main2") }
-    try repo.delete(.branch(main2))
-    #expect(throws: (any Error).self) { try repo.branch(named: "main2") }
+    let main2 = try repository.createBranch(named: "main2", at: commit)
+    #expect(throws: Never.self) { try repository.branch(named: "main2") }
+    try repository.delete(.branch(main2))
+    #expect(throws: (any Error).self) { try repository.branch(named: "main2") }
   }
 
   @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func upstream() throws {
-    let repo = try Repository.clone(.repository, to: .scratchDirectory)
-    let main = try repo.branch(named: "main")
+    let repository = try Repository.clone(.repository, to: .scratchDirectory)
+    let main = try repository.branch(named: "main")
     let remoteBranch = try main.upstream
     #expect(remoteBranch.id.description == "refs/remotes/origin/main")
     #expect(remoteBranch.reference.description == "refs/remotes/origin/main")
@@ -101,11 +101,12 @@ struct BranchTests {
 
   @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func setUpstream() throws {
-    let repo = try Repository.clone(.repository, to: .scratchDirectory)
-    let main = try repo.branch(named: "main")
-    let commit = try #require(Array(repo.commits(for: .branch(main))).first)
+    let repository = try Repository.clone(.repository, to: .scratchDirectory)
+    let main = try repository.branch(named: "main")
+    let commits = try repository.commits(for: .branch(main))
+    let commit = try #require(Array(commits).first)
 
-    let main2 = try repo.createBranch(named: "main2", at: commit)
+    let main2 = try repository.createBranch(named: "main2", at: commit)
     #expect(throws: (any Error).self) { try main2.upstream }
 
     try main2.setUpstream(main.upstream)

@@ -7,8 +7,8 @@ struct BlameTests {
 
   @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func blame() throws {
-    let repo = try Repository.clone(.repository, to: .scratchDirectory)
-    let blame = try repo.blame(for: "file.txt")
+    let repository = try Repository.clone(.repository, to: .scratchDirectory)
+    let blame = try repository.blame(for: "file.txt")
     let hunks = blame.hunks
     #expect(hunks.count == 1)
     let hunk = try Array(hunks).value(at: 0)

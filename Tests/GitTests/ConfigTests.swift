@@ -97,8 +97,8 @@ struct ConfigTests {
 
   @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func level() throws {
-    let repo = try Repository.clone(.repository, to: .scratchDirectory)
-    let config = try repo.config
+    let repository = try Repository.clone(.repository, to: .scratchDirectory)
+    let config = try repository.config
 
     let old = try Set(config.entries)
 

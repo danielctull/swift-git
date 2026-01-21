@@ -13,8 +13,8 @@ struct ReflogTests {
   @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func reflog() throws {
     let cloneDate = Date()
-    let repo = try Repository.clone(.repository, to: .scratchDirectory)
-    let reflog = try repo.reflog
+    let repository = try Repository.clone(.repository, to: .scratchDirectory)
+    let reflog = try repository.reflog
     #expect(reflog.items.count == 1)
     let item = try #require(reflog.items.last)
     //            #expect(item.message == "checkout: moving from master to main")
@@ -40,11 +40,11 @@ struct ReflogTests {
 
   @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func append() throws {
-    let repo = try Repository.clone(.repository, to: .scratchDirectory)
-    let reflog = try repo.reflog(named: "CUSTOM")
+    let repository = try Repository.clone(.repository, to: .scratchDirectory)
+    let reflog = try repository.reflog(named: "CUSTOM")
     #expect(reflog.items.count == 0)
 
-    try reflog.append(.testItem(id: repo.head.target))
+    try reflog.append(.testItem(id: repository.head.target))
     #expect(reflog.items.count == 1)
 
     let item = try #require(reflog.items.first)
@@ -63,11 +63,11 @@ struct ReflogTests {
 
   @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func remove() throws {
-    let repo = try Repository.clone(.repository, to: .scratchDirectory)
-    let reflog = try repo.reflog(named: "CUSTOM")
+    let repository = try Repository.clone(.repository, to: .scratchDirectory)
+    let reflog = try repository.reflog(named: "CUSTOM")
     #expect(reflog.items.count == 0)
 
-    try reflog.append(.testItem(id: repo.head.target))
+    try reflog.append(.testItem(id: repository.head.target))
     #expect(reflog.items.count == 1)
 
     try reflog.remove(#require(reflog.items.first))
@@ -76,17 +76,17 @@ struct ReflogTests {
 
   @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func write() throws {
-    let repo = try Repository.clone(.repository, to: .scratchDirectory)
+    let repository = try Repository.clone(.repository, to: .scratchDirectory)
 
     do {
-      let reflog = try repo.reflog(named: "CUSTOM")
+      let reflog = try repository.reflog(named: "CUSTOM")
       #expect(reflog.items.count == 0)
-      try reflog.append(.testItem(id: repo.head.target))
+      try reflog.append(.testItem(id: repository.head.target))
       try reflog.write()
     }
 
     do {
-      let reflog = try repo.reflog(named: "CUSTOM")
+      let reflog = try repository.reflog(named: "CUSTOM")
       #expect(reflog.items.count == 1)
 
       let item = try #require(reflog.items.first)
@@ -106,20 +106,20 @@ struct ReflogTests {
 
   @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func rename() throws {
-    let repo = try Repository.clone(.repository, to: .scratchDirectory)
+    let repository = try Repository.clone(.repository, to: .scratchDirectory)
 
     do {
-      let reflog = try repo.reflog(named: "OLD")
+      let reflog = try repository.reflog(named: "OLD")
       #expect(reflog.items.count == 0)
-      try reflog.append(.testItem(id: repo.head.target))
+      try reflog.append(.testItem(id: repository.head.target))
       try reflog.write()
       #expect(reflog.items.count == 1)
     }
 
-    try repo.renameReflog(from: "OLD", to: "NEW")
+    try repository.renameReflog(from: "OLD", to: "NEW")
 
     do {
-      let reflog = try repo.reflog(named: "NEW")
+      let reflog = try repository.reflog(named: "NEW")
       #expect(reflog.items.count == 1)
 
       let item = try #require(reflog.items.first)
@@ -139,18 +139,18 @@ struct ReflogTests {
 
   @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func delete() throws {
-    let repo = try Repository.clone(.repository, to: .scratchDirectory)
+    let repository = try Repository.clone(.repository, to: .scratchDirectory)
 
-    #expect(try repo.reflog(named: "REFLOG_TEST").items.count == 0)
+    #expect(try repository.reflog(named: "REFLOG_TEST").items.count == 0)
 
-    let reflog = try repo.reflog(named: "REFLOG_TEST")
-    try reflog.append(.testItem(id: repo.head.target))
+    let reflog = try repository.reflog(named: "REFLOG_TEST")
+    try reflog.append(.testItem(id: repository.head.target))
     try reflog.write()
 
-    #expect(try repo.reflog(named: "REFLOG_TEST").items.count == 1)
+    #expect(try repository.reflog(named: "REFLOG_TEST").items.count == 1)
 
-    try repo.deleteReflog(named: "REFLOG_TEST")
-    #expect(try repo.reflog(named: "REFLOG_TEST").items.count == 0)
+    try repository.deleteReflog(named: "REFLOG_TEST")
+    #expect(try repository.reflog(named: "REFLOG_TEST").items.count == 0)
   }
 }
 

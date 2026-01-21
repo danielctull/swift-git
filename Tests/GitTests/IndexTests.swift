@@ -7,8 +7,8 @@ struct IndexTests {
 
   @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func index() throws {
-    let repo = try Repository.clone(.repository, to: .scratchDirectory)
-    let entries = try Array(repo.index.entries)
+    let repository = try Repository.clone(.repository, to: .scratchDirectory)
+    let entries = try Array(repository.index.entries)
     #expect(entries.count == 2)
 
     do {

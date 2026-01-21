@@ -29,8 +29,8 @@ struct ReferenceTests {
 
   @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func repositoryReferences() throws {
-    let repo = try Repository.clone(.repository, to: .scratchDirectory)
-    let references = try Array(repo.references)
+    let repository = try Repository.clone(.repository, to: .scratchDirectory)
+    let references = try Array(repository.references)
     #expect(references.count == 5)
     #expect(try references.value(at: 0).id == "refs/heads/main")
     #expect(
@@ -81,48 +81,48 @@ struct ReferenceTests {
 
   @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func delete() throws {
-    let repo = try Repository.clone(.repository, to: .scratchDirectory)
+    let repository = try Repository.clone(.repository, to: .scratchDirectory)
 
     do {
-      let references = try Array(repo.references)
+      let references = try Array(repository.references)
       #expect(references.count == 5)
       #expect(try references.value(at: 0).id == "refs/heads/main")
       #expect(try references.value(at: 1).id == "refs/remotes/origin/HEAD")
       #expect(try references.value(at: 2).id == "refs/remotes/origin/main")
       #expect(try references.value(at: 3).id == "refs/tags/1.0")
       #expect(try references.value(at: 4).id == "refs/tags/lightweight-tag")
-      try repo.delete(references.value(at: 0))
+      try repository.delete(references.value(at: 0))
     }
 
     do {
-      let references = try Array(repo.references)
+      let references = try Array(repository.references)
       #expect(references.count == 4)
       #expect(try references.value(at: 0).id == "refs/remotes/origin/HEAD")
       #expect(try references.value(at: 1).id == "refs/remotes/origin/main")
       #expect(try references.value(at: 2).id == "refs/tags/1.0")
       #expect(try references.value(at: 3).id == "refs/tags/lightweight-tag")
-      try repo.delete(references.value(at: 0))
+      try repository.delete(references.value(at: 0))
     }
 
     do {
-      let references = try Array(repo.references)
+      let references = try Array(repository.references)
       #expect(references.count == 3)
       #expect(try references.value(at: 0).id == "refs/remotes/origin/main")
       #expect(try references.value(at: 1).id == "refs/tags/1.0")
       #expect(try references.value(at: 2).id == "refs/tags/lightweight-tag")
-      try repo.delete(references.value(at: 1))
+      try repository.delete(references.value(at: 1))
     }
 
     do {
-      let references = try Array(repo.references)
+      let references = try Array(repository.references)
       #expect(references.count == 2)
       #expect(try references.value(at: 0).id == "refs/remotes/origin/main")
       #expect(try references.value(at: 1).id == "refs/tags/lightweight-tag")
-      try repo.delete(references.value(at: 1))
+      try repository.delete(references.value(at: 1))
     }
 
     do {
-      let references = try Array(repo.references)
+      let references = try Array(repository.references)
       #expect(references.count == 1)
       #expect(try references.value(at: 0).id == "refs/remotes/origin/main")
     }
@@ -130,10 +130,10 @@ struct ReferenceTests {
 
   @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func removeReferenceByID() throws {
-    let repo = try Repository.clone(.repository, to: .scratchDirectory)
+    let repository = try Repository.clone(.repository, to: .scratchDirectory)
 
     do {
-      let references = try Array(repo.references)
+      let references = try Array(repository.references)
       #expect(references.count == 5)
       #expect(try references.value(at: 0).id == "refs/heads/main")
       #expect(try references.value(at: 1).id == "refs/remotes/origin/HEAD")
@@ -143,12 +143,12 @@ struct ReferenceTests {
     }
 
     #expect(throws: (any Error).self) {
-      try repo.remove("refs/heads/not-here")
+      try repository.remove("refs/heads/not-here")
     }
 
     do {
-      try repo.remove("refs/heads/main")
-      let references = try Array(repo.references)
+      try repository.remove("refs/heads/main")
+      let references = try Array(repository.references)
       #expect(references.count == 4)
       #expect(try references.value(at: 0).id == "refs/remotes/origin/HEAD")
       #expect(try references.value(at: 1).id == "refs/remotes/origin/main")
@@ -157,8 +157,8 @@ struct ReferenceTests {
     }
 
     do {
-      try repo.remove("refs/remotes/origin/HEAD")
-      let references = try Array(repo.references)
+      try repository.remove("refs/remotes/origin/HEAD")
+      let references = try Array(repository.references)
       #expect(references.count == 3)
       #expect(try references.value(at: 0).id == "refs/remotes/origin/main")
       #expect(try references.value(at: 1).id == "refs/tags/1.0")
@@ -166,16 +166,16 @@ struct ReferenceTests {
     }
 
     do {
-      try repo.remove("refs/tags/1.0")
-      let references = try Array(repo.references)
+      try repository.remove("refs/tags/1.0")
+      let references = try Array(repository.references)
       #expect(references.count == 2)
       #expect(try references.value(at: 0).id == "refs/remotes/origin/main")
       #expect(try references.value(at: 1).id == "refs/tags/lightweight-tag")
     }
 
     do {
-      try repo.remove("refs/tags/lightweight-tag")
-      let references = try Array(repo.references)
+      try repository.remove("refs/tags/lightweight-tag")
+      let references = try Array(repository.references)
       #expect(references.count == 1)
       #expect(try references.value(at: 0).id == "refs/remotes/origin/main")
     }
@@ -183,10 +183,10 @@ struct ReferenceTests {
 
   @Test(.scratchDirectory(.random), .repositoryURL("Test.git"))
   func removeReference() throws {
-    let repo = try Repository.clone(.repository, to: .scratchDirectory)
+    let repository = try Repository.clone(.repository, to: .scratchDirectory)
 
     do {
-      let references = try Array(repo.references)
+      let references = try Array(repository.references)
       #expect(references.count == 5)
       #expect(try references.value(at: 0).id == "refs/heads/main")
       #expect(try references.value(at: 1).id == "refs/remotes/origin/HEAD")
@@ -196,8 +196,8 @@ struct ReferenceTests {
     }
 
     do {
-      try repo.remove(try repo.reference(for: "refs/heads/main"))
-      let references = try Array(repo.references)
+      try repository.remove(try repository.reference(for: "refs/heads/main"))
+      let references = try Array(repository.references)
       #expect(references.count == 4)
       #expect(try references.value(at: 0).id == "refs/remotes/origin/HEAD")
       #expect(try references.value(at: 1).id == "refs/remotes/origin/main")
@@ -206,8 +206,10 @@ struct ReferenceTests {
     }
 
     do {
-      try repo.remove(try repo.reference(for: "refs/remotes/origin/HEAD"))
-      let references = try Array(repo.references)
+      try repository.remove(
+        try repository.reference(for: "refs/remotes/origin/HEAD")
+      )
+      let references = try Array(repository.references)
       #expect(references.count == 3)
       #expect(try references.value(at: 0).id == "refs/remotes/origin/main")
       #expect(try references.value(at: 1).id == "refs/tags/1.0")
@@ -215,16 +217,18 @@ struct ReferenceTests {
     }
 
     do {
-      try repo.remove(try repo.reference(for: "refs/tags/1.0"))
-      let references = try Array(repo.references)
+      try repository.remove(try repository.reference(for: "refs/tags/1.0"))
+      let references = try Array(repository.references)
       #expect(references.count == 2)
       #expect(try references.value(at: 0).id == "refs/remotes/origin/main")
       #expect(try references.value(at: 1).id == "refs/tags/lightweight-tag")
     }
 
     do {
-      try repo.remove(try repo.reference(for: "refs/tags/lightweight-tag"))
-      let references = try Array(repo.references)
+      try repository.remove(
+        try repository.reference(for: "refs/tags/lightweight-tag")
+      )
+      let references = try Array(repository.references)
       #expect(references.count == 1)
       #expect(try references.value(at: 0).id == "refs/remotes/origin/main")
     }
