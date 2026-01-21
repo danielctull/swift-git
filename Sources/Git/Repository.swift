@@ -15,7 +15,7 @@ extension Repository {
   ) throws -> Repository {
     try Repository(
       pointer: Managed(
-        create: Managed.Create { pointer in
+        create: Create { pointer in
           url.withUnsafeFileSystemRepresentation { path in
             git_repository_init(pointer, path, UInt32(isBare))
           }
@@ -28,7 +28,7 @@ extension Repository {
   public static func open(_ url: URL) throws -> Repository {
     try Repository(
       pointer: Managed(
-        create: Managed.Create { pointer in
+        create: Create { pointer in
           url.withUnsafeFileSystemRepresentation { path in
             git_repository_open(pointer, path)
           }

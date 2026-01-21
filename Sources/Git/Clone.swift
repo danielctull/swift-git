@@ -8,7 +8,7 @@ extension Repository {
     let remoteString = remote.isFileURL ? remote.path : remote.absoluteString
     return Repository(
       pointer: try Managed(
-        create: Managed.Create { pointer in
+        create: Create { pointer in
           local.withUnsafeFileSystemRepresentation { path in
             git_clone(pointer, remoteString, path, nil)
           }
