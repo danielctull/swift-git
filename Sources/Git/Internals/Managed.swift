@@ -80,9 +80,7 @@ extension Managed {
       Int32,
     _ parameter: repeat each Parameter
   ) -> Create<Value> {
-    Create { output in
-      task(output, self.pointer, repeat each parameter)
-    }
+    Create(task, pointer, repeat each parameter)
   }
 }
 
@@ -154,13 +152,15 @@ struct Create<Value> {
 
 extension Create {
 
-  init(
-    _ task: @escaping (UnsafeMutablePointer<Value>) -> Int32
+  init<each Parameter>(
+    _ task:
+      @escaping (UnsafeMutablePointer<Value>, repeat each Parameter) -> Int32,
+    _ parameter: repeat each Parameter
   ) {
     self.init {
       let pointer = UnsafeMutablePointer<Value>.allocate(capacity: 1)
       defer { pointer.deallocate() }
-      let result = task(pointer)
+      let result = task(pointer, repeat each parameter)
       try GitError.check(result)
       return pointer.pointee
     }

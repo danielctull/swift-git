@@ -13,29 +13,25 @@ extension Repository {
     _ url: URL,
     isBare: Bool = false
   ) throws -> Repository {
-    try Repository(
-      pointer: Managed(
-        create: Create { pointer in
-          url.withUnsafeFileSystemRepresentation { path in
-            git_repository_init(pointer, path, UInt32(isBare))
-          }
-        },
-        free: git_repository_free
+    try url.withUnsafeFileSystemRepresentation { path in
+      try Repository(
+        pointer: Managed(
+          create: Create(git_repository_init, path, UInt32(isBare)),
+          free: git_repository_free
+        )
       )
-    )
+    }
   }
 
   public static func open(_ url: URL) throws -> Repository {
-    try Repository(
-      pointer: Managed(
-        create: Create { pointer in
-          url.withUnsafeFileSystemRepresentation { path in
-            git_repository_open(pointer, path)
-          }
-        },
-        free: git_repository_free
+    try url.withUnsafeFileSystemRepresentation { path in
+      try Repository(
+        pointer: Managed(
+          create: Create(git_repository_open, path),
+          free: git_repository_free
+        )
       )
-    )
+    }
   }
 }
 
