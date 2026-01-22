@@ -31,6 +31,16 @@ final class Managed<Pointer> {
     self.free = free
   }
 
+  convenience init<T>(
+    create: Create<UnsafeMutablePointer<T>>,
+    dispose: @escaping (UnsafeMutablePointer<T>) -> Void
+  ) throws where Pointer == UnsafeMutablePointer<T> {
+    try self.init(create: create) { pointer in
+      dispose(pointer)
+      pointer.deallocate()
+    }
+  }
+
   convenience init(
     create: Create<Pointer?>,
     free: @escaping Free
@@ -81,6 +91,15 @@ extension Managed {
     _ parameter: repeat each Parameter
   ) -> Create<Value> {
     Create(task, pointer, repeat each parameter)
+  }
+
+  func create<Value, each Parameter>(
+    _ task:
+      @escaping (UnsafeMutablePointer<Value>, Pointer, repeat each Parameter) ->
+      Int32,
+    _ parameter: repeat each Parameter
+  ) -> Create<UnsafeMutablePointer<Value>> {
+    Create(pointer: task, pointer, repeat each parameter)
   }
 }
 
@@ -163,6 +182,25 @@ extension Create {
       let result = task(pointer, repeat each parameter)
       try GitError.check(result)
       return pointer.pointee
+    }
+  }
+
+  /// Creates a pointer that the caller is responsible for freeing.
+  init<T, Pointer, each Parameter>(
+    pointer task: @escaping (UnsafeMutablePointer<T>, Pointer, repeat each Parameter) -> Int32,
+    _ managed: Pointer,
+    _ parameter: repeat each Parameter
+  ) where Value == UnsafeMutablePointer<T> {
+    self.init {
+      let pointer = UnsafeMutablePointer<T>.allocate(capacity: 1)
+      let result = task(pointer, managed, repeat each parameter)
+      do {
+        try GitError.check(result)
+        return pointer
+      } catch {
+        pointer.deallocate()
+        throw error
+      }
     }
   }
 }
