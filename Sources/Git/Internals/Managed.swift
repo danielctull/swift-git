@@ -17,7 +17,7 @@ final class Managed<Pointer> {
   ///   - free: The function to free the pointer.
   /// - Throws: A ``GitError`` if the results of the functions are not GIT_OK.
   init(
-    create: Create,
+    create: Create<Pointer>,
     free: @escaping Free
   ) throws {
 
@@ -32,7 +32,7 @@ final class Managed<Pointer> {
   }
 
   convenience init(
-    create: Managed<Pointer?>.Create,
+    create: Create<Pointer?>,
     free: @escaping Free
   ) throws {
     try self.init(
@@ -79,10 +79,8 @@ extension Managed {
       @escaping (UnsafeMutablePointer<Value>, Pointer, repeat each Parameter) ->
       Int32,
     _ parameter: repeat each Parameter
-  ) -> Managed<Value>.Create {
-    Managed<Value>.Create { output in
-      task(output, self.pointer, repeat each parameter)
-    }
+  ) -> Create<Value> {
+    Create(task, pointer, repeat each parameter)
   }
 }
 
@@ -115,7 +113,7 @@ extension Managed {
       Int32,
     _ parameter: repeat each Parameter
   ) throws -> Value {
-    let create = Managed<Value>.Create { output in
+    let create = Create<Value> { output in
       task(output, self.pointer, repeat each parameter)
     }
     return try create()
@@ -140,30 +138,29 @@ extension Managed {
   }
 }
 
-// MARK: - Managed.Create
+// MARK: - Create
 
-extension Managed {
-
-  struct Create {
-    private let action: () throws -> Pointer
-    fileprivate init(action: @escaping () throws -> Pointer) {
-      self.action = action
-    }
-    fileprivate func callAsFunction() throws -> Pointer {
-      try action()
-    }
+struct Create<Value> {
+  private let action: () throws -> Value
+  fileprivate init(action: @escaping () throws -> Value) {
+    self.action = action
+  }
+  fileprivate func callAsFunction() throws -> Value {
+    try action()
   }
 }
 
-extension Managed.Create {
+extension Create {
 
-  init(
-    _ task: @escaping (UnsafeMutablePointer<Pointer>) -> Int32
+  init<each Parameter>(
+    _ task:
+      @escaping (UnsafeMutablePointer<Value>, repeat each Parameter) -> Int32,
+    _ parameter: repeat each Parameter
   ) {
     self.init {
-      let pointer = UnsafeMutablePointer<Pointer>.allocate(capacity: 1)
+      let pointer = UnsafeMutablePointer<Value>.allocate(capacity: 1)
       defer { pointer.deallocate() }
-      let result = task(pointer)
+      let result = task(pointer, repeat each parameter)
       try GitError.check(result)
       return pointer.pointee
     }
