@@ -1,4 +1,4 @@
-public struct GitCollection<Element, Index: BinaryInteger> {
+struct GitCollection<Element, Index: BinaryInteger> {
   let count: () -> Index
   let element: (Index) -> Element
 }
@@ -6,9 +6,9 @@ public struct GitCollection<Element, Index: BinaryInteger> {
 // MARK: - Collection
 
 extension GitCollection: RandomAccessCollection {
-  public var startIndex: Index { 0 }
-  public var endIndex: Index { count() }
-  public func index(after i: Index) -> Index { i + 1 }
-  public func index(before i: Index) -> Index { i - 1 }
-  public subscript(position: Index) -> Element { element(position) }
+  var startIndex: Index { 0 }
+  var endIndex: Index { count() }
+  func index(after i: Index) -> Index { i + 1 }
+  func index(before i: Index) -> Index { i - 1 }
+  subscript(position: Index) -> Element { element(position) }
 }

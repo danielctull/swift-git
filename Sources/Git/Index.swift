@@ -24,7 +24,7 @@ extension Index {
     public let objectID: Object.ID
   }
 
-  public var entries: GitCollection<Entry, Int> {
+  public var entries: some RandomAccessCollection<Entry> {
     GitCollection {
       pointer.get(git_index_entrycount)
     } element: { index in

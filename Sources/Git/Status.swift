@@ -2,7 +2,7 @@ import libgit2
 
 extension Repository {
 
-  public var status: GitCollection<StatusEntry, Int> {
+  public var status: some RandomAccessCollection<StatusEntry> {
     get throws {
 
       let list = try Managed(

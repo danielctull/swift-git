@@ -120,7 +120,7 @@ extension Commit {
     }
   }
 
-  public var parentIDs: GitCollection<Commit.ID, UInt32> {
+  public var parentIDs: some RandomAccessCollection<Commit.ID> {
     GitCollection {
       pointer.get(git_commit_parentcount)
     } element: { index in
