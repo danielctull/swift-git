@@ -17,7 +17,7 @@ extension Repository {
     }
   }
 
-  public var commits: GitSequence<Commit> {
+  public var commits: some Sequence<Commit> {
     get throws {
       try commits(for: [])
     }
@@ -27,7 +27,7 @@ extension Repository {
     for references: Reference...,
     sortedBy sortOptions: SortOptions = SortOptions(),
     includeHead: Bool = true
-  ) throws -> GitSequence<Commit> {
+  ) throws -> some Sequence<Commit> {
     try commits(
       for: references,
       sortedBy: sortOptions,
@@ -39,7 +39,7 @@ extension Repository {
     for references: [Reference] = [],
     sortedBy sortOptions: SortOptions = SortOptions(),
     includeHead: Bool = true
-  ) throws -> GitSequence<Commit> {
+  ) throws -> some Sequence<Commit> {
 
     try GitSequence {
 

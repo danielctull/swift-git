@@ -2,7 +2,7 @@ import libgit2
 
 extension Repository {
 
-  public var branches: GitSequence<Branch> {
+  public var branches: some Sequence<Branch> {
     get throws {
       try GitSequence {
 

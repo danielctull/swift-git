@@ -14,7 +14,7 @@ extension Repository {
     }
   }
 
-  public var references: GitSequence<Reference> {
+  public var references: some Sequence<Reference> {
     get throws {
       try GitSequence {
 

@@ -43,7 +43,7 @@ extension Config {
     )
   }
 
-  public var entries: GitSequence<Config.Entry> {
+  public var entries: some Sequence<Config.Entry> {
     get throws {
       try GitSequence {
 
