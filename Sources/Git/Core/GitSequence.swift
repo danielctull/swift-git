@@ -1,4 +1,4 @@
-public struct GitSequence<Element> {
+struct GitSequence<Element> {
   private let nextElement: () -> Element?
 }
 
@@ -24,5 +24,5 @@ extension GitSequence {
 // MARK: - Sequence
 
 extension GitSequence: Sequence, IteratorProtocol {
-  public func next() -> Element? { nextElement() }
+  func next() -> Element? { nextElement() }
 }
