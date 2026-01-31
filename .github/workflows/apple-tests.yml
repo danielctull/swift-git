@@ -7,6 +7,10 @@ on:
         type: string
         description: "Swift version list (JSON)"
         default: '["6.2"]'
+      swift_flags:
+        type: string
+        description: "Additional Swift flags"
+        default: ''
 
 jobs:
   macos:
@@ -35,7 +39,7 @@ jobs:
         run: xcrun clang --version
 
       - name: Swift Test
-        run: xcrun swift test
+        run: xcrun swift test ${{ inputs.swift_flags }}
 
   ios:
     name: iOS (Swift ${{ matrix.swift_version }})
@@ -61,4 +65,4 @@ jobs:
         run: xcrun clang --version
 
       - name: Swift Test
-        run: swift test -Xswiftc -sdk -Xswiftc $(xcrun --sdk iphonesimulator --show-sdk-path) -Xswiftc -target -Xswiftc arm64-apple-ios18.0-simulator
+        run: swift test ${{ inputs.swift_flags }} -Xswiftc -sdk -Xswiftc $(xcrun --sdk iphonesimulator --show-sdk-path) -Xswiftc -target -Xswiftc arm64-apple-ios18.0-simulator

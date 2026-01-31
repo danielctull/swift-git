@@ -9,6 +9,24 @@
         "revision" : "c9fbff6f1fc31c53c396ab28b4b3dbb453c2f674",
         "version" : "1.9.2"
       }
+    },
+    {
+      "identity" : "swift-libssh2",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/danielctull-forks/swift-libssh2.git",
+      "state" : {
+        "revision" : "efe39988aa01f224abb78362ac78a0e1a6d6eb29",
+        "version" : "1.11.1"
+      }
+    },
+    {
+      "identity" : "swift-mbedtls",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/danielctull-forks/swift-mbedtls",
+      "state" : {
+        "revision" : "742643f87c31c408f8514cac75e17e7aa4eb59a4",
+        "version" : "3.6.5"
+      }
     }
   ],
   "version" : 3
