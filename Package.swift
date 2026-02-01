@@ -5,8 +5,8 @@ import PackageDescription
 let package = Package(
   name: "swift-git",
   platforms: [
-    .macOS(.v13),
-    .iOS(.v15),
+    .iOS(.v18),
+    .macOS(.v15),
   ],
   products: [
     .library(name: "Git", targets: ["Git"])
