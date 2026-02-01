@@ -24,8 +24,15 @@ struct ReflogTests {
     #expect(
       item.new.description == "b1d2dbab22a62771db0c040ccf396dbbfdcef052"
     )
-    #expect(item.committer.name == "Daniel Tull")
-    #expect(item.committer.email == "dt@danieltull.co.uk")
+
+    if let signature = try? repository.defaultSignature {
+      #expect(item.committer.name == signature.name)
+      #expect(item.committer.email == signature.email)
+    } else {
+      #expect(!item.committer.name.isEmpty)
+      #expect(!item.committer.email.isEmpty)
+    }
+
     // The date for a reflog item is when it occurred, in this case when
     // the repo was cloned at the start of this test.
     let timeInterval = item.committer.date.timeIntervalSince(cloneDate)
