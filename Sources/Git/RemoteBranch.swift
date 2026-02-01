@@ -53,7 +53,7 @@ public struct RemoteBranch: Equatable, Hashable {
     self.pointer = pointer
     reference = try Reference.Name(pointer: pointer)
     name = try pointer.get(git_branch_name)
-      |> Unwrap
+      |> unwrap
       |> String.init
       |> Name.init
     target = try Object.ID(reference: pointer)

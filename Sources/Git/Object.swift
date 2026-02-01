@@ -97,7 +97,7 @@ extension Object.ID {
   }
 
   init(object: Managed<OpaquePointer>) throws {
-    self = try object.get(git_object_id) |> Unwrap |> Self.init
+    self = try object.get(git_object_id) |> unwrap |> Self.init
   }
 
   init(reference: Managed<OpaquePointer>) throws {
@@ -106,7 +106,7 @@ extension Object.ID {
       free: git_reference_free
     )
 
-    self = try resolved.get(git_reference_target) |> Unwrap |> Self.init
+    self = try resolved.get(git_reference_target) |> unwrap |> Self.init
   }
 }
 

@@ -58,9 +58,9 @@ extension Diff {
           nil,
           { delta, hunk, hunks in
             GitError.catching {
-              let hunks = try Unwrap(hunks).assumingMemoryBound(to: [Hunk].self)
-              let delta = try Unwrap(delta?.pointee)
-              let hunk = try Unwrap(hunk?.pointee)
+              let hunks = try unwrap(hunks).assumingMemoryBound(to: [Hunk].self)
+              let delta = try unwrap(delta?.pointee)
+              let hunk = try unwrap(hunk?.pointee)
               hunks.pointee.append(try Hunk(delta: delta, hunk: hunk))
             }
           },
@@ -78,7 +78,7 @@ extension Diff.Hunk {
 
   fileprivate init(delta: git_diff_delta, hunk: git_diff_hunk) throws {
     let lines = ClosedRange(start: hunk.new_start, count: hunk.new_lines)
-    let file = try Unwrap(Diff.File(delta.new_file))
+    let file = try unwrap(Diff.File(delta.new_file))
     self.init(lines: lines, file: file)
   }
 }

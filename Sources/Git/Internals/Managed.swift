@@ -36,7 +36,7 @@ final class Managed<Pointer> {
     free: @escaping Free
   ) throws {
     try self.init(
-      create: Create { try Unwrap(create()) },
+      create: Create { try unwrap(create()) },
       free: free
     )
   }

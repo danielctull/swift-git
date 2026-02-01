@@ -37,12 +37,12 @@ public struct Remote: Equatable, Hashable, Identifiable {
   init(pointer: Managed<OpaquePointer>) throws {
     self.pointer = pointer
     name = try pointer.get(git_remote_name)
-      |> Unwrap
+      |> unwrap
       |> String.init(cString:)
       |> Name.init
     id = ID(name: name)
     url = try pointer.get(git_remote_url)
-      |> Unwrap
+      |> unwrap
       |> String.init(cString:)
       |> URL.init(fileURLWithPath:)
   }

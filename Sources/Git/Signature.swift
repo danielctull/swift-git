@@ -5,7 +5,7 @@ extension Repository {
 
   public var defaultSignature: Signature {
     get throws {
-      try Signature(pointer.get(git_signature_default) |> Unwrap)
+      try Signature(pointer.get(git_signature_default) |> unwrap)
     }
   }
 }
