@@ -2,7 +2,7 @@ import Foundation
 import Git
 import Testing
 
-private func AssertEqualResolvingSymlinks(
+private func assertEqualResolvingSymlinks(
   _ expression1: @autoclosure () throws -> URL?,
   _ expression2: @autoclosure () throws -> URL?,
   file: StaticString = #filePath,
@@ -20,8 +20,8 @@ struct RepositoryTests {
   @Test(.scratchDirectory(.random))
   func create() throws {
     let repository = try Repository.create(.scratchDirectory)
-    AssertEqualResolvingSymlinks(repository.workingDirectory, .scratchDirectory)
-    try AssertEqualResolvingSymlinks(
+    assertEqualResolvingSymlinks(repository.workingDirectory, .scratchDirectory)
+    try assertEqualResolvingSymlinks(
       repository.gitDirectory,
       URL.scratchDirectory.appending(path: ".git")
     )
@@ -31,14 +31,14 @@ struct RepositoryTests {
   func createBare() throws {
     let bare = try Repository.create(.scratchDirectory, isBare: true)
     #expect(bare.workingDirectory == nil)
-    try AssertEqualResolvingSymlinks(bare.gitDirectory, .scratchDirectory)
+    try assertEqualResolvingSymlinks(bare.gitDirectory, .scratchDirectory)
   }
 
   @Test(.scratchDirectory(.random))
   func createNotBare() throws {
     let repository = try Repository.create(.scratchDirectory, isBare: false)
-    AssertEqualResolvingSymlinks(repository.workingDirectory, .scratchDirectory)
-    try AssertEqualResolvingSymlinks(
+    assertEqualResolvingSymlinks(repository.workingDirectory, .scratchDirectory)
+    try assertEqualResolvingSymlinks(
       repository.gitDirectory,
       URL.scratchDirectory.appending(path: ".git")
     )
@@ -50,8 +50,8 @@ struct RepositoryTests {
       try Repository.clone(.repository, to: .scratchDirectory)
     }
     let repository = try Repository.open(URL.scratchDirectory)
-    AssertEqualResolvingSymlinks(repository.workingDirectory, .scratchDirectory)
-    try AssertEqualResolvingSymlinks(
+    assertEqualResolvingSymlinks(repository.workingDirectory, .scratchDirectory)
+    try assertEqualResolvingSymlinks(
       repository.gitDirectory,
       URL.scratchDirectory.appending(path: ".git")
     )
