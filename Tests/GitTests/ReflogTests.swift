@@ -17,7 +17,7 @@ struct ReflogTests {
     let reflog = try repository.reflog
     #expect(reflog.items.count == 1)
     let item = try #require(reflog.items.last)
-    //            #expect(item.message == "checkout: moving from master to main")
+    // TODO: Check the message content once available
     #expect(
       item.old.description == "0000000000000000000000000000000000000000"
     )
