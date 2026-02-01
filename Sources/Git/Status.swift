@@ -32,13 +32,13 @@ extension StatusEntry {
   fileprivate init(_ entry: UnsafePointer<git_status_entry>) {
     let entry = entry.pointee
     status = Status(entry.status)
-    if let head_to_index = entry.head_to_index {
-      headToIndex = Diff.Delta(head_to_index.pointee)
+    if let headToIndexPointer = entry.head_to_index {
+      headToIndex = Diff.Delta(headToIndexPointer.pointee)
     } else {
       headToIndex = nil
     }
-    if let index_to_workdir = entry.index_to_workdir {
-      indexToWorkingDirectory = Diff.Delta(index_to_workdir.pointee)
+    if let indexToWorkdirPointer = entry.index_to_workdir {
+      indexToWorkingDirectory = Diff.Delta(indexToWorkdirPointer.pointee)
     } else {
       indexToWorkingDirectory = nil
     }
