@@ -85,15 +85,21 @@ jobs:
       # iOS (requires self-hosted runners)
       enable_ios_checks: false
 
-  apple-tests:
+  macos-tests:
     name: Tests (default)
-    uses: ./.github/workflows/apple-tests.yml
+    uses: ./.github/workflows/macos-tests.yml
     with:
       swift_versions: '["6.2"]'
 
-  apple-tests-libssh2:
+  macos-tests-libssh2:
     name: Tests (libssh2)
-    uses: ./.github/workflows/apple-tests.yml
+    uses: ./.github/workflows/macos-tests.yml
     with:
       swift_versions: '["6.2"]'
       swift_flags: '--traits libssh2'
+
+  ios-tests:
+    name: Tests (default)
+    uses: ./.github/workflows/ios-tests.yml
+    with:
+      swift_versions: '["6.2"]'
