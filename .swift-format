@@ -40,7 +40,7 @@
     "NeverUseForceTry" : true,
     "NeverUseImplicitlyUnwrappedOptionals" : false,
     "NoAccessLevelOnExtensionDeclaration" : true,
-    "NoAssignmentInExpressions" : true,
+    "NoAssignmentInExpressions" : false,
     "NoBlockComments" : true,
     "NoCasesWithOnlyFallthrough" : true,
     "NoEmptyLinesOpeningClosingBraces" : false,

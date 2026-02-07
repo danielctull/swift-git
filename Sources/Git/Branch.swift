@@ -77,7 +77,7 @@ public struct Branch: Equatable, Hashable, Identifiable {
   init(pointer: Managed<OpaquePointer>) throws {
     pointer.assert(git_reference_is_branch, "Expected branch.")
     self.pointer = pointer
-    name = try pointer.get(git_branch_name) |> Unwrap |> String.init
+    name = try pointer.get(git_branch_name) |> unwrap |> String.init
       |> Name.init
     target = try Object.ID(reference: pointer)
     reference = try Reference.Name(pointer: pointer)

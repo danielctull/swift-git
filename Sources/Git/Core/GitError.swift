@@ -32,7 +32,7 @@ extension GitError {
     let code = git_error_code(result)
     guard code != GIT_OK else { return }
 
-    guard let error = try? git_error_last() |> Unwrap |> \.pointee else {
+    guard let error = try? git_error_last() |> unwrap |> \.pointee else {
       throw GitError(code: Code(code))
     }
 

@@ -15,7 +15,7 @@ public struct Blob: Equatable, Hashable, Identifiable {
     id = try ID(objectID: Object.ID(object: pointer))
 
     let size = pointer.get(git_blob_rawsize) |> Int.init
-    let content = try pointer.get(git_blob_rawcontent) |> Unwrap
+    let content = try pointer.get(git_blob_rawcontent) |> unwrap
     data = Data(bytes: content, count: size)
 
     isBinary = pointer.get(git_blob_is_binary) |> Bool.init

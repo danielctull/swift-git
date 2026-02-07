@@ -36,7 +36,7 @@ final class Managed<Pointer> {
     free: @escaping Free
   ) throws {
     try self.init(
-      create: Create { try Unwrap(create()) },
+      create: Create { try unwrap(create()) },
       free: free
     )
   }
@@ -126,7 +126,7 @@ extension Managed {
 
   /// Performs a traditional C-style assert with a message.
   ///
-  /// Use this function for internal sanity checks that are active during
+  /// Use this function for internal consistency checks that are active during
   /// testing but do not impact performance of shipping code.
   func assert(
     _ assertion: @escaping (Pointer) -> Int32,

@@ -28,7 +28,7 @@ extension Blame {
 
   public func hunk(for line: LineNumber) throws -> Hunk {
     try pointer.get(git_blame_get_hunk_byline, line.rawValue)
-      |> Unwrap
+      |> unwrap
       |> Hunk.init
   }
 

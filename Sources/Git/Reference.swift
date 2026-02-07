@@ -205,7 +205,7 @@ extension Reference.Name {
 
   init(pointer: Managed<OpaquePointer>) throws {
     try self.init(
-      pointer.get(git_reference_name) |> Unwrap |> String.init(cString:)
+      pointer.get(git_reference_name) |> unwrap |> String.init(cString:)
     )
   }
 }

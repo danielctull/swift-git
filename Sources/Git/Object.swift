@@ -97,7 +97,7 @@ extension Object.ID {
   }
 
   init(object: Managed<OpaquePointer>) throws {
-    self = try object.get(git_object_id) |> Unwrap |> Self.init
+    self = try object.get(git_object_id) |> unwrap |> Self.init
   }
 
   init(reference: Managed<OpaquePointer>) throws {
@@ -106,7 +106,7 @@ extension Object.ID {
       free: git_reference_free
     )
 
-    self = try resolved.get(git_reference_target) |> Unwrap |> Self.init
+    self = try resolved.get(git_reference_target) |> unwrap |> Self.init
   }
 }
 
@@ -123,10 +123,10 @@ extension Object.ID: CustomStringConvertible {
 
   public var description: String {
     withUnsafePointer { oid in
-      let length = Int(GIT_OID_HEXSZ)
+      let length = Int(GIT_OID_HEXSZ) + 1
       let cchar = UnsafeMutablePointer<CChar>.allocate(capacity: length)
       defer { cchar.deallocate() }
-      git_oid_fmt(cchar, oid)
+      git_oid_tostr(cchar, length, oid)
       return String(cString: cchar)
     }
   }

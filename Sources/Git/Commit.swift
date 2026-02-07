@@ -93,16 +93,16 @@ public struct Commit: Equatable, Hashable, Identifiable {
     self.pointer = pointer
     id = try ID(objectID: Object.ID(object: pointer))
     summary = try pointer.get(git_commit_summary)
-      |> Unwrap
+      |> unwrap
       |> String.init(cString:)
     body = try? pointer.get(git_commit_body)
-      |> Unwrap
+      |> unwrap
       |> String.init(cString:)
     author = try pointer.get(git_commit_author)
-      |> Unwrap
+      |> unwrap
       |> Signature.init
     committer = try pointer.get(git_commit_committer)
-      |> Unwrap
+      |> unwrap
       |> Signature.init
   }
 }

@@ -33,7 +33,7 @@ public struct Tag: Equatable, Hashable, Identifiable {
 
     let repository =
       try pointer.get(git_reference_owner)
-      |> Unwrap
+      |> unwrap
       |> Managed.init
       |> Repository.init
 
@@ -127,17 +127,17 @@ public struct AnnotatedTag: Equatable, Hashable, Identifiable {
     self.pointer = pointer
     id = try ID(objectID: Object.ID(object: pointer))
     name = try pointer.get(git_tag_name)
-      |> Unwrap
+      |> unwrap
       |> String.init(cString:)
       |> Tag.Name.init
     target = try pointer.get(git_tag_target_id)
-      |> Unwrap
+      |> unwrap
       |> Object.ID.init
     tagger = try pointer.get(git_tag_tagger)
-      |> Unwrap
+      |> unwrap
       |> Signature.init
     message = try pointer.get(git_tag_message)
-      |> Unwrap
+      |> unwrap
       |> String.init(cString:)
   }
 }
