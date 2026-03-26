@@ -42,16 +42,16 @@ jobs:
       # Swift SDK for Wasm (TODO: build issues in libgit2)
       enable_wasm_sdk_build: false
       enable_embedded_wasm_sdk_build: false
-      wasm_sdk_versions: '["6.3"]'
+      #wasm_sdk_versions: '["6.3"]'
 
       # Swift SDK for Android (TODO: awaiting 6.3 Android SDK)
       enable_android_sdk_build: false
-      android_sdk_versions: '["6.3"]'
+      #android_sdk_versions: '["6.3"]'
 
       # Windows (TODO: fix issues)
       enable_windows_checks: false
       enable_windows_docker: false
-      windows_swift_versions: '["6.2", "6.3"]'
+      #windows_swift_versions: '["6.2", "6.3"]'
 
       # macOS (requires self-hosted runners)
       enable_macos_checks: false
