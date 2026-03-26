@@ -25,25 +25,25 @@ jobs:
     with:
       # Linux
       enable_linux_checks: true
-      linux_swift_versions: '["6.2"]'
+      linux_swift_versions: '["6.2", "6.3"]'
 
       # Static Linux SDK
       enable_linux_static_sdk_build: true
-      linux_static_sdk_versions: '["6.2"]'
+      linux_static_sdk_versions: '["6.2", "6.3"]'
 
-      # Swift SDK for Wasm (only nightly builds available)
+      # Swift SDK for Wasm (TODO: build issues in libgit2)
       enable_wasm_sdk_build: false
-
-      # Swift SDK for Embedded Wasm (only nightly builds available)
       enable_embedded_wasm_sdk_build: false
+      wasm_sdk_versions: '["6.3"]'
 
-      # Swift SDK for Android (only nightly builds available)
+      # Swift SDK for Android (TODO: awaiting 6.3 Android SDK)
       enable_android_sdk_build: false
+      android_sdk_versions: '["6.3"]'
 
       # Windows (TODO: fix issues)
       enable_windows_checks: false
       enable_windows_docker: false
-      windows_swift_versions: '["6.2"]'
+      windows_swift_versions: '["6.2", "6.3"]'
 
       # macOS (requires self-hosted runners)
       enable_macos_checks: false
@@ -59,25 +59,25 @@ jobs:
 
       # Linux
       enable_linux_checks: true
-      linux_swift_versions: '["6.2"]'
+      linux_swift_versions: '["6.2", "6.3"]'
 
       # Static Linux SDK
       enable_linux_static_sdk_build: true
-      linux_static_sdk_versions: '["6.2"]'
+      linux_static_sdk_versions: '["6.2", "6.3"]'
 
-      # Swift SDK for Wasm (only nightly builds available)
+      # Swift SDK for Wasm (TODO: build issues in libgit2)
       enable_wasm_sdk_build: false
-
-      # Swift SDK for Embedded Wasm (only nightly builds available)
       enable_embedded_wasm_sdk_build: false
+      wasm_sdk_versions: '["6.3"]'
 
-      # Swift SDK for Android (only nightly builds available)
+      # Swift SDK for Android (TODO: awaiting 6.3 Android SDK)
       enable_android_sdk_build: false
+      android_sdk_versions: '["6.3"]'
 
-      # Windows
+      # Windows (TODO: fix issues)
       enable_windows_checks: false
       enable_windows_docker: false
-      windows_swift_versions: '["6.2"]'
+      windows_swift_versions: '["6.2", "6.3"]'
 
       # macOS (requires self-hosted runners)
       enable_macos_checks: false
