@@ -22,7 +22,7 @@ let package = Package(
   dependencies: [
     .package(
       url: "https://github.com/danielctull-forks/swift-libgit2.git",
-      from: "1.9.2",
+      from: "1.9.6",
       traits: [
         .trait(name: "libssh2", condition: .when(traits: ["libssh2"]))
       ]
