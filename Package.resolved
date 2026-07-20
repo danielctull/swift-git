@@ -1,5 +1,5 @@
 {
-  "originHash" : "64bb92da0ecbdf2e49085165314417293670c904a3dbfd670369db1c725884ed",
+  "originHash" : "b55e3e83d5e67cb640c7161528ae4601e6eeb9ccbf0dc923f210c9efd1d26559",
   "pins" : [
     {
       "identity" : "swift-libgit2",
@@ -8,6 +8,24 @@
       "state" : {
         "revision" : "af2ca7650bfcaa50894a0a97c0ad059fcb76b29b",
         "version" : "1.9.6"
+      }
+    },
+    {
+      "identity" : "swift-libssh2",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/danielctull-forks/swift-libssh2.git",
+      "state" : {
+        "revision" : "efe39988aa01f224abb78362ac78a0e1a6d6eb29",
+        "version" : "1.11.1"
+      }
+    },
+    {
+      "identity" : "swift-mbedtls",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/danielctull-forks/swift-mbedtls",
+      "state" : {
+        "revision" : "742643f87c31c408f8514cac75e17e7aa4eb59a4",
+        "version" : "3.6.5"
       }
     }
   ],
