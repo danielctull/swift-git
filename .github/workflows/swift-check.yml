@@ -20,9 +20,14 @@ jobs:
       python_lint_check_enabled: false
 
   tests:
-    name: Tests (default)
+    name: Tests (${{ matrix.traits }})
     uses: swiftlang/github-workflows/.github/workflows/swift_package_test.yml@0.0.13
+    strategy:
+      matrix:
+        traits: ["default", "libssh2"]
     with:
+      swift_flags: --traits ${{ matrix.traits }}
+
       # Linux
       enable_linux_checks: true
       linux_swift_versions: '["6.2", "6.3"]'
@@ -51,52 +56,15 @@ jobs:
       # iOS (requires self-hosted runners)
       enable_ios_checks: false
 
-  tests-libssh2:
-    name: Tests (libssh2)
-    uses: swiftlang/github-workflows/.github/workflows/swift_package_test.yml@0.0.13
-    with:
-      swift_flags: '--traits libssh2'
-
-      # Linux
-      enable_linux_checks: true
-      linux_swift_versions: '["6.2", "6.3"]'
-
-      # Static Linux SDK
-      enable_linux_static_sdk_build: true
-      linux_static_sdk_versions: '["6.2", "6.3"]'
-
-      # Swift SDK for Wasm (only nightly builds available)
-      enable_wasm_sdk_build: false
-
-      # Swift SDK for Embedded Wasm (only nightly builds available)
-      enable_embedded_wasm_sdk_build: false
-
-      # Swift SDK for Android (only nightly builds available)
-      enable_android_sdk_build: false
-
-      # Windows
-      enable_windows_checks: false
-      enable_windows_docker: false
-      windows_swift_versions: '["6.2", "6.3"]'
-
-      # macOS (requires self-hosted runners)
-      enable_macos_checks: false
-
-      # iOS (requires self-hosted runners)
-      enable_ios_checks: false
-
   macos-tests:
-    name: Tests (default)
+    name: Tests (${{ matrix.traits }})
     uses: ./.github/workflows/macos-tests.yml
+    strategy:
+      matrix:
+        traits: ["default", "libssh2"]
     with:
       swift_versions: '["6.2", "6.3"]'
-
-  macos-tests-libssh2:
-    name: Tests (libssh2)
-    uses: ./.github/workflows/macos-tests.yml
-    with:
-      swift_versions: '["6.2", "6.3"]'
-      swift_flags: '--traits libssh2'
+      swift_flags: --traits ${{ matrix.traits }}
 
   ios-tests:
     name: Tests (default)
