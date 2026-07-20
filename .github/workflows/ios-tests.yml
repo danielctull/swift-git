@@ -19,6 +19,8 @@ jobs:
         include:
           - swift_version: "6.2"
             xcode_version: "26.2"
+          - swift_version: "6.3"
+            xcode_version: "26.3"
     steps:
       - name: Checkout
         uses: actions/checkout@v4
