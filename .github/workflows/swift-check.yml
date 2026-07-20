@@ -27,6 +27,11 @@ jobs:
         traits: ["default", "libssh2"]
     with:
       swift_flags: --traits ${{ matrix.traits }}
+      
+      # Android
+      enable_android_sdk_build: true
+      enable_android_sdk_checks: true
+      android_sdk_versions: '["6.3"]'
 
       # Linux
       enable_linux_checks: true
@@ -41,9 +46,6 @@ jobs:
 
       # Embedded Wasm (only nightly builds available)
       enable_embedded_wasm_sdk_build: false
-
-      # Android (only nightly builds available)
-      enable_android_sdk_build: false
 
       # Windows (TODO: fix issues)
       enable_windows_checks: false
