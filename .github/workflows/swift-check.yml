@@ -32,17 +32,17 @@ jobs:
       enable_linux_checks: true
       linux_swift_versions: '["6.2", "6.3"]'
 
-      # Static Linux SDK
+      # Static Linux
       enable_linux_static_sdk_build: true
       linux_static_sdk_versions: '["6.2", "6.3"]'
 
-      # Swift SDK for Wasm (only nightly builds available)
+      # Wasm (only nightly builds available)
       enable_wasm_sdk_build: false
 
-      # Swift SDK for Embedded Wasm (only nightly builds available)
+      # Embedded Wasm (only nightly builds available)
       enable_embedded_wasm_sdk_build: false
 
-      # Swift SDK for Android (only nightly builds available)
+      # Android (only nightly builds available)
       enable_android_sdk_build: false
 
       # Windows (TODO: fix issues)
